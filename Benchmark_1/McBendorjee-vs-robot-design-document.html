@@ -1,0 +1,471 @@
+<html>
+  <head>
+    <title>McBendorjee Vs Robots Game Design Document</title>
+    <link rel="stylesheet" type="text/css" href="../css/homepage.css" />
+    <link rel="stylesheet" type="text/css" href="../css/GloomyOutlook.css" />
+  </head>
+
+  <body>
+    <h2 style="width: 750px" align="center">
+      McBendorjee Vs Robots<br />
+      Game Design Document
+    </h2>
+
+    <h4 style="width: 750px" align="center">
+      by Andrew Ojeda, Michael Campos, Tuyen Vo
+    </h4>
+
+    <div id="content">
+      <h3>INTRODUCTION</h3>
+
+      <p>
+        This document describes a game called "McBendorjee Vs Robots", which is
+        designed to be a simple, 2D top down game that will be submitted for the
+        final project for CSE 380. The game will employ sprite based animations,
+        tiled levels, collision detection, AI, resource management, and other
+        various 2D game techniques learned throughout the semester.
+      </p>
+      <br />
+
+      <h3>TECHNOLOGY</h3>
+
+      <p>
+        McBendorjee Vs Robots will be developed for the Windows Platform using
+        the McKilla's Gorilla game engine, which is a bare-bones engine
+        developed by
+        <a href="http://www.cs.sunysb.edu/~richard">Richard McKenna</a> for
+        rapid prototyping 2D games. DirectX will be used as the underlying
+        rendering technology. XACT will be used for all music and sound effects
+        management. Artwork will be brutally simple, and so we'll simply use MS
+        Paint.
+      </p>
+      <br />
+
+      <h3>BACK STORY</h3>
+
+      <p>
+        Professor McBendorjee was busy trying to recreate the Wolfie 2D engine
+        from scratch using nothing but C and MIPs for his CSE 420 class, when he
+        accidentally forgot to give a character array a null pointer reference.
+        This led to a catastrophic chain of events that culminated in Professor
+        McBendorjee getting his own conscience written into the main character
+        sprite. Now he will have to brave the AI robots he was creating to
+        escape Wolfie 2D or be forever stuck
+      </p>
+      <br />
+
+      <h3>OBJECTIVE</h3>
+
+      <p>
+        McBendorjee will have to brave 6 levels, each with 4 rooms a peace.
+        McBendorjee will have to brave all the AI Robots he created by
+        manipulating their movement so that they step on the various hidden
+        bombs laid throughout the room.
+      </p>
+
+      <p>
+        All The Robots have various AI that vary in terms of complexity. Some
+        were designed to mimic player movement, some have predetermined paths,
+        others will seek out the player.
+      </p>
+      <br />
+
+      <h3>GAMEPLAY</h3>
+
+      <p>
+        The game will have a top down perspective, The player can make
+        McBendorjee can move up, down, left or right, but not diagonal. He will
+        have a baseball bat as a melee weapon which he can hit the enemies with.
+        The bat cannot damage the enemies directly, but they will get stunned
+        and their behaviors will change after. McBendorjee has 5 hitpoints, if
+        he runs out of these it will be gameover. 
+      </p>
+
+      <p>
+        The map will consist one room that is 32 by 32 tiles. Each level will
+        have 4 rooms. Within the room are multiple hidden bombs that player
+        cannot see. Each bomb will have 3 square sections around it where the
+        bomb is the center of the square. The largest square will have an area
+        of 49 tiles, the second square will have an area of 25 tiles, and the
+        smallest square will have an area of 9 tiles. If the player is not
+        within any of these squares their sprite body will be white. If they are
+        within the largest square they will be green, the middle square they
+        will be yellow, and the smallest square they will be red. If they step
+        on the bomb it will instant game over. They player has an option to mark
+        the bomb with a flag for future reference, but this will not have any
+        affect on the bomb itself other than for visual reference.
+      </p>
+
+      <p>
+        Within each room will be certain number of enemies. There number of
+        enemies will always be equal or less than the number of bombs in the
+        room. The enemies will have various behaviors that the player will have
+        to manipulate. If an enemy steps on the bomb, they will be destroyed and
+        so will the bomb. If an enemy collides with the player, they will take
+        take damage and have temporary invincibility frames from taking damage
+        from enemies (but not bombs). Enemies will do various amounts of damage.
+        Each type of enemy will have various behaviors and responses to being
+        hit. The goal is to get all the enemies to step on the bombs. Once that
+        has happened, the player needs to step on the end room title to clear the room.
+        A level is completed once all 4 rooms have been completed.
+      </p>
+
+
+      <table border="5" cellpadding="5">
+        <tr align="center">
+          <th>Enemy Name</th>
+          <th>Initial Behavior</th>
+          <th>Behavior After Being Hit</th>
+          <th>Damage Dealt</th>
+        </tr>
+        <tr align="center">
+          <td>Blue Robot</td>
+          <td>Moves opposite direction of player when player moves</td>
+          <td>Moves same direction as player when player moves</td>
+          <td>1</td>
+        </tr>
+        <tr align="center">
+          <td>Yellow Robot</td>
+          <td>
+            Moves opposite direction of the player regardless when the player
+            moves
+          </td>
+          <td>
+            Moves same direction as the player regardless when the player moves
+          </td>
+          <td>2</td>
+        </tr>
+        <tr align="center">
+          <td>Red Robot</td>
+          <td>Seeks out the player</td>
+          <td>No change but still freezes when hit</td>
+          <td>3</td>
+        </tr>
+        <tr align="center">
+          <td>Blue Robot Mouse</td>
+          <td>
+            Consistently moves left or right, or up or down. Reverse direction
+            if it has a collision
+          </td>
+          <td>Reverses direction</td>
+          <td>2</td>
+        </tr>
+        <tr align="center">
+          <td>Yellow Robot Mouse</td>
+          <td>
+            Consistently moves in the opposite direction the player is facing
+          </td>
+          <td>Consistently moves in the same direction the player is facing</td>
+          <td>2</td>
+        </tr>
+        <tr align="center">
+          <td>Red Robot Mouse</td>
+          <td>
+            Consistently moves left or right, or up or down. If the player
+            appears in the same X and your Y coordinate, it will start moving in
+            that direction
+          </td>
+          <td>No change but still freezes when hit</td>
+          <td>2</td>
+        </tr>
+        <tr align="center">
+          <td>Blue Statue</td>
+          <td>
+            Stays still and shoots a projectile in the north, west, south, then
+            east direction
+          </td>
+          <td>Launches back 3 tiles in the opposite direction it was hit</td>
+          <td>1</td>
+        </tr>
+        <tr align="center">
+          <td>Yellow Statue</td>
+          <td>
+            Stays still and shoots a projectile in the north, west, south, and
+            east directions simultaneously, then in all four diagonal directions
+            simultaneously
+          </td>
+          <td>Launches back 3 tiles in the opposite direction it was hit</td>
+          <td>1</td>
+        </tr>
+        <tr align="center">
+          <td>Red Statue</td>
+          <td>
+            Stays still and shoots a projectile in the direction of the player
+          </td>
+          <td>Launches back 3 tiles in the opposite direction it was hit</td>
+          <td>2</td>
+        </tr>
+      </table>
+
+      <br />
+
+      <p>
+        There will also two types of collideable objects in the room.
+        Blocks that can be moved when the player hits them, and blocks
+        that can't be moved at all. Moveable blocks will move one tile in the opposite direction they were hit.
+        Both McBendorjee and the enemies cannot go through these blocks.
+        Blocks can cover the end room title, so be careful! 
+      </p>
+
+      <h3>CONTROLS</h3>
+
+      <p>
+        This game will be played using both a keyboard and mouse. Once started,
+        use the following:
+      </p>
+
+      <ul>
+        <li><strong>W or UP-ARROW</strong> - Move Up</li>
+        <li><strong>A OR LEFT-ARROW</strong> - Move Left</li>
+        <li><strong>D OR RIGHT-ARROW</strong> - Move Right</li>
+        <li><strong>S OR DOWN-ARROW</strong> - Move Down</li>
+        <li><strong>SPACE or LEFT-MOUSE-CLICK</strong> - Melee Attack</li>
+        <li>
+          <strong>SHIFT or RIGHT-MOUSE-CLICK</strong> - Place a flag on a bomb
+          tile
+        </li>
+        <li>
+          <strong>P</strong> - Panic Button, Resets the Room to it's original
+          state
+        </li>
+        <li>
+          <strong>ESC</strong> - This pauses the game and presents a pop-up
+          window to the player asking them to continue when they are ready. If a
+          game is not in progress, ESC does nothing.
+        </li>
+      </ul>
+      <br />
+
+      <h3>GRAPHICAL USER INTERFACE</h3>
+
+      <p>As far as the GUI is concerned, if we consider</p>
+
+      <ul>
+        <li>
+          <strong>Splash Screen</strong> - The splash screen GUI simply presents
+          a game logo. In the background will be a random room from the game,
+          with Professor McBendorjee's sprite playing it's idle animation. Start
+          button for the user to press when they are ready to play. Upon
+          pressing it, a brief scripted sequence is played explaining the back
+          story for the game. While playing the message "Press ESC to Skip"
+          should be displayed at the bottom of the screen. If pressed, the game
+          will jump to the main menu.
+        </li>
+        <img id="splashScreen" src="splashScreen.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="Splash Screen" width="500" height="500">
+        <br />
+
+        <li>
+          <strong>Main Menu</strong> - After the User has watched or skipped the
+          intro, they will be given the option to start the game, as well as go
+          to a levels selection screen, a controls screen, and a help screen.
+          <br />
+          <img id="mainMenu" src="mainMenu.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="Main Menu" width="500" height="500">
+
+          <ul>
+            <li>
+              <strong>New Game</strong> - If pressed, a new game will start from
+              Level 1.
+            </li>
+            <li>
+              <strong>Level Select</strong> - If pressed, the level select
+              screen will load, which will allow the user to start the game from
+              a specific level. The final build will only have the levels the
+              player has unlocked.
+            </li>
+            <br />
+            <img id="levelSelect" src="levelSelect.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="Level Select" width="500" height="500">
+            <li>
+              <strong>Display Controls</strong> - If pressed, the game will
+              display an info screen that includes a description of all game
+              controls.
+            </li>
+            <br />
+            <img id="displayControls" src="displayControls.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="Display Controls" width="500" height="500">
+            <li>
+              <strong>Leader Boards</strong> - If pressed, the game will display an
+              info screen with the fastest times for clearing each level.
+            </li>
+            <img id="leaderBoards" src="leaderBoards.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="Leader Boards" width="500" height="500">
+            <li>
+              <strong>Help</strong> - If pressed, the game will display an info
+              screen with information about the game authors, characters,
+              enemies, and backstory. It will also have a list of cheat codes to
+              help with development and grading.
+            </li>
+            <img id="help" src="help.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="Help" width="500" height="500">
+          </ul>
+        </li>
+        <br />
+
+        <li>
+          <strong>In-Game GUI</strong> - On the left of the screen will be two
+          buttons and other game information
+          <br />
+          <img id="inGameGui" src="inGameGui.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="In-Game GUI" width="500" height="500">
+          <ul>
+            <li>
+              <strong>Pause Button</strong> If pressed, the games action will
+              pause and a screen displaying the controls, and will have two
+              buttons, one for resuming the game, and one for exiting the game
+            </li>
+            <br />
+            <img id="inGameGuiPaused" src="inGameGuiPaused.jpg" onerror="this.onerror=null; this.src='not-found-image.jpg'" alt="In-Game GUI Paused" width="500" height="500">
+            <li>
+              <strong>Panic Button</strong> If pressed, the current room will
+              reset to it's original state. The timer will continue from where
+              it was. Player will also loose one health point. This can be used
+              if the player soft locks themselves.
+            </li>
+            <li>
+              <strong>Player Health</strong> Display for the player health.
+            </li>
+            <li>
+              <strong>Timer</strong> Current timer for the current level.
+              Displayed in Hours, Minutes, and Seconds.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <br />
+
+      <h3>ARTWORK</h3>
+
+      <p>
+        All artwork in the game will be original. The following needs to be
+        created:
+      </p>
+
+      <ul>
+        <li>
+          <strong>McBendorjee</strong> - we'll only dress McBendorjee in his lab
+          coat. The color of his lab coat will determine if there are bombs
+          nearby so we'll need to make artwork for him in his White, Green,
+          Blue, and Red outfits. Each will require animations for:
+          <!-- TODO: Maybe some more animations for McBendorjee? -->
+          <!-- Do we really need animations for up,down,left, and right?
+               Yes, so the user can get a better view of the lab coat B)
+               It's orthogonal baby :)
+          -->
+          <ul>
+            <li>Walking Up</li>
+            <li>Walking Right</li>
+            <li>Walking Left</li>
+            <li>Walking Down</li>
+            <li>Attacking Up</li>
+            <li>Attacking Right</li>
+            <li>Attacking Left</li>
+            <li>Attacking Down</li>
+            <li>Taking Damage</li>
+            <li>Dying</li>
+          </ul>
+        </li>
+        <br />
+        <li>
+          <strong>Enemies</strong>
+          <!-- TODO: Enemies? -->
+          <ul>
+          <strong>Robot</strong> - Simple one eyed robot sprite, with
+          three Blue, Yellow and Red variations, No attacking animation needed
+          as they do damage by colliding.  No damage animation needed as they 
+          only die from one hit from a bomb. Idle and frozen animations will simply
+          be the last walking animation
+          <ul>
+            <li>Walking Up</li>
+            <li>Walking Right</li>
+            <li>Walking Left</li>
+            <li>Walking Down</li>
+            <li>Dying</li>
+          </ul>
+
+          <strong>Robot Mouse</strong> - Simple small mouse robot sprite, with
+          three Blue, Yellow and Red variations, No attacking animation needed
+          as they do damage by colliding.  No damage animation needed as they 
+          only die from one hit from a bomb. 
+          <ul>
+            <li>Moving Up</li>
+            <li>Moving Right</li>
+            <li>Moving Left</li>
+            <li>Moving Down</li>
+            <li>Dying</li>
+          </ul>
+
+          <strong>Robot Statue</strong> - Simple statue sprite with one eye, with
+          three Blue, Yellow and Red variations, No moving animation needed
+          as sprite is stationary.
+          <ul>
+            <li>Looking Up</li>
+            <li>Looking Right</li>
+            <li>Looking Left</li>
+            <li>Looking Down</li>
+            <li>Dying</li>
+          </ul>
+        </ul>
+
+         
+        </li>
+        <br />
+        <li>
+          <strong>Tiles</strong>
+          <ul>
+            <li>
+              <strong>Main Floor</strong> - Two simple alternating colors for the non collideable floor 
+            </li>
+            <li>
+              <strong>Wall</strong> - Eight simple collideable wall tiles (Four corners and Four flat walls)
+            </li>
+            <li>
+              <strong>Blocks</strong> - Two types of blocks of different colors, both collideable, one moveable one not
+            </li>
+            <li>
+              <strong>End Switch</strong> - Simple switch tile that the player will step on once all enemies have been defeated, non collideable
+            </li>
+          </ul>
+          <li><strong>Level Themes</strong> - If time permits, a different theme will be used each level, other wise every level will have same tileset</li>
+        </li>
+
+
+      </ul>
+      <br />
+
+      <h3>SOUND EFFECTS</h3>
+
+      <p>
+        All sound effects will be original. Sounds must be made to coincide with
+        each of the following events:
+      </p>
+      <ul>
+        <li><strong>Player Move</strong></li>
+        <li><strong>Player Attack</strong></li>
+        <li><strong>Player Damage</strong></li>
+        <li><strong>Player Death</strong></li>
+        <li><strong>Enemy Hit</strong></li>
+        <li><strong>Enemy Death</strong></li>
+        <li><strong>Game Paused</strong></li>
+       
+      </ul>
+      <br />
+
+      <h3>MUSIC</h3>
+
+      <ul>
+        <li><Strong>Splash/Main Screen Music</Strong></li>
+        <li><Strong>Level 1 Music</Strong></li>
+        <li><Strong>Level 2 Music</Strong></li>
+        <li><Strong>Level 3 Music</Strong></li>
+        <li><Strong>Level 4 Music</Strong></li>
+        <li><Strong>Level 5 Music</Strong></li>
+        <li><Strong>Level 6 Music</Strong></li>
+      </ul>
+      <br />
+
+      <hr />
+
+      <p style="font-size: 9pt; text-align: center">
+        Web page created and maintained<br />
+        by Andrew Ojeda, Michael Campos, Tuyen Vo</a>
+      </p>
+
+      <p><br /></p>
+    </div>
+  </body>
+</html>
