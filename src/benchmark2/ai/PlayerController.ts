@@ -47,6 +47,8 @@ export default class PlayerController implements BattlerAI {
 
   private receiver: Receiver;
 
+  private coatColor: string;
+
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
@@ -65,6 +67,7 @@ export default class PlayerController implements BattlerAI {
     this.inventory = options.inventory;
 
     this.receiver = new Receiver();
+    this.coatColor = "white";
     // this.receiver.subscribe(Events.SWAP_PLAYER);
   }
 
@@ -171,27 +174,117 @@ export default class PlayerController implements BattlerAI {
       }
 
       if (Input.isPressed("forward")) {
-        this.owner.animation.playIfNotAlready("WALK_UP_WHITE", true, null);
+        let animationName = "WALK_UP_WHITE";
+        switch (this.coatColor) {
+          case "white":
+            animationName = "WALK_UP_WHITE";
+            break;
+          case "blue":
+            animationName = "WALK_UP_BLUE";
+            break;
+          case "green":
+            animationName = "WALK_UP_GREEN";
+            break;
+          case "red":
+            animationName = "WALK_UP_RED";
+            break;
+          default:
+            animationName = "WALK_UP_WHITE";
+            break;
+        }
+        this.owner.animation.playIfNotAlready(animationName, true, null);
         this.lookDirection.y = 1;
         this.lookDirection.x = 0;
       }
       if (Input.isPressed("left")) {
-        this.owner.animation.playIfNotAlready("WALK_LEFT_WHITE", true, null);
+        let animationName = "WALK_LEFT_WHITE";
+        switch (this.coatColor) {
+          case "white":
+            animationName = "WALK_LEFT_WHITE";
+            break;
+          case "blue":
+            animationName = "WALK_LEFT_BLUE";
+            break;
+          case "green":
+            animationName = "WALK_LEFT_GREEN";
+            break;
+          case "red":
+            animationName = "WALK_LEFT_RED";
+            break;
+          default:
+            animationName = "WALK_LEFT_WHITE";
+            break;
+        }
+        this.owner.animation.playIfNotAlready(animationName, true, null);
         this.lookDirection.y = 0;
         this.lookDirection.x = -1;
       }
       if (Input.isPressed("backward")) {
-        this.owner.animation.playIfNotAlready("WALK_DOWN_WHITE", true, null);
+        let animationName = "WALK_DOWN_WHITE";
+        switch (this.coatColor) {
+          case "white":
+            animationName = "WALK_DOWN_WHITE";
+            break;
+          case "blue":
+            animationName = "WALK_DOWN_BLUE";
+            break;
+          case "green":
+            animationName = "WALK_DOWN_GREEN";
+            break;
+          case "red":
+            animationName = "WALK_DOWN_RED";
+            break;
+          default:
+            animationName = "WALK_DOWN_WHITE";
+            break;
+        }
+        this.owner.animation.playIfNotAlready(animationName, true, null);
         this.lookDirection.y = -1;
         this.lookDirection.x = 0;
       }
       if (Input.isPressed("right")) {
-        this.owner.animation.playIfNotAlready("WALK_RIGHT_WHITE", true, null);
+        let animationName = "WALK_RIGHT_WHITE";
+        switch (this.coatColor) {
+          case "white":
+            animationName = "WALK_RIGHT_WHITE";
+            break;
+          case "blue":
+            animationName = "WALK_RIGHT_BLUE";
+            break;
+          case "green":
+            animationName = "WALK_RIGHT_GREEN";
+            break;
+          case "red":
+            animationName = "WALK_RIGHT_RED";
+            break;
+          default:
+            animationName = "WALK_RIGHT_WHITE";
+            break;
+        }
+        this.owner.animation.playIfNotAlready(animationName, true, null);
         this.lookDirection.y = 0;
         this.lookDirection.x = 1;
       }
     } else {
-      this.owner.animation.playIfNotAlready("IDLE_WHITE", true, null);
+      let animationName = "IDEL_WHITE";
+      switch (this.coatColor) {
+        case "white":
+          animationName = "IDEL_WHITE";
+          break;
+        case "blue":
+          animationName = "IDEL_BLUE";
+          break;
+        case "green":
+          animationName = "IDEL_GREEN";
+          break;
+        case "red":
+          animationName = "IDEL_RED";
+          break;
+        default:
+          animationName = "IDEL_WHITE";
+          break;
+      }
+      this.owner.animation.playIfNotAlready(animationName, true, null);
     }
     //   console.log(this.lookDirection.toString());
 
@@ -260,6 +353,10 @@ export default class PlayerController implements BattlerAI {
           break;
       }
     }
+  }
+
+  setCoatColor(color: string) {
+    this.coatColor = color;
   }
 
   destroy() {}

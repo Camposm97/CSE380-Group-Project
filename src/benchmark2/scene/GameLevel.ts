@@ -240,10 +240,13 @@ export default class GameLevel extends Scene {
           (<PlayerController>this.player._ai).health = 0;
         } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
           console.log("1");
+          (<PlayerController>this.player._ai).setCoatColor("red");
         } else if (this.player.collisionShape.overlaps(bomb.middleBoundary)) {
           console.log("2");
+          (<PlayerController>this.player._ai).setCoatColor("blue");
         } else if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
           console.log("3");
+          (<PlayerController>this.player._ai).setCoatColor("green");
         }
       }
     }
