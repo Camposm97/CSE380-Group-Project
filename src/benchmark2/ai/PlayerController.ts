@@ -50,7 +50,7 @@ export default class PlayerController implements BattlerAI {
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
-        this.owner.scale = new Vec2(0.4, 0.4)
+        this.owner.scale = new Vec2(0.3, 0.3)
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap
 
@@ -64,34 +64,29 @@ export default class PlayerController implements BattlerAI {
         this.inventory = options.inventory;
 
         this.receiver = new Receiver();
-        this.receiver.subscribe(Events.SWAP_PLAYER);
+        // this.receiver.subscribe(Events.SWAP_PLAYER);
     }
 
     activate(options: Record<string, any>): void { }
 
     handleEvent(event: GameEvent): void {
         // If our id matches this player, set boolean and update inventory UI
-        if (event.type === Events.SWAP_PLAYER) {
-            if (event.data.get("id") === this.owner.id) {
-                this.inputEnabled = true;
-                this.inventory.setActive(true);
-            }
-            else {
-                this.inputEnabled = false;
-                this.inventory.setActive(false);
-            }
-        }
+        // if (event.type === Events.SWAP_PLAYER) {
+        //     if (event.data.get("id") === this.owner.id) {
+        //         this.inputEnabled = true;
+        //         this.inventory.setActive(true);
+        //     }
+        //     else {
+        //         this.inputEnabled = false;
+        //         this.inventory.setActive(false);
+        //     }
+        // }
     }
 
     update(deltaT: number): void {
         while(this.receiver.hasNextEvent()){
             this.handleEvent(this.receiver.getNextEvent());
         }
-
-        let tileCoord = this.tilemap.getColRowAt(this.owner.position)
-        tileCoord = new Vec2(tileCoord.x, tileCoord.y)
-        let tile = this.tilemap.getTileAtRowCol(tileCoord)
-        // console.log(`${tileCoord.x} : ${tileCoord.y}`)
 
         if (this.inputEnabled && this.health > 0) {
             //Check right click
@@ -136,25 +131,33 @@ export default class PlayerController implements BattlerAI {
                 }
             }
 
-
             // WASD Movement
-            let forwardAxis = (Input.isPressed('forward') ? 1 : 0) + (Input.isPressed('backward') ? -1 : 0);
+            let forwardAxis = (Input.isPressed('forward') || Input.isPressed('up') ? 1 : 0) + (Input.isPressed('backward') ? -1 : 0);
             let horizontalAxis = (Input.isPressed('left') ? -1 : 0) + (Input.isPressed('right') ? 1 : 0);
-            // if (Input.isPressed('forward')) {
 
-            //     let movement = Vec2.UP.scaled(1 * this.speed)
-            //     movement = movement.add(new Vec2(1 * this.speed, 0))
-            //     let newPos = this.owner.position.clone().add(movement.scale(deltaT))
-            //     this.path = this.owner.getScene().getNavigationManager().getPath(Names.NAVMESH, this.owner.position, newPos, true)
-            // }
+            // if ((forwardAxis != 0 && horizontalAxis == 0) || (forwardAxis == 0 && horizontalAxis != 0)) {
             if (forwardAxis || horizontalAxis) {
                 let movement = Vec2.UP.scaled(forwardAxis * this.speed);
                 movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
                 let newPos = this.owner.position.clone().add(movement.scaled(deltaT))
                 this.path = this.owner.getScene().getNavigationManager().getPath(Names.NAVMESH, this.owner.position, newPos, true);
+                
+                let tileCoord = this.tilemap.getColRowAt(this.owner.position)
+                tileCoord = new Vec2(tileCoord.x, tileCoord.y)
+                let tile = this.tilemap.getTileAtRowCol(tileCoord)
+                console.log(`x=${tileCoord.x} y=${tileCoord.y}`)
             }
             if (Input.isPressed('forward')) {
                 this.owner.animation.play('WALK_UP', false, null)
+            }
+            if (Input.isPressed('left')) {
+                this.owner.animation.play('WALK_LEFT', false, null)
+            }
+            if (Input.isPressed('backward')) {
+                this.owner.animation.play('WALK_DOWN', false, null)
+            }
+            if (Input.isPressed('right')) {
+                this.owner.animation.play('WALK_RIGHT', false, null)
             }
         }
 

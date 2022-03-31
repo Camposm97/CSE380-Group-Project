@@ -4,7 +4,7 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import Gameplay from "./Gameplay";
+import GameLevel from "./GameLevel";
 
 export default class MainMenu extends Scene {
     private mainMenu: Layer
@@ -183,7 +183,7 @@ export default class MainMenu extends Scene {
                 this.controls.setHidden(true)
             }
             if (event.type === this.BT_EVENT.PLAY) {
-                this.sceneManager.changeToScene(Gameplay, {});
+                this.sceneManager.changeToScene(GameLevel, {});
             }
             if (event.type === this.BT_EVENT.LEVEL_SELECT) {
                 

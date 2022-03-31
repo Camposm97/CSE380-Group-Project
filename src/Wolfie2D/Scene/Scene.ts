@@ -437,7 +437,6 @@ export default class Scene implements Updateable {
      * @returns The Tilemap, if one this name exists, otherwise null
      */
     getTilemap(name: string): Tilemap {
-        console.log(this.tilemaps)
         for(let tilemap of this .tilemaps){
             if(tilemap.name === name){
                 return tilemap;

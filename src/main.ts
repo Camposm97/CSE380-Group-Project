@@ -11,10 +11,10 @@ import WeaponTypeRegistry from "./benchmark2/registry/WeaponTypeRegistry";
         canvasSize: {x: 1200, y: 800},          // The size of the game
         clearColor: {r: 0.1, g: 0.1, b: 0.1},   // The color the game clears to
         inputs: [
-            {name: "forward", keys: ["w"]},
-            {name: "backward", keys: ["s"]},
-            {name: "left", keys: ["a"]},
-            {name: "right", keys: ["d"]},
+            {name: "forward", keys: ["w", "arrowup"]},
+            {name: "backward", keys: ["s", "arrowdown"]},
+            {name: "left", keys: ["a", "arrowleft"]},
+            {name: "right", keys: ["d", "arrowright"]},
             {name: "pickup", keys: ["e"]},
             {name: "drop", keys: ["q"]},
             {name: "slot1", keys: ["1"]},

@@ -40,7 +40,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     player1: GameNode;
 
     /** A reference to the player object */
-    player2: GameNode;
+    // player2: GameNode;
 
     // The current known position of the player
     playerPos: Vec2;
@@ -79,7 +79,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
 
         this.player1 = options.player1;
 
-        this.player2 = options.player2;
+        // this.player2 = options.player2;
 
         this.inRange = options.inRange;
 
@@ -174,29 +174,34 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         let pos = this.player1.position;
         let position1 = this.isPlayerVisible(pos);
         
-        pos = this.player2.position;
-        let position2 = this.isPlayerVisible(pos);
+        // pos = this.player2.position;
+        // let position2 = this.isPlayerVisible(pos);
 
         // Determine which player position to return
-        if (position1 == null && position2 == null){
-            return null;
+        if (position1 == null) {
+            return null
         }
-        else if (position1 == null){
-            return position2;
-        }
-        else if (position2 == null){
-            return position1;
-        }
+        // let dis1 = Math.sqrt(Math.pow(this.owner.position.x - position1.x, 2) + Math.pow(this.owner.position.y - position1.y, 2))
+        return position1
+        // if (position1 == null && position2 == null){
+        //     return null;
+        // }
+        // else if (position1 == null){
+        //     return position2;
+        // }
+        // else if (position2 == null){
+        //     return position1;
+        // }
 
-        // If both are in sight, pick the closet one
-        let distance1 = Math.sqrt(Math.pow(this.owner.position.x - position1.x, 2) + Math.pow(this.owner.position.y - position1.y, 2));
-        let distance2 = Math.sqrt(Math.pow(this.owner.position.x - position2.x, 2) + Math.pow(this.owner.position.y - position2.y, 2));
-        if (distance1 < distance2){
-            return position1;
-        }
-        else{
-            return position2;
-        }
+        // // If both are in sight, pick the closet one
+        // let distance1 = Math.sqrt(Math.pow(this.owner.position.x - position1.x, 2) + Math.pow(this.owner.position.y - position1.y, 2));
+        // let distance2 = Math.sqrt(Math.pow(this.owner.position.x - position2.x, 2) + Math.pow(this.owner.position.y - position2.y, 2));
+        // if (distance1 < distance2){
+        //     return position1;
+        // }
+        // else{
+        //     return position2;
+        // }
     }
 
     update(deltaT: number){

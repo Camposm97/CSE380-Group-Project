@@ -31,9 +31,10 @@ import Map from "../../Wolfie2D/DataTypes/Map";
 import Berserk from "../ai/enemy_actions/Berserk";
 import ScoreTimer from "../game_system/ScoreTimer";
 
-export default class Gameplay extends Scene {
+export default class GameLevel extends Scene {
     // The player
-    private players: Array<AnimatedSprite>;
+    // private players: Array<AnimatedSprite>;
+    private player: AnimatedSprite
 
     // A list of enemies
     private enemies: Array<AnimatedSprite>;
@@ -118,7 +119,8 @@ export default class Gameplay extends Scene {
         this.initializePlayer();
 
         // Make the viewport follow the player
-        this.viewport.follow(this.players[0]);
+        // this.viewport.follow(this.players[0]);
+        this.viewport.follow(this.player)
 
         // Zoom in to a reasonable level
         // this.viewport.enableZoom(); // Disable Zoom
@@ -131,7 +133,8 @@ export default class Gameplay extends Scene {
         this.initializeEnemies();
 
         // Send the player and enemies to the battle manager
-        this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
+        // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
+        this.battleManager.setPlayers([<BattlerAI>this.player._ai])
         this.battleManager.setEnemies(this.enemies.map(enemy => <BattlerAI>enemy._ai));
 
         // Subscribe to relevant events
@@ -148,12 +151,13 @@ export default class Gameplay extends Scene {
 
         this.healthDisplays = new Array(2);
         this.healthDisplays[0] = <Label>this.add.uiElement(UIElementType.LABEL, "health", 
-            {position: new Vec2(70, 16), text: "Health: " + (<BattlerAI>this.players[0]._ai).health});
+            // {position: new Vec2(70, 16), text: "Health: " + (<BattlerAI>this.players[0]._ai).health});
+            {position: new Vec2(70,20), text: "HP: " + (<BattlerAI>this.player._ai).health})
         this.healthDisplays[0].textColor = Color.WHITE;
 
-        this.healthDisplays[1] = <Label>this.add.uiElement(UIElementType.LABEL, "health", 
-            {position: new Vec2(70, 32), text: "Health: " + (<BattlerAI>this.players[1]._ai).health});
-        this.healthDisplays[1].textColor = Color.WHITE;
+        // this.healthDisplays[1] = <Label>this.add.uiElement(UIElementType.LABEL, "health", 
+        //     {position: new Vec2(70, 32), text: "Health: " + (<BattlerAI>this.players[1]._ai).health});
+        // this.healthDisplays[1].textColor = Color.WHITE;
 
         this.lblTime = <Label> this.add.uiElement(UIElementType.LABEL, "health", 
         {
@@ -192,26 +196,28 @@ export default class Gameplay extends Scene {
         }
 
         // check health of each player
-        let health1 = (<BattlerAI>this.players[0]._ai).health;
-        let health2 = (<BattlerAI>this.players[1]._ai).health;
+        let health1 = (<BattlerAI>this.player._ai).health
+        // let health1 = (<BattlerAI>this.players[0]._ai).health;
+        // let health2 = (<BattlerAI>this.players[1]._ai).health;
 
         //If both are dead, game over
-        if(health1 <= 0 && health2 <= 0){
+        // if(health1 <= 0 && health2 <= 0){
+        if (health1 <= 0) {
             this.viewport.setZoomLevel(1)
             this.viewport.disableZoom()
             this.sceneManager.changeToScene(GameOver, {win: false});
         }
 
         // update closest enemy of each player
-        let closetEnemy1 = this.getClosestEnemy(this.players[0].position, (<PlayerController>this.players[0]._ai).range);
-        let closetEnemy2 = this.getClosestEnemy(this.players[1].position, (<PlayerController>this.players[1]._ai).range);
+        let closetEnemy1 = this.getClosestEnemy(this.player.position, (<PlayerController>this.player._ai).range);
+        // let closetEnemy2 = this.getClosestEnemy(this.players[1].position, (<PlayerController>this.players[1]._ai).range);
 
-        (<PlayerController>this.players[0]._ai).target = closetEnemy1;
-        (<PlayerController>this.players[1]._ai).target = closetEnemy2;
+        (<PlayerController>this.player._ai).target = closetEnemy1;
+        // (<PlayerController>this.players[1]._ai).target = closetEnemy2;
 
         // Update health gui
         this.healthDisplays[0].text = "Health: " + health1;
-        this.healthDisplays[1].text = "Health: " + health2;
+        // this.healthDisplays[1].text = "Health: " + health2;
         this.lblTime.text = `${this.scoreTimer.toString()}`
 
         // Debug mode graph
@@ -219,16 +225,16 @@ export default class Gameplay extends Scene {
             this.getLayer("graph").setHidden(!this.getLayer("graph").isHidden());
         }
         
-        //Swap characters
-        if(Input.isKeyJustPressed("z")){
-            this.emitter.fireEvent(Events.SWAP_PLAYER, {id: this.players[0].id});
-            this.viewport.follow(this.players[0]);
-        }
-        // Swap characters
-        if(Input.isKeyJustPressed("x")){
-            this.emitter.fireEvent(Events.SWAP_PLAYER, {id: this.players[1].id});
-            this.viewport.follow(this.players[1]);
-        }
+        // //Swap characters
+        // if(Input.isKeyJustPressed("z")){
+        //     this.emitter.fireEvent(Events.SWAP_PLAYER, {id: this.players[0].id});
+        //     this.viewport.follow(this.players[0]);
+        // }
+        // // Swap characters
+        // if(Input.isKeyJustPressed("x")){
+        //     this.emitter.fireEvent(Events.SWAP_PLAYER, {id: this.players[1].id});
+        //     this.viewport.follow(this.players[1]);
+        // }
     }
 
     getClosestEnemy(playerPos: Vec2, range: number): Vec2 {
@@ -318,51 +324,51 @@ export default class Gameplay extends Scene {
     initializePlayer(): void {
         // Create the inventory
         let inventory = new InventoryManager(this, 2, "inventorySlot", new Vec2(16, 16), 4, "slots1", "items1");
-        let startingWeapon = this.createWeapon("knife");
+        let startingWeapon = this.createWeapon("weak_pistol");
         inventory.addItem(startingWeapon);
 
         // Create the players
-        this.players = Array(2);
-        this.players[0] = this.add.animatedSprite("player1", "primary");
-        this.players[0].position.set(4*16, 32*16);
-        this.players[0].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
+        // this.players = Array(2);
+        this.player = this.add.animatedSprite("player1", "primary");
+        this.player.position.set(4*16, 32*16);
+        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         //First player is melee based, starts off with a knife and is short ranged
-        this.players[0].addAI(PlayerController,
+        this.player.addAI(PlayerController,
             {
                 speed: 100,
                 health: 25,
                 inventory: inventory,
                 items: this.items,
                 inputEnabled: true,
-                range: 30,
+                range: 75,
                 tilemap: 'Floor'
             });
-        this.players[0].animation.play("IDLE");
+        this.player.animation.play("IDLE");
 
 
-        inventory = new InventoryManager(this, 2, "inventorySlot", new Vec2(16, 32), 4, "slots2", "items2");
-        startingWeapon = this.createWeapon("weak_pistol");
-        inventory.addItem(startingWeapon);
+        // inventory = new InventoryManager(this, 2, "inventorySlot", new Vec2(16, 32), 4, "slots2", "items2");
+        // startingWeapon = this.createWeapon("weak_pistol");
+        // inventory.addItem(startingWeapon);
 
         //Second player is ranged based, long range and starts with pistol
-        this.players[1] = this.add.animatedSprite("player2", "primary");
-        this.players[1].position.set(5*16, 4*16);
-        this.players[1].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
-        this.players[1].addAI(PlayerController,
-            {
-                speed: 100,
-                health: 15,
-                inventory: inventory,
-                items: this.items,
-                inputEnabled: false,
-                range: 100,
-                tilemap: 'Floor'
-            });
-        this.players[1].animation.play("IDLE");
+        // this.players[1] = this.add.animatedSprite("player2", "primary");
+        // this.players[1].position.set(5*16, 4*16);
+        // this.players[1].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
+        // this.players[1].addAI(PlayerController,
+        //     {
+        //         speed: 100,
+        //         health: 15,
+        //         inventory: inventory,
+        //         items: this.items,
+        //         inputEnabled: false,
+        //         range: 100,
+        //         tilemap: 'Floor'
+        //     });
+        // this.players[1].animation.play("IDLE");
 
         //Set inventory UI highlight
-        (<PlayerController>this.players[0]._ai).inventory.setActive(true);
-        (<PlayerController>this.players[1]._ai).inventory.setActive(false);
+        (<PlayerController>this.player._ai).inventory.setActive(true);
+        // (<PlayerController>this.players[1]._ai).inventory.setActive(false);
     }
 
     createNavmesh(): void {
@@ -488,8 +494,8 @@ export default class Gameplay extends Scene {
                 patrolRoute: entity.route,            // This only matters if they're a patroller
                 guardPosition: entity.guardPosition,  // This only matters if they're a guard
                 health: entity.health,
-                player1: this.players[0],
-                player2: this.players[1],
+                player1: this.player,
+                // player2: this.players[1],
                 weapon: weapon,
                 goal: Statuses.REACHED_GOAL,
                 status: statusArray,
