@@ -417,7 +417,7 @@ export default class GameLevel extends Scene {
       range: 75,
       tilemap: "Floor",
     });
-    this.player.animation.play("IDLE");
+    this.player.animation.play("IDLE_WHITE");
 
     // inventory = new InventoryManager(this, 2, "inventorySlot", new Vec2(16, 32), 4, "slots2", "items2");
     // startingWeapon = this.createWeapon("weak_pistol");
