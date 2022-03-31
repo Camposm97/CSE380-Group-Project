@@ -12,6 +12,7 @@ import Item from "../game_system/items/Item";
 import Weapon from "../game_system/items/Weapon";
 import { Events, Names } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
+import AttackAction from "./enemy_actions/AttackAction";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -164,26 +165,40 @@ export default class PlayerController implements BattlerAI {
         tileCoord = new Vec2(tileCoord.x, tileCoord.y);
         let tile = this.tilemap.getTileAtRowCol(tileCoord);
         let tileWorldcoord = this.tilemap.getTileWorldPosition(tile);
-        console.log(this.owner.position.toString());
+        // console.log(this.owner.position.toString());
         // console.log(tileWorldcoord.toString());
-        console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
+        // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
       }
       if (Input.isPressed("forward")) {
         this.owner.animation.play("WALK_UP", false, null);
+        this.attack();
+        this.lookDirection.y = 1;
+        this.lookDirection.x = 0;
       }
       if (Input.isPressed("left")) {
         this.owner.animation.play("WALK_LEFT", false, null);
+        this.attack();
+        this.lookDirection.y = 0;
+        this.lookDirection.x = -1;
       }
       if (Input.isPressed("backward")) {
         this.owner.animation.play("WALK_DOWN", false, null);
+        this.attack();
+        this.lookDirection.y = -1;
+        this.lookDirection.x = 0;
       }
       if (Input.isPressed("right")) {
         this.owner.animation.play("WALK_RIGHT", false, null);
+        this.attack();
+        this.lookDirection.y = 0;
+        this.lookDirection.x = 1;
       }
+      //   console.log(this.lookDirection.toString());
     }
+    this.attack();
 
-    //Move on path if selected
     if (this.path != null) {
+      //Move on path if selected
       if (this.path.isDone()) {
         this.path = null;
       } else {
@@ -218,6 +233,32 @@ export default class PlayerController implements BattlerAI {
       this.owner.setAIActive(false, {});
       this.owner.visible = false;
       this.owner.isCollidable = false;
+    }
+  }
+
+  attack() {
+    // handles attacking
+    if (Input.isMouseJustPressed() || Input.isPressed("space")) {
+      switch (this.lookDirection.x) {
+        case 1:
+          console.log("attack right");
+          break;
+        case -1:
+          console.log("attack left");
+          break;
+        default:
+          break;
+      }
+      switch (this.lookDirection.y) {
+        case 1:
+          console.log("attack up");
+          break;
+        case -1:
+          console.log("attack down");
+          break;
+        default:
+          break;
+      }
     }
   }
 

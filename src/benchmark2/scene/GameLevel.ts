@@ -78,6 +78,7 @@ export default class GameLevel extends Scene {
     );
 
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
+    this.load.spritesheet("flag", "res/spritesheets/flag.json");
 
     // Load the tilemap
     // Change this file to be your own tilemap
@@ -236,6 +237,7 @@ export default class GameLevel extends Scene {
       if (bomb) {
         if (this.player.collisionShape.overlaps(bomb.collisionBoundary)) {
           console.log("boom");
+          (<PlayerController>this.player._ai).health = 0;
         } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
           console.log("1");
         } else if (this.player.collisionShape.overlaps(bomb.middleBoundary)) {
@@ -247,13 +249,13 @@ export default class GameLevel extends Scene {
     }
 
     // check health of each player
-    let health1 = (<BattlerAI>this.player._ai).health;
+    let health = (<BattlerAI>this.player._ai).health;
     // let health1 = (<BattlerAI>this.players[0]._ai).health;
     // let health2 = (<BattlerAI>this.players[1]._ai).health;
 
     //If both are dead, game over
     // if(health1 <= 0 && health2 <= 0){
-    if (health1 <= 0) {
+    if (health <= 0) {
       this.viewport.setZoomLevel(1);
       this.viewport.disableZoom();
       this.sceneManager.changeToScene(GameOver, { win: false });
@@ -270,7 +272,7 @@ export default class GameLevel extends Scene {
     // (<PlayerController>this.players[1]._ai).target = closetEnemy2;
 
     // Update health gui
-    this.healthDisplays[0].text = "Health: " + health1;
+    this.healthDisplays[0].text = "Health: " + health;
     // this.healthDisplays[1].text = "Health: " + health2;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
 
@@ -487,8 +489,6 @@ export default class GameLevel extends Scene {
     console.log(bombData);
 
     for (let bomb of bombData.bombs) {
-      console.log(bomb);
-      console.log(new Vec2(bomb.position[0], bomb.position[1]).toString());
       this.bombs.push(new Bomb(new Vec2(bomb.position[0], bomb.position[1])));
     }
   }
