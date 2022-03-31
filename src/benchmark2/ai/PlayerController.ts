@@ -49,7 +49,7 @@ export default class PlayerController implements BattlerAI {
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
-    this.owner.scale = new Vec2(0.3, 0.3);
+    this.owner.scale = new Vec2(0.5, 0.5);
 
     this.tilemap = this.owner
       .getScene()
@@ -169,32 +169,32 @@ export default class PlayerController implements BattlerAI {
         // console.log(tileWorldcoord.toString());
         // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
       }
+
       if (Input.isPressed("forward")) {
-        this.owner.animation.play("WALK_UP", false, null);
-        this.attack();
+        this.owner.animation.playIfNotAlready("WALK_UP_WHITE", true, null);
         this.lookDirection.y = 1;
         this.lookDirection.x = 0;
       }
       if (Input.isPressed("left")) {
-        this.owner.animation.play("WALK_LEFT", false, null);
-        this.attack();
+        this.owner.animation.playIfNotAlready("WALK_LEFT_WHITE", true, null);
         this.lookDirection.y = 0;
         this.lookDirection.x = -1;
       }
       if (Input.isPressed("backward")) {
-        this.owner.animation.play("WALK_DOWN", false, null);
-        this.attack();
+        this.owner.animation.playIfNotAlready("WALK_DOWN_WHITE", true, null);
         this.lookDirection.y = -1;
         this.lookDirection.x = 0;
       }
       if (Input.isPressed("right")) {
-        this.owner.animation.play("WALK_RIGHT", false, null);
-        this.attack();
+        this.owner.animation.playIfNotAlready("WALK_RIGHT_WHITE", true, null);
         this.lookDirection.y = 0;
         this.lookDirection.x = 1;
       }
-      //   console.log(this.lookDirection.toString());
+    } else {
+      this.owner.animation.playIfNotAlready("IDLE_WHITE", true, null);
     }
+    //   console.log(this.lookDirection.toString());
+
     this.attack();
 
     if (this.path != null) {
