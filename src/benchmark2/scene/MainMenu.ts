@@ -4,102 +4,149 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
+import Gameplay from "./Gameplay";
 
 export default class MainMenu extends Scene {
     private mainMenu: Layer
-    private about: Layer
+    private levelSelect: Layer
     private controls: Layer
+    private help: Layer
+    private leaderboard: Layer
 
-    private MENU_TYPE = {
+    private BT_EVENT = {
         MENU: "menu",
         PLAY: "play",
+        LEVEL_SELECT: "level_select",
         CONTROLS: "controls",
-        ABOUT: "about"
+        HELP: "about",
+        LEADERBOARD: "leaderboard"
     };
 
 
     startScene(): void {
         let center = this.viewport.getCenter().clone()
-        this.initMenuScene(center)
-        this.initControlScene(center);
-        this.initAboutScene(center);
+        this.initMenuButtons(center)
+        this.initLevelSelectScene(center)
+        this.initControlScene(center)
+        this.initHelpScene(center)
+        this.initLeaderboardScene(center)
 
         // Subscribe to the button events
-        this.receiver.subscribe(this.MENU_TYPE.MENU)
-        this.receiver.subscribe(this.MENU_TYPE.PLAY)
-        this.receiver.subscribe(this.MENU_TYPE.CONTROLS)
-        this.receiver.subscribe(this.MENU_TYPE.ABOUT)
+        this.receiver.subscribe(this.BT_EVENT.MENU)
+        this.receiver.subscribe(this.BT_EVENT.PLAY)
+        this.receiver.subscribe(this.BT_EVENT.LEVEL_SELECT)
+        this.receiver.subscribe(this.BT_EVENT.CONTROLS)
+        this.receiver.subscribe(this.BT_EVENT.HELP)
+        this.receiver.subscribe(this.BT_EVENT.LEADERBOARD)
     }
 
-    initMenuScene(center: Vec2): void {
-        this.mainMenu = this.addUILayer("mainMenu");
-        const play = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x, center.y - 100), text: "Play"})
-        play.size.set(200, 50)
-        play.borderWidth = 2
-        play.borderColor = Color.WHITE
-        play.backgroundColor = Color.TRANSPARENT
-        play.onClickEventId = this.MENU_TYPE.PLAY
+    initMenuButtons(v: Vec2): void {
+        this.mainMenu = this.addUILayer('mainMenu')
+        const layer = 'mainMenu'
+        this.initButton(layer, new Vec2(v.x, v.y - 150), 'Play', this.BT_EVENT.PLAY)
+        this.initButton(layer, new Vec2(v.x, v.y - 75), 'Level Select', this.BT_EVENT.LEVEL_SELECT)
+        this.initButton(layer, new Vec2(v.x, v.y - 0), 'Controls', this.BT_EVENT.CONTROLS)
+        this.initButton(layer, new Vec2(v.x, v.y + 75), 'Help', this.BT_EVENT.HELP)
+        this.initButton(layer, new Vec2(v.x, v.y + 150), 'Leaderboard', this.BT_EVENT.LEADERBOARD)
     }
 
-    initControlScene(center: Vec2) {
-        // Add controls button
-        const controls = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x, center.y), text: "Controls"});
-        controls.size.set(200, 50);
-        controls.borderWidth = 2;
-        controls.borderColor = Color.WHITE;
-        controls.backgroundColor = Color.TRANSPARENT;
-        controls.onClickEventId = this.MENU_TYPE.CONTROLS;
+    initButton(layer: string, pos: Vec2, text: string, eventId: string): void {
+        let bt = this.add.uiElement(UIElementType.BUTTON, layer, {position: pos, text: text})
+        bt.size.set(200, 50)
+        bt.borderWidth = 2
+        bt.borderColor = Color.WHITE
+        bt.backgroundColor = Color.TRANSPARENT
+        bt.onClickEventId = eventId
+    }
 
-        // Controls screen
+    initLevelSelectScene(center: Vec2): void {
+        this.levelSelect = this.addUILayer('levelSelect')
+    }
+
+    initControlScene(center: Vec2): void {
         this.controls = this.addUILayer("controls");
         this.controls.setHidden(true);
 
-        const header = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y - 250), text: "Controls"});
-        header.textColor = Color.WHITE;
+        const controlsHeader = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
+            {
+                position: new Vec2(center.x, center.y - 300),
+                text: "Controls"
+            });
+        controlsHeader.textColor = Color.WHITE;
 
-        const ws = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y - 50), text: "Right Click to move selected player to the clicked point on screen"});
+        const ws = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
+            {
+                position: new Vec2(center.x, center.y - 50),
+                text: "Right Click to move selected player to the clicked point on screen"
+            });
         ws.textColor = Color.WHITE;
-        const ad = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y), text: "E to pick up an item from the ground"});
+        const ad = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+            { 
+                position: new Vec2(center.x, center.y), 
+                text: "E to pick up an item from the ground" 
+            });
         ad.textColor = Color.WHITE;
-        const click = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 50), text: "Q to drop the current item on the ground"});
+        const click = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+            { 
+                position: new Vec2(center.x, center.y + 50), 
+                text: "Q to drop the current item on the ground" 
+            });
         click.textColor = Color.WHITE;
-        const shift = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 100), text: "1 and 2 to equip an inventory item"});
+        const shift = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+            { 
+                position: new Vec2(center.x, center.y + 100),
+                text: "1 and 2 to equip an inventory item" 
+            });
         shift.textColor = Color.WHITE
-        const shift2 = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 150), text: "Z and X to swap between player characters"});
+        const shift2 = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+            {
+                position: new Vec2(center.x, center.y + 150),
+                text: "Z and X to swap between player characters"
+            });
         shift2.textColor = Color.WHITE;
 
-        const back = this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(center.x, center.y + 250), text: "Back"});
+        const back = this.add.uiElement(UIElementType.BUTTON, "controls", 
+            {
+                position: new Vec2(center.x, center.y + 250), 
+                text: "Back" 
+            });
         back.size.set(200, 50);
         back.borderWidth = 2;
         back.borderColor = Color.WHITE;
         back.backgroundColor = Color.TRANSPARENT;
-        back.onClickEventId = this.MENU_TYPE.MENU;
+        back.onClickEventId = this.BT_EVENT.MENU;
     }
 
-    initAboutScene(center: Vec2) {
-        // Add about button
-        const about = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x, center.y + 100), text: "About"});
-        about.size.set(200, 50);
-        about.borderWidth = 2;
-        about.borderColor = Color.WHITE;
-        about.backgroundColor = Color.TRANSPARENT;
-        about.onClickEventId = this.MENU_TYPE.ABOUT
-
-        /* ########## ABOUT SCREEN ########## */
-        this.about = this.addUILayer("about");
-        this.about.setHidden(true);
+    initHelpScene(center: Vec2) {
+        // Controls Scene
+        this.help = this.addUILayer("about");
+        this.help.setHidden(true);
 
         // About Header
-        const aboutHeader = <Label>this.add.uiElement(UIElementType.LABEL, "about", {position: new Vec2(center.x, center.y - 250), text: "About"});
+        const aboutHeader = <Label>this.add.uiElement(UIElementType.LABEL, "about", 
+        {
+            position: new Vec2(center.x, center.y - 300),
+            text: "About"
+        });
         aboutHeader.textColor = Color.WHITE;
 
         const strAbout1 = "This game was created by Michael Campos, Zachary Grandison, and Richard McKenna";
         const strAbout2 = "using the Wolfie2D game engine, a TypeScript game engine created by";
         const strAbout3 = "Joe Weaver and Richard McKenna.";
 
-        const lblAbout1 = <Label>this.add.uiElement(UIElementType.LABEL, "about", {position: new Vec2(center.x, center.y - 50), text: strAbout1});
-        const lblAbout2 = <Label>this.add.uiElement(UIElementType.LABEL, "about", {position: new Vec2(center.x, center.y), text: strAbout2});
-        const lblAbout3 = <Label>this.add.uiElement(UIElementType.LABEL, "about", {position: new Vec2(center.x, center.y + 50), text: strAbout3});
+        const lblAbout1 = <Label>this.add.uiElement(UIElementType.LABEL, "about", 
+        {
+            position: new Vec2(center.x, center.y - 50), text: strAbout1 });
+        const lblAbout2 = <Label>this.add.uiElement(UIElementType.LABEL, "about", 
+        { 
+            position: new Vec2(center.x, center.y), 
+            text: strAbout2 
+        });
+        const lblAbout3 = <Label>this.add.uiElement(UIElementType.LABEL, "about", 
+        { 
+            position: new Vec2(center.x, center.y + 50), 
+            text: strAbout3 
+        });
 
         lblAbout1.textColor = Color.WHITE;
         lblAbout2.textColor = Color.WHITE;
@@ -111,32 +158,46 @@ export default class MainMenu extends Scene {
         lblAbout3.fontSize = FONT_SIZE;
 
         // About - Back Button
-        const aboutBack = this.add.uiElement(UIElementType.BUTTON, "about", {position: new Vec2(center.x, center.y + 250), text: "Back"});
+        const aboutBack = this.add.uiElement(UIElementType.BUTTON, "about", 
+            {
+                position: new Vec2(center.x, center.y + 250),
+                text: "Back"
+            });
         aboutBack.size.set(200, 50);
         aboutBack.borderWidth = 2;
         aboutBack.borderColor = Color.WHITE;
         aboutBack.backgroundColor = Color.TRANSPARENT;
-        aboutBack.onClickEventId = this.MENU_TYPE.MENU;
+        aboutBack.onClickEventId = this.BT_EVENT.MENU;
     }
 
-    updateScene(){
-        while(this.receiver.hasNextEvent()){
+    initLeaderboardScene(center: Vec2): void {
+        this.leaderboard = this.addUILayer('leaderboard')
+    }
+
+    updateScene() {
+        while (this.receiver.hasNextEvent()) {
             let event = this.receiver.getNextEvent()
-            if(event.type === this.MENU_TYPE.MENU){
+            if (event.type === this.BT_EVENT.MENU) {
                 this.mainMenu.setHidden(false)
-                this.about.setHidden(true)
+                this.help.setHidden(true)
                 this.controls.setHidden(true)
             }
-            if(event.type === this.MENU_TYPE.PLAY){
-                // this.sceneManager.changeToScene(hw4_scene, {});
+            if (event.type === this.BT_EVENT.PLAY) {
+                this.sceneManager.changeToScene(Gameplay, {});
             }
-            if(event.type === this.MENU_TYPE.CONTROLS){
+            if (event.type === this.BT_EVENT.LEVEL_SELECT) {
+                
+            }
+            if (event.type === this.BT_EVENT.CONTROLS) {
                 this.mainMenu.setHidden(true)
                 this.controls.setHidden(false)
             }
-            if(event.type === this.MENU_TYPE.ABOUT){
-                this.about.setHidden(false)
+            if (event.type === this.BT_EVENT.HELP) {
+                this.help.setHidden(false)
                 this.mainMenu.setHidden(true)
+            }
+            if (event.type === this.BT_EVENT.LEADERBOARD) {
+                
             }
         }
     }

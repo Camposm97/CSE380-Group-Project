@@ -8,10 +8,14 @@ var paths = {
     pages: ['src/*.html']
 };
 
+/*
+    This gulp file can only compile benchmark2 as of now
+*/
+
 var watchedBrowserify = watchify(browserify({
     basedir: '.',
     debug: true,
-    entries: ['src/main.ts'],
+    entries: ['src/Main.ts'],
     cache: {},
     packageCache: {}
 }).plugin(tsify));

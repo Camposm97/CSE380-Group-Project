@@ -5,6 +5,11 @@
 # VSCode
 .vscode
 
+# Gulp
+public/benchmark2/index.html
+public/benchmark3/index.html
+bundle.js
+
 # Logs
 logs
 *.log

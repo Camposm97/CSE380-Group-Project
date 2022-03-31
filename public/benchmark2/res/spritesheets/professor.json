@@ -41,15 +41,15 @@
             "name": "WALK_UP",
             "frames": [
                 {
+                    "index": 3,
+                    "duration": 10
+                },
+                {
                     "index": 4,
                     "duration": 10
                 },
                 {
                     "index": 5,
-                    "duration": 10
-                },
-                {
-                    "index": 6,
                     "duration": 10
                 }
             ]
@@ -58,15 +58,15 @@
             "name": "WALK_RIGHT",
             "frames": [
                 {
+                    "index": 6,
+                    "duration": 10
+                },
+                {
                     "index": 7,
                     "duration": 10
                 },
                 {
                     "index": 8,
-                    "duration": 10
-                },
-                {
-                    "index": 9,
                     "duration": 10
                 }
             ]
@@ -75,15 +75,15 @@
             "name": "WALK_LEFT",
             "frames": [
                 {
+                    "index": 9,
+                    "duration": 10
+                },
+                {
                     "index": 10,
                     "duration": 10
                 },
                 {
                     "index": 11,
-                    "duration": 10
-                },
-                {
-                    "index": 12,
                     "duration": 10
                 }
             ]

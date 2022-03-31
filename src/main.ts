@@ -1,11 +1,8 @@
 import Game from "./Wolfie2D/Loop/Game";
 import MainMenu from "./benchmark2/scene/MainMenu";
-// import hw4_scene from "./hw4/Scenes/hw4_scene";
-// import RegistryManager from "./Wolfie2D/Registry/RegistryManager";
-// import WeaponTemplateRegistry from "./hw4/Registry/WeaponRegistry";
-// import WeaponTypeRegistry from "./hw4/Registry/WeaponTypeRegistry";
-// import MainMenu from "./hw4/Scenes/MainMenu";
-import GoapActionPlanner from "./Wolfie2D/AI/GoapActionPlanner";
+import RegistryManager from "./Wolfie2D/Registry/RegistryManager";
+import WeaponTemplateRegistry from "./benchmark2/registry/WeaponRegistry";
+import WeaponTypeRegistry from "./benchmark2/registry/WeaponTypeRegistry";
 
 // The main function is your entrypoint into Wolfie2D. Specify your first scene and any options here.
 (function main(){
@@ -28,11 +25,11 @@ import GoapActionPlanner from "./Wolfie2D/AI/GoapActionPlanner";
     }
 
     // Set up custom registries
-    // let weaponTemplateRegistry = new WeaponTemplateRegistry();
-    // RegistryManager.addCustomRegistry("weaponTemplates", weaponTemplateRegistry);
+    let weaponTemplateRegistry = new WeaponTemplateRegistry();
+    RegistryManager.addCustomRegistry("weaponTemplates", weaponTemplateRegistry);
     
-    // let weaponTypeRegistry = new WeaponTypeRegistry();
-    // RegistryManager.addCustomRegistry("weaponTypes", weaponTypeRegistry);
+    let weaponTypeRegistry = new WeaponTypeRegistry();
+    RegistryManager.addCustomRegistry("weaponTypes", weaponTypeRegistry);
 
     // Create a game with the options specified
     const game = new Game(options);
