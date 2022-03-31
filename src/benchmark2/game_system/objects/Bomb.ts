@@ -27,7 +27,6 @@ export default class Bomb {
     );
     // this.position.x = tileCoord.x + 0.5 * 16;
     // this.position.y = tileCoord.y + 0.5 * 16;
-    console.log(this.position.toString());
     this.collisionBoundary = new AABB(
       new Vec2(this.position.x, this.position.y),
       new Vec2(0.8, 0.8)
@@ -45,5 +44,10 @@ export default class Bomb {
       new Vec2(this.position.x, this.position.y),
       new Vec2(48.8, 48.8)
     );
+  }
+
+  displayFlag(sprite: Sprite) {
+    this.sprite = sprite;
+    sprite.position = this.position;
   }
 }
