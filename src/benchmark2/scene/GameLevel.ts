@@ -33,41 +33,22 @@ import ScoreTimer from "../game_system/ScoreTimer";
 import Bomb from "../game_system/objects/Bomb";
 
 export default class GameLevel extends Scene {
-  // The player
-  // private players: Array<AnimatedSprite>;
-  private player: AnimatedSprite;
+  private player: AnimatedSprite;           // Player Sprite
+  private enemies: Array<AnimatedSprite>;   // List of Enemies
+  private bombs: Array<Bomb>;               // List of Bombs
+  private flags: Array<AnimatedSprite>;     // List of Flags
+  private walls: OrthogonalTilemap;         // Wall Layer
+  private graph: PositionGraph;             // Nav Mesh
+  private items: Array<Item>;               // List of Items
 
-  // A list of enemies
-  private enemies: Array<AnimatedSprite>;
-
-  // A list of bombs
-  private bombs: Array<Bomb>;
-
-  // A list of flags
-  private flags: Array<AnimatedSprite>;
-
-  // The wall layer of the tilemap to use for bullet visualization
-  private walls: OrthogonalTilemap;
-
-  // The position graph for the navmesh
-  private graph: PositionGraph;
-
-  // A list of items in the scene
-  private items: Array<Item>;
-
-  // The battle manager for the scene
   private battleManager: BattleManager;
-
-  // Player health
-  private healthDisplays: Array<Label>;
-  private lblTime: Label;
-
+  private lblHealth: Label
+  private lblTime: Label
   private scoreTimer: ScoreTimer;
 
   loadScene() {
     // Load the player and enemy spritesheets
     this.load.spritesheet("player1", "res/spritesheets/professor.json");
-    this.load.spritesheet("player2", "res/spritesheets/professor.json");
 
     this.load.spritesheet("gun_enemy", "res/spritesheets/gun_enemy.json");
     this.load.spritesheet("knife_enemy", "res/spritesheets/knife_enemy.json");
@@ -141,7 +122,7 @@ export default class GameLevel extends Scene {
 
     // Zoom in to a reasonable level
     // this.viewport.enableZoom(); // Disable Zoom
-    this.viewport.setZoomLevel(4);
+    this.viewport.setZoomLevel(3);
 
     // Create the navmesh
     this.createNavmesh();
@@ -169,33 +150,21 @@ export default class GameLevel extends Scene {
     this.spawnItems();
 
     // Add a UI for health
-    this.addUILayer("health");
+    this.addUILayer('hud');
 
-    this.healthDisplays = new Array(2);
-    this.healthDisplays[0] = <Label>this.add.uiElement(
-      UIElementType.LABEL,
-      "health",
-      // {position: new Vec2(70, 16), text: "Health: " + (<BattlerAI>this.players[0]._ai).health});
-      {
-        position: new Vec2(70, 20),
-        text: "HP: " + (<BattlerAI>this.player._ai).health,
-      }
-    );
-    this.healthDisplays[0].textColor = Color.WHITE;
+    this.lblHealth = <Label> this.add.uiElement(UIElementType.LABEL, 'hud', {
+      position: new Vec2(60,16), 
+      text: `HP: ${(<BattlerAI>this.player._ai).health}`
+    })
+    this.lblHealth.textColor = Color.WHITE
 
-    // this.healthDisplays[1] = <Label>this.add.uiElement(UIElementType.LABEL, "health",
-    //     {position: new Vec2(70, 32), text: "Health: " + (<BattlerAI>this.players[1]._ai).health});
-    // this.healthDisplays[1].textColor = Color.WHITE;
-
-    this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, "health", {
-      position: new Vec2(350, 15),
+    this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {
+      position: new Vec2(360, 16),
       text: "",
     });
     this.lblTime.textColor = Color.WHITE;
 
-    this.scoreTimer = new ScoreTimer(
-      300_000,
-      () => {
+    this.scoreTimer = new ScoreTimer(300_000, () => {
         this.sceneManager.changeToScene(GameOver, { win: false });
       },
       false
@@ -274,11 +243,8 @@ export default class GameLevel extends Scene {
 
     // check health of each player
     let health = (<BattlerAI>this.player._ai).health;
-    // let health1 = (<BattlerAI>this.players[0]._ai).health;
-    // let health2 = (<BattlerAI>this.players[1]._ai).health;
 
     //If both are dead, game over
-    // if(health1 <= 0 && health2 <= 0){
     if (health <= 0) {
       this.viewport.setZoomLevel(1);
       this.viewport.disableZoom();
@@ -296,8 +262,7 @@ export default class GameLevel extends Scene {
     // (<PlayerController>this.players[1]._ai).target = closetEnemy2;
 
     // Update health gui
-    this.healthDisplays[0].text = "Health: " + health;
-    // this.healthDisplays[1].text = "Health: " + health2;
+    this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
 
     // Debug mode graph
