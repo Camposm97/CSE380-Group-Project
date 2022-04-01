@@ -13,6 +13,8 @@ import Weapon from "../game_system/items/Weapon";
 import { Events, Names } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import AttackAction from "./enemy_actions/AttackAction";
+import { PlayerAnimations } from "../scene/Constants";
+import Emitter from "../../Wolfie2D/Events/Emitter";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -46,6 +48,7 @@ export default class PlayerController implements BattlerAI {
   private path: NavigationPath;
 
   private receiver: Receiver;
+  private emitter: Emitter;
 
   private coatColor: string;
 
@@ -67,6 +70,7 @@ export default class PlayerController implements BattlerAI {
     this.inventory = options.inventory;
 
     this.receiver = new Receiver();
+    this.emitter = new Emitter();
     this.coatColor = "white";
     // this.receiver.subscribe(Events.SWAP_PLAYER);
   }
@@ -94,17 +98,17 @@ export default class PlayerController implements BattlerAI {
 
     if (this.inputEnabled && this.health > 0) {
       //Check right click
-      if (Input.isMouseJustPressed(2)) {
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(
-            Names.NAVMESH,
-            this.owner.position,
-            Input.getGlobalMousePosition(),
-            true
-          );
-      }
+      // if (Input.isMouseJustPressed(2)) {
+      //   this.path = this.owner
+      //     .getScene()
+      //     .getNavigationManager()
+      //     .getPath(
+      //       Names.NAVMESH,
+      //       this.owner.position,
+      //       Input.getGlobalMousePosition(),
+      //       true
+      //     );
+      // }
 
       // Check for slot change
       if (Input.isJustPressed("slot1")) {
@@ -174,22 +178,22 @@ export default class PlayerController implements BattlerAI {
       }
 
       if (Input.isPressed("forward")) {
-        let animationName = "WALK_UP_WHITE";
+        let animationName = PlayerAnimations.WALK_UP_WHITE;
         switch (this.coatColor) {
           case "white":
-            animationName = "WALK_UP_WHITE";
+            animationName = PlayerAnimations.WALK_UP_WHITE;
             break;
           case "blue":
-            animationName = "WALK_UP_BLUE";
+            animationName = PlayerAnimations.WALK_UP_BLUE;
             break;
           case "green":
-            animationName = "WALK_UP_GREEN";
+            animationName = PlayerAnimations.WALK_UP_GREEN;
             break;
           case "red":
-            animationName = "WALK_UP_RED";
+            animationName = PlayerAnimations.WALK_UP_RED;
             break;
           default:
-            animationName = "WALK_UP_WHITE";
+            animationName = PlayerAnimations.WALK_UP_WHITE;
             break;
         }
         this.owner.animation.playIfNotAlready(animationName, true, null);
@@ -197,22 +201,22 @@ export default class PlayerController implements BattlerAI {
         this.lookDirection.x = 0;
       }
       if (Input.isPressed("left")) {
-        let animationName = "WALK_LEFT_WHITE";
+        let animationName = PlayerAnimations.WALK_LEFT_WHITE;
         switch (this.coatColor) {
           case "white":
-            animationName = "WALK_LEFT_WHITE";
+            animationName = PlayerAnimations.WALK_LEFT_WHITE;
             break;
           case "blue":
-            animationName = "WALK_LEFT_BLUE";
+            animationName = PlayerAnimations.WALK_LEFT_BLUE;
             break;
           case "green":
-            animationName = "WALK_LEFT_GREEN";
+            animationName = PlayerAnimations.WALK_LEFT_GREEN;
             break;
           case "red":
-            animationName = "WALK_LEFT_RED";
+            animationName = PlayerAnimations.WALK_LEFT_RED;
             break;
           default:
-            animationName = "WALK_LEFT_WHITE";
+            animationName = PlayerAnimations.WALK_LEFT_WHITE;
             break;
         }
         this.owner.animation.playIfNotAlready(animationName, true, null);
@@ -220,22 +224,22 @@ export default class PlayerController implements BattlerAI {
         this.lookDirection.x = -1;
       }
       if (Input.isPressed("backward")) {
-        let animationName = "WALK_DOWN_WHITE";
+        let animationName = PlayerAnimations.WALK_DOWN_WHITE;
         switch (this.coatColor) {
           case "white":
-            animationName = "WALK_DOWN_WHITE";
+            animationName = PlayerAnimations.WALK_DOWN_WHITE;
             break;
           case "blue":
-            animationName = "WALK_DOWN_BLUE";
+            animationName = PlayerAnimations.WALK_DOWN_BLUE;
             break;
           case "green":
-            animationName = "WALK_DOWN_GREEN";
+            animationName = PlayerAnimations.WALK_DOWN_GREEN;
             break;
           case "red":
-            animationName = "WALK_DOWN_RED";
+            animationName = PlayerAnimations.WALK_DOWN_RED;
             break;
           default:
-            animationName = "WALK_DOWN_WHITE";
+            animationName = PlayerAnimations.WALK_DOWN_WHITE;
             break;
         }
         this.owner.animation.playIfNotAlready(animationName, true, null);
@@ -243,22 +247,22 @@ export default class PlayerController implements BattlerAI {
         this.lookDirection.x = 0;
       }
       if (Input.isPressed("right")) {
-        let animationName = "WALK_RIGHT_WHITE";
+        let animationName = PlayerAnimations.WALK_RIGHT_WHITE;
         switch (this.coatColor) {
           case "white":
-            animationName = "WALK_RIGHT_WHITE";
+            animationName = PlayerAnimations.WALK_RIGHT_WHITE;
             break;
           case "blue":
-            animationName = "WALK_RIGHT_BLUE";
+            animationName = PlayerAnimations.WALK_RIGHT_BLUE;
             break;
           case "green":
-            animationName = "WALK_RIGHT_GREEN";
+            animationName = PlayerAnimations.WALK_RIGHT_GREEN;
             break;
           case "red":
-            animationName = "WALK_RIGHT_RED";
+            animationName = PlayerAnimations.WALK_RIGHT_RED;
             break;
           default:
-            animationName = "WALK_RIGHT_WHITE";
+            animationName = PlayerAnimations.WALK_RIGHT_WHITE;
             break;
         }
         this.owner.animation.playIfNotAlready(animationName, true, null);
@@ -266,22 +270,22 @@ export default class PlayerController implements BattlerAI {
         this.lookDirection.x = 1;
       }
     } else {
-      let animationName = "IDEL_WHITE";
+      let animationName = PlayerAnimations.IDLE_WHITE;
       switch (this.coatColor) {
         case "white":
-          animationName = "IDEL_WHITE";
+          animationName = PlayerAnimations.IDLE_WHITE;
           break;
         case "blue":
-          animationName = "IDEL_BLUE";
+          animationName = PlayerAnimations.IDLE_BLUE;
           break;
         case "green":
-          animationName = "IDEL_GREEN";
+          animationName = PlayerAnimations.IDLE_GREEN;
           break;
         case "red":
-          animationName = "IDEL_RED";
+          animationName = PlayerAnimations.IDLE_RED;
           break;
         default:
-          animationName = "IDEL_WHITE";
+          animationName = PlayerAnimations.IDLE_WHITE;
           break;
       }
       this.owner.animation.playIfNotAlready(animationName, true, null);
@@ -289,6 +293,16 @@ export default class PlayerController implements BattlerAI {
     //   console.log(this.lookDirection.toString());
 
     this.attack();
+
+    if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
+      console.log("flag place");
+      let tileCoord = this.tilemap.getColRowAt(this.owner.position);
+      let tileCoordx = (tileCoord.x += this.lookDirection.x);
+      let tileCoordy = (tileCoord.y += this.lookDirection.y);
+      this.emitter.fireEvent(Events.PLACE_FLAG, {
+        coordinates: new Vec2(tileCoordx, tileCoordy),
+      });
+    }
 
     if (this.path != null) {
       //Move on path if selected
@@ -331,7 +345,7 @@ export default class PlayerController implements BattlerAI {
 
   attack() {
     // handles attacking
-    if (Input.isMouseJustPressed() || Input.isPressed("space")) {
+    if (Input.isMouseJustPressed(1) || Input.isPressed("space")) {
       switch (this.lookDirection.x) {
         case 1:
           console.log("attack right");

@@ -43,6 +43,9 @@ export default class GameLevel extends Scene {
   // A list of bombs
   private bombs: Array<Bomb>;
 
+  // A list of flags
+  private flags: Array<AnimatedSprite>;
+
   // The wall layer of the tilemap to use for bullet visualization
   private walls: OrthogonalTilemap;
 
@@ -159,6 +162,7 @@ export default class GameLevel extends Scene {
     // Subscribe to relevant events
     this.receiver.subscribe("healthpack");
     this.receiver.subscribe("enemyDied");
+    this.receiver.subscribe(Events.PLACE_FLAG);
     this.receiver.subscribe(Events.UNLOAD_ASSET);
 
     // Spawn items into the world
@@ -223,6 +227,27 @@ export default class GameLevel extends Scene {
           });
         }
       }
+      if (event.isType(Events.PLACE_FLAG)) {
+        let coord = event.data.get("coordinates");
+        console.log(coord.toString());
+        for (let bomb of this.bombs) {
+          if (bomb && bomb.tileCoord.equals(coord)) {
+            //TODO Add flag sprite here
+            console.log("bomb found");
+
+            if (!bomb.isFlagged) {
+              console.log("flag placed");
+              bomb.setIsFlaggedTrue();
+              this.flags.push(this.add.animatedSprite("flag", "primary"));
+              this.flags[this.flags.length - 1].position = new Vec2(
+                (coord.x + 0.5) * 16,
+                (coord.y + 1.0) * 16
+              );
+              this.flags[this.flags.length - 1].animation.play("IDLE");
+            }
+          }
+        }
+      }
       if (event.isType(Events.UNLOAD_ASSET)) {
         let asset = this.sceneGraph.getNode(event.data.get("node"));
         asset.destroy();
@@ -236,18 +261,14 @@ export default class GameLevel extends Scene {
     for (let bomb of this.bombs) {
       if (bomb) {
         if (this.player.collisionShape.overlaps(bomb.collisionBoundary)) {
-          console.log("boom");
           (<PlayerController>this.player._ai).health = 0;
         } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
-          console.log("1");
           (<PlayerController>this.player._ai).setCoatColor("red");
         } else if (this.player.collisionShape.overlaps(bomb.middleBoundary)) {
-          console.log("2");
           (<PlayerController>this.player._ai).setCoatColor("blue");
         } else if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
-          console.log("3");
           (<PlayerController>this.player._ai).setCoatColor("green");
-        }
+        } else (<PlayerController>this.player._ai).setCoatColor("white");
       }
     }
 
@@ -486,8 +507,9 @@ export default class GameLevel extends Scene {
     // Get the bomb data
     const bombData = this.load.getObject("bombData");
 
-    // Create an array of the bombdata
+    // Create an array of the bombdata and flags
     this.bombs = new Array(bombData.numBombs);
+    this.flags = new Array(bombData.numBombs);
 
     console.log(bombData);
 

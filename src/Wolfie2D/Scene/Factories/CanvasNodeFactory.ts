@@ -23,230 +23,257 @@ import Particle from "../../Nodes/Graphics/Particle";
  * Access methods in this factory through Scene.add.[methodName]().
  */
 export default class CanvasNodeFactory {
-	protected scene: Scene;
-	protected resourceManager: ResourceManager;
+  protected scene: Scene;
+  protected resourceManager: ResourceManager;
 
-	init(scene: Scene): void {
-		this.scene = scene;
-		this.resourceManager = ResourceManager.getInstance();
-	}
+  init(scene: Scene): void {
+    this.scene = scene;
+    this.resourceManager = ResourceManager.getInstance();
+  }
 
-	/**
-	 * Adds an instance of a UIElement to the current scene - i.e. any class that extends UIElement
-	 * @param type The type of UIElement to add
-	 * @param layerName The layer to add the UIElement to
-	 * @param options Any additional arguments to feed to the constructor
-	 * @returns A new UIElement
-	 */
-	addUIElement = (type: string | UIElementType, layerName: string, options?: Record<string, any>): UIElement => {
-		// Get the layer
-		let layer = this.scene.getLayer(layerName);
+  /**
+   * Adds an instance of a UIElement to the current scene - i.e. any class that extends UIElement
+   * @param type The type of UIElement to add
+   * @param layerName The layer to add the UIElement to
+   * @param options Any additional arguments to feed to the constructor
+   * @returns A new UIElement
+   */
+  addUIElement = (
+    type: string | UIElementType,
+    layerName: string,
+    options?: Record<string, any>
+  ): UIElement => {
+    // Get the layer
+    let layer = this.scene.getLayer(layerName);
 
-		let instance: UIElement;
+    let instance: UIElement;
 
-		switch(type){
-			case UIElementType.BUTTON:
-				instance = this.buildButton(options);
-			break;
-			case UIElementType.LABEL:
-				instance = this.buildLabel(options);
-			break;
-			case UIElementType.SLIDER:
-				instance = this.buildSlider(options);
-			break;
-			case UIElementType.TEXT_INPUT:
-				instance = this.buildTextInput(options);
-			break;
-			default:
-				throw `UIElementType '${type}' does not exist, or is registered incorrectly.`
-		}
+    switch (type) {
+      case UIElementType.BUTTON:
+        instance = this.buildButton(options);
+        break;
+      case UIElementType.LABEL:
+        instance = this.buildLabel(options);
+        break;
+      case UIElementType.SLIDER:
+        instance = this.buildSlider(options);
+        break;
+      case UIElementType.TEXT_INPUT:
+        instance = this.buildTextInput(options);
+        break;
+      default:
+        throw `UIElementType '${type}' does not exist, or is registered incorrectly.`;
+    }
 
-		instance.setScene(this.scene);
-		instance.id = this.scene.generateId();
-		this.scene.getSceneGraph().addNode(instance);
+    instance.setScene(this.scene);
+    instance.id = this.scene.generateId();
+    this.scene.getSceneGraph().addNode(instance);
 
-		// Add instance to layer
-		layer.addNode(instance)
+    // Add instance to layer
+    layer.addNode(instance);
 
-		return instance;
-	}
+    return instance;
+  };
 
-	/**
-	 * Adds a sprite to the current scene
-	 * @param key The key of the image the sprite will represent
-	 * @param layerName The layer on which to add the sprite
-	 * @returns A new Sprite
-	 */
-	addSprite = (key: string, layerName: string): Sprite => {
-		let layer = this.scene.getLayer(layerName);
+  /**
+   * Adds a sprite to the current scene
+   * @param key The key of the image the sprite will represent
+   * @param layerName The layer on which to add the sprite
+   * @returns A new Sprite
+   */
+  addSprite = (key: string, layerName: string): Sprite => {
+    let layer = this.scene.getLayer(layerName);
 
-		let instance = new Sprite(key);
+    let instance = new Sprite(key);
 
-		// Add instance to scene
-		instance.setScene(this.scene);
-		instance.id = this.scene.generateId();
+    // Add instance to scene
+    instance.setScene(this.scene);
+    instance.id = this.scene.generateId();
 
-		if(!(this.scene.isParallaxLayer(layerName) || this.scene.isUILayer(layerName))){
-			this.scene.getSceneGraph().addNode(instance);
-		}
-		
-		// Add instance to layer
-		layer.addNode(instance);
+    if (
+      !(
+        this.scene.isParallaxLayer(layerName) || this.scene.isUILayer(layerName)
+      )
+    ) {
+      this.scene.getSceneGraph().addNode(instance);
+    }
 
-		return instance;
-	}
+    // Add instance to layer
+    layer.addNode(instance);
 
-	/**
-	 * Adds an AnimatedSprite to the current scene
-	 * @param key The key of the image the sprite will represent
-	 * @param layerName The layer on which to add the sprite
-	 * @returns A new AnimatedSprite
-	 */
-	addAnimatedSprite = (key: string, layerName: string): AnimatedSprite => {
-		let layer = this.scene.getLayer(layerName);
-		let spritesheet = this.resourceManager.getSpritesheet(key);
-		let instance = new AnimatedSprite(spritesheet);
+    return instance;
+  };
 
-		// Add instance fo scene
-		instance.setScene(this.scene);
-		instance.id = this.scene.generateId();
-		
-		if(!(this.scene.isParallaxLayer(layerName) || this.scene.isUILayer(layerName))){
-			this.scene.getSceneGraph().addNode(instance);
-		}
+  /**
+   * Adds an AnimatedSprite to the current scene
+   * @param key The key of the image the sprite will represent
+   * @param layerName The layer on which to add the sprite
+   * @returns A new AnimatedSprite
+   */
+  addAnimatedSprite = (key: string, layerName: string): AnimatedSprite => {
+    let layer = this.scene.getLayer(layerName);
+    let spritesheet = this.resourceManager.getSpritesheet(key);
+    console.log(spritesheet);
+    let instance = new AnimatedSprite(spritesheet);
 
-		// Add instance to layer
-		layer.addNode(instance);
+    // Add instance fo scene
+    instance.setScene(this.scene);
+    instance.id = this.scene.generateId();
 
-		return instance;
-	}
+    if (
+      !(
+        this.scene.isParallaxLayer(layerName) || this.scene.isUILayer(layerName)
+      )
+    ) {
+      this.scene.getSceneGraph().addNode(instance);
+    }
 
-	/**
-	 * Adds a new graphic element to the current Scene
-	 * @param type The type of graphic to add
-	 * @param layerName The layer on which to add the graphic
-	 * @param options Any additional arguments to send to the graphic constructor
-	 * @returns A new Graphic
-	 */
-	addGraphic = (type: GraphicType | string, layerName: string, options?: Record<string, any>): Graphic => {
-		// Get the layer
-		let layer = this.scene.getLayer(layerName);
+    // Add instance to layer
+    layer.addNode(instance);
 
-		let instance: Graphic;
+    return instance;
+  };
 
-		switch(type){
-			case GraphicType.POINT:
-				instance = this.buildPoint(options);
-				break;
-			case GraphicType.LINE:
-				instance = this.buildLine(options);
-				break;
-			case GraphicType.RECT:
-				instance = this.buildRect(options);
-				break;
-			case GraphicType.PARTICLE:
-				instance = this.buildParticle(options);
-				break;				
-			default:
-				throw `GraphicType '${type}' does not exist, or is registered incorrectly.`
-		}
+  /**
+   * Adds a new graphic element to the current Scene
+   * @param type The type of graphic to add
+   * @param layerName The layer on which to add the graphic
+   * @param options Any additional arguments to send to the graphic constructor
+   * @returns A new Graphic
+   */
+  addGraphic = (
+    type: GraphicType | string,
+    layerName: string,
+    options?: Record<string, any>
+  ): Graphic => {
+    // Get the layer
+    let layer = this.scene.getLayer(layerName);
 
-		// Add instance to scene
-		instance.setScene(this.scene);
-		instance.id = this.scene.generateId();
+    let instance: Graphic;
 
-		if(!(this.scene.isParallaxLayer(layerName) || this.scene.isUILayer(layerName))){
-			this.scene.getSceneGraph().addNode(instance);
-		}
+    switch (type) {
+      case GraphicType.POINT:
+        instance = this.buildPoint(options);
+        break;
+      case GraphicType.LINE:
+        instance = this.buildLine(options);
+        break;
+      case GraphicType.RECT:
+        instance = this.buildRect(options);
+        break;
+      case GraphicType.PARTICLE:
+        instance = this.buildParticle(options);
+        break;
+      default:
+        throw `GraphicType '${type}' does not exist, or is registered incorrectly.`;
+    }
 
-		// Add instance to layer
-		layer.addNode(instance);
+    // Add instance to scene
+    instance.setScene(this.scene);
+    instance.id = this.scene.generateId();
 
-		return instance;
-	}
+    if (
+      !(
+        this.scene.isParallaxLayer(layerName) || this.scene.isUILayer(layerName)
+      )
+    ) {
+      this.scene.getSceneGraph().addNode(instance);
+    }
 
-	/* ---------- BUILDERS ---------- */
+    // Add instance to layer
+    layer.addNode(instance);
 
-	buildButton(options?: Record<string, any>): Button {
-		this.checkIfPropExists("Button", options, "position", Vec2, "Vec2");
-		this.checkIfPropExists("Button", options, "text", "string");
+    return instance;
+  };
 
-		return new Button(options.position, options.text);
-	}
+  /* ---------- BUILDERS ---------- */
 
-	buildLabel(options?: Record<string, any>): Label {
-		this.checkIfPropExists("Label", options, "position", Vec2, "Vec2");
-		this.checkIfPropExists("Label", options, "text", "string");
+  buildButton(options?: Record<string, any>): Button {
+    this.checkIfPropExists("Button", options, "position", Vec2, "Vec2");
+    this.checkIfPropExists("Button", options, "text", "string");
 
-		return new Label(options.position, options.text)
-	}
+    return new Button(options.position, options.text);
+  }
 
-	buildSlider(options: Record<string, any>): Slider {
-		this.checkIfPropExists("Slider", options, "position", Vec2, "Vec2");
+  buildLabel(options?: Record<string, any>): Label {
+    this.checkIfPropExists("Label", options, "position", Vec2, "Vec2");
+    this.checkIfPropExists("Label", options, "text", "string");
 
-		let initValue = 0;
-		if(options.value !== undefined){
-			initValue = options.value;
-		}
+    return new Label(options.position, options.text);
+  }
 
-		return new Slider(options.position, initValue);
-	}
+  buildSlider(options: Record<string, any>): Slider {
+    this.checkIfPropExists("Slider", options, "position", Vec2, "Vec2");
 
-	buildTextInput(options: Record<string, any>): TextInput {
-		this.checkIfPropExists("TextInput", options, "position", Vec2, "Vec2");
+    let initValue = 0;
+    if (options.value !== undefined) {
+      initValue = options.value;
+    }
 
-		return new TextInput(options.position);
-	}
+    return new Slider(options.position, initValue);
+  }
 
-	buildPoint(options?: Record<string, any>): Point {
-		this.checkIfPropExists("Point", options, "position", Vec2, "Vec2");
+  buildTextInput(options: Record<string, any>): TextInput {
+    this.checkIfPropExists("TextInput", options, "position", Vec2, "Vec2");
 
-		return new Point(options.position);
-	}
+    return new TextInput(options.position);
+  }
 
-	buildParticle(options?: Record<string, any>): Point {
-		this.checkIfPropExists("Particle", options, "position", Vec2, "Vec2");
-		this.checkIfPropExists("Particle", options, "size", Vec2, "Vec2");
-		this.checkIfPropExists("Particle", options, "mass", "number", "number");
+  buildPoint(options?: Record<string, any>): Point {
+    this.checkIfPropExists("Point", options, "position", Vec2, "Vec2");
 
-		//Changed for testing
-		return new Particle(options.position, options.size, options.mass);
-	}
+    return new Point(options.position);
+  }
 
-	buildLine(options?: Record<string, any>): Point {
-		this.checkIfPropExists("Line", options, "start", Vec2, "Vec2");
-		this.checkIfPropExists("Line", options, "end", Vec2, "Vec2");
+  buildParticle(options?: Record<string, any>): Point {
+    this.checkIfPropExists("Particle", options, "position", Vec2, "Vec2");
+    this.checkIfPropExists("Particle", options, "size", Vec2, "Vec2");
+    this.checkIfPropExists("Particle", options, "mass", "number", "number");
 
-		return new Line(options.start, options.end);
-	}
+    //Changed for testing
+    return new Particle(options.position, options.size, options.mass);
+  }
 
-	buildRect(options?: Record<string, any>): Rect {
-		this.checkIfPropExists("Rect", options, "position", Vec2, "Vec2");
-		this.checkIfPropExists("Rect", options, "size", Vec2, "Vec2");
+  buildLine(options?: Record<string, any>): Point {
+    this.checkIfPropExists("Line", options, "start", Vec2, "Vec2");
+    this.checkIfPropExists("Line", options, "end", Vec2, "Vec2");
 
-		return new Rect(options.position, options.size);
-	}
+    return new Line(options.start, options.end);
+  }
 
-	/* ---------- ERROR HANDLING ---------- */
+  buildRect(options?: Record<string, any>): Rect {
+    this.checkIfPropExists("Rect", options, "position", Vec2, "Vec2");
+    this.checkIfPropExists("Rect", options, "size", Vec2, "Vec2");
 
-	checkIfPropExists<T>(objectName: string, options: Record<string, any>, prop: string, type: (new (...args: any) => T) | string, typeName?: string){
-		if(!options || options[prop] === undefined){
-			// Check that the options object has the property
-			throw `${objectName} object requires argument ${prop} of type ${typeName}, but none was provided.`;
-		} else {
-			// Check that the property has the correct type
-			if((typeof type) === "string"){
-				if(!(typeof options[prop] === type)){
-					throw `${objectName} object requires argument ${prop} of type ${type}, but provided ${prop} was not of type ${type}.`;
-				}
-			} else if(type instanceof Function){
-				// If type is a constructor, check against that
-				if(!(options[prop] instanceof type)){
-					throw `${objectName} object requires argument ${prop} of type ${typeName}, but provided ${prop} was not of type ${typeName}.`;
-				}
-			} else {
-				throw `${objectName} object requires argument ${prop} of type ${typeName}, but provided ${prop} was not of type ${typeName}.`;
-			}
-		}
-	}
+    return new Rect(options.position, options.size);
+  }
+
+  /* ---------- ERROR HANDLING ---------- */
+
+  checkIfPropExists<T>(
+    objectName: string,
+    options: Record<string, any>,
+    prop: string,
+    type: (new (...args: any) => T) | string,
+    typeName?: string
+  ) {
+    if (!options || options[prop] === undefined) {
+      // Check that the options object has the property
+      throw `${objectName} object requires argument ${prop} of type ${typeName}, but none was provided.`;
+    } else {
+      // Check that the property has the correct type
+      if (typeof type === "string") {
+        if (!(typeof options[prop] === type)) {
+          throw `${objectName} object requires argument ${prop} of type ${type}, but provided ${prop} was not of type ${type}.`;
+        }
+      } else if (type instanceof Function) {
+        // If type is a constructor, check against that
+        if (!(options[prop] instanceof type)) {
+          throw `${objectName} object requires argument ${prop} of type ${typeName}, but provided ${prop} was not of type ${typeName}.`;
+        }
+      } else {
+        throw `${objectName} object requires argument ${prop} of type ${typeName}, but provided ${prop} was not of type ${typeName}.`;
+      }
+    }
+  }
 }
