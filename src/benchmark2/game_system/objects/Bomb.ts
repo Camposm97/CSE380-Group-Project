@@ -14,13 +14,17 @@ import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilema
  */
 export default class Bomb {
   position: Vec2;
+  tileCoord: Vec2;
   collisionBoundary: AABB;
   innerBoundary: AABB;
   middleBoundary: AABB;
   outerBoundary: AABB;
-  sprite: Sprite;
+  isFlagged: boolean;
+  // sprite: Sprite;
 
   constructor(tileCoord: Vec2) {
+    this.isFlagged = false;
+    this.tileCoord = tileCoord;
     this.position = new Vec2(
       (tileCoord.x + 0.5) * 16,
       (tileCoord.y + 0.5) * 16
@@ -46,8 +50,12 @@ export default class Bomb {
     );
   }
 
-  displayFlag(sprite: Sprite) {
-    this.sprite = sprite;
-    sprite.position = this.position;
+  setIsFlaggedTrue() {
+    this.isFlagged = true;
   }
+
+  // displayFlag(sprite: Sprite) {
+  //   this.sprite = sprite;
+  //   sprite.position = this.position;
+  // }
 }

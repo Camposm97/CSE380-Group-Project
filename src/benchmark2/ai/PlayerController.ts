@@ -14,6 +14,7 @@ import Slice from "../game_system/items/weapon_types/Slice";
 import { Events, Names, PlayerAnimations } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import AttackAction from "./enemy_actions/AttackAction";
+import Emitter from "../../Wolfie2D/Events/Emitter";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -47,6 +48,9 @@ export default class PlayerController implements BattlerAI {
   private path: NavigationPath;
 
   private receiver: Receiver;
+  private emitter: Emitter;
+
+  private coatColor: string;
 
   private overrideIdle: Boolean
 
@@ -69,10 +73,12 @@ export default class PlayerController implements BattlerAI {
 
     this.receiver = new Receiver();
     this.receiver.subscribe('overrideIdle')
+    this.emitter = new Emitter();
+    this.coatColor = "white";
     // this.receiver.subscribe(Events.SWAP_PLAYER);
   }
 
-  activate(options: Record<string, any>): void {}
+  activate(options: Record<string, any>): void { }
 
   handleEvent(event: GameEvent): void {
     // If our id matches this player, set boolean and update inventory UI
@@ -98,17 +104,17 @@ export default class PlayerController implements BattlerAI {
 
     if (this.inputEnabled && this.health > 0) {
       //Check right click
-      if (Input.isMouseJustPressed(2)) {
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(
-            Names.NAVMESH,
-            this.owner.position,
-            Input.getGlobalMousePosition(),
-            true
-          );
-      }
+      // if (Input.isMouseJustPressed(2)) {
+      //   this.path = this.owner
+      //     .getScene()
+      //     .getNavigationManager()
+      //     .getPath(
+      //       Names.NAVMESH,
+      //       this.owner.position,
+      //       Input.getGlobalMousePosition(),
+      //       true
+      //     );
+      // }
 
       // Check for slot change
       if (Input.isJustPressed("slot1")) {
@@ -182,60 +188,183 @@ export default class PlayerController implements BattlerAI {
         // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
 
         this.overrideIdle = false
-
+        // TODO ADAPT THIS TO ANDREW'S CODE
+        //   if (Input.isPressed("forward")) {
+        //     this.owner.animation.playIfNotAlready("WALK_UP_WHITE", true, null);
+        //     this.lookDirection.y = 1;
+        //     this.lookDirection.x = 0;
+        //   }
+        //   if (Input.isPressed("left")) {
+        //     this.owner.animation.playIfNotAlready("WALK_LEFT_WHITE", true, null);
+        //     this.lookDirection.y = 0;
+        //     this.lookDirection.x = -1;
+        //   }
+        //   if (Input.isPressed("backward")) {
+        //     this.owner.animation.playIfNotAlready("WALK_DOWN_WHITE", true, null);
+        //     this.lookDirection.y = -1;
+        //     this.lookDirection.x = 0;
+        //   }
+        //   if (Input.isPressed("right")) {
+        //     this.owner.animation.playIfNotAlready("WALK_RIGHT_WHITE", true, null);
+        //     this.lookDirection.y = 0;
+        //     this.lookDirection.x = 1;
+        //   }
+        // } else {
+        //   if (!this.overrideIdle) {
+        //     this.owner.animation.playIfNotAlready("IDLE_WHITE", false, null);
+        //   }
+        // }
         if (Input.isPressed("forward")) {
-          this.owner.animation.playIfNotAlready("WALK_UP_WHITE", true, null);
+          let animationName = PlayerAnimations.WALK_UP_WHITE;
+          switch (this.coatColor) {
+            case "white":
+              animationName = PlayerAnimations.WALK_UP_WHITE;
+              break;
+            case "blue":
+              animationName = PlayerAnimations.WALK_UP_BLUE;
+              break;
+            case "green":
+              animationName = PlayerAnimations.WALK_UP_GREEN;
+              break;
+            case "red":
+              animationName = PlayerAnimations.WALK_UP_RED;
+              break;
+            default:
+              animationName = PlayerAnimations.WALK_UP_WHITE;
+              break;
+          }
+          this.owner.animation.playIfNotAlready(animationName, true, null);
           this.lookDirection.y = 1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("left")) {
-          this.owner.animation.playIfNotAlready("WALK_LEFT_WHITE", true, null);
+          let animationName = PlayerAnimations.WALK_LEFT_WHITE;
+          switch (this.coatColor) {
+            case "white":
+              animationName = PlayerAnimations.WALK_LEFT_WHITE;
+              break;
+            case "blue":
+              animationName = PlayerAnimations.WALK_LEFT_BLUE;
+              break;
+            case "green":
+              animationName = PlayerAnimations.WALK_LEFT_GREEN;
+              break;
+            case "red":
+              animationName = PlayerAnimations.WALK_LEFT_RED;
+              break;
+            default:
+              animationName = PlayerAnimations.WALK_LEFT_WHITE;
+              break;
+          }
+          this.owner.animation.playIfNotAlready(animationName, true, null);
           this.lookDirection.y = 0;
           this.lookDirection.x = -1;
         }
         if (Input.isPressed("backward")) {
-          this.owner.animation.playIfNotAlready("WALK_DOWN_WHITE", true, null);
+          let animationName = PlayerAnimations.WALK_DOWN_WHITE;
+          switch (this.coatColor) {
+            case "white":
+              animationName = PlayerAnimations.WALK_DOWN_WHITE;
+              break;
+            case "blue":
+              animationName = PlayerAnimations.WALK_DOWN_BLUE;
+              break;
+            case "green":
+              animationName = PlayerAnimations.WALK_DOWN_GREEN;
+              break;
+            case "red":
+              animationName = PlayerAnimations.WALK_DOWN_RED;
+              break;
+            default:
+              animationName = PlayerAnimations.WALK_DOWN_WHITE;
+              break;
+          }
+          this.owner.animation.playIfNotAlready(animationName, true, null);
           this.lookDirection.y = -1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("right")) {
-          this.owner.animation.playIfNotAlready("WALK_RIGHT_WHITE", true, null);
+          let animationName = PlayerAnimations.WALK_RIGHT_WHITE;
+          switch (this.coatColor) {
+            case "white":
+              animationName = PlayerAnimations.WALK_RIGHT_WHITE;
+              break;
+            case "blue":
+              animationName = PlayerAnimations.WALK_RIGHT_BLUE;
+              break;
+            case "green":
+              animationName = PlayerAnimations.WALK_RIGHT_GREEN;
+              break;
+            case "red":
+              animationName = PlayerAnimations.WALK_RIGHT_RED;
+              break;
+            default:
+              animationName = PlayerAnimations.WALK_RIGHT_WHITE;
+              break;
+          }
+          this.owner.animation.playIfNotAlready(animationName, true, null);
           this.lookDirection.y = 0;
           this.lookDirection.x = 1;
         }
       } else {
-        if (!this.overrideIdle) {
-          this.owner.animation.playIfNotAlready("IDLE_WHITE", false, null);
+        let animationName = PlayerAnimations.IDLE_WHITE;
+        switch (this.coatColor) {
+          case "white":
+            animationName = PlayerAnimations.IDLE_WHITE;
+            break;
+          case "blue":
+            animationName = PlayerAnimations.IDLE_BLUE;
+            break;
+          case "green":
+            animationName = PlayerAnimations.IDLE_GREEN;
+            break;
+          case "red":
+            animationName = PlayerAnimations.IDLE_RED;
+            break;
+          default:
+            animationName = PlayerAnimations.IDLE_WHITE;
+            break;
         }
+        this.owner.animation.playIfNotAlready(animationName, true, null);
       }
-    }
-    //   console.log(this.lookDirection.toString());
+      //   console.log(this.lookDirection.toString());
 
-    this.attack();
+      this.attack();
 
-    if (this.path != null) {
-      //Move on path if selected
-      if (this.path.isDone()) {
-        this.path = null;
+      if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
+        console.log("flag place");
+        let tileCoord = this.tilemap.getColRowAt(this.owner.position);
+        let tileCoordx = (tileCoord.x += this.lookDirection.x);
+        let tileCoordy = (tileCoord.y += this.lookDirection.y);
+        this.emitter.fireEvent(Events.PLACE_FLAG, {
+          coordinates: new Vec2(tileCoordx, tileCoordy),
+        });
+      }
+
+      if (this.path != null) {
+        //Move on path if selected
+        if (this.path.isDone()) {
+          this.path = null;
+        } else {
+          this.owner.moveOnPath(this.speed * deltaT, this.path);
+          // this.owner.rotation = Vec2.UP.angleToCCW(this.path.getMoveDirection(this.owner));
+        }
       } else {
-        this.owner.moveOnPath(this.speed * deltaT, this.path);
-        // this.owner.rotation = Vec2.UP.angleToCCW(this.path.getMoveDirection(this.owner));
-      }
-    } else {
-      //Target an enemy and attack
-      if (this.target != null) {
-        let item = this.inventory.getItem();
-        this.lookDirection = this.owner.position.dirTo(this.target);
+        //Target an enemy and attack
+        if (this.target != null) {
+          let item = this.inventory.getItem();
+          this.lookDirection = this.owner.position.dirTo(this.target);
 
-        // If there is an item in the current slot, use it
-        if (item) {
-          item.use(this.owner, "player", this.lookDirection);
-          // this.owner.rotation = Vec2.UP.angleToCCW(this.lookDirection);
+          // If there is an item in the current slot, use it
+          if (item) {
+            item.use(this.owner, "player", this.lookDirection);
+            // this.owner.rotation = Vec2.UP.angleToCCW(this.lookDirection);
 
-          if (item instanceof Healthpack) {
-            // Destroy the used healthpack
-            this.inventory.removeItem();
-            item.sprite.visible = false;
+            if (item instanceof Healthpack) {
+              // Destroy the used healthpack
+              this.inventory.removeItem();
+              item.sprite.visible = false;
+            }
           }
         }
       }
@@ -289,5 +418,10 @@ export default class PlayerController implements BattlerAI {
     }
   }
 
-  destroy() {}
+  setCoatColor(color: string) {
+    this.coatColor = color;
+  }
+
+  destroy() {
+  }
 }
