@@ -23,7 +23,7 @@ export default class MainMenu extends Scene {
     };
 
 
-    startScene(): void {
+    startScene(): void {        
         let center = this.viewport.getCenter().clone()
         this.initMenuButtons(center)
         this.initLevelSelectScene(center)

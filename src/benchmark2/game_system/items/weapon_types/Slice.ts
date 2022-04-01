@@ -16,7 +16,22 @@ export default class Slice extends WeaponType {
 
     doAnimation(attacker: GameNode, direction: Vec2, sliceSprite: AnimatedSprite): void {
         // Rotate this with the game node
-        sliceSprite.rotation = attacker.rotation;
+        switch (direction.x) {
+            case -1:
+                sliceSprite.rotation = (Math.PI) / 2
+                break;
+            case 1:
+                sliceSprite.rotation = (-1 * Math.PI) / 2
+                break;
+        }
+        switch (direction.y) {
+            case -1:
+                sliceSprite.rotation = 0
+                break;
+            case 1:
+                sliceSprite.rotation = Math.PI
+                break;
+        }
 
         // Move the slice out from the player
         sliceSprite.position = attacker.position.clone().add(direction.scaled(16));

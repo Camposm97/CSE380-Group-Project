@@ -10,7 +10,8 @@ import InventoryManager from "../game_system/InventoryManager";
 import Healthpack from "../game_system/items/Healthpack";
 import Item from "../game_system/items/Item";
 import Weapon from "../game_system/items/Weapon";
-import { Events, Names } from "../scene/Constants";
+import Slice from "../game_system/items/weapon_types/Slice";
+import { Events, Names, PlayerAnimations } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import AttackAction from "./enemy_actions/AttackAction";
 
@@ -47,6 +48,8 @@ export default class PlayerController implements BattlerAI {
 
   private receiver: Receiver;
 
+  private overrideIdle: Boolean
+
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
@@ -65,6 +68,7 @@ export default class PlayerController implements BattlerAI {
     this.inventory = options.inventory;
 
     this.receiver = new Receiver();
+    this.receiver.subscribe('overrideIdle')
     // this.receiver.subscribe(Events.SWAP_PLAYER);
   }
 
@@ -82,6 +86,9 @@ export default class PlayerController implements BattlerAI {
     //         this.inventory.setActive(false);
     //     }
     // }
+    if (event.type === 'overrideIdle') {
+      this.overrideIdle = !this.overrideIdle
+    }
   }
 
   update(deltaT: number): void {
@@ -140,8 +147,13 @@ export default class PlayerController implements BattlerAI {
         }
       }
 
-      // WASD Movement
+      // TEST DAMAGE ANIMATION
+      // if (Input.isJustPressed('panic')) {
+      //   this.overrideIdle = true
+      //   this.owner.animation.playIfNotAlready('DAMAGE', false, 'overrideIdle')
+      // }
 
+      // WASD Movement
       let forwardAxis =
         (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
         (Input.isPressed("backward") ? -1 : 0);
@@ -168,30 +180,34 @@ export default class PlayerController implements BattlerAI {
         // console.log(this.owner.position.toString());
         // console.log(tileWorldcoord.toString());
         // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
-      }
 
-      if (Input.isPressed("forward")) {
-        this.owner.animation.playIfNotAlready("WALK_UP_WHITE", true, null);
-        this.lookDirection.y = 1;
-        this.lookDirection.x = 0;
+        this.overrideIdle = false
+
+        if (Input.isPressed("forward")) {
+          this.owner.animation.playIfNotAlready("WALK_UP_WHITE", true, null);
+          this.lookDirection.y = 1;
+          this.lookDirection.x = 0;
+        }
+        if (Input.isPressed("left")) {
+          this.owner.animation.playIfNotAlready("WALK_LEFT_WHITE", true, null);
+          this.lookDirection.y = 0;
+          this.lookDirection.x = -1;
+        }
+        if (Input.isPressed("backward")) {
+          this.owner.animation.playIfNotAlready("WALK_DOWN_WHITE", true, null);
+          this.lookDirection.y = -1;
+          this.lookDirection.x = 0;
+        }
+        if (Input.isPressed("right")) {
+          this.owner.animation.playIfNotAlready("WALK_RIGHT_WHITE", true, null);
+          this.lookDirection.y = 0;
+          this.lookDirection.x = 1;
+        }
+      } else {
+        if (!this.overrideIdle) {
+          this.owner.animation.playIfNotAlready("IDLE_WHITE", false, null);
+        }
       }
-      if (Input.isPressed("left")) {
-        this.owner.animation.playIfNotAlready("WALK_LEFT_WHITE", true, null);
-        this.lookDirection.y = 0;
-        this.lookDirection.x = -1;
-      }
-      if (Input.isPressed("backward")) {
-        this.owner.animation.playIfNotAlready("WALK_DOWN_WHITE", true, null);
-        this.lookDirection.y = -1;
-        this.lookDirection.x = 0;
-      }
-      if (Input.isPressed("right")) {
-        this.owner.animation.playIfNotAlready("WALK_RIGHT_WHITE", true, null);
-        this.lookDirection.y = 0;
-        this.lookDirection.x = 1;
-      }
-    } else {
-      this.owner.animation.playIfNotAlready("IDLE_WHITE", true, null);
     }
     //   console.log(this.lookDirection.toString());
 
@@ -228,6 +244,8 @@ export default class PlayerController implements BattlerAI {
 
   damage(damage: number): void {
     this.health -= damage;
+    this.overrideIdle = true // Override idle animation
+    this.owner.animation.play(PlayerAnimations.DAMAGE, false, 'overrideIdle')
     if (this.health <= 0) {
       this.health = 0;
       this.owner.setAIActive(false, {});
@@ -238,13 +256,18 @@ export default class PlayerController implements BattlerAI {
 
   attack() {
     // handles attacking
-    if (Input.isMouseJustPressed() || Input.isPressed("space")) {
+    if (Input.isMouseJustPressed() || Input.isJustPressed("attack")) {
+      this.overrideIdle = true
       switch (this.lookDirection.x) {
         case 1:
           console.log("attack right");
+          this.owner.animation.play('LOOK_RIGHT_WHITE', false, null)
+          this.inventory.getItem().use(this.owner, 'player', this.lookDirection)
           break;
         case -1:
           console.log("attack left");
+          this.owner.animation.play('LOOK_LEFT_WHITE', false, null)
+          this.inventory.getItem().use(this.owner, 'player', this.lookDirection)
           break;
         default:
           break;
@@ -252,9 +275,13 @@ export default class PlayerController implements BattlerAI {
       switch (this.lookDirection.y) {
         case 1:
           console.log("attack up");
+          this.owner.animation.play('LOOK_UP_WHITE', false, null)
+          this.inventory.getItem().use(this.owner, 'player', new Vec2(0, -1))
           break;
         case -1:
           console.log("attack down");
+          this.owner.animation.play('LOOK_DOWN_WHITE', false, null)
+          this.inventory.getItem().use(this.owner, 'player', new Vec2(0, 1))
           break;
         default:
           break;

@@ -36,6 +36,42 @@
             ]
         },
         {
+            "name": "LOOK_DOWN_WHITE",
+            "frames": [
+                {
+                    "index": 0,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_UP_WHITE",
+            "frames": [
+                {
+                    "index": 7,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_RIGHT_WHITE",
+            "frames": [
+                {
+                    "index": 10,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_LEFT_WHITE",
+            "frames": [
+                {
+                    "index": 13,
+                    "duration": 60
+                }
+            ]
+        },
+        {
             "name": "WALK_DOWN_WHITE",
             "frames": [
                 {
@@ -170,6 +206,42 @@
             ]
         },
         {
+            "name": "LOOK_DOWN_GREEN",
+            "frames": [
+                {
+                    "index": 22,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_UP_GREEN",
+            "frames": [
+                {
+                    "index": 29,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_RIGHT_GREEN",
+            "frames": [
+                {
+                    "index": 32,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_LEFT_GREEN",
+            "frames": [
+                {
+                    "index": 35,
+                    "duration": 60
+                }
+            ]
+        },
+        {
             "name": "WALK_DOWN_GREEN",
             "frames": [
                 {
@@ -263,6 +335,42 @@
             ]
         },
         {
+            "name": "LOOK_DOWN_BLUE",
+            "frames": [
+                {
+                    "index": 38,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_UP_BLUE",
+            "frames": [
+                {
+                    "index": 45,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_RIGHT_BLUE",
+            "frames": [
+                {
+                    "index": 48,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_LEFT_BLUE",
+            "frames": [
+                {
+                    "index": 51,
+                    "duration": 60
+                }
+            ]
+        },
+        {
             "name": "WALK_DOWN_BLUE",
             "frames": [
                 {
@@ -352,6 +460,42 @@
                 {
                     "index": 58,
                     "duration": 40
+                }
+            ]
+        },
+        {
+            "name": "LOOK_DOWN_RED",
+            "frames": [
+                {
+                    "index": 54,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_UP_RED",
+            "frames": [
+                {
+                    "index": 61,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_RIGHT_RED",
+            "frames": [
+                {
+                    "index": 64,
+                    "duration": 60
+                }
+            ]
+        },
+        {
+            "name": "LOOK_LEFT_RED",
+            "frames": [
+                {
+                    "index": 67,
+                    "duration": 60
                 }
             ]
         },

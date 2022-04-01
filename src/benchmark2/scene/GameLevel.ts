@@ -401,7 +401,7 @@ export default class GameLevel extends Scene {
       "slots1",
       "items1"
     );
-    let startingWeapon = this.createWeapon("weak_pistol");
+    let startingWeapon = this.createWeapon("knife");
     inventory.addItem(startingWeapon);
 
     // Create the players
