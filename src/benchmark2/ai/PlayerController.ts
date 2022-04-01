@@ -5,54 +5,47 @@ import Input from "../../Wolfie2D/Input/Input";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
-import Timer from "../../Wolfie2D/Timing/Timer";
 import InventoryManager from "../game_system/InventoryManager";
 import Healthpack from "../game_system/items/Healthpack";
 import Item from "../game_system/items/Item";
-import Weapon from "../game_system/items/Weapon";
-import Slice from "../game_system/items/weapon_types/Slice";
-import { Events, Names, PlayerAnimations } from "../scene/Constants";
+import { Events, Names, PlayerAction, PlayerAnimations, CoatColor } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
-import AttackAction from "./enemy_actions/AttackAction";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
-  tilemap: OrthogonalTilemap;
+  private tilemap: OrthogonalTilemap;
 
   // Fields from BattlerAI
-  health: number;
+  public health: number;
 
   // The actual player sprite
-  owner: AnimatedSprite;
+  public owner: AnimatedSprite;
 
   // Attack range
-  range: number;
+  public range: number;
 
   // Current targeted enemy
-  target: Vec2;
+  public target: Vec2;
 
   // Used for swapping control between both players
-  inputEnabled: boolean;
+  private inputEnabled: boolean;
 
   // The inventory of the player
-  inventory: InventoryManager;
+  public inventory: InventoryManager;
 
   /** A list of items in the game world */
   private items: Array<Item>;
 
+  public coatColor: string;
+  private overrideIdle: Boolean
+
   // Movement
   private speed: number;
-
   private lookDirection: Vec2;
   private path: NavigationPath;
-
   private receiver: Receiver;
   private emitter: Emitter;
-
-  private coatColor: string;
-
-  private overrideIdle: Boolean
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
@@ -72,27 +65,16 @@ export default class PlayerController implements BattlerAI {
     this.inventory = options.inventory;
 
     this.receiver = new Receiver();
-    this.receiver.subscribe('overrideIdle')
+    this.receiver.subscribe(Events.OVERRIDE_IDLE)
     this.emitter = new Emitter();
-    this.coatColor = "white";
+    this.coatColor = CoatColor.WHITE;
     // this.receiver.subscribe(Events.SWAP_PLAYER);
   }
 
   activate(options: Record<string, any>): void { }
 
   handleEvent(event: GameEvent): void {
-    // If our id matches this player, set boolean and update inventory UI
-    // if (event.type === Events.SWAP_PLAYER) {
-    //     if (event.data.get("id") === this.owner.id) {
-    //         this.inputEnabled = true;
-    //         this.inventory.setActive(true);
-    //     }
-    //     else {
-    //         this.inputEnabled = false;
-    //         this.inventory.setActive(false);
-    //     }
-    // }
-    if (event.type === 'overrideIdle') {
+    if (event.type === Events.OVERRIDE_IDLE) {
       this.overrideIdle = !this.overrideIdle
     }
   }
@@ -103,18 +85,6 @@ export default class PlayerController implements BattlerAI {
     }
 
     if (this.inputEnabled && this.health > 0) {
-      //Check right click
-      // if (Input.isMouseJustPressed(2)) {
-      //   this.path = this.owner
-      //     .getScene()
-      //     .getNavigationManager()
-      //     .getPath(
-      //       Names.NAVMESH,
-      //       this.owner.position,
-      //       Input.getGlobalMousePosition(),
-      //       true
-      //     );
-      // }
 
       // Check for slot change
       if (Input.isJustPressed("slot1")) {
@@ -154,10 +124,9 @@ export default class PlayerController implements BattlerAI {
       }
 
       // TEST DAMAGE ANIMATION
-      // if (Input.isJustPressed('panic')) {
-      //   this.overrideIdle = true
-      //   this.owner.animation.playIfNotAlready('DAMAGE', false, 'overrideIdle')
-      // }
+      if (Input.isJustPressed('panic')) {
+        this.doAnimation(PlayerAction.DAMAGE)
+      }
 
       // WASD Movement
       let forwardAxis =
@@ -187,149 +156,32 @@ export default class PlayerController implements BattlerAI {
         // console.log(tileWorldcoord.toString());
         // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
 
-        this.overrideIdle = false
-        // TODO ADAPT THIS TO ANDREW'S CODE
-        //   if (Input.isPressed("forward")) {
-        //     this.owner.animation.playIfNotAlready("WALK_UP_WHITE", true, null);
-        //     this.lookDirection.y = 1;
-        //     this.lookDirection.x = 0;
-        //   }
-        //   if (Input.isPressed("left")) {
-        //     this.owner.animation.playIfNotAlready("WALK_LEFT_WHITE", true, null);
-        //     this.lookDirection.y = 0;
-        //     this.lookDirection.x = -1;
-        //   }
-        //   if (Input.isPressed("backward")) {
-        //     this.owner.animation.playIfNotAlready("WALK_DOWN_WHITE", true, null);
-        //     this.lookDirection.y = -1;
-        //     this.lookDirection.x = 0;
-        //   }
-        //   if (Input.isPressed("right")) {
-        //     this.owner.animation.playIfNotAlready("WALK_RIGHT_WHITE", true, null);
-        //     this.lookDirection.y = 0;
-        //     this.lookDirection.x = 1;
-        //   }
-        // } else {
-        //   if (!this.overrideIdle) {
-        //     this.owner.animation.playIfNotAlready("IDLE_WHITE", false, null);
-        //   }
-        // }
+        // If there is any movement, override idle animation
         if (Input.isPressed("forward")) {
-          let animationName = PlayerAnimations.WALK_UP_WHITE;
-          switch (this.coatColor) {
-            case "white":
-              animationName = PlayerAnimations.WALK_UP_WHITE;
-              break;
-            case "blue":
-              animationName = PlayerAnimations.WALK_UP_BLUE;
-              break;
-            case "green":
-              animationName = PlayerAnimations.WALK_UP_GREEN;
-              break;
-            case "red":
-              animationName = PlayerAnimations.WALK_UP_RED;
-              break;
-            default:
-              animationName = PlayerAnimations.WALK_UP_WHITE;
-              break;
-          }
-          this.owner.animation.playIfNotAlready(animationName, true, null);
+          this.doAnimation(PlayerAction.WALK_UP)
           this.lookDirection.y = 1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("left")) {
-          let animationName = PlayerAnimations.WALK_LEFT_WHITE;
-          switch (this.coatColor) {
-            case "white":
-              animationName = PlayerAnimations.WALK_LEFT_WHITE;
-              break;
-            case "blue":
-              animationName = PlayerAnimations.WALK_LEFT_BLUE;
-              break;
-            case "green":
-              animationName = PlayerAnimations.WALK_LEFT_GREEN;
-              break;
-            case "red":
-              animationName = PlayerAnimations.WALK_LEFT_RED;
-              break;
-            default:
-              animationName = PlayerAnimations.WALK_LEFT_WHITE;
-              break;
-          }
-          this.owner.animation.playIfNotAlready(animationName, true, null);
+          this.doAnimation(PlayerAction.WALK_LEFT)
           this.lookDirection.y = 0;
           this.lookDirection.x = -1;
         }
         if (Input.isPressed("backward")) {
-          let animationName = PlayerAnimations.WALK_DOWN_WHITE;
-          switch (this.coatColor) {
-            case "white":
-              animationName = PlayerAnimations.WALK_DOWN_WHITE;
-              break;
-            case "blue":
-              animationName = PlayerAnimations.WALK_DOWN_BLUE;
-              break;
-            case "green":
-              animationName = PlayerAnimations.WALK_DOWN_GREEN;
-              break;
-            case "red":
-              animationName = PlayerAnimations.WALK_DOWN_RED;
-              break;
-            default:
-              animationName = PlayerAnimations.WALK_DOWN_WHITE;
-              break;
-          }
-          this.owner.animation.playIfNotAlready(animationName, true, null);
+          this.doAnimation(PlayerAction.WALK_DOWN)
           this.lookDirection.y = -1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("right")) {
-          let animationName = PlayerAnimations.WALK_RIGHT_WHITE;
-          switch (this.coatColor) {
-            case "white":
-              animationName = PlayerAnimations.WALK_RIGHT_WHITE;
-              break;
-            case "blue":
-              animationName = PlayerAnimations.WALK_RIGHT_BLUE;
-              break;
-            case "green":
-              animationName = PlayerAnimations.WALK_RIGHT_GREEN;
-              break;
-            case "red":
-              animationName = PlayerAnimations.WALK_RIGHT_RED;
-              break;
-            default:
-              animationName = PlayerAnimations.WALK_RIGHT_WHITE;
-              break;
-          }
-          this.owner.animation.playIfNotAlready(animationName, true, null);
+          this.doAnimation(PlayerAction.WALK_RIGHT)
           this.lookDirection.y = 0;
           this.lookDirection.x = 1;
         }
       } else {
-        let animationName = PlayerAnimations.IDLE_WHITE;
-        switch (this.coatColor) {
-          case "white":
-            animationName = PlayerAnimations.IDLE_WHITE;
-            break;
-          case "blue":
-            animationName = PlayerAnimations.IDLE_BLUE;
-            break;
-          case "green":
-            animationName = PlayerAnimations.IDLE_GREEN;
-            break;
-          case "red":
-            animationName = PlayerAnimations.IDLE_RED;
-            break;
-          default:
-            animationName = PlayerAnimations.IDLE_WHITE;
-            break;
-        }
-        this.owner.animation.playIfNotAlready(animationName, true, null);
+        this.doAnimation(PlayerAction.IDLE)
       }
-      //   console.log(this.lookDirection.toString());
 
-      this.attack();
+      this.handleAttack();
 
       if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
         console.log("flag place");
@@ -371,10 +223,37 @@ export default class PlayerController implements BattlerAI {
     }
   }
 
+  doAnimation(action: PlayerAction): void {
+    switch (action) {
+      case PlayerAction.IDLE:
+        if (!this.overrideIdle) {
+          this.owner.animation.playIfNotAlready(`${action}_${this.coatColor}`, true, null)
+        }
+        break;
+      case PlayerAction.WALK_UP:
+      case PlayerAction.WALK_DOWN:
+      case PlayerAction.WALK_RIGHT:
+      case PlayerAction.WALK_LEFT:
+        this.overrideIdle = false
+        this.owner.animation.playIfNotAlready(`${action}_${this.coatColor}`, true, null)
+        break;
+      case PlayerAction.LOOK_UP:
+      case PlayerAction.LOOK_DOWN:
+      case PlayerAction.LOOK_RIGHT:
+      case PlayerAction.LOOK_LEFT:
+        this.overrideIdle = true
+        this.owner.animation.play(`${action}_${this.coatColor}`, false, null)
+        break;
+      case PlayerAction.DAMAGE:
+        this.overrideIdle = true
+        this.owner.animation.play(PlayerAnimations.DAMAGE, false, Events.OVERRIDE_IDLE)
+        break;
+    }
+  }
+
   damage(damage: number): void {
     this.health -= damage;
-    this.overrideIdle = true // Override idle animation
-    this.owner.animation.play(PlayerAnimations.DAMAGE, false, 'overrideIdle')
+    this.doAnimation(PlayerAction.DAMAGE)
     if (this.health <= 0) {
       this.health = 0;
       this.owner.setAIActive(false, {});
@@ -383,36 +262,33 @@ export default class PlayerController implements BattlerAI {
     }
   }
 
-  attack() {
+  handleAttack(): void {
     // handles attacking
     if (Input.isMouseJustPressed() || Input.isJustPressed("attack")) {
-      this.overrideIdle = true
+      let item = this.inventory.getItem()
+      if (item === null) return
       switch (this.lookDirection.x) {
         case 1:
           console.log("attack right");
-          this.owner.animation.play('LOOK_RIGHT_WHITE', false, null)
+          this.doAnimation(PlayerAction.LOOK_RIGHT)
           this.inventory.getItem().use(this.owner, 'player', this.lookDirection)
           break;
         case -1:
           console.log("attack left");
-          this.owner.animation.play('LOOK_LEFT_WHITE', false, null)
+          this.doAnimation(PlayerAction.LOOK_LEFT)
           this.inventory.getItem().use(this.owner, 'player', this.lookDirection)
-          break;
-        default:
           break;
       }
       switch (this.lookDirection.y) {
         case 1:
           console.log("attack up");
-          this.owner.animation.play('LOOK_UP_WHITE', false, null)
+          this.doAnimation(PlayerAction.LOOK_UP)
           this.inventory.getItem().use(this.owner, 'player', new Vec2(0, -1))
           break;
         case -1:
           console.log("attack down");
-          this.owner.animation.play('LOOK_DOWN_WHITE', false, null)
+          this.doAnimation(PlayerAction.LOOK_DOWN)
           this.inventory.getItem().use(this.owner, 'player', new Vec2(0, 1))
-          break;
-        default:
           break;
       }
     }
@@ -423,5 +299,6 @@ export default class PlayerController implements BattlerAI {
   }
 
   destroy() {
+    
   }
 }

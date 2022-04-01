@@ -5,8 +5,8 @@ export enum Names {
 export enum Events {
   SHOT_FIRED = "SHOT_FIRED",
   UNLOAD_ASSET = "UNLOAD_ASSET",
-  SWAP_PLAYER = "SWAP_PLAYER",
   PLACE_FLAG = "PLACE_FLAG",
+  OVERRIDE_IDLE = 'OVERRIDE_IDLE'
 }
 
 export enum Statuses {
@@ -15,6 +15,26 @@ export enum Statuses {
   CAN_RETREAT = "CAN_RETREAT",
   CAN_BERSERK = "CAN_BERSERK",
   REACHED_GOAL = "GOAL",
+}
+
+export enum CoatColor {
+  WHITE = 'WHITE',
+  GREEN = 'GREEN',
+  BLUE = 'BLUE',
+  RED = 'RED'
+}
+
+export enum PlayerAction {
+  IDLE = 'IDLE',
+  WALK_UP = 'WALK_UP',
+  WALK_DOWN = 'WALK_DOWN',
+  WALK_RIGHT = 'WALK_RIGHT',
+  WALK_LEFT = 'WALK_LEFT',
+  LOOK_UP = 'LOOK_UP',
+  LOOK_DOWN = 'LOOK_DOWN',
+  LOOK_RIGHT = 'LOOK_RIGHT',
+  LOOK_LEFT = 'LOOK_LEFT',
+  DAMAGE = 'DAMAGE'
 }
 
 export enum PlayerAnimations {
@@ -55,5 +75,4 @@ export enum PlayerAnimations {
     LOOK_LEFT_BLUE = 'LOOK_LEFT_BLUE',
     LOOK_LEFT_RED = 'LOOK_LEFT_RED',
     DAMAGE = 'DAMAGE'
-
 }

@@ -6,7 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { Events, Names, Statuses } from "./Constants";
+import { CoatColor, Events, Names, Statuses } from "./Constants";
 import EnemyAI from "../ai/EnemyAI";
 import WeaponType from "../game_system/items/weapon_types/WeaponType";
 import RegistryManager from "../../Wolfie2D/Registry/RegistryManager";
@@ -141,7 +141,7 @@ export default class GameLevel extends Scene {
 
     // Zoom in to a reasonable level
     // this.viewport.enableZoom(); // Disable Zoom
-    this.viewport.setZoomLevel(3);
+    this.viewport.setZoomLevel(4);
 
     // Create the navmesh
     this.createNavmesh();
@@ -263,12 +263,12 @@ export default class GameLevel extends Scene {
         if (this.player.collisionShape.overlaps(bomb.collisionBoundary)) {
           (<PlayerController>this.player._ai).health = 0;
         } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
-          (<PlayerController>this.player._ai).setCoatColor("red");
+          (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
         } else if (this.player.collisionShape.overlaps(bomb.middleBoundary)) {
-          (<PlayerController>this.player._ai).setCoatColor("blue");
+          (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
         } else if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
-          (<PlayerController>this.player._ai).setCoatColor("green");
-        } else (<PlayerController>this.player._ai).setCoatColor("white");
+          (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
+        } else (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
       }
     }
 
