@@ -49,18 +49,10 @@ export default class GameLevel extends Scene {
   loadScene() {
     // Load the player and enemy spritesheets
     this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
-
     this.load.spritesheet("gun_enemy", "res/spritesheets/gun_enemy.json");
     this.load.spritesheet("knife_enemy", "res/spritesheets/knife_enemy.json");
-    this.load.spritesheet(
-      "custom_enemy1",
-      "res/spritesheets/custom_enemy1.json"
-    );
-    this.load.spritesheet(
-      "custom_enemy2",
-      "res/spritesheets/custom_enemy2.json"
-    );
-
+    this.load.spritesheet("custom_enemy1", "res/spritesheets/custom_enemy1.json");
+    this.load.spritesheet("custom_enemy2", "res/spritesheets/custom_enemy2.json");
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
 
@@ -152,8 +144,8 @@ export default class GameLevel extends Scene {
     // Add a UI for health
     this.addUILayer('hud');
 
-    this.lblHealth = <Label> this.add.uiElement(UIElementType.LABEL, 'hud', {
-      position: new Vec2(60,16), 
+    this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {
+      position: new Vec2(60, 16),
       text: `HP: ${(<BattlerAI>this.player._ai).health}`
     })
     this.lblHealth.textColor = Color.WHITE
@@ -165,8 +157,8 @@ export default class GameLevel extends Scene {
     this.lblTime.textColor = Color.WHITE;
 
     this.scoreTimer = new ScoreTimer(300_000, () => {
-        this.sceneManager.changeToScene(GameOver, { win: false });
-      },
+      this.sceneManager.changeToScene(GameOver, { win: false });
+    },
       false
     );
     this.scoreTimer.start();
@@ -288,7 +280,7 @@ export default class GameLevel extends Scene {
     for (let enemy of this.enemies) {
       let distance = Math.sqrt(
         Math.pow(enemy.position.x - playerPos.x, 2) +
-          Math.pow(enemy.position.y - playerPos.y, 2)
+        Math.pow(enemy.position.y - playerPos.y, 2)
       );
       if (distance <= range) {
         if (distance < closetDistance) {
