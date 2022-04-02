@@ -31,6 +31,8 @@ export default class GameOver extends Scene {
             lblStatus.text = 'You win!'
             const lblScore = <Label> this.add.uiElement(UIElementType.LABEL, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y + 50), text: `Score: ${this.timeLeft}`})
             lblScore.textColor = Color.WHITE
+        } else {
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
         }
 
         const btOk = <Button> this.add.uiElement(UIElementType.BUTTON, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y + 300), text: 'Main Menu'})
@@ -41,7 +43,5 @@ export default class GameOver extends Scene {
         btOk.onClick = () => {
             this.sceneManager.changeToScene(MainMenu, {})
         }
-
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
     }
 }

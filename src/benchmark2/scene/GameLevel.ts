@@ -40,7 +40,6 @@ export default class GameLevel extends Scene {
   private walls: OrthogonalTilemap;         // Wall Layer
   private graph: PositionGraph;             // Nav Mesh
   private items: Array<Item>;               // List of Items
-
   private battleManager: BattleManager;
   private lblHealth: Label
   private lblTime: Label
@@ -55,27 +54,12 @@ export default class GameLevel extends Scene {
     this.load.spritesheet("custom_enemy2", "res/spritesheets/custom_enemy2.json");
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
-
-    // Load the tilemap
-    // Change this file to be your own tilemap
-    this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load my tile map
-
-    // Load the scene info
-    this.load.object("weaponData", "res/data/weaponData.json");
-
-    // Load the nav mesh
-    this.load.object("navmesh", "res/data/navmesh.json");
-
-    // Load in the enemy info
-    this.load.object("enemyData", "res/data/enemy.json");
-
-    // Load in the bomb info
-    this.load.object("bombData", "res/data/bombs.json");
-
-    // Load in item info
-    this.load.object("itemData", "res/data/items.json");
-
-    // Load the healthpack sprite
+    this.load.tilemap("level", "res/tilemaps/testRoom.json");       // Load tile map
+    this.load.object("weaponData", "res/data/weaponData.json");     // Load scene info
+    this.load.object("navmesh", "res/data/navmesh.json");           // Load nav mesh
+    this.load.object("enemyData", "res/data/enemy.json");           // Load enemy info
+    this.load.object("bombData", "res/data/bombs.json");            // Load bomb info
+    this.load.object("itemData", "res/data/items.json");            // Load item info
     this.load.image("healthpack", "res/sprites/healthpack.png");
     this.load.image("inventorySlot", "res/sprites/inventory.png");
     this.load.image("knife", "res/sprites/knife.png");
@@ -109,11 +93,9 @@ export default class GameLevel extends Scene {
     this.initializePlayer();
 
     // Make the viewport follow the player
-    // this.viewport.follow(this.players[0]);
     this.viewport.follow(this.player);
 
     // Zoom in to a reasonable level
-    // this.viewport.enableZoom(); // Disable Zoom
     this.viewport.setZoomLevel(3);
 
     // Create the navmesh
@@ -144,23 +126,13 @@ export default class GameLevel extends Scene {
     // Add a UI for health
     this.addUILayer('hud');
 
-    this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {
-      position: new Vec2(60, 16),
-      text: `HP: ${(<BattlerAI>this.player._ai).health}`
-    })
+    this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {position: new Vec2(60, 16), text: `HP: ${(<BattlerAI>this.player._ai).health}`})
     this.lblHealth.textColor = Color.WHITE
 
-    this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {
-      position: new Vec2(360, 16),
-      text: "",
-    });
+    this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {position: new Vec2(360, 16), text: ""});
     this.lblTime.textColor = Color.WHITE;
 
-    this.scoreTimer = new ScoreTimer(300_000, () => {
-      this.sceneManager.changeToScene(GameOver, { win: false });
-    },
-      false
-    );
+    this.scoreTimer = new ScoreTimer(300_000, () => {this.sceneManager.changeToScene(GameOver, { win: false })},false);
     this.scoreTimer.start();
   }
 
