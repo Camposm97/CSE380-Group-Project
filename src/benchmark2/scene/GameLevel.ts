@@ -48,7 +48,7 @@ export default class GameLevel extends Scene {
 
   loadScene() {
     // Load the player and enemy spritesheets
-    this.load.spritesheet("player1", "res/spritesheets/professor.json");
+    this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
 
     this.load.spritesheet("gun_enemy", "res/spritesheets/gun_enemy.json");
     this.load.spritesheet("knife_enemy", "res/spritesheets/knife_enemy.json");
