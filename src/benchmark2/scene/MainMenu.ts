@@ -74,36 +74,54 @@ export default class MainMenu extends Scene {
             });
         controlsHeader.textColor = Color.WHITE;
 
-        const ws = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
+        const wu = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
             {
                 position: new Vec2(center.x, center.y - 50),
-                text: "Right Click to move selected player to the clicked point on screen"
+                text: "W/Up-Arrow to move up"
             });
-        ws.textColor = Color.WHITE;
-        const ad = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+        wu.textColor = Color.WHITE;
+        const al = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
             { 
                 position: new Vec2(center.x, center.y), 
-                text: "E to pick up an item from the ground" 
+                text: "A/Left-Arrow to move left" 
             });
-        ad.textColor = Color.WHITE;
-        const click = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+        al.textColor = Color.WHITE;
+        const sd = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
             { 
                 position: new Vec2(center.x, center.y + 50), 
-                text: "Q to drop the current item on the ground" 
+                text: "S/Down-Arrow to move down" 
             });
-        click.textColor = Color.WHITE;
-        const shift = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+        sd.textColor = Color.WHITE;
+        const dr = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
             { 
                 position: new Vec2(center.x, center.y + 100),
-                text: "1 and 2 to equip an inventory item" 
+                text: "D/Right-Arrow to move right" 
             });
-        shift.textColor = Color.WHITE
-        const shift2 = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+        dr.textColor = Color.WHITE;
+        const lclick = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
             {
                 position: new Vec2(center.x, center.y + 150),
-                text: "Z and X to swap between player characters"
+                text: "Sapce/Left-Click to attack"
             });
-        shift2.textColor = Color.WHITE;
+        lclick.textColor = Color.WHITE;
+        const rclick = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+            {
+                position: new Vec2(center.x, center.y - 100),
+                text: "Shift/Right-Click to place flag"
+            });
+        rclick.textColor = Color.WHITE;
+        const p = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+            {
+                position: new Vec2(center.x, center.y - 150),
+                text: "P - panic button, resets the room to its original sate"
+            });
+        p.textColor = Color.WHITE;
+        const esc = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
+            {
+                position: new Vec2(center.x, center.y - 250),
+                text: "ESC pause the game"
+            });
+        esc.textColor = Color.WHITE;
 
         const back = this.add.uiElement(UIElementType.BUTTON, "controls", 
             {
@@ -130,7 +148,7 @@ export default class MainMenu extends Scene {
         });
         aboutHeader.textColor = Color.WHITE;
 
-        const strAbout1 = "This game was created by Michael Campos, Zachary Grandison, and Richard McKenna";
+        const strAbout1 = "This game was created by Andrew Ojeda, Michael Campos, Tuyen Vo";
         const strAbout2 = "using the Wolfie2D game engine, a TypeScript game engine created by";
         const strAbout3 = "Joe Weaver and Richard McKenna.";
 
