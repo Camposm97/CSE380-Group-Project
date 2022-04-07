@@ -30,6 +30,7 @@ export default class MainMenu extends Scene {
         this.initControlScene(center)
         this.initHelpScene(center)
         this.initLeaderboardScene(center)
+        
 
 
         // Subscribe to the button events
@@ -49,6 +50,8 @@ export default class MainMenu extends Scene {
         this.initButton(layer, new Vec2(v.x, v.y - 0), 'Controls', this.BT_EVENT.CONTROLS)
         this.initButton(layer, new Vec2(v.x, v.y + 75), 'Help', this.BT_EVENT.HELP)
         this.initButton(layer, new Vec2(v.x, v.y + 150), 'Leaderboard', this.BT_EVENT.LEADERBOARD)
+        
+    
     }
 
     initButton(layer: string, pos: Vec2, text: string, eventId: string): void {
@@ -58,8 +61,10 @@ export default class MainMenu extends Scene {
         bt.borderColor = Color.WHITE
         bt.backgroundColor = Color.TRANSPARENT
         bt.onClickEventId = eventId
-    }
+        
 
+    }
+ 
     initLevelSelectScene(center: Vec2): void {
          // Level Select Boards Scene
          this.levelSelect = this.addUILayer('levelSelect')
@@ -119,36 +124,49 @@ export default class MainMenu extends Scene {
          l1.borderWidth = 2;
          l1.borderColor = Color.WHITE;
          l1.backgroundColor = Color.TRANSPARENT;
+         l1.font = "Comic Sans MS"
+
          l2.size.set(200, 50);
          l2.borderWidth = 2;
          l2.borderColor = Color.WHITE;
          l2.backgroundColor = Color.TRANSPARENT;
+         l2.font = "Comic Sans MS"
+
          l2.onClickEventId = this.BT_EVENT.MENU;
          l3.size.set(200, 50);
          l3.borderWidth = 2;
          l3.borderColor = Color.WHITE;
          l3.backgroundColor = Color.TRANSPARENT;
          l3.onClickEventId = this.BT_EVENT.MENU;
+         l3.font = "Comic Sans MS"
+
          l4.size.set(200, 50);
          l4.borderWidth = 2;
          l4.borderColor = Color.WHITE;
          l4.backgroundColor = Color.TRANSPARENT;
          l4.onClickEventId = this.BT_EVENT.MENU;
+         l1.font = "Comic Sans MS"
+
          l5.size.set(200, 50);
          l5.borderWidth = 2;
          l5.borderColor = Color.WHITE;
          l5.backgroundColor = Color.TRANSPARENT;
          l5.onClickEventId = this.BT_EVENT.MENU;
+         l5.font = "Comic Sans MS"
+
          l6.size.set(200, 50);
          l6.borderWidth = 2;
          l6.borderColor = Color.WHITE;
          l6.backgroundColor = Color.TRANSPARENT;
          l6.onClickEventId = this.BT_EVENT.MENU;
+         l6.font = "Comic Sans MS"
+
          back.size.set(200, 50);
          back.borderWidth = 2;
          back.borderColor = Color.WHITE;
          back.backgroundColor = Color.TRANSPARENT;
          back.onClickEventId = this.BT_EVENT.MENU;
+
     }
     
 
@@ -159,10 +177,13 @@ export default class MainMenu extends Scene {
         const controlsHeader = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
             {
                 position: new Vec2(center.x, center.y - 300),
-                text: "Controls"
+                text: "Controls", 
+
+                
             });
         controlsHeader.textColor = Color.WHITE;
 
+        
         const wu = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
             {
                 position: new Vec2(center.x, center.y - 50),
@@ -205,23 +226,28 @@ export default class MainMenu extends Scene {
                 text: "P - panic button, resets the room to its original sate"
             });
         p.textColor = Color.WHITE;
+        p.font = "Comic Sans MS"
         const esc = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
             {
                 position: new Vec2(center.x, center.y - 200),
                 text: "ESC pause the game"
             });
         esc.textColor = Color.WHITE;
+        esc.font = "Comic Sans MS"
 
         const back = this.add.uiElement(UIElementType.BUTTON, "controls", 
             {
                 position: new Vec2(center.x, center.y + 250), 
-                text: "Back" 
+                text: "Back" ,
+                font:  "Comic Sans MS"
             });
         back.size.set(200, 50);
         back.borderWidth = 2;
         back.borderColor = Color.WHITE;
         back.backgroundColor = Color.TRANSPARENT;
         back.onClickEventId = this.BT_EVENT.MENU;
+        
+        
     }
 
     initHelpScene(center: Vec2) {
@@ -344,6 +370,7 @@ export default class MainMenu extends Scene {
             
         });
         name.textColor = Color.WHITE;
+        name.font = "Comic Sans MS"
 
         const score = <Label>this.add.uiElement(UIElementType.LABEL, "leaderboard", 
         { 
@@ -353,6 +380,7 @@ export default class MainMenu extends Scene {
            
         });
         score.textColor = Color.WHITE;
+        score.font = "Comic Sans MS"
 
         // Leader Boards - Back Button
         const back = this.add.uiElement(UIElementType.BUTTON, "leaderboard", 
@@ -365,6 +393,7 @@ export default class MainMenu extends Scene {
         back.borderColor = Color.WHITE;
         back.backgroundColor = Color.TRANSPARENT;
         back.onClickEventId = this.BT_EVENT.MENU;
+
     }
 
     updateScene() {

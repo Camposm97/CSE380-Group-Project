@@ -11,11 +11,13 @@ export default class SplashScreen extends Scene {
     private logo: AnimatedSprite;
     loadScene(): void {
         this.load.image("logo","res/sprites/Logo.png");
+        
     }
 
     startScene(): void {
         // First, create a layer for it to go on
         this.addLayer("primary");
+        
 
 
         // Center the viewport
@@ -39,7 +41,7 @@ export default class SplashScreen extends Scene {
         startBtn.borderColor = Color.WHITE;
         startBtn.borderRadius = 0;
         startBtn.setPadding(new Vec2(50, 10));
-        startBtn.font = "PixelSimple";
+        startBtn.font = "Comic Sans MS"
 
         // When the play button is clicked, go to the next scene
         startBtn.onClick = () => {

@@ -38,6 +38,7 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import MainMenu from "./MainMenu";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
+import BlueMouseAI from "../ai/BlueMouseAI";
 
 export default class GameLevel extends Scene {
   private timeLeft: number
@@ -53,6 +54,7 @@ export default class GameLevel extends Scene {
   private lblTime: Label;
   private glm: GameLayerManager
   private scoreTimer: ScoreTimer
+  private listeningEnemies: number; //number of enemies that listen for player movement events
 
   initScene(options: Record<string, any>): void {
     this.timeLeft = options.timeLeft
@@ -64,6 +66,7 @@ export default class GameLevel extends Scene {
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
     this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
+    this.load.spritesheet("blueMouse", "res/spritesheets/rm_blue.json");
     this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load tile map
     this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
     this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
@@ -110,6 +113,9 @@ export default class GameLevel extends Scene {
 
     // Create the navmesh
     this.createNavmesh();
+
+    //initialize the number of enemies listening for player movement to 0
+    this.listeningEnemies = 0;
 
     // Initialize all enemies
     this.initializeEnemies();
@@ -237,18 +243,23 @@ export default class GameLevel extends Scene {
         for (let bomb of this.bombs) {
           if (bomb && !bomb.isDestroyed) {
             if (enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
+              if ((<RobotAI>enemy._ai).listening) this.listeningEnemies--;
               enemy.destroy();
               this.enemies = this.enemies.filter(
                 (currentEnemy) => currentEnemy !== enemy
               );
+              this.battleManager.enemies = this.battleManager.enemies.filter(
+                (currentEnemy) => currentEnemy !== enemy._ai
+              );
+              //TODO ADD BOMB EXPLOSION SPRITE AND REMOVE ANY FLAG SPRITE THAT HAS BEEN PLACED
               bomb.setIsDestroyedTrue();
             }
           }
         }
       }
     }
-    //tell the playerAi no more enemies are left so it stops fireing movement events
-    if (this.enemies.length === 0)
+    //tell the playerAi no more enemies listening for events are left so it stops fireing movement events
+    if (this.listeningEnemies === 0)
       (<PlayerController>this.player._ai).noMoreEnemies();
 
     // checks to see how close player is to bomb
@@ -497,7 +508,10 @@ export default class GameLevel extends Scene {
       switch (entity.ai) {
         case "BlueRobotAI":
           this.enemies[i].addAI(BlueRobotAI, enemyOptions);
+          this.listeningEnemies++;
           break;
+        case "BlueMouseAI":
+          this.enemies[i].addAI(BlueMouseAI, enemyOptions);
         default:
           break;
       }

@@ -12,7 +12,142 @@
   "durationType": "time",
   "animations": [
     {
-      "name": "WALK_UP",
+      "name": "IDLE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 0,
+          "duration": 4
+        },
+        {
+          "index": 1,
+          "duration": 4
+        },
+        {
+          "index": 2,
+          "duration": 4
+        },
+        {
+          "index": 3,
+          "duration": 4
+        },
+        {
+          "index": 4,
+          "duration": 4
+        },
+        {
+          "index": 5,
+          "duration": 4
+        },
+        {
+          "index": 6,
+          "duration": 4
+        },
+        {
+          "index": 7,
+          "duration": 4
+        },
+        {
+          "index": 8,
+          "duration": 4
+        },
+        {
+          "index": 9,
+          "duration": 4
+        },
+        {
+          "index": 10,
+          "duration": 4
+        },
+        {
+          "index": 11,
+          "duration": 4
+        },
+        {
+          "index": 24,
+          "duration": 5
+        },
+        {
+          "index": 25,
+          "duration": 5
+        },
+        {
+          "index": 26,
+          "duration": 5
+        },
+        {
+          "index": 27,
+          "duration": 5
+        },
+        {
+          "index": 28,
+          "duration": 5
+        },
+        {
+          "index": 29,
+          "duration": 5
+        },
+        {
+          "index": 30,
+          "duration": 5
+        },
+        {
+          "index": 31,
+          "duration": 5
+        },
+        {
+          "index": 32,
+          "duration": 5
+        },
+        {
+          "index": 33,
+          "duration": 5
+        },
+        {
+          "index": 34,
+          "duration": 5
+        },
+        {
+          "index": 35,
+          "duration": 5
+        },
+        {
+          "index": 36,
+          "duration": 5
+        },
+        {
+          "index": 37,
+          "duration": 5
+        },
+        {
+          "index": 38,
+          "duration": 5
+        },
+        {
+          "index": 39,
+          "duration": 5
+        },
+        {
+          "index": 40,
+          "duration": 5
+        },
+        {
+          "index": 41,
+          "duration": 5
+        },
+        {
+          "index": 42,
+          "duration": 5
+        },
+        {
+          "index": 43,
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "name": "WALK_DOWN",
+      "repeat": true,
       "frames": [
         {
           "index": 0,
@@ -65,7 +200,8 @@
       ]
     },
     {
-      "name": "WALK_DOWN",
+      "name": "WALK_UP",
+      "repeat": true,
       "frames": [
         {
           "index": 12,
@@ -119,6 +255,7 @@
     },
     {
       "name": "WALK_LEFT",
+      "repeat": true,
       "frames": [
         {
           "index": 24,
@@ -164,6 +301,7 @@
     },
     {
       "name": "WALK_RIGHT",
+      "repeat": true,
       "frames": [
         {
           "index": 34,
@@ -209,6 +347,7 @@
     },
     {
       "name": "DEATH",
+      "repeat": false,
       "frames": [
         {
           "index": 44,

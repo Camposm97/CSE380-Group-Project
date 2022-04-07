@@ -18,7 +18,7 @@ import RobotAI from "./RobotAI";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import { PlayerAction } from "../scene/Constants";
 
-export default class BlueRobotAI implements RobotAI {
+export default class BlueMouseAI implements RobotAI {
   owner: AnimatedSprite;
   //whether or not robot is frozen
   isFrozen: boolean;
@@ -39,19 +39,22 @@ export default class BlueRobotAI implements RobotAI {
 
   time: number;
 
+  direction: number;
+
   listening: boolean;
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
 
-    this.listening = true;
+    this.listening = false;
 
     console.log(this.owner);
     this.owner.scale = new Vec2(0.125, 0.125);
-    this.time = 5000;
-    this.speed = 100;
+    this.time = 2000;
+    this.speed = 120;
     this.mainBehavior = true;
     this.damage = 1;
+    this.direction = 1;
     if (options) {
       if (options.behavior === "secondary") {
         this.mainBehavior = false;
@@ -67,10 +70,6 @@ export default class BlueRobotAI implements RobotAI {
 
     this.isFrozen = false;
     this.receiver = new Receiver();
-    this.receiver.subscribe(PlayerAction.WALK_DOWN);
-    this.receiver.subscribe(PlayerAction.WALK_LEFT);
-    this.receiver.subscribe(PlayerAction.WALK_UP);
-    this.receiver.subscribe(PlayerAction.WALK_RIGHT);
   }
 
   hit(): void {
@@ -80,67 +79,50 @@ export default class BlueRobotAI implements RobotAI {
       this.mainBehavior = !this.mainBehavior;
     }
   }
+
+  collide(): void {
+    if (!this.isFrozen) {
+      this.direction *= -1;
+    }
+  }
+
+  setPath() {
+    let movement = null;
+    let newPos = null;
+    if (this.mainBehavior) {
+      movement = Vec2.LEFT.scaled(this.speed * this.direction);
+      newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
+      this.path = this.owner
+        .getScene()
+        .getNavigationManager()
+        .getPath(Names.NAVMESH, this.owner.position, newPos, true);
+    } else {
+      movement = Vec2.UP.scaled(this.speed * this.direction);
+      newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
+      this.path = this.owner
+        .getScene()
+        .getNavigationManager()
+        .getPath(Names.NAVMESH, this.owner.position, newPos, true);
+    }
+  }
+
   destroy(): void {
     // throw new Error("Method not implemented.");
   }
   activate(options: Record<string, any>): void {
     // throw new Error("Method not implemented.");
   }
-  handleEvent(event: GameEvent): void {
-    let movement = null;
-    let newPos = null;
-    switch (event.type) {
-      case PlayerAction.WALK_DOWN:
-        if (this.mainBehavior) movement = Vec2.UP.scaled(this.speed);
-        else movement = Vec2.DOWN.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      case PlayerAction.WALK_UP:
-        if (this.mainBehavior) movement = Vec2.DOWN.scaled(this.speed);
-        else movement = Vec2.UP.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      case PlayerAction.WALK_LEFT:
-        if (this.mainBehavior) movement = Vec2.RIGHT.scaled(this.speed);
-        else movement = Vec2.LEFT.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      case PlayerAction.WALK_RIGHT:
-        if (this.mainBehavior) movement = Vec2.LEFT.scaled(this.speed);
-        else movement = Vec2.RIGHT.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      default:
-        break;
-    }
-  }
+  handleEvent(event: GameEvent): void {}
   update(deltaT: number): void {
     this.deltaT = deltaT;
     if (this.frozenTimer.isStopped()) {
       this.isFrozen = false;
     }
 
-    while (this.receiver.hasNextEvent()) {
-      this.handleEvent(this.receiver.getNextEvent());
-    }
+    if (this.owner.isColliding) this.collide();
 
     if (this.isFrozen) this.path = null;
+    else this.setPath();
 
     if (this.path != null && !this.isFrozen) {
       //Move on path if selected
