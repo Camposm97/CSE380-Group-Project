@@ -39,6 +39,7 @@ import MainMenu from "./MainMenu";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
 import BlueMouseAI from "../ai/BlueMouseAI";
+import { RoomEndManager } from "../game_system/RoomEndManager";
 
 export default class GameLevel extends Scene {
   private timeLeft: number
@@ -91,6 +92,7 @@ export default class GameLevel extends Scene {
     let tilemapSize: Vec2 = this.walls.size.scaled(0.5);
 
     this.viewport.setBounds(0, 0, tilemapSize.x, tilemapSize.y);
+    this.viewport.setZoomLevel(3);
 
     this.glm = new GameLayerManager(this) // ***INITIALIZES PRIMARY LAYER***
 
@@ -108,9 +110,6 @@ export default class GameLevel extends Scene {
     // Make the viewport follow the player
     this.viewport.follow(this.player);
 
-    // Zoom in to a reasonable level
-    this.viewport.setZoomLevel(3);
-
     // Create the navmesh
     this.createNavmesh();
 
@@ -126,6 +125,9 @@ export default class GameLevel extends Scene {
     this.glm.initHudLayer()
     this.glm.initPauseLayer()
     this.glm.initControlsLayer()
+    this.glm.initRoomCompleteLayer()
+
+    this.initScoreTimer()
 
     // Send the player and enemies to the battle manager
     // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
@@ -145,6 +147,9 @@ export default class GameLevel extends Scene {
 
     // Spawn items into the world
     // this.spawnItems();
+  }
+
+  initScoreTimer(): void {
     if (this.timeLeft !== undefined) {
       this.scoreTimer = new ScoreTimer(this.timeLeft, this.timesUp, false)
     } else {

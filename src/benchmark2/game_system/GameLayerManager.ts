@@ -7,12 +7,15 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
+import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
+import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 
 enum LayerType {
     PRIMARY = 'primary',
     HUD = 'hud',
     PAUSE = 'pause',
-    CONTROLS = 'controls'
+    CONTROLS = 'controls',
+    ROOM_COMPLETE = 'ROOM_COMPLETE'
 }
 
 export class GameLayerManager {
@@ -21,6 +24,8 @@ export class GameLayerManager {
     private hudLayer: Layer
     private pauseLayer: Layer
     private controlsLayer: Layer
+    private roomCompleteLayer: Layer
+    private lblRoomEnd: Label
 
     /**
      * Initializes primary layer when constructed
@@ -168,20 +173,53 @@ export class GameLayerManager {
         back.onClickEventId = Events.SHOW_CONTROLS;
     }
 
+    initRoomCompleteLayer(): void {
+        this.roomCompleteLayer = this.scene.addUILayer(LayerType.ROOM_COMPLETE)
+        this.roomCompleteLayer.setHidden(true)
+        let c = this.scene.getViewport().getCenter().clone()
+        let scale = this.scene.getViewport().getZoomLevel()
+        this.lblRoomEnd = <Label> this.scene.add.uiElement(UIElementType.LABEL, LayerType.ROOM_COMPLETE, {
+            position: new Vec2((c.x/scale) - 600, c.y/scale), text: 'Room Complete!'
+        })
+        this.lblRoomEnd.size.set(1200,60)
+        this.lblRoomEnd.borderRadius = 0;
+        this.lblRoomEnd.backgroundColor = new Color(34, 32, 52);
+        this.lblRoomEnd.textColor = Color.WHITE;
+        this.lblRoomEnd.fontSize = 48;
+        this.lblRoomEnd.font = "Comic Sans MS";
+        this.lblRoomEnd.tweens.add('slideIn', {
+            startDelay: 0,
+            duration: 1000,
+            effects: [
+                {
+                    property: TweenableProperties.posX,
+                    start: this.lblRoomEnd.position.x,
+                    end: (c.x/scale),
+                    ease: EaseFunctionType.OUT_SINE
+                }
+            ]
+        })
+    }
+
+    showRoomComplete() {
+        this.roomCompleteLayer.setHidden(false)
+        this.lblRoomEnd.tweens.play('slideIn', false)
+    }
+
     showPause() {
         this.primaryLayer.setHidden(!this.primaryLayer.isHidden())
-      this.hudLayer.setHidden(!this.hudLayer.isHidden())
-      this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
-      this.scene.getTilemap('Floor').visible = !this.scene.getTilemap('Floor').visible
-      this.scene.getTilemap('Walls').visible = !this.scene.getTilemap('Walls').visible
-      this.scene.getLayer('slots1').setHidden(!this.scene.getLayer('slots1').isHidden())
-      this.scene.getLayer('items1').setHidden(!this.scene.getLayer('items1').isHidden())
-      this.scene.getPlayer().setAIActive(!this.scene.getPlayer().aiActive, {})
-      if (this.pauseLayer.isHidden()) {
-        this.scene.getViewport().setZoomLevel(3)
-      } else {
-        this.scene.getViewport().setZoomLevel(1)
-      }
+        this.hudLayer.setHidden(!this.hudLayer.isHidden())
+        this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
+        this.scene.getTilemap('Floor').visible = !this.scene.getTilemap('Floor').visible
+        this.scene.getTilemap('Walls').visible = !this.scene.getTilemap('Walls').visible
+        this.scene.getLayer('slots1').setHidden(!this.scene.getLayer('slots1').isHidden())
+        this.scene.getLayer('items1').setHidden(!this.scene.getLayer('items1').isHidden())
+        this.scene.getPlayer().setAIActive(!this.scene.getPlayer().aiActive, {})
+        if (this.pauseLayer.isHidden()) {
+            this.scene.getViewport().setZoomLevel(3)
+        } else {
+            this.scene.getViewport().setZoomLevel(1)
+        }
     }
 
     showControls() {
