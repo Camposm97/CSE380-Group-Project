@@ -21,9 +21,11 @@ export default class Bomb {
   outerBoundary: AABB;
   isFlagged: boolean;
   // sprite: Sprite;
+  isDestroyed: boolean;
 
   constructor(tileCoord: Vec2) {
     this.isFlagged = false;
+    this.isDestroyed = false;
     this.tileCoord = tileCoord;
     this.position = new Vec2(
       (tileCoord.x + 0.5) * 16,
@@ -52,6 +54,10 @@ export default class Bomb {
 
   setIsFlaggedTrue() {
     this.isFlagged = true;
+  }
+
+  setIsDestroyedTrue() {
+    this.isDestroyed = true;
   }
 
   // displayFlag(sprite: Sprite) {

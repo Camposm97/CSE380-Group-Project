@@ -8,9 +8,16 @@ import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import InventoryManager from "../game_system/InventoryManager";
 import Healthpack from "../game_system/items/Healthpack";
 import Item from "../game_system/items/Item";
-import { Events, Names, PlayerAction, PlayerAnimations, CoatColor } from "../scene/Constants";
+import {
+  Events,
+  Names,
+  PlayerAction,
+  PlayerAnimations,
+  CoatColor,
+} from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
+import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -38,7 +45,7 @@ export default class PlayerController implements BattlerAI {
   private items: Array<Item>;
 
   public coatColor: string;
-  private overrideIdle: Boolean
+  private overrideIdle: Boolean;
 
   // Movement
   private speed: number;
@@ -46,10 +53,17 @@ export default class PlayerController implements BattlerAI {
   private path: NavigationPath;
   private receiver: Receiver;
   private emitter: Emitter;
+  private iFrame: boolean;
+  private iFrameTimer: Timer;
+
+  private enemiesLeft: boolean;
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
+
+    this.iFrameTimer = new Timer(5000);
+    this.enemiesLeft = true;
 
     this.tilemap = this.owner
       .getScene()
@@ -65,27 +79,28 @@ export default class PlayerController implements BattlerAI {
     this.inventory = options.inventory;
 
     this.receiver = new Receiver();
-    this.receiver.subscribe(Events.OVERRIDE_IDLE)
+    this.receiver.subscribe(Events.OVERRIDE_IDLE);
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
     // this.receiver.subscribe(Events.SWAP_PLAYER);
   }
 
-  activate(options: Record<string, any>): void { }
+  activate(options: Record<string, any>): void {}
 
   handleEvent(event: GameEvent): void {
     if (event.type === Events.OVERRIDE_IDLE) {
-      this.overrideIdle = !this.overrideIdle
+      this.overrideIdle = !this.overrideIdle;
     }
   }
 
   update(deltaT: number): void {
+    if (this.iFrameTimer.isStopped()) this.iFrame = false;
+
     while (this.receiver.hasNextEvent()) {
       this.handleEvent(this.receiver.getNextEvent());
     }
 
     if (this.inputEnabled && this.health > 0) {
-
       // Check for slot change
       if (Input.isJustPressed("slot1")) {
         this.inventory.changeSlot(0);
@@ -124,8 +139,8 @@ export default class PlayerController implements BattlerAI {
       }
 
       // TEST DAMAGE ANIMATION
-      if (Input.isJustPressed('panic')) {
-        this.doAnimation(PlayerAction.DAMAGE)
+      if (Input.isJustPressed("panic")) {
+        this.doAnimation(PlayerAction.DAMAGE);
       }
 
       // WASD Movement
@@ -158,27 +173,31 @@ export default class PlayerController implements BattlerAI {
 
         // If there is any movement, override idle animation
         if (Input.isPressed("forward")) {
-          this.doAnimation(PlayerAction.WALK_UP)
+          this.doAnimation(PlayerAction.WALK_UP);
+          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_UP);
           this.lookDirection.y = 1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("left")) {
-          this.doAnimation(PlayerAction.WALK_LEFT)
+          this.doAnimation(PlayerAction.WALK_LEFT);
+          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_LEFT);
           this.lookDirection.y = 0;
           this.lookDirection.x = -1;
         }
         if (Input.isPressed("backward")) {
-          this.doAnimation(PlayerAction.WALK_DOWN)
+          this.doAnimation(PlayerAction.WALK_DOWN);
+          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_DOWN);
           this.lookDirection.y = -1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("right")) {
-          this.doAnimation(PlayerAction.WALK_RIGHT)
+          this.doAnimation(PlayerAction.WALK_RIGHT);
+          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_RIGHT);
           this.lookDirection.y = 0;
           this.lookDirection.x = 1;
         }
       } else {
-        this.doAnimation(PlayerAction.IDLE)
+        this.doAnimation(PlayerAction.IDLE);
       }
 
       this.handleAttack();
@@ -227,68 +246,88 @@ export default class PlayerController implements BattlerAI {
     switch (action) {
       case PlayerAction.IDLE:
         if (!this.overrideIdle) {
-          this.owner.animation.playIfNotAlready(`${action}_${this.coatColor}`, true, null)
+          this.owner.animation.playIfNotAlready(
+            `${action}_${this.coatColor}`,
+            true,
+            null
+          );
         }
         break;
       case PlayerAction.WALK_UP:
       case PlayerAction.WALK_DOWN:
       case PlayerAction.WALK_RIGHT:
       case PlayerAction.WALK_LEFT:
-        this.overrideIdle = false
-        this.owner.animation.playIfNotAlready(`${action}_${this.coatColor}`, true, null)
+        this.overrideIdle = false;
+        this.owner.animation.playIfNotAlready(
+          `${action}_${this.coatColor}`,
+          true,
+          null
+        );
         break;
       case PlayerAction.LOOK_UP:
       case PlayerAction.LOOK_DOWN:
       case PlayerAction.LOOK_RIGHT:
       case PlayerAction.LOOK_LEFT:
-        this.overrideIdle = true
-        this.owner.animation.play(`${action}_${this.coatColor}`, false, null)
+        this.overrideIdle = true;
+        this.owner.animation.play(`${action}_${this.coatColor}`, false, null);
         break;
       case PlayerAction.DAMAGE:
-        this.overrideIdle = true
-        this.owner.animation.play(PlayerAnimations.DAMAGE, false, Events.OVERRIDE_IDLE)
+        this.overrideIdle = true;
+        this.owner.animation.play(
+          PlayerAnimations.DAMAGE,
+          false,
+          Events.OVERRIDE_IDLE
+        );
         break;
     }
   }
 
   damage(damage: number): void {
-    this.health -= damage;
-    this.doAnimation(PlayerAction.DAMAGE)
-    if (this.health <= 0) {
-      this.health = 0;
-      this.owner.setAIActive(false, {});
-      this.owner.visible = false;
-      this.owner.isCollidable = false;
+    if (!this.iFrame) {
+      this.health -= damage;
+      this.doAnimation(PlayerAction.DAMAGE);
+      if (this.health <= 0) {
+        this.health = 0;
+        this.owner.setAIActive(false, {});
+        this.owner.visible = false;
+        this.owner.isCollidable = false;
+      }
+      this.iFrame = true;
+      this.iFrameTimer.start();
     }
   }
 
   handleAttack(): void {
     // handles attacking
     if (Input.isMouseJustPressed() || Input.isJustPressed("attack")) {
-      let item = this.inventory.getItem()
-      if (item === null) return
+      let item = this.inventory.getItem();
+      if (item === null) return;
       switch (this.lookDirection.x) {
         case 1:
           console.log("attack right");
-          this.doAnimation(PlayerAction.LOOK_RIGHT)
-          this.inventory.getItem().use(this.owner, 'player', this.lookDirection)
+          this.doAnimation(PlayerAction.LOOK_RIGHT);
+          this.inventory
+            .getItem()
+            .use(this.owner, "player", this.lookDirection);
           break;
         case -1:
           console.log("attack left");
-          this.doAnimation(PlayerAction.LOOK_LEFT)
-          this.inventory.getItem().use(this.owner, 'player', this.lookDirection)
+          this.doAnimation(PlayerAction.LOOK_LEFT);
+          this.inventory
+            .getItem()
+            .use(this.owner, "player", this.lookDirection);
           break;
       }
       switch (this.lookDirection.y) {
         case 1:
           console.log("attack up");
-          this.doAnimation(PlayerAction.LOOK_UP)
-          this.inventory.getItem().use(this.owner, 'player', new Vec2(0, -1))
+          this.doAnimation(PlayerAction.LOOK_UP);
+          this.inventory.getItem().use(this.owner, "player", new Vec2(0, -1));
           break;
         case -1:
           console.log("attack down");
-          this.doAnimation(PlayerAction.LOOK_DOWN)
-          this.inventory.getItem().use(this.owner, 'player', new Vec2(0, 1))
+          this.doAnimation(PlayerAction.LOOK_DOWN);
+          this.inventory.getItem().use(this.owner, "player", new Vec2(0, 1));
           break;
       }
     }
@@ -298,7 +337,9 @@ export default class PlayerController implements BattlerAI {
     this.coatColor = color;
   }
 
-  destroy() {
-    
+  destroy() {}
+
+  noMoreEnemies(): void {
+    this.enemiesLeft = false;
   }
 }

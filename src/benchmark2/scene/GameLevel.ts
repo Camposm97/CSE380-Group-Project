@@ -8,6 +8,7 @@ import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
 import { CoatColor, Events, Names, Statuses } from "./Constants";
 import EnemyAI from "../ai/EnemyAI";
+import BlueRobotAI from "../ai/BlueRobotAI";
 import WeaponType from "../game_system/items/weapon_types/WeaponType";
 import RegistryManager from "../../Wolfie2D/Registry/RegistryManager";
 import Weapon from "../game_system/items/Weapon";
@@ -31,18 +32,19 @@ import Map from "../../Wolfie2D/DataTypes/Map";
 import Berserk from "../ai/enemy_actions/Berserk";
 import ScoreTimer from "../game_system/ScoreTimer";
 import Bomb from "../game_system/objects/Bomb";
+import RobotAI from "../ai/RobotAI";
 
 export default class GameLevel extends Scene {
-  private player: AnimatedSprite;           // Player Sprite
-  private enemies: Array<AnimatedSprite>;   // List of Enemies
-  private bombs: Array<Bomb>;               // List of Bombs
-  private flags: Array<AnimatedSprite>;     // List of Flags
-  private walls: OrthogonalTilemap;         // Wall Layer
-  private graph: PositionGraph;             // Nav Mesh
-  private items: Array<Item>;               // List of Items
+  private player: AnimatedSprite; // Player Sprite
+  private enemies: Array<AnimatedSprite>; // List of Enemies
+  private bombs: Array<Bomb>; // List of Bombs
+  private flags: Array<AnimatedSprite>; // List of Flags
+  private walls: OrthogonalTilemap; // Wall Layer
+  private graph: PositionGraph; // Nav Mesh
+  private items: Array<Item>; // List of Items
   private battleManager: BattleManager;
-  private lblHealth: Label
-  private lblTime: Label
+  private lblHealth: Label;
+  private lblTime: Label;
   private scoreTimer: ScoreTimer;
 
   loadScene() {
@@ -50,12 +52,13 @@ export default class GameLevel extends Scene {
     this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
-    this.load.tilemap("level", "res/tilemaps/testRoom.json");       // Load tile map
-    this.load.object("weaponData", "res/data/weaponData.json");     // Load scene info
-    this.load.object("navmesh", "res/data/navmesh.json");           // Load nav mesh
-    this.load.object("enemyData", "res/data/enemy.json");           // Load enemy info
-    this.load.object("bombData", "res/data/bombs.json");            // Load bomb info
-    this.load.object("itemData", "res/data/items.json");            // Load item info
+    this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
+    this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load tile map
+    this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
+    this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
+    this.load.object("enemyData", "res/data/enemy.json"); // Load enemy info
+    this.load.object("bombData", "res/data/bombs.json"); // Load bomb info
+    this.load.object("itemData", "res/data/items.json"); // Load item info
     this.load.image("healthpack", "res/sprites/healthpack.png");
     this.load.image("inventorySlot", "res/sprites/inventory.png");
     this.load.image("knife", "res/sprites/knife.png");
@@ -107,28 +110,39 @@ export default class GameLevel extends Scene {
     // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
     this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
     this.battleManager.setEnemies(
-      this.enemies.map((enemy) => <BattlerAI>enemy._ai)
+      this.enemies.map((enemy) => <RobotAI>enemy._ai)
     );
 
     // Subscribe to relevant events
-    this.receiver.subscribe("healthpack");
     this.receiver.subscribe("enemyDied");
     this.receiver.subscribe(Events.PLACE_FLAG);
     this.receiver.subscribe(Events.UNLOAD_ASSET);
 
     // Spawn items into the world
-    this.spawnItems();
+    // this.spawnItems();
 
     // Add a UI for health
-    this.addUILayer('hud');
+    this.addUILayer("hud");
 
-    this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {position: new Vec2(60, 16), text: `HP: ${(<BattlerAI>this.player._ai).health}`})
-    this.lblHealth.textColor = Color.WHITE
+    this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, "hud", {
+      position: new Vec2(60, 16),
+      text: `HP: ${(<BattlerAI>this.player._ai).health}`,
+    });
+    this.lblHealth.textColor = Color.WHITE;
 
-    this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {position: new Vec2(360, 16), text: ""});
+    this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, "hud", {
+      position: new Vec2(360, 16),
+      text: "",
+    });
     this.lblTime.textColor = Color.WHITE;
 
-    this.scoreTimer = new ScoreTimer(300_000, () => {this.sceneManager.changeToScene(GameOver, { win: false })},false);
+    this.scoreTimer = new ScoreTimer(
+      300_000,
+      () => {
+        this.sceneManager.changeToScene(GameOver, { win: false });
+      },
+      false
+    );
     this.scoreTimer.start();
   }
 
@@ -136,15 +150,15 @@ export default class GameLevel extends Scene {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
 
-      if (event.isType("healthpack")) {
-        this.createHealthpack(event.data.get("position"));
-      }
+      // if (event.isType("healthpack")) {
+      //   this.createHealthpack(event.data.get("position"));
+      // }
       if (event.isType("enemyDied")) {
         this.enemies = this.enemies.filter(
           (enemy) => enemy !== event.data.get("enemy")
         );
         this.battleManager.enemies = this.battleManager.enemies.filter(
-          (enemy) => enemy !== <BattlerAI>event.data.get("enemy")._ai
+          (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
         );
 
         if (this.battleManager.enemies.length === 0) {
@@ -172,6 +186,7 @@ export default class GameLevel extends Scene {
                 (coord.x + 0.5) * 16,
                 (coord.y + 1.0) * 16
               );
+              this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
               this.flags[this.flags.length - 1].animation.play("IDLE");
             }
           }
@@ -183,12 +198,38 @@ export default class GameLevel extends Scene {
       }
     }
 
+    //handleCollisions for
+    for (let enemy of this.enemies) {
+      if (enemy && enemy.sweptRect) {
+        if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
+          console.log("enemy hit player");
+          (<PlayerController>this.player._ai).damage(
+            (<RobotAI>enemy._ai).damage
+          );
+        }
+        for (let bomb of this.bombs) {
+          if (bomb && !bomb.isDestroyed) {
+            if (enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
+              enemy.destroy();
+              this.enemies = this.enemies.filter(
+                (currentEnemy) => currentEnemy !== enemy
+              );
+              bomb.setIsDestroyedTrue();
+            }
+          }
+        }
+      }
+    }
+    //tell the playerAi no more enemies are left so it stops fireing movement events
+    if (this.enemies.length === 0)
+      (<PlayerController>this.player._ai).noMoreEnemies();
+
     // checks to see how close player is to bomb
     // changers sprite closer player gets to bom
     // gameover if player lands on bomb
 
     for (let bomb of this.bombs) {
-      if (bomb) {
+      if (bomb && !bomb.isDestroyed) {
         if (this.player.collisionShape.overlaps(bomb.collisionBoundary)) {
           (<PlayerController>this.player._ai).health = 0;
         } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
@@ -197,7 +238,8 @@ export default class GameLevel extends Scene {
           (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
         } else if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
           (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
-        } else (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
+        } else
+          (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
       }
     }
 
@@ -211,16 +253,6 @@ export default class GameLevel extends Scene {
       this.sceneManager.changeToScene(GameOver, { win: false });
     }
 
-    // update closest enemy of each player
-    let closetEnemy1 = this.getClosestEnemy(
-      this.player.position,
-      (<PlayerController>this.player._ai).range
-    );
-    // let closetEnemy2 = this.getClosestEnemy(this.players[1].position, (<PlayerController>this.players[1]._ai).range);
-
-    (<PlayerController>this.player._ai).target = closetEnemy1;
-    // (<PlayerController>this.players[1]._ai).target = closetEnemy2;
-
     // Update health gui
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
@@ -229,17 +261,6 @@ export default class GameLevel extends Scene {
     if (Input.isKeyJustPressed("g")) {
       this.getLayer("graph").setHidden(!this.getLayer("graph").isHidden());
     }
-
-    // //Swap characters
-    // if(Input.isKeyJustPressed("z")){
-    //     this.emitter.fireEvent(Events.SWAP_PLAYER, {id: this.players[0].id});
-    //     this.viewport.follow(this.players[0]);
-    // }
-    // // Swap characters
-    // if(Input.isKeyJustPressed("x")){
-    //     this.emitter.fireEvent(Events.SWAP_PLAYER, {id: this.players[1].id});
-    //     this.viewport.follow(this.players[1]);
-    // }
   }
 
   getClosestEnemy(playerPos: Vec2, range: number): Vec2 {
@@ -248,7 +269,7 @@ export default class GameLevel extends Scene {
     for (let enemy of this.enemies) {
       let distance = Math.sqrt(
         Math.pow(enemy.position.x - playerPos.x, 2) +
-        Math.pow(enemy.position.y - playerPos.y, 2)
+          Math.pow(enemy.position.y - playerPos.y, 2)
       );
       if (distance <= range) {
         if (distance < closetDistance) {
@@ -370,26 +391,6 @@ export default class GameLevel extends Scene {
     });
     this.player.animation.play("IDLE_WHITE");
 
-    // inventory = new InventoryManager(this, 2, "inventorySlot", new Vec2(16, 32), 4, "slots2", "items2");
-    // startingWeapon = this.createWeapon("weak_pistol");
-    // inventory.addItem(startingWeapon);
-
-    //Second player is ranged based, long range and starts with pistol
-    // this.players[1] = this.add.animatedSprite("player2", "primary");
-    // this.players[1].position.set(5*16, 4*16);
-    // this.players[1].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
-    // this.players[1].addAI(PlayerController,
-    //     {
-    //         speed: 100,
-    //         health: 15,
-    //         inventory: inventory,
-    //         items: this.items,
-    //         inputEnabled: false,
-    //         range: 100,
-    //         tilemap: 'Floor'
-    //     });
-    // this.players[1].animation.play("IDLE");
-
     //Set inventory UI highlight
     (<PlayerController>this.player._ai).inventory.setActive(true);
     // (<PlayerController>this.players[1]._ai).inventory.setActive(false);
@@ -450,107 +451,9 @@ export default class GameLevel extends Scene {
     // Create an enemies array
     this.enemies = new Array(enemyData.numEnemies);
 
-    let actionsGun = [
-      new Retreat(
-        1,
-        [Statuses.LOW_HEALTH, Statuses.CAN_RETREAT],
-        [Statuses.REACHED_GOAL],
-        { retreatDistance: 150 }
-      ),
-      new Berserk(
-        2,
-        [Statuses.LOW_HEALTH, Statuses.CAN_BERSERK],
-        [Statuses.REACHED_GOAL],
-        {}
-      ),
-      new AttackAction(4, [Statuses.IN_RANGE], [Statuses.REACHED_GOAL]),
-      new Move(3, [], [Statuses.IN_RANGE], { inRange: 100 }),
-    ];
-    let actionsKnife = [
-      new Berserk(
-        1,
-        [Statuses.LOW_HEALTH, Statuses.CAN_BERSERK],
-        [Statuses.REACHED_GOAL],
-        {}
-      ),
-      new Move(2, [], [Statuses.IN_RANGE], { inRange: 20 }),
-      new AttackAction(3, [Statuses.IN_RANGE], [Statuses.REACHED_GOAL]),
-      new Retreat(
-        4,
-        [Statuses.LOW_HEALTH, Statuses.CAN_RETREAT],
-        [Statuses.REACHED_GOAL],
-        { retreatDistance: 150 }
-      ),
-    ];
-    let actionsCustom1 = [
-      new AttackAction(1, [Statuses.IN_RANGE], [Statuses.REACHED_GOAL]),
-      new Move(2, [], [Statuses.IN_RANGE], { inRange: 100 }),
-      new Retreat(
-        3,
-        [Statuses.LOW_HEALTH, Statuses.CAN_RETREAT],
-        [Statuses.REACHED_GOAL],
-        { retreatDistance: 150 }
-      ),
-      new Berserk(4, [Statuses.CAN_BERSERK], [Statuses.REACHED_GOAL], {}),
-    ];
-    let actionsCustom2 = [
-      new Berserk(1, [Statuses.CAN_BERSERK], [Statuses.REACHED_GOAL], {}),
-      new Retreat(
-        2,
-        [Statuses.LOW_HEALTH, Statuses.CAN_RETREAT],
-        [Statuses.REACHED_GOAL],
-        { retreatDistance: 150 }
-      ),
-      new AttackAction(3, [Statuses.IN_RANGE], [Statuses.REACHED_GOAL]),
-      new Move(4, [], [Statuses.IN_RANGE], { inRange: 100 }),
-    ];
-
-    let gunPlans = this.generateGoapPlans(
-      actionsGun,
-      [
-        Statuses.IN_RANGE,
-        Statuses.LOW_HEALTH,
-        Statuses.CAN_BERSERK,
-        Statuses.CAN_RETREAT,
-      ],
-      Statuses.REACHED_GOAL
-    );
-    let knifePlans = this.generateGoapPlans(
-      actionsKnife,
-      [
-        Statuses.IN_RANGE,
-        Statuses.LOW_HEALTH,
-        Statuses.CAN_BERSERK,
-        Statuses.CAN_RETREAT,
-      ],
-      Statuses.REACHED_GOAL
-    );
-    let customPlans1 = this.generateGoapPlans(
-      actionsCustom1,
-      [
-        Statuses.IN_RANGE,
-        Statuses.LOW_HEALTH,
-        Statuses.CAN_BERSERK,
-        Statuses.CAN_RETREAT,
-      ],
-      Statuses.REACHED_GOAL
-    );
-    let customPlans2 = this.generateGoapPlans(
-      actionsCustom2,
-      [
-        Statuses.IN_RANGE,
-        Statuses.LOW_HEALTH,
-        Statuses.CAN_BERSERK,
-        Statuses.CAN_RETREAT,
-      ],
-      Statuses.REACHED_GOAL
-    );
-    this.testGoapPlans(gunPlans, knifePlans, customPlans1, customPlans2);
-
     // Initialize the enemies
     for (let i = 0; i < enemyData.numEnemies; i++) {
       let entity = enemyData.enemies[i];
-
       // Create an enemy
       this.enemies[i] = this.add.animatedSprite(entity.type, "primary");
       this.enemies[i].position.set(
@@ -560,71 +463,23 @@ export default class GameLevel extends Scene {
       this.enemies[i].animation.play("IDLE");
 
       // Activate physics
-      this.enemies[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
-
-      if (entity.route) {
-        entity.route = entity.route.map((index: number) =>
-          this.graph.getNodePosition(index)
-        );
-      }
-
-      if (entity.guardPosition) {
-        entity.guardPosition = new Vec2(
-          entity.guardPosition[0] / 2,
-          entity.guardPosition[1] / 2
-        );
-      }
-
-      /*initalize status and actions for each enemy. This can be edited if you want your custom enemies to start out with
-            different statuses, but dont remove these statuses for the original two enemies*/
-      let statusArray: Array<string> = [
-        Statuses.CAN_RETREAT,
-        Statuses.CAN_BERSERK,
-      ];
-
-      //Vary weapon type and choose actions
-      let weapon;
-      let actions;
-      let range;
-
-      switch (entity.type) {
-        case "gun_enemy":
-          weapon = this.createWeapon("weak_pistol");
-          actions = actionsGun;
-          range = 100;
-          break;
-        case "knife_enemy":
-          weapon = this.createWeapon("knife");
-          actions = actionsKnife;
-          range = 20;
-          break;
-        case "custom_enemy1": // ADD CODE HERE
-          weapon = this.createWeapon("laserGun");
-          actions = actionsCustom1;
-          range = 100;
-          break;
-        case "custom_enemy2": // ADD CODE HERE
-          weapon = this.createWeapon("pistol");
-          actions = actionsCustom2;
-          range = 500;
-          break;
-      }
+      this.enemies[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(9, 9)));
 
       let enemyOptions = {
-        defaultMode: entity.mode,
-        patrolRoute: entity.route, // This only matters if they're a patroller
-        guardPosition: entity.guardPosition, // This only matters if they're a guard
-        health: entity.health,
-        player1: this.player,
-        // player2: this.players[1],
-        weapon: weapon,
-        goal: Statuses.REACHED_GOAL,
-        status: statusArray,
-        actions: actions,
-        inRange: range,
+        behavior: entity.behavior,
+        time: entity.time,
+        damage: entity.damage,
       };
 
-      this.enemies[i].addAI(EnemyAI, enemyOptions);
+      //TODO TRY AND FIND A WAY TO MAP STRINGS TO ROBOT AI CLASS TYPES
+      //ADD MORE AI TYPES ONCE THEY ARE MADE
+      switch (entity.ai) {
+        case "BlueRobotAI":
+          this.enemies[i].addAI(BlueRobotAI, enemyOptions);
+          break;
+        default:
+          break;
+      }
     }
   }
 
