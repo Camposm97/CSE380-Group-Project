@@ -2,7 +2,7 @@
     "name": "Blue Robot",
     "spriteSheetImage": "r_blue.png",
     "spriteWidth": 256,
-    "spriteHeiht": 256,
+    "spriteHeight": 256,
     "topBuffer": 0,
     "rightBuffer": 0,
     "bottomBuffer": 0,

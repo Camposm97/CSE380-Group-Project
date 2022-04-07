@@ -113,7 +113,7 @@ export default class CanvasNodeFactory {
   addAnimatedSprite = (key: string, layerName: string): AnimatedSprite => {
     let layer = this.scene.getLayer(layerName);
     let spritesheet = this.resourceManager.getSpritesheet(key);
-    console.log(spritesheet);
+    // console.log(spritesheet);
     let instance = new AnimatedSprite(spritesheet);
 
     // Add instance fo scene

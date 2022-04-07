@@ -31,6 +31,8 @@ import Map from "../../Wolfie2D/DataTypes/Map";
 import Berserk from "../ai/enemy_actions/Berserk";
 import ScoreTimer from "../game_system/ScoreTimer";
 import Bomb from "../game_system/objects/Bomb";
+import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+import { Pause } from "./Pause";
 
 export default class GameLevel extends Scene {
   private player: AnimatedSprite;           // Player Sprite
@@ -115,13 +117,15 @@ export default class GameLevel extends Scene {
     this.receiver.subscribe("enemyDied");
     this.receiver.subscribe(Events.PLACE_FLAG);
     this.receiver.subscribe(Events.UNLOAD_ASSET);
+    this.receiver.subscribe(Events.RESET_ROOM)
+    this.receiver.subscribe(Events.PAUSE_GAME)
 
     // Spawn items into the world
     this.spawnItems();
 
     // Add a UI for health
     this.addUILayer('hud');
-
+    
     this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, 'hud', {position: new Vec2(60, 16), text: `HP: ${(<BattlerAI>this.player._ai).health}`})
     this.lblHealth.textColor = Color.WHITE
 
@@ -134,8 +138,13 @@ export default class GameLevel extends Scene {
 
   updateScene(deltaT: number): void {
     while (this.receiver.hasNextEvent()) {
-      let event = this.receiver.getNextEvent();
-
+      let event = this.receiver.getNextEvent()
+      if (event.isType(Events.RESET_ROOM)) {
+        this.sceneManager.changeToScene(GameLevel, {})
+      }
+      if (event.isType(Events.PAUSE_GAME)) {
+        console.log('pausing game')
+      }
       if (event.isType("healthpack")) {
         this.createHealthpack(event.data.get("position"));
       }
@@ -352,11 +361,10 @@ export default class GameLevel extends Scene {
     );
     let startingWeapon = this.createWeapon("knife");
     inventory.addItem(startingWeapon);
-
     // Create the players
     // this.players = Array(2);
     this.player = this.add.animatedSprite("player1", "primary");
-    this.player.position.set(4 * 16, 32 * 16);
+    this.player.position.set(128, 128);
     this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
     //First player is melee based, starts off with a knife and is short ranged
     this.player.addAI(PlayerController, {
@@ -369,7 +377,7 @@ export default class GameLevel extends Scene {
       tilemap: "Floor",
     });
     this.player.animation.play("IDLE_WHITE");
-
+    
     // inventory = new InventoryManager(this, 2, "inventorySlot", new Vec2(16, 32), 4, "slots2", "items2");
     // startingWeapon = this.createWeapon("weak_pistol");
     // inventory.addItem(startingWeapon);
