@@ -34,7 +34,8 @@ import ScoreTimer from "../game_system/ScoreTimer";
 import Bomb from "../game_system/objects/Bomb";
 import RobotAI from "../ai/RobotAI";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
-import { Pause } from "./Pause";
+import Layer from "../../Wolfie2D/Scene/Layer";
+import MainMenu from "./MainMenu";
 
 export default class GameLevel extends Scene {
   private player: AnimatedSprite; // Player Sprite
@@ -47,6 +48,7 @@ export default class GameLevel extends Scene {
   private battleManager: BattleManager;
   private lblHealth: Label;
   private lblTime: Label;
+  private pauseLayer: Layer
   private scoreTimer: ScoreTimer;
 
   loadScene() {
@@ -119,8 +121,10 @@ export default class GameLevel extends Scene {
     this.receiver.subscribe("enemyDied");
     this.receiver.subscribe(Events.PLACE_FLAG);
     this.receiver.subscribe(Events.UNLOAD_ASSET);
-    this.receiver.subscribe(Events.RESET_ROOM);
     this.receiver.subscribe(Events.PAUSE_GAME);
+    this.receiver.subscribe(Events.RESET_ROOM);
+    this.receiver.subscribe(Events.SHOW_CONTROLS);
+    this.receiver.subscribe(Events.EXIT_GAME);
 
     // Spawn items into the world
     // this.spawnItems();
@@ -142,6 +146,39 @@ export default class GameLevel extends Scene {
     });
     this.lblTime.textColor = Color.WHITE;
 
+    let c = this.viewport.getCenter().clone()
+    this.pauseLayer = this.addLayer('pause', 1)
+    let btPause = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+      position: new Vec2(c.x, c.y - 200),
+      text: 'Resume'
+    })
+    btPause.borderWidth = 2
+    btPause.padding = new Vec2(8,8)
+    btPause.size = new Vec2(200,40)
+    btPause.onClickEventId = Events.PAUSE_GAME
+    let btReset = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+      position: new Vec2(c.x, c.y - 100),
+      text: 'Reset Room'
+    })
+    btReset.borderWidth = 2
+    btReset.size = new Vec2(200,40)
+    btReset.onClickEventId = Events.RESET_ROOM
+    let btControls = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+      position: new Vec2(c.x, c.y),
+      text: 'Controls'
+    })
+    btControls.borderWidth = 2
+    btControls.size = new Vec2(200,40)
+    btControls.onClickEventId = Events.SHOW_CONTROLS
+    let btExit = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+      position: new Vec2(c.x, c.y + 100),
+      text: 'Exit'
+    })
+    btExit.borderWidth = 2
+    btExit.size = new Vec2(200,40)
+    btExit.onClickEventId = Events.EXIT_GAME
+    this.pauseLayer.setHidden(true)
+
     this.scoreTimer = new ScoreTimer(
       300_000,
       () => {
@@ -155,11 +192,26 @@ export default class GameLevel extends Scene {
   updateScene(deltaT: number): void {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
+      if (event.isType(Events.PAUSE_GAME)) {
+        /*
+          If there are no more enemies left in the room, and you pause, the pause button will crash the game.
+          I don't think we have to worry about this too much since the room is cleared when there are no more enemies.
+        */
+        this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
+        if (this.pauseLayer.isHidden()) {
+          this.viewport.setZoomLevel(3)
+        } else {
+          this.viewport.setZoomLevel(1)
+        }
+      }
       if (event.isType(Events.RESET_ROOM)) {
         this.sceneManager.changeToScene(GameLevel, {});
       }
-      if (event.isType(Events.PAUSE_GAME)) {
-        console.log("pausing game");
+      if (event.isType(Events.SHOW_CONTROLS)) {
+        console.log('display controls')
+      }
+      if (event.isType(Events.EXIT_GAME)) {
+        this.sceneManager.changeToScene(MainMenu, {})
       }
       if (event.isType("healthpack")) {
         this.createHealthpack(event.data.get("position"));

@@ -8,7 +8,9 @@ export enum Events {
   PLACE_FLAG = "PLACE_FLAG",
   OVERRIDE_IDLE = 'OVERRIDE_IDLE',
   RESET_ROOM = 'RESET_ROOM',
-  PAUSE_GAME = 'PAUSE_GAME'
+  PAUSE_GAME = 'PAUSE_GAME',
+  SHOW_CONTROLS = 'SHOW_CONTROLS',
+  EXIT_GAME = 'EXIT_GAME'
 }
 
 export enum Statuses {
