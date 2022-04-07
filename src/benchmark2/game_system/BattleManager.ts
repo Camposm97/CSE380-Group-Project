@@ -12,7 +12,8 @@ export default class BattleManager {
     if (attackerType === "player") {
       // Check for collisions with enemies
       for (let enemy of this.enemies) {
-        if (weapon.hits(enemy.owner)) {
+        console.log(enemy.owner);
+        if (enemy.owner.collisionShape && weapon.hits(enemy.owner)) {
           enemy.hit();
         }
       }

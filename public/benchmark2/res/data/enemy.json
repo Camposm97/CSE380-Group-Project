@@ -1,10 +1,16 @@
 {
-  "numEnemies": 1,
+  "numEnemies": 2,
   "enemies": [
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
       "position": [145, 940],
+      "damage": 1
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [170, 940],
       "damage": 1
     }
   ]

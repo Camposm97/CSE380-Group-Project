@@ -36,6 +36,7 @@ import RobotAI from "../ai/RobotAI";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import MainMenu from "./MainMenu";
+import BlueMouseAI from "../ai/BlueMouseAI";
 
 export default class GameLevel extends Scene {
   private player: AnimatedSprite; // Player Sprite
@@ -48,8 +49,9 @@ export default class GameLevel extends Scene {
   private battleManager: BattleManager;
   private lblHealth: Label;
   private lblTime: Label;
-  private pauseLayer: Layer
+  private pauseLayer: Layer;
   private scoreTimer: ScoreTimer;
+  private listeningEnemies: number; //number of enemies that listen for player movement events
 
   loadScene() {
     // Load the player and enemy spritesheets
@@ -57,6 +59,7 @@ export default class GameLevel extends Scene {
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
     this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
+    this.load.spritesheet("blueMouse", "res/spritesheets/rm_blue.json");
     this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load tile map
     this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
     this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
@@ -104,6 +107,9 @@ export default class GameLevel extends Scene {
     // Create the navmesh
     this.createNavmesh();
 
+    //initialize the number of enemies listening for player movement to 0
+    this.listeningEnemies = 0;
+
     // Initialize all enemies
     this.initializeEnemies();
 
@@ -132,12 +138,10 @@ export default class GameLevel extends Scene {
     // Add a UI for health
     this.addUILayer("hud");
 
-    this.lblHealth = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "hud", {
-        position: new Vec2(60, 16),
-        text: `HP: ${(<BattlerAI>this.player._ai).health}`,
-      })
-    );
+    this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, "hud", {
+      position: new Vec2(60, 16),
+      text: `HP: ${(<BattlerAI>this.player._ai).health}`,
+    });
     this.lblHealth.textColor = Color.WHITE;
 
     this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, "hud", {
@@ -146,38 +150,38 @@ export default class GameLevel extends Scene {
     });
     this.lblTime.textColor = Color.WHITE;
 
-    let c = this.viewport.getCenter().clone()
-    this.pauseLayer = this.addLayer('pause', 1)
-    let btPause = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+    let c = this.viewport.getCenter().clone();
+    this.pauseLayer = this.addLayer("pause", 1);
+    let btPause = this.add.uiElement(UIElementType.BUTTON, "pause", {
       position: new Vec2(c.x, c.y - 200),
-      text: 'Resume'
-    })
-    btPause.borderWidth = 2
-    btPause.padding = new Vec2(8,8)
-    btPause.size = new Vec2(200,40)
-    btPause.onClickEventId = Events.PAUSE_GAME
-    let btReset = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+      text: "Resume",
+    });
+    btPause.borderWidth = 2;
+    btPause.padding = new Vec2(8, 8);
+    btPause.size = new Vec2(200, 40);
+    btPause.onClickEventId = Events.PAUSE_GAME;
+    let btReset = this.add.uiElement(UIElementType.BUTTON, "pause", {
       position: new Vec2(c.x, c.y - 100),
-      text: 'Reset Room'
-    })
-    btReset.borderWidth = 2
-    btReset.size = new Vec2(200,40)
-    btReset.onClickEventId = Events.RESET_ROOM
-    let btControls = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+      text: "Reset Room",
+    });
+    btReset.borderWidth = 2;
+    btReset.size = new Vec2(200, 40);
+    btReset.onClickEventId = Events.RESET_ROOM;
+    let btControls = this.add.uiElement(UIElementType.BUTTON, "pause", {
       position: new Vec2(c.x, c.y),
-      text: 'Controls'
-    })
-    btControls.borderWidth = 2
-    btControls.size = new Vec2(200,40)
-    btControls.onClickEventId = Events.SHOW_CONTROLS
-    let btExit = this.add.uiElement(UIElementType.BUTTON, 'pause', {
+      text: "Controls",
+    });
+    btControls.borderWidth = 2;
+    btControls.size = new Vec2(200, 40);
+    btControls.onClickEventId = Events.SHOW_CONTROLS;
+    let btExit = this.add.uiElement(UIElementType.BUTTON, "pause", {
       position: new Vec2(c.x, c.y + 100),
-      text: 'Exit'
-    })
-    btExit.borderWidth = 2
-    btExit.size = new Vec2(200,40)
-    btExit.onClickEventId = Events.EXIT_GAME
-    this.pauseLayer.setHidden(true)
+      text: "Exit",
+    });
+    btExit.borderWidth = 2;
+    btExit.size = new Vec2(200, 40);
+    btExit.onClickEventId = Events.EXIT_GAME;
+    this.pauseLayer.setHidden(true);
 
     this.scoreTimer = new ScoreTimer(
       300_000,
@@ -197,21 +201,21 @@ export default class GameLevel extends Scene {
           If there are no more enemies left in the room, and you pause, the pause button will crash the game.
           I don't think we have to worry about this too much since the room is cleared when there are no more enemies.
         */
-        this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
+        this.pauseLayer.setHidden(!this.pauseLayer.isHidden());
         if (this.pauseLayer.isHidden()) {
-          this.viewport.setZoomLevel(3)
+          this.viewport.setZoomLevel(3);
         } else {
-          this.viewport.setZoomLevel(1)
+          this.viewport.setZoomLevel(1);
         }
       }
       if (event.isType(Events.RESET_ROOM)) {
         this.sceneManager.changeToScene(GameLevel, {});
       }
       if (event.isType(Events.SHOW_CONTROLS)) {
-        console.log('display controls')
+        console.log("display controls");
       }
       if (event.isType(Events.EXIT_GAME)) {
-        this.sceneManager.changeToScene(MainMenu, {})
+        this.sceneManager.changeToScene(MainMenu, {});
       }
       if (event.isType("healthpack")) {
         this.createHealthpack(event.data.get("position"));
@@ -273,18 +277,23 @@ export default class GameLevel extends Scene {
         for (let bomb of this.bombs) {
           if (bomb && !bomb.isDestroyed) {
             if (enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
+              if ((<RobotAI>enemy._ai).listening) this.listeningEnemies--;
               enemy.destroy();
               this.enemies = this.enemies.filter(
                 (currentEnemy) => currentEnemy !== enemy
               );
+              this.battleManager.enemies = this.battleManager.enemies.filter(
+                (currentEnemy) => currentEnemy !== enemy._ai
+              );
+              //TODO ADD BOMB EXPLOSION SPRITE AND REMOVE ANY FLAG SPRITE THAT HAS BEEN PLACED
               bomb.setIsDestroyedTrue();
             }
           }
         }
       }
     }
-    //tell the playerAi no more enemies are left so it stops fireing movement events
-    if (this.enemies.length === 0)
+    //tell the playerAi no more enemies listening for events are left so it stops fireing movement events
+    if (this.listeningEnemies === 0)
       (<PlayerController>this.player._ai).noMoreEnemies();
 
     // checks to see how close player is to bomb
@@ -538,7 +547,10 @@ export default class GameLevel extends Scene {
       switch (entity.ai) {
         case "BlueRobotAI":
           this.enemies[i].addAI(BlueRobotAI, enemyOptions);
+          this.listeningEnemies++;
           break;
+        case "BlueMouseAI":
+          this.enemies[i].addAI(BlueMouseAI, enemyOptions);
         default:
           break;
       }
