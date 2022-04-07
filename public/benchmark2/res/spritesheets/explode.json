@@ -3,8 +3,8 @@
     "spriteSheetImage": "explode.png",
     "spriteWidth": 32,
     "spriteHeight": 32,
-    "columns": 7,
-    "rows": 1,
+    "columns": 3,
+    "rows": 3,
     "durationType": "time",
     "animations": [
       {
