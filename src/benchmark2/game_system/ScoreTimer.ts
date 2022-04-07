@@ -5,6 +5,10 @@ export default class ScoreTimer extends Timer {
         return Math.round(this.timeLeft / 1000.0)
     }
 
+    getTimeLeftInMillis(): number {
+        return this.timeLeft
+    }
+
     toString(): string {
         return `Time: ${Math.round(this.timeLeft / 1000.0)}`
     }

@@ -144,10 +144,6 @@ export default class PlayerController implements BattlerAI {
         this.emitter.fireEvent(Events.RESET_ROOM, {});
       }
 
-      if (Input.isJustPressed("pause")) {
-        this.emitter.fireEvent(Events.PAUSE_GAME, {});
-      }
-
       // WASD Movement
       let forwardAxis =
         (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +

@@ -36,8 +36,11 @@ import RobotAI from "../ai/RobotAI";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import MainMenu from "./MainMenu";
+import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import { GameLayerManager } from "../game_system/GameLayerManager";
 
 export default class GameLevel extends Scene {
+  private timeLeft: number
   private player: AnimatedSprite; // Player Sprite
   private enemies: Array<AnimatedSprite>; // List of Enemies
   private bombs: Array<Bomb>; // List of Bombs
@@ -48,8 +51,12 @@ export default class GameLevel extends Scene {
   private battleManager: BattleManager;
   private lblHealth: Label;
   private lblTime: Label;
-  private pauseLayer: Layer
-  private scoreTimer: ScoreTimer;
+  private glm: GameLayerManager
+  private scoreTimer: ScoreTimer
+
+  initScene(options: Record<string, any>): void {
+    this.timeLeft = options.timeLeft
+  }
 
   loadScene() {
     // Load the player and enemy spritesheets
@@ -82,7 +89,7 @@ export default class GameLevel extends Scene {
 
     this.viewport.setBounds(0, 0, tilemapSize.x, tilemapSize.y);
 
-    this.addLayer("primary", 10);
+    this.glm = new GameLayerManager(this) // ***INITIALIZES PRIMARY LAYER***
 
     // Create the battle manager
     this.battleManager = new BattleManager();
@@ -110,6 +117,10 @@ export default class GameLevel extends Scene {
     // Initalize all bombs
     this.initializeBombs();
 
+    this.glm.initHudLayer()
+    this.glm.initPauseLayer()
+    this.glm.initControlsLayer()
+
     // Send the player and enemies to the battle manager
     // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
     this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
@@ -128,137 +139,90 @@ export default class GameLevel extends Scene {
 
     // Spawn items into the world
     // this.spawnItems();
-
-    // Add a UI for health
-    this.addUILayer("hud");
-
-    this.lblHealth = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "hud", {
-        position: new Vec2(60, 16),
-        text: `HP: ${(<BattlerAI>this.player._ai).health}`,
-      })
-    );
-    this.lblHealth.textColor = Color.WHITE;
-
-    this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, "hud", {
-      position: new Vec2(360, 16),
-      text: "",
-    });
-    this.lblTime.textColor = Color.WHITE;
-
-    let c = this.viewport.getCenter().clone()
-    this.pauseLayer = this.addLayer('pause', 1)
-    let btPause = this.add.uiElement(UIElementType.BUTTON, 'pause', {
-      position: new Vec2(c.x, c.y - 200),
-      text: 'Resume'
-    })
-    btPause.borderWidth = 2
-    btPause.padding = new Vec2(8,8)
-    btPause.size = new Vec2(200,40)
-    btPause.onClickEventId = Events.PAUSE_GAME
-    let btReset = this.add.uiElement(UIElementType.BUTTON, 'pause', {
-      position: new Vec2(c.x, c.y - 100),
-      text: 'Reset Room'
-    })
-    btReset.borderWidth = 2
-    btReset.size = new Vec2(200,40)
-    btReset.onClickEventId = Events.RESET_ROOM
-    let btControls = this.add.uiElement(UIElementType.BUTTON, 'pause', {
-      position: new Vec2(c.x, c.y),
-      text: 'Controls'
-    })
-    btControls.borderWidth = 2
-    btControls.size = new Vec2(200,40)
-    btControls.onClickEventId = Events.SHOW_CONTROLS
-    let btExit = this.add.uiElement(UIElementType.BUTTON, 'pause', {
-      position: new Vec2(c.x, c.y + 100),
-      text: 'Exit'
-    })
-    btExit.borderWidth = 2
-    btExit.size = new Vec2(200,40)
-    btExit.onClickEventId = Events.EXIT_GAME
-    this.pauseLayer.setHidden(true)
-
-    this.scoreTimer = new ScoreTimer(
-      300_000,
-      () => {
-        this.sceneManager.changeToScene(GameOver, { win: false });
-      },
-      false
-    );
+    if (this.timeLeft !== undefined) {
+      this.scoreTimer = new ScoreTimer(this.timeLeft, this.timesUp, false)
+    } else {
+      this.scoreTimer = new ScoreTimer(300_000, this.timesUp, false)
+    }
     this.scoreTimer.start();
+  }
+
+  timesUp(): void {
+    this.sceneManager.changeToScene(GameOver, {win: false})
+  }
+
+  handleEvent(event: GameEvent): void {
+    if (event.isType(Events.PAUSE_GAME)) {
+      /*
+        If there are no more enemies left in the room, and you pause, the pause button will crash the game.
+        I don't think we have to worry about this too much since the room is cleared when there are no more enemies.
+      */
+      this.glm.showPause()
+    }
+    if (event.isType(Events.RESET_ROOM)) {
+      /*
+        TODO: When the room is reset, pass the previous timer so the player can't always reset and 
+          be able to get the best score on all of his/her attempt
+      */
+      this.sceneManager.changeToScene(GameLevel, {timeLeft: this.scoreTimer.getTimeLeftInMillis()});
+    }
+    if (event.isType(Events.SHOW_CONTROLS)) {
+      this.glm.showControls()
+    }
+    if (event.isType(Events.EXIT_GAME)) {
+      this.sceneManager.changeToScene(MainMenu, {})
+    }
+    if (event.isType("healthpack")) {
+      this.createHealthpack(event.data.get("position"));
+    }
+    if (event.isType("enemyDied")) {
+      this.enemies = this.enemies.filter(
+        (enemy) => enemy !== event.data.get("enemy")
+      );
+      this.battleManager.enemies = this.battleManager.enemies.filter(
+        (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
+      );
+
+      if (this.battleManager.enemies.length === 0) {
+        this.viewport.setZoomLevel(1);
+        this.viewport.disableZoom();
+        this.sceneManager.changeToScene(GameOver, {
+          win: true,
+          timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
+        });
+      }
+    }
+    if (event.isType(Events.PLACE_FLAG)) {
+      let coord = event.data.get("coordinates");
+      console.log(coord.toString());
+      for (let bomb of this.bombs) {
+        if (bomb && bomb.tileCoord.equals(coord)) {
+          //TODO Add flag sprite here
+          console.log("bomb found");
+
+          if (!bomb.isFlagged) {
+            console.log("flag placed");
+            bomb.setIsFlaggedTrue();
+            this.flags.push(this.add.animatedSprite("flag", "primary"));
+            this.flags[this.flags.length - 1].position = new Vec2(
+              (coord.x + 0.5) * 16,
+              (coord.y + 1.0) * 16
+            );
+            this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
+            this.flags[this.flags.length - 1].animation.play("IDLE");
+          }
+        }
+      }
+    }
+    if (event.isType(Events.UNLOAD_ASSET)) {
+      let asset = this.sceneGraph.getNode(event.data.get("node"));
+      asset.destroy();
+    }
   }
 
   updateScene(deltaT: number): void {
     while (this.receiver.hasNextEvent()) {
-      let event = this.receiver.getNextEvent();
-      if (event.isType(Events.PAUSE_GAME)) {
-        /*
-          If there are no more enemies left in the room, and you pause, the pause button will crash the game.
-          I don't think we have to worry about this too much since the room is cleared when there are no more enemies.
-        */
-        this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
-        if (this.pauseLayer.isHidden()) {
-          this.viewport.setZoomLevel(3)
-        } else {
-          this.viewport.setZoomLevel(1)
-        }
-      }
-      if (event.isType(Events.RESET_ROOM)) {
-        this.sceneManager.changeToScene(GameLevel, {});
-      }
-      if (event.isType(Events.SHOW_CONTROLS)) {
-        console.log('display controls')
-      }
-      if (event.isType(Events.EXIT_GAME)) {
-        this.sceneManager.changeToScene(MainMenu, {})
-      }
-      if (event.isType("healthpack")) {
-        this.createHealthpack(event.data.get("position"));
-      }
-      if (event.isType("enemyDied")) {
-        this.enemies = this.enemies.filter(
-          (enemy) => enemy !== event.data.get("enemy")
-        );
-        this.battleManager.enemies = this.battleManager.enemies.filter(
-          (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
-        );
-
-        if (this.battleManager.enemies.length === 0) {
-          this.viewport.setZoomLevel(1);
-          this.viewport.disableZoom();
-          this.sceneManager.changeToScene(GameOver, {
-            win: true,
-            timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
-          });
-        }
-      }
-      if (event.isType(Events.PLACE_FLAG)) {
-        let coord = event.data.get("coordinates");
-        console.log(coord.toString());
-        for (let bomb of this.bombs) {
-          if (bomb && bomb.tileCoord.equals(coord)) {
-            //TODO Add flag sprite here
-            console.log("bomb found");
-
-            if (!bomb.isFlagged) {
-              console.log("flag placed");
-              bomb.setIsFlaggedTrue();
-              this.flags.push(this.add.animatedSprite("flag", "primary"));
-              this.flags[this.flags.length - 1].position = new Vec2(
-                (coord.x + 0.5) * 16,
-                (coord.y + 1.0) * 16
-              );
-              this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
-              this.flags[this.flags.length - 1].animation.play("IDLE");
-            }
-          }
-        }
-      }
-      if (event.isType(Events.UNLOAD_ASSET)) {
-        let asset = this.sceneGraph.getNode(event.data.get("node"));
-        asset.destroy();
-      }
+      this.handleEvent(this.receiver.getNextEvent())
     }
 
     //handleCollisions for
@@ -323,6 +287,9 @@ export default class GameLevel extends Scene {
     // Debug mode graph
     if (Input.isKeyJustPressed("g")) {
       this.getLayer("graph").setHidden(!this.getLayer("graph").isHidden());
+    }
+    if (Input.isJustPressed('pause')) {
+      this.emitter.fireEvent(Events.PAUSE_GAME, {})
     }
   }
 
@@ -425,15 +392,7 @@ export default class GameLevel extends Scene {
    */
   initializePlayer(): void {
     // Create the inventory
-    let inventory = new InventoryManager(
-      this,
-      2,
-      "inventorySlot",
-      new Vec2(16, 16),
-      4,
-      "slots1",
-      "items1"
-    );
+    let inventory = new InventoryManager(this, 2, "inventorySlot", new Vec2(16, 16), 4, "slots1", "items1")
     let startingWeapon = this.createWeapon("knife");
     inventory.addItem(startingWeapon);
     // Create the players
@@ -545,118 +504,15 @@ export default class GameLevel extends Scene {
     }
   }
 
-  powerset(array: Array<string>): Array<Array<string>> {
-    return array.reduce((a, v) => a.concat(a.map((r) => [v].concat(r))), [[]]);
+  getPlayer(): AnimatedSprite {
+    return this.player
   }
 
-  /**
-   * This function takes all possible actions and all possible statuses, and generates a list of all possible combinations and statuses
-   * and the actions that are taken when run through the GoapActionPlanner.
-   */
-  generateGoapPlans(
-    actions: Array<GoapAction>,
-    statuses: Array<string>,
-    goal: string
-  ): string {
-    let planner = new GoapActionPlanner();
-    // Get all possible status combinations
-    let statusComboinations = this.powerset(statuses);
-    let map = new Map<String>();
-    //console.log(statusComboinations.toString());
-
-    for (let s of statusComboinations) {
-      // Get plan
-      let plan = planner.plan(goal, actions, s, null);
-      let givenStatuses = "Given: ";
-      s.forEach((v) => (givenStatuses = givenStatuses + v + ", "));
-
-      map.add(givenStatuses, plan.toString());
-    }
-
-    return map.toString();
+  setLblHealth(lbl: Label): void {
+    this.lblHealth = lbl
   }
 
-  /**
-   * Use this function to test and verify that your created plans are correct. Note that you should only start using this function once you're ready to
-   * test your berserk action for the existing gun and knife enemies. Your custom enemies can be added whenever they're ready,
-   * your tests will pass if you leave the arguments for both null.
-   */
-  testGoapPlans(
-    gunPlans: string,
-    knifePlans: string,
-    customPlan1: string,
-    customPlan2: string
-  ) {
-    let expectedKnifeResult =
-      `Given:  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: LOW_HEALTH,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: LOW_HEALTH, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_BERSERK,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: CAN_BERSERK, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_BERSERK, LOW_HEALTH,  -> Top -> (Berserk)\n` +
-      `Given: CAN_BERSERK, LOW_HEALTH, IN_RANGE,  -> Top -> (Berserk)\n` +
-      `Given: CAN_RETREAT,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, LOW_HEALTH,  -> Top -> (Retreat)\n` +
-      `Given: CAN_RETREAT, LOW_HEALTH, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK, LOW_HEALTH,  -> Top -> (Berserk)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK, LOW_HEALTH, IN_RANGE,  -> Top -> (Berserk)\n`;
-
-    let expectedGunResult =
-      `Given:  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: LOW_HEALTH,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: LOW_HEALTH, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_BERSERK,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: CAN_BERSERK, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_BERSERK, LOW_HEALTH,  -> Top -> (Berserk)\n` +
-      `Given: CAN_BERSERK, LOW_HEALTH, IN_RANGE,  -> Top -> (Berserk)\n` +
-      `Given: CAN_RETREAT,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, LOW_HEALTH,  -> Top -> (Retreat)\n` +
-      `Given: CAN_RETREAT, LOW_HEALTH, IN_RANGE,  -> Top -> (Retreat)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK,  -> Top -> (Move) -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK, IN_RANGE,  -> Top -> (AttackAction)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK, LOW_HEALTH,  -> Top -> (Retreat)\n` +
-      `Given: CAN_RETREAT, CAN_BERSERK, LOW_HEALTH, IN_RANGE,  -> Top -> (Retreat)\n`;
-
-    console.assert(gunPlans === expectedGunResult, {
-      errorMsg:
-        "Your created gun enemy plan does not match the expected behavior patterns",
-    });
-
-    console.assert(knifePlans === expectedKnifeResult, {
-      errorMsg:
-        "Your created knife enemy plan does not match the expected behavior patterns",
-    });
-
-    if (customPlan1 !== null) {
-      console.assert(customPlan1 !== expectedGunResult, {
-        errorMsg:
-          "Your first custom plan has the same behavior as the gun enemy",
-      });
-      console.assert(customPlan1 !== expectedKnifeResult, {
-        errorMsg:
-          "Your first custom plan has the same behavior as the knife enemy",
-      });
-    }
-
-    if (customPlan2 !== null) {
-      console.assert(customPlan2 !== expectedGunResult, {
-        errorMsg:
-          "Your second custom plan has the same behavior as the gun enemy",
-      });
-      console.assert(customPlan2 !== expectedKnifeResult, {
-        errorMsg:
-          "Your second custom plan has the same behavior as the knife enemy",
-      });
-      if (customPlan1 !== null)
-        console.assert(customPlan2 !== customPlan1, {
-          errorMsg: "Both of your custom plans have the same behavior",
-        });
-    }
+  setLblTime(lbl: Label): void {
+    this.lblTime = lbl
   }
 }
