@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "Blue Robot",
   "spriteSheetImage": "r_blue.png",
   "spriteWidth": 256,
@@ -40,6 +41,39 @@
         {
           "index": 12,
           "duration": 10
+=======
+    "name": "Blue Robot",
+    "spriteSheetImage": "r_blue.png",
+    "spriteWidth": 256,
+    "spriteHeight": 256,
+    "topBuffer": 0,
+    "rightBuffer": 0,
+    "bottomBuffer": 0,
+    "leftBuffer": 0,
+    "rows": 4,
+    "columns": 4,
+    "animations": [
+        {
+            "name": "IDLE",
+            "frames": [
+                {
+                    "index": 0,
+                    "duration": 30
+                },
+                {
+                    "index": 3,
+                    "duration": 30
+                },
+                {
+                    "index": 12,
+                    "duration": 30
+                },
+                {
+                    "index": 9,
+                    "duration": 30
+                }
+            ]
+>>>>>>> 737bf17240af018460c8b84897738ec3bb93f7b1
         },
         {
           "index": 13,

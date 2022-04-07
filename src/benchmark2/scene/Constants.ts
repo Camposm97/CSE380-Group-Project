@@ -6,7 +6,9 @@ export enum Events {
   SHOT_FIRED = "SHOT_FIRED",
   UNLOAD_ASSET = "UNLOAD_ASSET",
   PLACE_FLAG = "PLACE_FLAG",
-  OVERRIDE_IDLE = 'OVERRIDE_IDLE'
+  OVERRIDE_IDLE = 'OVERRIDE_IDLE',
+  RESET_ROOM = 'RESET_ROOM',
+  PAUSE_GAME = 'PAUSE_GAME'
 }
 
 export enum Statuses {
@@ -75,4 +77,30 @@ export enum PlayerAnimations {
     LOOK_LEFT_BLUE = 'LOOK_LEFT_BLUE',
     LOOK_LEFT_RED = 'LOOK_LEFT_RED',
     DAMAGE = 'DAMAGE'
+}
+
+export enum RobotMouseAnimations {
+  WALK_UP = 'WALK_UP',
+  WALK_DOWN = 'WALK_DOWN',
+  WALK_LEFT = 'WALK_LEFT',
+  WALK_RIGHT = 'WALK_RIGHT',
+  DEATH = 'DEATH'
+}
+
+export enum RobotAnimations {
+  IDLE = 'IDLE',
+  WALK_UP = 'WALK_UP',
+  WALK_RIGHT = 'WALK_RIGHT',
+  WALK_DOWN = 'WALK_DOWN',
+  WALK_LEFT = 'WALK_LEFT',
+  DAMAGE = 'DAMAGE'
+}
+
+export enum RobotStatueAnimations {
+    IDLE = 'IDLE',
+    LOOK_UP = 'LOOK_UP',
+    LOOK_RIGHT = 'LOOK_RIGHT',
+    LOOK_DOWN = 'LOOK_DOWN',
+    LOOK_LEFT = 'LOOK_LEFT',
+    DEATH = 'DEATH'
 }

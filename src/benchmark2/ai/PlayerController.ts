@@ -57,6 +57,7 @@ export default class PlayerController implements BattlerAI {
   private iFrameTimer: Timer;
 
   private enemiesLeft: boolean;
+  private idleTimer: Timer;
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
@@ -82,7 +83,7 @@ export default class PlayerController implements BattlerAI {
     this.receiver.subscribe(Events.OVERRIDE_IDLE);
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
-    // this.receiver.subscribe(Events.SWAP_PLAYER);
+    this.idleTimer = new Timer(5000, () => {}, false);
   }
 
   activate(options: Record<string, any>): void {}
@@ -138,9 +139,13 @@ export default class PlayerController implements BattlerAI {
         }
       }
 
-      // TEST DAMAGE ANIMATION
+      // Panic Button
       if (Input.isJustPressed("panic")) {
-        this.doAnimation(PlayerAction.DAMAGE);
+        this.emitter.fireEvent(Events.RESET_ROOM, {});
+      }
+
+      if (Input.isJustPressed("pause")) {
+        this.emitter.fireEvent(Events.PAUSE_GAME, {});
       }
 
       // WASD Movement
@@ -304,14 +309,14 @@ export default class PlayerController implements BattlerAI {
       if (item === null) return;
       switch (this.lookDirection.x) {
         case 1:
-          console.log("attack right");
+          // console.log("attack right");
           this.doAnimation(PlayerAction.LOOK_RIGHT);
           this.inventory
             .getItem()
             .use(this.owner, "player", this.lookDirection);
           break;
         case -1:
-          console.log("attack left");
+          // console.log("attack left");
           this.doAnimation(PlayerAction.LOOK_LEFT);
           this.inventory
             .getItem()
@@ -320,12 +325,12 @@ export default class PlayerController implements BattlerAI {
       }
       switch (this.lookDirection.y) {
         case 1:
-          console.log("attack up");
+          // console.log("attack up");
           this.doAnimation(PlayerAction.LOOK_UP);
           this.inventory.getItem().use(this.owner, "player", new Vec2(0, -1));
           break;
         case -1:
-          console.log("attack down");
+          // console.log("attack down");
           this.doAnimation(PlayerAction.LOOK_DOWN);
           this.inventory.getItem().use(this.owner, "player", new Vec2(0, 1));
           break;

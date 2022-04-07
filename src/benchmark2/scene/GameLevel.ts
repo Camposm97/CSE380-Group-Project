@@ -33,6 +33,8 @@ import Berserk from "../ai/enemy_actions/Berserk";
 import ScoreTimer from "../game_system/ScoreTimer";
 import Bomb from "../game_system/objects/Bomb";
 import RobotAI from "../ai/RobotAI";
+import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+import { Pause } from "./Pause";
 
 export default class GameLevel extends Scene {
   private player: AnimatedSprite; // Player Sprite
@@ -117,6 +119,8 @@ export default class GameLevel extends Scene {
     this.receiver.subscribe("enemyDied");
     this.receiver.subscribe(Events.PLACE_FLAG);
     this.receiver.subscribe(Events.UNLOAD_ASSET);
+    this.receiver.subscribe(Events.RESET_ROOM);
+    this.receiver.subscribe(Events.PAUSE_GAME);
 
     // Spawn items into the world
     // this.spawnItems();
@@ -124,10 +128,12 @@ export default class GameLevel extends Scene {
     // Add a UI for health
     this.addUILayer("hud");
 
-    this.lblHealth = <Label>this.add.uiElement(UIElementType.LABEL, "hud", {
-      position: new Vec2(60, 16),
-      text: `HP: ${(<BattlerAI>this.player._ai).health}`,
-    });
+    this.lblHealth = <Label>(
+      this.add.uiElement(UIElementType.LABEL, "hud", {
+        position: new Vec2(60, 16),
+        text: `HP: ${(<BattlerAI>this.player._ai).health}`,
+      })
+    );
     this.lblHealth.textColor = Color.WHITE;
 
     this.lblTime = <Label>this.add.uiElement(UIElementType.LABEL, "hud", {
@@ -149,10 +155,15 @@ export default class GameLevel extends Scene {
   updateScene(deltaT: number): void {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
-
-      // if (event.isType("healthpack")) {
-      //   this.createHealthpack(event.data.get("position"));
-      // }
+      if (event.isType(Events.RESET_ROOM)) {
+        this.sceneManager.changeToScene(GameLevel, {});
+      }
+      if (event.isType(Events.PAUSE_GAME)) {
+        console.log("pausing game");
+      }
+      if (event.isType("healthpack")) {
+        this.createHealthpack(event.data.get("position"));
+      }
       if (event.isType("enemyDied")) {
         this.enemies = this.enemies.filter(
           (enemy) => enemy !== event.data.get("enemy")
@@ -373,11 +384,10 @@ export default class GameLevel extends Scene {
     );
     let startingWeapon = this.createWeapon("knife");
     inventory.addItem(startingWeapon);
-
     // Create the players
     // this.players = Array(2);
     this.player = this.add.animatedSprite("player1", "primary");
-    this.player.position.set(4 * 16, 32 * 16);
+    this.player.position.set(128, 128);
     this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
     //First player is melee based, starts off with a knife and is short ranged
     this.player.addAI(PlayerController, {
