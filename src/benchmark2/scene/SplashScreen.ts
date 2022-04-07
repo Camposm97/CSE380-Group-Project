@@ -11,11 +11,13 @@ export default class SplashScreen extends Scene {
     private logo: AnimatedSprite;
     loadScene(): void {
         this.load.image("logo","res/sprites/Logo.png");
+        
     }
 
     startScene(): void {
         // First, create a layer for it to go on
         this.addLayer("primary");
+        
 
 
         // Center the viewport
