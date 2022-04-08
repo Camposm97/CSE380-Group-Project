@@ -55,9 +55,7 @@ export default class PlayerController implements BattlerAI {
   private emitter: Emitter;
   private iFrame: boolean;
   private iFrameTimer: Timer;
-
   private enemiesLeft: boolean;
-  private idleTimer: Timer;
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
@@ -83,7 +81,6 @@ export default class PlayerController implements BattlerAI {
     this.receiver.subscribe(Events.OVERRIDE_IDLE);
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
-    this.idleTimer = new Timer(5000, () => {}, false);
   }
 
   activate(options: Record<string, any>): void {}
@@ -139,67 +136,15 @@ export default class PlayerController implements BattlerAI {
         }
       }
 
-      // Panic Button
       if (Input.isJustPressed("panic")) {
         this.emitter.fireEvent(Events.RESET_ROOM, {});
       }
 
       // WASD Movement
-      let forwardAxis =
-        (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
-        (Input.isPressed("backward") ? -1 : 0);
-      let horizontalAxis =
-        (Input.isPressed("left") ? -1 : 0) + (Input.isPressed("right") ? 1 : 0);
-
-      if (
-        (forwardAxis != 0 && horizontalAxis == 0) ||
-        (forwardAxis == 0 && horizontalAxis != 0)
-      ) {
-        //   if (forwardAxis || horizontalAxis) {
-        let movement = Vec2.UP.scaled(forwardAxis * this.speed);
-        movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
-        let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-
-        let tileCoord = this.tilemap.getColRowAt(this.owner.position);
-        tileCoord = new Vec2(tileCoord.x, tileCoord.y);
-        let tile = this.tilemap.getTileAtRowCol(tileCoord);
-        let tileWorldcoord = this.tilemap.getTileWorldPosition(tile);
-        // console.log(this.owner.position.toString());
-        // console.log(tileWorldcoord.toString());
-        // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
-
-        // If there is any movement, override idle animation
-        if (Input.isPressed("forward")) {
-          this.doAnimation(PlayerAction.WALK_UP);
-          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_UP);
-          this.lookDirection.y = 1;
-          this.lookDirection.x = 0;
-        }
-        if (Input.isPressed("left")) {
-          this.doAnimation(PlayerAction.WALK_LEFT);
-          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_LEFT);
-          this.lookDirection.y = 0;
-          this.lookDirection.x = -1;
-        }
-        if (Input.isPressed("backward")) {
-          this.doAnimation(PlayerAction.WALK_DOWN);
-          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_DOWN);
-          this.lookDirection.y = -1;
-          this.lookDirection.x = 0;
-        }
-        if (Input.isPressed("right")) {
-          this.doAnimation(PlayerAction.WALK_RIGHT);
-          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_RIGHT);
-          this.lookDirection.y = 0;
-          this.lookDirection.x = 1;
-        }
-      } else {
-        this.doAnimation(PlayerAction.IDLE);
+      if (!this.owner.animation.isPlaying(PlayerAnimations.DAMAGE)) {
+        this.handleMovement(deltaT)
       }
+      
 
       this.handleAttack();
 
@@ -291,6 +236,64 @@ export default class PlayerController implements BattlerAI {
       }
       this.iFrame = true;
       this.iFrameTimer.start();
+    }
+  }
+
+  handleMovement(deltaT: number): void {
+    let forwardAxis =
+      (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
+      (Input.isPressed("backward") ? -1 : 0);
+    let horizontalAxis =
+      (Input.isPressed("left") ? -1 : 0) + (Input.isPressed("right") ? 1 : 0);
+
+    if (
+      (forwardAxis != 0 && horizontalAxis == 0) ||
+      (forwardAxis == 0 && horizontalAxis != 0)
+    ) {
+      //   if (forwardAxis || horizontalAxis) {
+      let movement = Vec2.UP.scaled(forwardAxis * this.speed);
+      movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
+      let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
+      this.path = this.owner
+        .getScene()
+        .getNavigationManager()
+        .getPath(Names.NAVMESH, this.owner.position, newPos, true);
+
+      let tileCoord = this.tilemap.getColRowAt(this.owner.position);
+      tileCoord = new Vec2(tileCoord.x, tileCoord.y);
+      let tile = this.tilemap.getTileAtRowCol(tileCoord);
+      let tileWorldcoord = this.tilemap.getTileWorldPosition(tile);
+      // console.log(this.owner.position.toString());
+      // console.log(tileWorldcoord.toString());
+      // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
+
+      // If there is any movement, override idle animation
+      if (Input.isPressed("forward")) {
+        this.doAnimation(PlayerAction.WALK_UP);
+        // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_UP);
+        this.lookDirection.y = 1;
+        this.lookDirection.x = 0;
+      }
+      if (Input.isPressed("left")) {
+        this.doAnimation(PlayerAction.WALK_LEFT);
+        // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_LEFT);
+        this.lookDirection.y = 0;
+        this.lookDirection.x = -1;
+      }
+      if (Input.isPressed("backward")) {
+        this.doAnimation(PlayerAction.WALK_DOWN);
+        // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_DOWN);
+        this.lookDirection.y = -1;
+        this.lookDirection.x = 0;
+      }
+      if (Input.isPressed("right")) {
+        this.doAnimation(PlayerAction.WALK_RIGHT);
+        // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_RIGHT);
+        this.lookDirection.y = 0;
+        this.lookDirection.x = 1;
+      }
+    } else {
+      this.doAnimation(PlayerAction.IDLE);
     }
   }
 
