@@ -434,6 +434,16 @@
           "duration": 2
         }
       ]
+    },
+    {
+      "name": "OFF",
+      "repeat": false,
+      "frames": [
+        {
+          "index": 64,
+          "duration": 10
+        }
+      ]
     }
   ]
 }

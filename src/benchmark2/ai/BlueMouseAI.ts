@@ -1,22 +1,10 @@
-import GoapActionPlanner from "../../Wolfie2D/AI/GoapActionPlanner";
-import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
-import StateMachineGoapAI from "../../Wolfie2D/AI/StateMachineGoapAI";
-import GoapAction from "../../Wolfie2D/DataTypes/Interfaces/GoapAction";
-import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
-import Stack from "../../Wolfie2D/DataTypes/Stack";
-import State from "../../Wolfie2D/DataTypes/State/State";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
-import GameNode from "../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
-import Weapon from "../game_system/items/Weapon";
-import { Events, Names, Statuses } from "../scene/Constants";
+import { Names, RobotMouseAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
-import Receiver from "../../Wolfie2D/Events/Receiver";
-import { PlayerAction } from "../scene/Constants";
 
 export default class BlueMouseAI implements RobotAI {
   owner: AnimatedSprite;
@@ -28,28 +16,18 @@ export default class BlueMouseAI implements RobotAI {
   mainBehavior: boolean;
 
   damage: number;
-
   speed: number;
-
   private deltaT: number;
-
   private path: NavigationPath;
-
-  private receiver: Receiver;
-
   time: number;
-
   direction: number;
-
   listening: boolean;
+  offState: boolean
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
-
     this.listening = false;
-
-    console.log(this.owner);
-    this.owner.scale = new Vec2(0.125, 0.125);
+    this.owner.scale = new Vec2(0.12, 0.12);
     this.time = 2000;
     this.speed = 120;
     this.mainBehavior = true;
@@ -66,10 +44,9 @@ export default class BlueMouseAI implements RobotAI {
         this.damage = options.damage;
       }
     }
-    this.frozenTimer = new Timer(this.time);
-
+    this.frozenTimer = new Timer(this.time)
     this.isFrozen = false;
-    this.receiver = new Receiver();
+    this.offState = false
   }
 
   hit(): void {
@@ -89,20 +66,44 @@ export default class BlueMouseAI implements RobotAI {
   setPath() {
     let movement = null;
     let newPos = null;
-    if (this.mainBehavior) {
+    if (this.mainBehavior) { // left=1, right=-1
       movement = Vec2.LEFT.scaled(this.speed * this.direction);
       newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
       this.path = this.owner
         .getScene()
         .getNavigationManager()
         .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-    } else {
+    } else { // up=1, down=-1
       movement = Vec2.UP.scaled(this.speed * this.direction);
       newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
       this.path = this.owner
         .getScene()
         .getNavigationManager()
         .getPath(Names.NAVMESH, this.owner.position, newPos, true);
+    }
+    this.doAnimation()
+  }
+  
+  /**
+   * Plays an animation based on @param this.direction and @param this.mainBehavior
+   */
+  doAnimation() {
+    if (this.isFrozen) {
+      if (this.offState) {
+        this.owner.animation.queue(RobotMouseAnimations.OFF, true)
+      } else {
+        this.owner.animation.playIfNotAlready(RobotMouseAnimations.DEATH, false)
+        this.offState = true
+      }
+      return
+    }
+    switch (this.direction) {
+      case -1: // right/up
+        this.owner.animation.playIfNotAlready(this.mainBehavior ? RobotMouseAnimations.WALK_RIGHT : RobotMouseAnimations.WALK_DOWN, true)
+        break;
+      case 1: //left/down
+        this.owner.animation.playIfNotAlready(this.mainBehavior ? RobotMouseAnimations.WALK_LEFT : RobotMouseAnimations.WALK_UP, true)
+        break;
     }
   }
 
@@ -119,12 +120,17 @@ export default class BlueMouseAI implements RobotAI {
 
     if (this.frozenTimer.isStopped()) {
       this.isFrozen = false;
+      this.offState = false
     }
 
     if (this.owner.isColliding) this.collide();
 
-    if (this.isFrozen) this.path = null;
-    else this.setPath();
+    if (this.isFrozen) {
+      this.path = null;
+      this.doAnimation()
+    } else {
+      this.setPath();
+    }
 
     if (this.path != null && !this.isFrozen) {
       //Move on path if selected
