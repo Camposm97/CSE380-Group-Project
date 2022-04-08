@@ -144,10 +144,6 @@ export default class PlayerController implements BattlerAI {
         this.emitter.fireEvent(Events.RESET_ROOM, {});
       }
 
-      if (Input.isJustPressed("pause")) {
-        this.emitter.fireEvent(Events.PAUSE_GAME, {});
-      }
-
       // WASD Movement
       let forwardAxis =
         (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
@@ -278,11 +274,7 @@ export default class PlayerController implements BattlerAI {
         break;
       case PlayerAction.DAMAGE:
         this.overrideIdle = true;
-        this.owner.animation.play(
-          PlayerAnimations.DAMAGE,
-          false,
-          Events.OVERRIDE_IDLE
-        );
+        this.owner.animation.play(PlayerAnimations.DAMAGE, false, Events.OVERRIDE_IDLE);
         break;
     }
   }

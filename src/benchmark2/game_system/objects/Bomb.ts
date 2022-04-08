@@ -1,8 +1,13 @@
 import AABB from "../../../Wolfie2D/DataTypes/Shapes/AABB";
+import Spritesheet from "../../../Wolfie2D/DataTypes/Spritesheet";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
-import GameNode from "../../../Wolfie2D/Nodes/GameNode";
+import GameNode, { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import { TweenEffect } from "../../../Wolfie2D/Rendering/Animations/AnimationTypes";
+import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
+import { Events } from "../../scene/Constants";
 
 /**
  * Bomb class
@@ -13,6 +18,7 @@ import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilema
  * just yet.
  */
 export default class Bomb {
+  owner: AnimatedSprite
   position: Vec2;
   tileCoord: Vec2;
   collisionBoundary: AABB;
@@ -20,10 +26,23 @@ export default class Bomb {
   middleBoundary: AABB;
   outerBoundary: AABB;
   isFlagged: boolean;
-  // sprite: Sprite;
   isDestroyed: boolean;
 
-  constructor(tileCoord: Vec2) {
+  constructor(tileCoord: Vec2, owner: AnimatedSprite) {
+    this.owner = owner
+    this.owner.tweens.add('fadeOut', {
+      startDelay: 1000,
+      duration: 3000,
+      effects: [
+          {
+              property: TweenableProperties.alpha,
+              start: 1.0,
+              end: 0,
+              ease: EaseFunctionType.IN_OUT_QUAD,
+          }
+      ],
+      onEnd: Events.DESTROY_BOMB,
+    })
     this.isFlagged = false;
     this.isDestroyed = false;
     this.tileCoord = tileCoord;
@@ -31,6 +50,8 @@ export default class Bomb {
       (tileCoord.x + 0.5) * 16,
       (tileCoord.y + 0.5) * 16
     );
+    this.owner.position = this.position
+    this.owner.scale = new Vec2(2.0,2.0)
     // this.position.x = tileCoord.x + 0.5 * 16;
     // this.position.y = tileCoord.y + 0.5 * 16;
     this.collisionBoundary = new AABB(
@@ -58,6 +79,16 @@ export default class Bomb {
 
   setIsDestroyedTrue() {
     this.isDestroyed = true;
+  }
+
+  hide() {
+    this.owner.animation.play('HIDDEN', true, null)
+  }
+
+  explode() {
+    this.owner.animation.playIfNotAlready('IDLE', false, null)
+    this.owner.animation.queue('DEBRIS', true, null)
+    this.owner.tweens.play('fadeOut')
   }
 
   // displayFlag(sprite: Sprite) {

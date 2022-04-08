@@ -11,6 +11,7 @@ export enum Events {
   PAUSE_GAME = "PAUSE_GAME",
   SHOW_CONTROLS = "SHOW_CONTROLS",
   EXIT_GAME = "EXIT_GAME",
+  DESTROY_BOMB = "DESTROY_BOMB",
 }
 
 export enum Statuses {
