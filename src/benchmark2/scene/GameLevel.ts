@@ -6,8 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { CoatColor, Events, Names, RobotAction, Statuses } from "./Constants";
-import EnemyAI from "../ai/EnemyAI";
+import { CoatColor, Events, Names, RobotAction } from "./Constants";
 import BlueRobotAI from "../ai/BlueRobotAI";
 import WeaponType from "../game_system/items/weapon_types/WeaponType";
 import RegistryManager from "../../Wolfie2D/Registry/RegistryManager";
@@ -160,6 +159,7 @@ export default class GameLevel extends Scene {
     }
     this.scoreTimer.start();
   }
+
   initializeProjectiles(): void {
     for (let i = 0; i < this.projectiles.length; i++) {
       this.projectiles[i] = this.add.animatedSprite("projectile", "primary");
@@ -330,21 +330,23 @@ export default class GameLevel extends Scene {
           (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
       } else (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
     }
+    let health = (<BattlerAI>this.player._ai).health
+    this.handleLoseCondition(health)
+    this.updateHUD(health)
+    this.handleInput();
+  }
 
-    // check health of each player
-    let health = (<BattlerAI>this.player._ai).health;
-
-    //If both are dead, game over
-    if (health <= 0) {
+  handleLoseCondition(health: number): void {
+    if (health <= 0) { // If {health} <= 0, Game Over!
       this.viewport.setZoomLevel(1);
       this.viewport.disableZoom();
       this.sceneManager.changeToScene(GameOver, { win: false });
     }
+  }
 
-    // Update health gui
+  updateHUD(health: number): void {
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
-    this.handleInput();
   }
 
   handleInput(): void {
@@ -533,10 +535,7 @@ export default class GameLevel extends Scene {
     console.log(bombData);
     let bombSprite = this.add.animatedSprite("bomb", "primary");
     for (let bomb of bombData.bombs) {
-      let b = new Bomb(
-        new Vec2(bomb.position[0], bomb.position[1]),
-        bombSprite
-      );
+      let b = new Bomb(new Vec2(bomb.position[0], bomb.position[1]), bombSprite);
       this.bombs.push(b);
       b.hide();
     }
