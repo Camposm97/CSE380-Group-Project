@@ -2,6 +2,21 @@ export enum Names {
   NAVMESH = "navmesh",
 }
 
+export enum Control {
+  FORWARD = 'forward',
+  BACKWARD = 'backward',
+  LEFT = 'left',
+  RIGHT = 'right',
+  ATTACK = 'attack',
+  PLACE_FLAG = 'place-flag',
+  PANIC = 'panic',
+  PAUSE = 'pause',
+  PICK_UP = 'pickup',
+  DROP = 'drop',
+  SLOT1 = 'slot1',
+  SLOT2 = 'slot2'
+}
+
 export enum Events {
   SHOT_FIRED = "SHOT_FIRED",
   UNLOAD_ASSET = "UNLOAD_ASSET",
@@ -100,6 +115,7 @@ export enum RobotAnimations {
   WALK_DOWN = "WALK_DOWN",
   WALK_LEFT = "WALK_LEFT",
   DAMAGE = "DAMAGE",
+  FROZEN = 'FROZEN'
 }
 
 export enum RobotStatueAnimations {

@@ -9,11 +9,9 @@
   "leftBuffer": 0,
   "rows": 4,
   "columns": 4,
-  "durationType": "time",
   "animations": [
     {
       "name": "IDLE",
-      "repeat": true,
       "frames": [
         {
           "index": 0,
@@ -35,7 +33,6 @@
     },
     {
       "name": "WALK_UP",
-      "repeat": true,
       "frames": [
         {
           "index": 12,
@@ -53,7 +50,6 @@
     },
     {
       "name": "WALK_RIGHT",
-      "repeat": true,
       "frames": [
         {
           "index": 0,
@@ -71,7 +67,6 @@
     },
     {
       "name": "WALK_DOWN",
-      "repeat": true,
       "frames": [
         {
           "index": 9,
@@ -89,7 +84,6 @@
     },
     {
       "name": "WALK_LEFT",
-      "repeat": true,
       "frames": [
         {
           "index": 3,
@@ -107,7 +101,6 @@
     },
     {
       "name": "DAMAGE",
-      "repeat": false,
       "frames": [
         {
           "index": 6,
@@ -117,6 +110,15 @@
           "index": 7,
           "duration": 10
         },
+        {
+          "index": 8,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "FROZEN",
+      "frames": [
         {
           "index": 8,
           "duration": 10
