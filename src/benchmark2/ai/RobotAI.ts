@@ -21,5 +21,5 @@ export default interface RobotAI extends AI {
   listening: boolean;
 
   //method for handling taking a hit from the player
-  hit: () => void;
+  hit: (options?: Record<string, any>) => void;
 }

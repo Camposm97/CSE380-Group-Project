@@ -6,7 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { CoatColor, Events, Names, Statuses } from "./Constants";
+import { CoatColor, Events, Names, RobotAction, Statuses } from "./Constants";
 import EnemyAI from "../ai/EnemyAI";
 import BlueRobotAI from "../ai/BlueRobotAI";
 import WeaponType from "../game_system/items/weapon_types/WeaponType";
@@ -37,6 +37,8 @@ import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import MainMenu from "./MainMenu";
 import BlueMouseAI from "../ai/BlueMouseAI";
+import BlueStatueAI from "../ai/BlueStatueAI";
+import ProjectileAI from "../ai/ProjectileAI";
 
 export default class GameLevel extends Scene {
   private player: AnimatedSprite; // Player Sprite
@@ -53,6 +55,12 @@ export default class GameLevel extends Scene {
   private scoreTimer: ScoreTimer;
   private listeningEnemies: number; //number of enemies that listen for player movement events
 
+  // Create an object pool for our projectives
+  private MAX_PROJECTILE_SIZE = 5;
+  private projectiles: Array<AnimatedSprite> = new Array(
+    this.MAX_PROJECTILE_SIZE
+  );
+
   loadScene() {
     // Load the player and enemy spritesheets
     this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
@@ -60,6 +68,8 @@ export default class GameLevel extends Scene {
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
     this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
     this.load.spritesheet("blueMouse", "res/spritesheets/rm_blue.json");
+    this.load.spritesheet("blueStatue", "res/spritesheets/rs_blue.json");
+    this.load.spritesheet("projectile", "res/spritesheets/projectile.json");
     this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load tile map
     this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
     this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
@@ -116,15 +126,19 @@ export default class GameLevel extends Scene {
     // Initalize all bombs
     this.initializeBombs();
 
+    // Initialize projectiles
+    this.initializeProjectiles();
+
     // Send the player and enemies to the battle manager
     // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
-    this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
+    this.battleManager.setPlayers([<PlayerController>this.player._ai]);
     this.battleManager.setEnemies(
       this.enemies.map((enemy) => <RobotAI>enemy._ai)
     );
 
     // Subscribe to relevant events
     this.receiver.subscribe("enemyDied");
+    this.receiver.subscribe(RobotAction.FIRE_PROJECTILE);
     this.receiver.subscribe(Events.PLACE_FLAG);
     this.receiver.subscribe(Events.UNLOAD_ASSET);
     this.receiver.subscribe(Events.PAUSE_GAME);
@@ -191,6 +205,37 @@ export default class GameLevel extends Scene {
       false
     );
     this.scoreTimer.start();
+  }
+  initializeProjectiles(): void {
+    for (let i = 0; i < this.projectiles.length; i++) {
+      this.projectiles[i] = this.add.animatedSprite("projectile", "primary");
+      this.projectiles[i].visible = false;
+
+      // Add AI to our projectile
+      this.projectiles[i].addAI(ProjectileAI, { velocity: new Vec2(0, 0) });
+    }
+  }
+
+  spawnProjectile(position: Vec2, velocity: Vec2): void {
+    // Find the first viable bullet
+    let projectile: AnimatedSprite = null;
+    let randomNum = Math.random();
+
+    for (let p of this.projectiles) {
+      if (!p.visible) {
+        // We found a dead projectile
+        projectile = p;
+        break;
+      }
+    }
+
+    if (projectile !== null) {
+      // Spawn a projectile
+      projectile.visible = true;
+      projectile.position = position.add(new Vec2(0, -64));
+      (<ProjectileAI>projectile._ai).start_velocity = velocity;
+      projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
+    }
   }
 
   updateScene(deltaT: number): void {
@@ -259,6 +304,12 @@ export default class GameLevel extends Scene {
           }
         }
       }
+      if (event.isType(RobotAction.FIRE_PROJECTILE)) {
+        this.spawnProjectile(
+          event.data.get("position"),
+          event.data.get("velocity")
+        );
+      }
       if (event.isType(Events.UNLOAD_ASSET)) {
         let asset = this.sceneGraph.getNode(event.data.get("node"));
         asset.destroy();
@@ -312,7 +363,7 @@ export default class GameLevel extends Scene {
           (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
         } else
           (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
-      }
+      } else (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
     }
 
     // check health of each player
@@ -551,6 +602,8 @@ export default class GameLevel extends Scene {
           break;
         case "BlueMouseAI":
           this.enemies[i].addAI(BlueMouseAI, enemyOptions);
+        case "BlueStatueAI":
+          this.enemies[i].addAI(BlueStatueAI, enemyOptions);
         default:
           break;
       }

@@ -49,7 +49,7 @@ export default class PlayerController implements BattlerAI {
 
   // Movement
   private speed: number;
-  private lookDirection: Vec2;
+  public lookDirection: Vec2;
   private path: NavigationPath;
   private receiver: Receiver;
   private emitter: Emitter;
@@ -179,25 +179,25 @@ export default class PlayerController implements BattlerAI {
         // If there is any movement, override idle animation
         if (Input.isPressed("forward")) {
           this.doAnimation(PlayerAction.WALK_UP);
-          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_UP);
+          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_UP);
           this.lookDirection.y = 1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("left")) {
           this.doAnimation(PlayerAction.WALK_LEFT);
-          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_LEFT);
+          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_LEFT);
           this.lookDirection.y = 0;
           this.lookDirection.x = -1;
         }
         if (Input.isPressed("backward")) {
           this.doAnimation(PlayerAction.WALK_DOWN);
-          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_DOWN);
+          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_DOWN);
           this.lookDirection.y = -1;
           this.lookDirection.x = 0;
         }
         if (Input.isPressed("right")) {
           this.doAnimation(PlayerAction.WALK_RIGHT);
-          if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_RIGHT);
+          // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_RIGHT);
           this.lookDirection.y = 0;
           this.lookDirection.x = 1;
         }

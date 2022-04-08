@@ -1,5 +1,5 @@
 {
-  "numEnemies": 2,
+  "numEnemies": 3,
   "enemies": [
     {
       "ai": "BlueRobotAI",
@@ -11,6 +11,12 @@
       "ai": "BlueMouseAI",
       "type": "blueMouse",
       "position": [170, 940],
+      "damage": 1
+    },
+    {
+      "ai": "BlueStatueAI",
+      "type": "blueStatue",
+      "position": [200, 500],
       "damage": 1
     }
   ]

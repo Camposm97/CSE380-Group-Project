@@ -17,8 +17,10 @@ import { Events, Names, Statuses } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import { PlayerAction } from "../scene/Constants";
+import Input from "../../Wolfie2D/Input/Input";
 
 export default class BlueRobotAI implements RobotAI {
+  projectile: boolean;
   owner: AnimatedSprite;
   //whether or not robot is frozen
   isFrozen: boolean;
@@ -46,7 +48,8 @@ export default class BlueRobotAI implements RobotAI {
 
     this.listening = true;
 
-    console.log(this.owner);
+    this.projectile = false;
+
     this.owner.scale = new Vec2(0.125, 0.125);
     this.time = 5000;
     this.speed = 100;
@@ -86,48 +89,46 @@ export default class BlueRobotAI implements RobotAI {
   activate(options: Record<string, any>): void {
     // throw new Error("Method not implemented.");
   }
+
   handleEvent(event: GameEvent): void {
-    let movement = null;
-    let newPos = null;
-    switch (event.type) {
-      case PlayerAction.WALK_DOWN:
-        if (this.mainBehavior) movement = Vec2.UP.scaled(this.speed);
-        else movement = Vec2.DOWN.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      case PlayerAction.WALK_UP:
-        if (this.mainBehavior) movement = Vec2.DOWN.scaled(this.speed);
-        else movement = Vec2.UP.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      case PlayerAction.WALK_LEFT:
-        if (this.mainBehavior) movement = Vec2.RIGHT.scaled(this.speed);
-        else movement = Vec2.LEFT.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      case PlayerAction.WALK_RIGHT:
-        if (this.mainBehavior) movement = Vec2.LEFT.scaled(this.speed);
-        else movement = Vec2.RIGHT.scaled(this.speed);
-        newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
-        this.path = this.owner
-          .getScene()
-          .getNavigationManager()
-          .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-        break;
-      default:
-        break;
+    // throw new Error("Method not implemented.");
+  }
+
+  move(): void {
+    let forwardAxis =
+      (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
+      (Input.isPressed("backward") ? -1 : 0);
+    let horizontalAxis =
+      (Input.isPressed("left") ? -1 : 0) + (Input.isPressed("right") ? 1 : 0);
+    if (this.mainBehavior) {
+      forwardAxis *= -1;
+      horizontalAxis *= -1;
+    }
+
+    if (
+      (forwardAxis != 0 && horizontalAxis == 0) ||
+      (forwardAxis == 0 && horizontalAxis != 0)
+    ) {
+      let movement = Vec2.UP.scaled(forwardAxis * this.speed);
+      movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
+      let newPos = this.owner.position
+        .clone()
+        .add(movement.scaled(this.deltaT));
+      this.path = this.owner
+        .getScene()
+        .getNavigationManager()
+        .getPath(Names.NAVMESH, this.owner.position, newPos, true);
+
+      // If there is any movement, override idle animation
+      if (Input.isPressed("forward")) {
+      }
+      if (Input.isPressed("left")) {
+      }
+      if (Input.isPressed("backward")) {
+      }
+      if (Input.isPressed("right")) {
+      }
+    } else {
     }
   }
   update(deltaT: number): void {
@@ -136,11 +137,8 @@ export default class BlueRobotAI implements RobotAI {
       this.isFrozen = false;
     }
 
-    while (this.receiver.hasNextEvent()) {
-      this.handleEvent(this.receiver.getNextEvent());
-    }
-
     if (this.isFrozen) this.path = null;
+    else this.move();
 
     if (this.path != null && !this.isFrozen) {
       //Move on path if selected

@@ -1,10 +1,11 @@
 import GameNode from "../../Wolfie2D/Nodes/GameNode";
 import BattlerAI from "../ai/BattlerAI";
+import PlayerController from "../ai/PlayerController";
 import RobotAI from "../ai/RobotAI";
 import Weapon from "./items/Weapon";
 
 export default class BattleManager {
-  players: Array<BattlerAI>;
+  players: Array<PlayerController>;
 
   enemies: Array<RobotAI>;
 
@@ -14,13 +15,13 @@ export default class BattleManager {
       for (let enemy of this.enemies) {
         console.log(enemy.owner);
         if (enemy.owner.collisionShape && weapon.hits(enemy.owner)) {
-          enemy.hit();
+          enemy.hit({ direction: this.players[0].lookDirection });
         }
       }
     }
   }
 
-  setPlayers(player: Array<BattlerAI>): void {
+  setPlayers(player: Array<PlayerController>): void {
     this.players = player;
   }
 
