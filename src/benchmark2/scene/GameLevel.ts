@@ -27,6 +27,7 @@ import MainMenu from "./MainMenu";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
 import BlueMouseAI from "../ai/BlueMouseAI";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class GameLevel extends Scene {
   private timeLeft: number
@@ -55,6 +56,7 @@ export default class GameLevel extends Scene {
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
     this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
     this.load.spritesheet("blueMouse", "res/spritesheets/rm_blue.json");
+    this.load.spritesheet('bomb', 'res/spritesheets/explode.json')
     this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load tile map
     this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
     this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
@@ -66,6 +68,7 @@ export default class GameLevel extends Scene {
     this.load.image("knife", "res/sprites/knife.png");
     this.load.image("laserGun", "res/sprites/laserGun.png");
     this.load.image("pistol", "res/sprites/pistol.png");
+    this.load.audio('boom', 'res/sound/explode.wav')
   }
 
   startScene() {
@@ -151,11 +154,11 @@ export default class GameLevel extends Scene {
 
   handleEvent(event: GameEvent): void {
     if (event.isType(Events.PAUSE_GAME)) {
-      /*
-        If there are no more enemies left in the room, and you pause, the pause button will crash the game.
-        I don't think we have to worry about this too much since the room is cleared when there are no more enemies.
-      */
-      this.glm.showPause()
+      if(this.glm.showPause()) {
+        this.scoreTimer.pause()
+      } else {
+        this.scoreTimer.start(this.scoreTimer.getTimeLeftInMillis())
+      }
     }
     if (event.isType(Events.RESET_ROOM)) {
       this.glm.hideAllAndZoomOut()
@@ -231,6 +234,8 @@ export default class GameLevel extends Scene {
           if (bomb && !bomb.isDestroyed) {
             if (enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
               if ((<RobotAI>enemy._ai).listening) this.listeningEnemies--;
+              bomb.explode()
+              this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'boom', loop: false, holdReference: false})
               enemy.destroy();
               this.enemies = this.enemies.filter(
                 (currentEnemy) => currentEnemy !== enemy
@@ -460,9 +465,11 @@ export default class GameLevel extends Scene {
     this.flags = new Array(bombData.numBombs);
 
     console.log(bombData);
-
+    let bombSprite = this.add.animatedSprite('bomb', 'primary')
     for (let bomb of bombData.bombs) {
-      this.bombs.push(new Bomb(new Vec2(bomb.position[0], bomb.position[1])));
+      let b = new Bomb(new Vec2(bomb.position[0], bomb.position[1]), bombSprite)
+      this.bombs.push(b);
+      b.hide()
     }
   }
 

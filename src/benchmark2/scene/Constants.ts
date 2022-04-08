@@ -2,6 +2,7 @@ export enum Names {
   NAVMESH = "navmesh",
 }
 
+
 export enum Events {
   SHOT_FIRED = "SHOT_FIRED",
   UNLOAD_ASSET = "UNLOAD_ASSET",
@@ -10,7 +11,8 @@ export enum Events {
   RESET_ROOM = 'RESET_ROOM',
   PAUSE_GAME = 'PAUSE_GAME',
   SHOW_CONTROLS = 'SHOW_CONTROLS',
-  EXIT_GAME = 'EXIT_GAME'
+  EXIT_GAME = 'EXIT_GAME',
+  DESTROY_BOMB = "DESTROY_BOMB"
 }
 
 export enum Statuses {

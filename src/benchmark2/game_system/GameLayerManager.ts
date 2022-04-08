@@ -206,7 +206,11 @@ export class GameLayerManager {
         this.lblRoomEnd.tweens.play('slideIn', false)
     }
 
-    showPause() {
+    /**
+     * 
+     * @returns false if primaryLayer is hidden, else it returns true
+     */
+    showPause(): boolean {
         this.primaryLayer.setHidden(!this.primaryLayer.isHidden())
         this.hudLayer.setHidden(!this.hudLayer.isHidden())
         this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
@@ -220,6 +224,7 @@ export class GameLayerManager {
         } else {
             this.scene.getViewport().setZoomLevel(1)
         }
+        return this.primaryLayer.isHidden()
     }
 
     showControls() {
