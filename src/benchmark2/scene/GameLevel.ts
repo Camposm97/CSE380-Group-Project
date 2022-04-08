@@ -568,6 +568,7 @@ export default class GameLevel extends Scene {
         time: entity.time,
         damage: entity.damage,
       };
+      console.log(entity.ai);
 
       //TODO TRY AND FIND A WAY TO MAP STRINGS TO ROBOT AI CLASS TYPES
       //ADD MORE AI TYPES ONCE THEY ARE MADE
@@ -577,9 +578,13 @@ export default class GameLevel extends Scene {
           this.listeningEnemies++;
           break;
         case "BlueMouseAI":
+          console.log("addeding blue mouse ai");
           this.enemies[i].addAI(BlueMouseAI, enemyOptions);
+          console.log(this.enemies[i]._ai);
+          break;
         case "BlueStatueAI":
           this.enemies[i].addAI(BlueStatueAI, enemyOptions);
+          break;
         default:
           break;
       }

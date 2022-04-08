@@ -113,8 +113,10 @@ export default class BlueMouseAI implements RobotAI {
     // throw new Error("Method not implemented.");
   }
   handleEvent(event: GameEvent): void {}
+
   update(deltaT: number): void {
     this.deltaT = deltaT;
+
     if (this.frozenTimer.isStopped()) {
       this.isFrozen = false;
     }

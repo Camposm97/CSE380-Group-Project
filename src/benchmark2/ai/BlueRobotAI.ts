@@ -50,16 +50,20 @@ export default class BlueRobotAI implements RobotAI {
       }
     }
 
-    this.frozenTimer = new Timer(this.time, () => {
-      this.isFrozen = false
-      this.owner.animation.play(RobotAnimations.IDLE, true, null)
-    }, false);
+    this.frozenTimer = new Timer(
+      this.time,
+      () => {
+        this.isFrozen = false;
+        this.owner.animation.play(RobotAnimations.IDLE, true, null);
+      },
+      false
+    );
   }
 
   hit(): void {
     if (!this.isFrozen) {
       this.isFrozen = true;
-      this.owner.animation.play(RobotAnimations.DAMAGE, false, null)
+      this.owner.animation.play(RobotAnimations.DAMAGE, false, null);
       this.frozenTimer.start(this.time);
       this.mainBehavior = !this.mainBehavior;
     }
@@ -87,7 +91,10 @@ export default class BlueRobotAI implements RobotAI {
       horizontalAxis *= -1;
     }
 
-    if ((forwardAxis != 0 && horizontalAxis == 0) || (forwardAxis == 0 && horizontalAxis != 0)) {
+    if (
+      (forwardAxis != 0 && horizontalAxis == 0) ||
+      (forwardAxis == 0 && horizontalAxis != 0)
+    ) {
       let movement = Vec2.UP.scaled(forwardAxis * this.speed);
       movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
       let newPos = this.owner.position
@@ -100,43 +107,76 @@ export default class BlueRobotAI implements RobotAI {
 
       // If there is any movement, override idle animation
       if (Input.isPressed(Control.FORWARD)) {
-        this.mainBehavior ? 
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_DOWN, true, null) :
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_UP, true, null)
+        this.mainBehavior
+          ? this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_DOWN,
+              true,
+              null
+            )
+          : this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_UP,
+              true,
+              null
+            );
       }
       if (Input.isPressed(Control.LEFT)) {
-        this.mainBehavior ? 
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_RIGHT, true, null) :
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_LEFT, true, null)
-
+        this.mainBehavior
+          ? this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_RIGHT,
+              true,
+              null
+            )
+          : this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_LEFT,
+              true,
+              null
+            );
       }
       if (Input.isPressed(Control.BACKWARD)) {
-        this.mainBehavior ? 
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_UP, true, null) :
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_DOWN, true, null)
+        this.mainBehavior
+          ? this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_UP,
+              true,
+              null
+            )
+          : this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_DOWN,
+              true,
+              null
+            );
       }
       if (Input.isPressed(Control.RIGHT)) {
-        this.mainBehavior ? 
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_LEFT, true, null) :
-        this.owner.animation.playIfNotAlready(RobotAnimations.WALK_RIGHT, true, null)
+        this.mainBehavior
+          ? this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_LEFT,
+              true,
+              null
+            )
+          : this.owner.animation.playIfNotAlready(
+              RobotAnimations.WALK_RIGHT,
+              true,
+              null
+            );
       }
     } else {
-      this.owner.animation.playIfNotAlready(RobotAnimations.IDLE, true, null)
+      this.owner.animation.playIfNotAlready(RobotAnimations.IDLE, true, null);
     }
   }
   update(deltaT: number): void {
     this.deltaT = deltaT;
 
     if (this.isFrozen) {
-      this.owner.animation.queue(RobotAnimations.FROZEN, true, null)
-      this.path = null
+      this.owner.animation.queue(RobotAnimations.FROZEN, true, null);
+      this.path = null;
     } else {
-      this.move()
+      this.move();
     }
 
     if (this.path != null && !this.isFrozen) {
       //Move on path if selected
-      this.path.isDone() ? this.path = null : this.owner.moveOnPath(this.speed * deltaT, this.path)
+      this.path.isDone()
+        ? (this.path = null)
+        : this.owner.moveOnPath(this.speed * deltaT, this.path);
     }
   }
 }
