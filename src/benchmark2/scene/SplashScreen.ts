@@ -8,20 +8,18 @@ import Color from "../../Wolfie2D/Utils/Color";
 import MainMenu from "./MainMenu";
 
 export default class SplashScreen extends Scene {
-    private logo: AnimatedSprite;
     loadScene(): void {
         this.load.image("logo","res/sprites/Logo.png");
-        
-    }
+        this.load.image('prof', 'res/sprites/professor.png')  
+        this.load.image('rm', 'res/sprites/rm.png')
+    } 
 
     startScene(): void {
         // First, create a layer for it to go on
         this.addLayer("primary");
         
-
-
         // Center the viewport
-        let cetner = this.viewport.getCenter().clone();
+        let c = this.viewport.getCenter().clone();
 
         let sprite = this.add.sprite("logo", "primary");
         sprite.positionX = 610;
@@ -29,6 +27,16 @@ export default class SplashScreen extends Scene {
 
         sprite.scale = new Vec2(0.75,0.75);
         
+        let profSprite = this.add.sprite('prof', 'primary')
+        profSprite.scale = new Vec2(5.0,5.0)
+        profSprite.position = new Vec2(c.x/2, c.y+50)
+
+        let rm1 = this.add.sprite('rm', 'primary')
+        rm1.position = new Vec2(c.x+300, c.y)
+        let rm2 = this.add.sprite('rm', 'primary')
+        rm2.position = new Vec2(c.x+350, c.y+50)
+        let rm3 = this.add.sprite('rm', 'primary')
+        rm3.position = new Vec2(c.x+275, c.y+75)
 
         let size = this.viewport.getHalfSize();
         this.viewport.setFocus(size);
@@ -39,14 +47,13 @@ export default class SplashScreen extends Scene {
         let startBtn = <Button>this.add.uiElement(UIElementType.BUTTON, "primary", {position: new Vec2(size.x, size.y), text: "Click to Start"});
         startBtn.backgroundColor = Color.TRANSPARENT;
         startBtn.borderColor = Color.WHITE;
-        startBtn.borderRadius = 0;
-        startBtn.setPadding(new Vec2(50, 10));
+        startBtn.borderRadius = 2;
+        startBtn.size = new Vec2(250, 50)
         startBtn.font = "Comic Sans MS"
 
         // When the play button is clicked, go to the next scene
         startBtn.onClick = () => {
-            this.sceneManager.changeToScene(MainMenu, {}, this.sceneOptions);
-            
+            this.sceneManager.changeToScene(MainMenu, {}, this.sceneOptions);   
         }
 
         // Scene has started, so start playing music
