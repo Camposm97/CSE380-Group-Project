@@ -6,8 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { CoatColor, Events, Names, Statuses } from "./Constants";
-import EnemyAI from "../ai/EnemyAI";
+import { CoatColor, Events, Names } from "./Constants";
 import BlueRobotAI from "../ai/BlueRobotAI";
 import WeaponType from "../game_system/items/weapon_types/WeaponType";
 import RegistryManager from "../../Wolfie2D/Registry/RegistryManager";
@@ -19,27 +18,15 @@ import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import BattleManager from "../game_system/BattleManager";
 import BattlerAI from "../ai/BattlerAI";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
-import Color from "../../Wolfie2D/Utils/Color";
 import Input from "../../Wolfie2D/Input/Input";
 import GameOver from "./GameOver";
-import AttackAction from "../ai/enemy_actions/AttackAction";
-import Move from "../ai/enemy_actions/Move";
-import Retreat from "../ai/enemy_actions/Retreat";
-import GoapAction from "../../Wolfie2D/DataTypes/Interfaces/GoapAction";
-import GoapActionPlanner from "../../Wolfie2D/AI/GoapActionPlanner";
-import Map from "../../Wolfie2D/DataTypes/Map";
-import Berserk from "../ai/enemy_actions/Berserk";
 import ScoreTimer from "../game_system/ScoreTimer";
 import Bomb from "../game_system/objects/Bomb";
 import RobotAI from "../ai/RobotAI";
-import Button from "../../Wolfie2D/Nodes/UIElements/Button";
-import Layer from "../../Wolfie2D/Scene/Layer";
 import MainMenu from "./MainMenu";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
 import BlueMouseAI from "../ai/BlueMouseAI";
-import { RoomEndManager } from "../game_system/RoomEndManager";
 
 export default class GameLevel extends Scene {
   private timeLeft: number
@@ -171,10 +158,7 @@ export default class GameLevel extends Scene {
       this.glm.showPause()
     }
     if (event.isType(Events.RESET_ROOM)) {
-      /*
-        TODO: When the room is reset, pass the previous timer so the player can't always reset and 
-          be able to get the best score on all of his/her attempt
-      */
+      this.glm.hideAllAndZoomOut()
       this.sceneManager.changeToScene(GameLevel, {timeLeft: this.scoreTimer.getTimeLeftInMillis()});
     }
     if (event.isType(Events.SHOW_CONTROLS)) {
@@ -241,9 +225,7 @@ export default class GameLevel extends Scene {
       if (enemy && enemy.sweptRect) {
         if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
           console.log("enemy hit player");
-          (<PlayerController>this.player._ai).damage(
-            (<RobotAI>enemy._ai).damage
-          );
+          (<PlayerController>this.player._ai).damage((<RobotAI>enemy._ai).damage);
         }
         for (let bomb of this.bombs) {
           if (bomb && !bomb.isDestroyed) {
@@ -299,7 +281,10 @@ export default class GameLevel extends Scene {
     // Update health gui
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
+    this.handleInput()
+  }
 
+  handleInput(): void {
     // Debug mode graph
     if (Input.isKeyJustPressed("g")) {
       this.getLayer("graph").setHidden(!this.getLayer("graph").isHidden());

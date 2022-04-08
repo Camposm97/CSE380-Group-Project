@@ -274,11 +274,7 @@ export default class PlayerController implements BattlerAI {
         break;
       case PlayerAction.DAMAGE:
         this.overrideIdle = true;
-        this.owner.animation.play(
-          PlayerAnimations.DAMAGE,
-          false,
-          Events.OVERRIDE_IDLE
-        );
+        this.owner.animation.play(PlayerAnimations.DAMAGE, false, Events.OVERRIDE_IDLE);
         break;
     }
   }

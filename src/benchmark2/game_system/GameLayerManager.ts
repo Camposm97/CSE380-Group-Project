@@ -226,4 +226,16 @@ export class GameLayerManager {
         this.controlsLayer.setHidden(!this.controlsLayer.isHidden())
         this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
     }
+
+    hideAllAndZoomOut() {
+        this.primaryLayer.setHidden(true)
+        this.hudLayer.setHidden(true)
+        this.pauseLayer.setHidden(true)
+        this.controlsLayer.setHidden(true)
+        this.scene.getTilemap('Floor').visible = false
+        this.scene.getTilemap('Walls').visible = false
+        this.scene.getLayer('slots1').setHidden(true)
+        this.scene.getLayer('items1').setHidden(true)
+        this.scene.getViewport().setZoomLevel(1)
+    }
 }
