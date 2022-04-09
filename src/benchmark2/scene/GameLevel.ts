@@ -49,6 +49,7 @@ export default class GameLevel extends Scene {
   private scoreTimer: ScoreTimer;
   private listeningEnemies: number; //number of enemies that listen for player movement events
   private nearestBomb: Bomb; //for detecting how close the player is to the nearest bomb
+  private greenFlag: AnimatedSprite;
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -69,7 +70,9 @@ export default class GameLevel extends Scene {
     this.load.spritesheet("blueStatue", "res/spritesheets/rs_blue.json");
     this.load.spritesheet("projectile", "res/spritesheets/projectile.json");
     this.load.spritesheet("bomb", "res/spritesheets/explode.json");
+    this.load.spritesheet("greenFlag", "res/spritesheets/green_flag.json");
     this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load tile map
+    this.load.object("start_end", "res/data/start_end.json"); //Load player and green flag coordinates
     this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
     this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
     this.load.object("enemyData", "res/data/enemy.json"); // Load enemy info
@@ -110,6 +113,9 @@ export default class GameLevel extends Scene {
 
     // Create the player
     this.initializePlayer();
+
+    // Place the end level flag
+    this.initializeGreenFlag();
 
     // Make the viewport follow the player
     this.viewport.follow(this.player);
@@ -158,6 +164,17 @@ export default class GameLevel extends Scene {
 
     // Spawn items into the world
     // this.spawnItems();
+  }
+  initializeGreenFlag() {
+    this.greenFlag = this.add.animatedSprite("greenFlag", "primary");
+    let coord = this.load.getObject("start_end").greenFlagPos;
+    this.greenFlag.position = new Vec2(
+      (coord[0] + 0.5) * 16,
+      (coord[1] + 1.0) * 16
+    );
+    this.greenFlag.scale = new Vec2(0.5, 0.5);
+    this.greenFlag.animation.play("IDLE");
+    console.log(this.greenFlag);
   }
 
   initScoreTimer(): void {
@@ -510,7 +527,8 @@ export default class GameLevel extends Scene {
     // Create the players
     // this.players = Array(2);
     this.player = this.add.animatedSprite("player1", "primary");
-    this.player.position.set(128, 128);
+    let coord = this.load.getObject("start_end").playerStartPos;
+    this.player.position = new Vec2(coord[0] * 16 - 0.5, coord[1] * 16 - 0.5);
     this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
     //First player is melee based, starts off with a knife and is short ranged
     this.player.addAI(PlayerController, {
