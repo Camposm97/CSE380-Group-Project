@@ -3,6 +3,7 @@ import BattlerAI from "../ai/BattlerAI";
 import PlayerController from "../ai/PlayerController";
 import RobotAI from "../ai/RobotAI";
 import Weapon from "./items/Weapon";
+import Block from "./objects/Block";
 
 export default class BattleManager {
   players: Array<PlayerController>;

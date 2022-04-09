@@ -57,12 +57,17 @@ export default class PlayerController implements BattlerAI {
   private iFrameTimer: Timer;
   private enemiesLeft: boolean;
 
+  //Bomb Detection
+  public nearBomb: boolean;
+
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
 
     this.iFrameTimer = new Timer(5000);
     this.enemiesLeft = true;
+
+    this.nearBomb = false;
 
     this.tilemap = this.owner
       .getScene()
@@ -142,9 +147,8 @@ export default class PlayerController implements BattlerAI {
 
       // WASD Movement
       if (!this.owner.animation.isPlaying(PlayerAnimations.DAMAGE)) {
-        this.handleMovement(deltaT)
+        this.handleMovement(deltaT);
       }
-      
 
       this.handleAttack();
 
@@ -219,7 +223,11 @@ export default class PlayerController implements BattlerAI {
         break;
       case PlayerAction.DAMAGE:
         this.overrideIdle = true;
-        this.owner.animation.play(PlayerAnimations.DAMAGE, false, Events.OVERRIDE_IDLE);
+        this.owner.animation.play(
+          PlayerAnimations.DAMAGE,
+          false,
+          Events.OVERRIDE_IDLE
+        );
         break;
     }
   }

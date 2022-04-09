@@ -30,12 +30,14 @@ import BlueMouseAI from "../ai/BlueMouseAI";
 import BlueStatueAI from "../ai/BlueStatueAI";
 import ProjectileAI from "../ai/ProjectileAI";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import Block from "../game_system/objects/Block";
 
 export default class GameLevel extends Scene {
   private timeLeft: number;
   private player: AnimatedSprite; // Player Sprite
   private enemies: Array<AnimatedSprite>; // List of Enemies
   private bombs: Array<Bomb>; // List of Bombs
+  private blocks: Array<Block>; // List of Blocks
   private flags: Array<AnimatedSprite>; // List of Flags
   private walls: OrthogonalTilemap; // Wall Layer
   private graph: PositionGraph; // Nav Mesh
@@ -46,6 +48,7 @@ export default class GameLevel extends Scene {
   private glm: GameLayerManager;
   private scoreTimer: ScoreTimer;
   private listeningEnemies: number; //number of enemies that listen for player movement events
+  private nearestBomb: Bomb; //for detecting how close the player is to the nearest bomb
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -72,11 +75,13 @@ export default class GameLevel extends Scene {
     this.load.object("enemyData", "res/data/enemy.json"); // Load enemy info
     this.load.object("bombData", "res/data/bombs.json"); // Load bomb info
     this.load.object("itemData", "res/data/items.json"); // Load item info
+    this.load.object("blockData", "res/data/blocks.json"); // Load block info
     this.load.image("healthpack", "res/sprites/healthpack.png");
     this.load.image("inventorySlot", "res/sprites/inventory.png");
     this.load.image("knife", "res/sprites/knife.png");
     this.load.image("laserGun", "res/sprites/laserGun.png");
     this.load.image("pistol", "res/sprites/pistol.png");
+    this.load.image("block", "res/sprites/block.png");
     this.load.audio("boom", "res/sound/explode.wav");
   }
 
@@ -120,6 +125,9 @@ export default class GameLevel extends Scene {
 
     // Initalize all bombs
     this.initializeBombs();
+
+    // Initaize all blocks
+    this.initializeBlocks();
 
     // Initialize projectiles
     this.initializeProjectiles();
@@ -238,14 +246,9 @@ export default class GameLevel extends Scene {
     }
     if (event.isType(Events.PLACE_FLAG)) {
       let coord = event.data.get("coordinates");
-      console.log(coord.toString());
       for (let bomb of this.bombs) {
         if (bomb && bomb.tileCoord.equals(coord)) {
-          //TODO Add flag sprite here
-          console.log("bomb found");
-
           if (!bomb.isFlagged) {
-            console.log("flag placed");
             bomb.setIsFlaggedTrue();
             this.flags.push(this.add.animatedSprite("flag", "primary"));
             this.flags[this.flags.length - 1].position = new Vec2(
@@ -279,7 +282,6 @@ export default class GameLevel extends Scene {
     for (let enemy of this.enemies) {
       if (enemy && enemy.sweptRect) {
         if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
-          console.log("enemy hit player");
           (<PlayerController>this.player._ai).damage(
             (<RobotAI>enemy._ai).damage
           );
@@ -316,28 +318,63 @@ export default class GameLevel extends Scene {
     // changers sprite closer player gets to bom
     // gameover if player lands on bomb
 
-    for (let bomb of this.bombs) {
-      if (bomb && !bomb.isDestroyed) {
-        if (this.player.collisionShape.overlaps(bomb.collisionBoundary)) {
-          (<PlayerController>this.player._ai).health = 0;
-        } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
-          (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
-        } else if (this.player.collisionShape.overlaps(bomb.middleBoundary)) {
-          (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
-        } else if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
-          (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
-        } else
-          (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
-      } else (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
+    if (!(<PlayerController>this.player._ai).nearBomb) {
+      (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
+      for (let bomb of this.bombs) {
+        if (bomb && !bomb.isDestroyed) {
+          if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
+            this.nearestBomb = bomb;
+            (<PlayerController>this.player._ai).nearBomb = true;
+          }
+        }
+      }
+
+      // {
+      //   if (this.player.collisionShape.overlaps(bomb.collisionBoundary)) {
+      //     (<PlayerController>this.player._ai).health = 0;
+      //   } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
+      //     (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
+      //   } else if (this.player.collisionShape.overlaps(bomb.middleBoundary)) {
+      //     (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
+      //   } else if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
+      //     (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
+      //   }
+      // } else (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
     }
-    let health = (<BattlerAI>this.player._ai).health
-    this.handleLoseCondition(health)
-    this.updateHUD(health)
+
+    if ((<PlayerController>this.player._ai).nearBomb) {
+      this.bombCollision();
+    }
+    let health = (<BattlerAI>this.player._ai).health;
+    this.handleLoseCondition(health);
+    this.updateHUD(health);
     this.handleInput();
   }
 
+  //Once the player is near a bomb, we see how close to the bomb that player is
+  bombCollision() {
+    if (
+      this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary)
+    ) {
+      (<PlayerController>this.player._ai).health = 0;
+    } else if (
+      this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)
+    ) {
+      (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
+    } else if (
+      this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)
+    ) {
+      (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
+    } else if (
+      this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary)
+    ) {
+      (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
+    } else (<PlayerController>this.player._ai).nearBomb = false;
+  }
+
   handleLoseCondition(health: number): void {
-    if (health <= 0) { // If {health} <= 0, Game Over!
+    if (health <= 0) {
+      // If {health} <= 0, Game Over!
       this.viewport.setZoomLevel(1);
       this.viewport.disableZoom();
       this.sceneManager.changeToScene(GameOver, { win: false });
@@ -524,7 +561,27 @@ export default class GameLevel extends Scene {
     this.navManager.addNavigableEntity(Names.NAVMESH, navmesh);
   }
 
-  initializeBombs() {
+  initializeBlocks(): void {
+    // Get the block data
+    const blockData = this.load.getObject("blockData");
+
+    // Create an array of the blockdata
+    this.blocks = new Array(blockData.numBlocks);
+
+    for (let i = 0; i < blockData.numBlocks; i++) {
+      let blockSprite = this.add.sprite("block", "primary");
+      this.blocks[i] = new Block(
+        new Vec2(
+          blockData.blocks[i].position[0],
+          blockData.blocks[i].position[1]
+        ),
+        blockSprite
+      );
+      this.blocks[i].owner.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
+    }
+  }
+
+  initializeBombs(): void {
     // Get the bomb data
     const bombData = this.load.getObject("bombData");
 
@@ -532,12 +589,13 @@ export default class GameLevel extends Scene {
     this.bombs = new Array(bombData.numBombs);
     this.flags = new Array(bombData.numBombs);
 
-    console.log(bombData);
     let bombSprite = this.add.animatedSprite("bomb", "primary");
-    for (let bomb of bombData.bombs) {
-      let b = new Bomb(new Vec2(bomb.position[0], bomb.position[1]), bombSprite);
-      this.bombs.push(b);
-      b.hide();
+    for (let i = 0; i < bombData.numBombs; i++) {
+      this.bombs[i] = new Bomb(
+        new Vec2(bombData.bombs[i].position[0], bombData.bombs[i].position[1]),
+        bombSprite
+      );
+      this.bombs[i].hide();
     }
   }
 
@@ -567,7 +625,6 @@ export default class GameLevel extends Scene {
         time: entity.time,
         damage: entity.damage,
       };
-      console.log(entity.ai);
 
       //TODO TRY AND FIND A WAY TO MAP STRINGS TO ROBOT AI CLASS TYPES
       //ADD MORE AI TYPES ONCE THEY ARE MADE
@@ -577,9 +634,7 @@ export default class GameLevel extends Scene {
           this.listeningEnemies++;
           break;
         case "BlueMouseAI":
-          console.log("addeding blue mouse ai");
           this.enemies[i].addAI(BlueMouseAI, enemyOptions);
-          console.log(this.enemies[i]._ai);
           break;
         case "BlueStatueAI":
           this.enemies[i].addAI(BlueStatueAI, enemyOptions);
