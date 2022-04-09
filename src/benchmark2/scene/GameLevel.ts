@@ -144,6 +144,7 @@ export default class GameLevel extends Scene {
     this.battleManager.setEnemies(
       this.enemies.map((enemy) => <RobotAI>enemy._ai)
     );
+    this.battleManager.setBlocks(this.blocks);
 
     // Subscribe to relevant events
     this.receiver.subscribe("enemyDied");
@@ -589,8 +590,8 @@ export default class GameLevel extends Scene {
     this.bombs = new Array(bombData.numBombs);
     this.flags = new Array(bombData.numBombs);
 
-    let bombSprite = this.add.animatedSprite("bomb", "primary");
     for (let i = 0; i < bombData.numBombs; i++) {
+      let bombSprite = this.add.animatedSprite("bomb", "primary");
       this.bombs[i] = new Bomb(
         new Vec2(bombData.bombs[i].position[0], bombData.bombs[i].position[1]),
         bombSprite
