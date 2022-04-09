@@ -139,7 +139,7 @@ export class GameLayerManager {
         const lclick = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
             {
                 position: new Vec2(center.x, center.y + 150),
-                text: "Sapce/Left-Click to attack"
+                text: "Space/Left-Click to attack"
             });
         lclick.textColor = Color.WHITE;
         const rclick = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
@@ -157,7 +157,7 @@ export class GameLayerManager {
         const esc = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
             {
                 position: new Vec2(center.x, center.y - 200),
-                text: "ESC pause the game"
+                text: "ESC - pause the game"
             });
         esc.textColor = Color.WHITE;
 
@@ -188,7 +188,7 @@ export class GameLayerManager {
         this.lblRoomEnd.fontSize = 48;
         this.lblRoomEnd.font = "Comic Sans MS";
         this.lblRoomEnd.tweens.add('slideIn', {
-            startDelay: 0,
+            startDelay: 300,
             duration: 1000,
             effects: [
                 {

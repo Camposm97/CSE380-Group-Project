@@ -31,6 +31,7 @@ import BlueStatueAI from "../ai/BlueStatueAI";
 import ProjectileAI from "../ai/ProjectileAI";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Block from "../game_system/objects/Block";
+import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default class GameLevel extends Scene {
   private timeLeft: number;
@@ -50,6 +51,8 @@ export default class GameLevel extends Scene {
   private listeningEnemies: number; //number of enemies that listen for player movement events
   private nearestBomb: Bomb; //for detecting how close the player is to the nearest bomb
   private greenFlag: AnimatedSprite;
+  private startNextLvl: boolean
+  private nextLvl: new (...args: any) => GameLevel
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -144,6 +147,9 @@ export default class GameLevel extends Scene {
 
     this.initScoreTimer();
 
+    this.startNextLvl = false
+    this.nextLvl = null
+
     // Send the player and enemies to the battle manager
     // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
     this.battleManager.setPlayers([<PlayerController>this.player._ai]);
@@ -161,6 +167,8 @@ export default class GameLevel extends Scene {
     this.receiver.subscribe(Events.RESET_ROOM);
     this.receiver.subscribe(Events.SHOW_CONTROLS);
     this.receiver.subscribe(Events.EXIT_GAME);
+
+    // this.setNextLvl(GameLevel)
 
     // Spawn items into the world
     // this.spawnItems();
@@ -227,62 +235,62 @@ export default class GameLevel extends Scene {
   }
 
   handleEvent(event: GameEvent): void {
-    if (event.isType(Events.PAUSE_GAME)) {
-      if (this.glm.showPause()) {
-        this.scoreTimer.pause();
-      } else {
-        this.scoreTimer.start(this.scoreTimer.getTimeLeftInMillis());
-      }
-    }
-    if (event.isType(Events.RESET_ROOM)) {
-      this.glm.hideAllAndZoomOut();
-      this.sceneManager.changeToScene(GameLevel, {
-        timeLeft: this.scoreTimer.getTimeLeftInMillis(),
-      });
-    }
-    if (event.isType(Events.SHOW_CONTROLS)) {
-      this.glm.showControls();
-    }
-    if (event.isType(Events.EXIT_GAME)) {
-      this.sceneManager.changeToScene(MainMenu, {});
-    }
-    if (event.isType("healthpack")) {
-      this.createHealthpack(event.data.get("position"));
-    }
-    if (event.isType("enemyDied")) {
-      this.enemies = this.enemies.filter(
-        (enemy) => enemy !== event.data.get("enemy")
-      );
-      this.battleManager.enemies = this.battleManager.enemies.filter(
-        (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
-      );
-    }
-    if (event.isType(Events.PLACE_FLAG)) {
-      let coord = event.data.get("coordinates");
-      for (let bomb of this.bombs) {
-        if (bomb && bomb.tileCoord.equals(coord)) {
-          if (!bomb.isFlagged) {
-            bomb.setIsFlaggedTrue();
-            this.flags.push(this.add.animatedSprite("flag", "primary"));
-            this.flags[this.flags.length - 1].position = new Vec2(
-              (coord.x + 0.5) * 16,
-              (coord.y + 1.0) * 16
-            );
-            this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
-            this.flags[this.flags.length - 1].animation.play("IDLE");
+    switch (`event-type=${event.type}`) {
+      case Events.PAUSE_GAME:
+        if (this.glm.showPause()) {
+          this.scoreTimer.pause()
+        } else {
+          this.scoreTimer.start(this.scoreTimer.getTimeLeftInMillis())
+        }
+        break;
+      case Events.RESET_ROOM:
+        this.glm.hideAllAndZoomOut()
+        this.sceneManager.changeToScene(GameLevel, {timeLeft: this.scoreTimer.getTimeLeftInMillis()})
+        break;
+      case Events.SHOW_CONTROLS:
+        this.glm.showControls()
+        break;
+      case Events.EXIT_GAME:
+        this.sceneManager.changeToScene(MainMenu, {});
+        break;
+      case 'healthpack':
+        this.createHealthpack(event.data.get("position"));
+        break;
+      case 'enemyDied':
+        this.enemies = this.enemies.filter(
+          (enemy) => enemy !== event.data.get("enemy")
+        );
+        this.battleManager.enemies = this.battleManager.enemies.filter(
+          (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
+        );
+        break;
+      case Events.PLACE_FLAG:
+        let coord = event.data.get("coordinates");
+        for (let bomb of this.bombs) {
+          if (bomb && bomb.tileCoord.equals(coord)) {
+            if (!bomb.isFlagged) {
+              bomb.setIsFlaggedTrue();
+              this.flags.push(this.add.animatedSprite("flag", "primary"));
+              this.flags[this.flags.length - 1].position = new Vec2(
+                (coord.x + 0.5) * 16,
+                (coord.y + 1.0) * 16
+              );
+              this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
+              this.flags[this.flags.length - 1].animation.play("IDLE");
+            }
           }
         }
-      }
-      if (event.isType(RobotAction.FIRE_PROJECTILE)) {
-        this.spawnProjectile(
-          event.data.get("position"),
-          event.data.get("velocity")
-        );
-      }
-    }
-    if (event.isType(Events.UNLOAD_ASSET)) {
-      let asset = this.sceneGraph.getNode(event.data.get("node"));
-      asset.destroy();
+        if (event.isType(RobotAction.FIRE_PROJECTILE)) {
+          this.spawnProjectile(
+            event.data.get("position"),
+            event.data.get("velocity")
+          );
+        }
+        break;
+      case Events.UNLOAD_ASSET:
+        let asset = this.sceneGraph.getNode(event.data.get("node"));
+        asset.destroy();
+        break;
     }
   }
 
@@ -301,11 +309,7 @@ export default class GameLevel extends Scene {
         }
         for (let bomb of this.bombs) {
           if (bomb && !bomb.isDestroyed) {
-            if (
-              enemy &&
-              enemy.sweptRect &&
-              enemy.sweptRect.overlaps(bomb.collisionBoundary)
-            ) {
+            if (enemy && enemy.sweptRect && enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
               if ((<RobotAI>enemy._ai).listening) this.listeningEnemies--;
               bomb.explode();
               this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
@@ -329,16 +333,16 @@ export default class GameLevel extends Scene {
       }
     }
 
-    if (
-      this.enemies.length === 0 &&
-      this.player.collisionShape.overlaps(this.greenFlag.collisionShape)
-    ) {
-      this.viewport.setZoomLevel(1);
-      this.viewport.disableZoom();
-      this.sceneManager.changeToScene(GameOver, {
-        win: true,
-        timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
-      });
+    if (this.enemies.length === 0 && this.player.collisionShape.overlaps(this.greenFlag.collisionShape)) {
+      if (!this.startNextLvl) {
+        this.glm.showRoomComplete()
+        new Timer(3000, () => {
+          this.viewport.setZoomLevel(1);
+          this.viewport.disableZoom();
+          this.sceneManager.changeToScene(GameOver, {win: true, timeLeft: this.scoreTimer.getTimeLeftInSeconds(), nextLvl: this.nextLvl});
+        }, false).start()
+      }
+      this.startNextLvl = true
     }
 
     // checks to see how close player is to bomb
@@ -659,6 +663,10 @@ export default class GameLevel extends Scene {
           break;
       }
     }
+  }
+
+  setNextLvl(nextLvl: new (...args: any) => GameLevel): void {
+    this.nextLvl = nextLvl
   }
 
   getPlayer(): AnimatedSprite {

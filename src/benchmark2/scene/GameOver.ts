@@ -6,14 +6,17 @@ import Color from "../../Wolfie2D/Utils/Color";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import MainMenu from "./MainMenu";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import GameLevel from "./GameLevel";
 
 export default class GameOver extends Scene {
     private win: boolean
     private timeLeft: number
+    private nextLvl: new (...args: any) => GameLevel
 
     initScene(options: Record<string, any>): void {
         this.win = options.win
         this.timeLeft = options.timeLeft
+        this.nextLvl = options.nextLvl
     }
 
     loadScene(): void {
@@ -42,6 +45,13 @@ export default class GameOver extends Scene {
         btOk.backgroundColor = Color.TRANSPARENT
         btOk.onClick = () => {
             this.sceneManager.changeToScene(MainMenu, {})
+        }
+
+        if (this.nextLvl) {
+            btOk.text = 'Next Room'
+            btOk.onClick = () => {
+                this.sceneManager.changeToScene(this.nextLvl, {})
+            }
         }
     }
 }

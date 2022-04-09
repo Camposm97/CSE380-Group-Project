@@ -38,10 +38,9 @@ export default class Bomb {
               property: TweenableProperties.alpha,
               start: 1.0,
               end: 0,
-              ease: EaseFunctionType.IN_OUT_QUAD,
+              ease: EaseFunctionType.IN_SINE,
           }
-      ],
-      onEnd: Events.DESTROY_BOMB,
+      ]
     })
     this.isFlagged = false;
     this.isDestroyed = false;
@@ -86,6 +85,7 @@ export default class Bomb {
   }
 
   explode() {
+    this.isDestroyed = true
     this.owner.animation.playIfNotAlready('IDLE', false, null)
     this.owner.animation.queue('DEBRIS', true, null)
     this.owner.tweens.play('fadeOut')

@@ -37,9 +37,6 @@ import { Control } from "./benchmark2/scene/Constants";
     let weaponTypeRegistry = new WeaponTypeRegistry();
     RegistryManager.addCustomRegistry("weaponTypes", weaponTypeRegistry);
 
-    // Create a game with the options specified
     const game = new Game(options);
-
-    // Start our game
     game.start(SplashScreen, {});
 })();
