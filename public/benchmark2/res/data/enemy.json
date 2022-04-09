@@ -8,14 +8,14 @@
       "damage": 1
     },
     {
-      "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [170, 940],
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [170, 1000],
       "damage": 1
     },
     {
-      "ai": "BlueStatueAI",
-      "type": "blueStatue",
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
       "position": [200, 500],
       "damage": 1
     }

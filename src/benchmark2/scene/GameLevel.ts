@@ -174,6 +174,10 @@ export default class GameLevel extends Scene {
     );
     this.greenFlag.scale = new Vec2(0.5, 0.5);
     this.greenFlag.animation.play("IDLE");
+    this.greenFlag.collisionShape = new AABB(
+      this.greenFlag.position,
+      new Vec2(0.8, 0.8)
+    );
     console.log(this.greenFlag);
   }
 
@@ -252,15 +256,6 @@ export default class GameLevel extends Scene {
       this.battleManager.enemies = this.battleManager.enemies.filter(
         (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
       );
-
-      if (this.battleManager.enemies.length === 0) {
-        this.viewport.setZoomLevel(1);
-        this.viewport.disableZoom();
-        this.sceneManager.changeToScene(GameOver, {
-          win: true,
-          timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
-        });
-      }
     }
     if (event.isType(Events.PLACE_FLAG)) {
       let coord = event.data.get("coordinates");
@@ -306,7 +301,11 @@ export default class GameLevel extends Scene {
         }
         for (let bomb of this.bombs) {
           if (bomb && !bomb.isDestroyed) {
-            if (enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
+            if (
+              enemy &&
+              enemy.sweptRect &&
+              enemy.sweptRect.overlaps(bomb.collisionBoundary)
+            ) {
               if ((<RobotAI>enemy._ai).listening) this.listeningEnemies--;
               bomb.explode();
               this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
@@ -314,6 +313,7 @@ export default class GameLevel extends Scene {
                 loop: false,
                 holdReference: false,
               });
+
               enemy.destroy();
               this.enemies = this.enemies.filter(
                 (currentEnemy) => currentEnemy !== enemy
@@ -321,16 +321,25 @@ export default class GameLevel extends Scene {
               this.battleManager.enemies = this.battleManager.enemies.filter(
                 (currentEnemy) => currentEnemy !== enemy._ai
               );
-              //TODO ADD BOMB EXPLOSION SPRITE AND REMOVE ANY FLAG SPRITE THAT HAS BEEN PLACED
+              //TODO REMOVE ANY FLAG SPRITE THAT HAS BEEN PLACED
               bomb.setIsDestroyedTrue();
             }
           }
         }
       }
     }
-    //tell the playerAi no more enemies listening for events are left so it stops fireing movement events
-    if (this.listeningEnemies === 0)
-      (<PlayerController>this.player._ai).noMoreEnemies();
+
+    if (
+      this.enemies.length === 0 &&
+      this.player.collisionShape.overlaps(this.greenFlag.collisionShape)
+    ) {
+      this.viewport.setZoomLevel(1);
+      this.viewport.disableZoom();
+      this.sceneManager.changeToScene(GameOver, {
+        win: true,
+        timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
+      });
+    }
 
     // checks to see how close player is to bomb
     // changers sprite closer player gets to bom
@@ -346,18 +355,6 @@ export default class GameLevel extends Scene {
           }
         }
       }
-
-      // {
-      //   if (this.player.collisionShape.overlaps(bomb.collisionBoundary)) {
-      //     (<PlayerController>this.player._ai).health = 0;
-      //   } else if (this.player.collisionShape.overlaps(bomb.innerBoundary)) {
-      //     (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
-      //   } else if (this.player.collisionShape.overlaps(bomb.middleBoundary)) {
-      //     (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
-      //   } else if (this.player.collisionShape.overlaps(bomb.outerBoundary)) {
-      //     (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
-      //   }
-      // } else (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
     }
 
     if ((<PlayerController>this.player._ai).nearBomb) {
