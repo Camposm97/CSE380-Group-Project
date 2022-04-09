@@ -33,7 +33,10 @@ export default class Block {
   }
 
   hit(direction: Vec2) {
-    this.owner.move(direction.scale(16));
+    this.owner.position = new Vec2(
+      this.owner.position.x + direction.x * 16,
+      this.owner.position.y + direction.y * -16
+    );
   }
 
   // displayFlag(sprite: Sprite) {
