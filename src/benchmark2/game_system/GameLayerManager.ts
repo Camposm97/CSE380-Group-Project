@@ -9,7 +9,7 @@ import { Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import { initButton } from "../ui/UIBuilder";
+import { initButton, initLabel } from "../ui/UIBuilder";
 
 enum LayerType {
     PRIMARY = 'primary',
@@ -73,62 +73,15 @@ export class GameLayerManager {
 
         const center = this.scene.getViewport().getCenter().clone()
 
-        const controlsHeader = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 300),
-                text: "Controls"
-            });
-        controlsHeader.textColor = Color.WHITE;
-
-        const wu = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 50),
-                text: "W/Up-Arrow to move up"
-            });
-        wu.textColor = Color.WHITE;
-        const al = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y),
-                text: "A/Left-Arrow to move left"
-            });
-        al.textColor = Color.WHITE;
-        const sd = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y + 50),
-                text: "S/Down-Arrow to move down"
-            });
-        sd.textColor = Color.WHITE;
-        const dr = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y + 100),
-                text: "D/Right-Arrow to move right"
-            });
-        dr.textColor = Color.WHITE;
-        const lclick = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y + 150),
-                text: "Space/Left-Click to attack"
-            });
-        lclick.textColor = Color.WHITE;
-        const rclick = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 100),
-                text: "Shift/Right-Click to place flag"
-            });
-        rclick.textColor = Color.WHITE;
-        const p = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 150),
-                text: "P - panic button, resets the room to its original sate"
-            });
-        p.textColor = Color.WHITE;
-        const esc = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 200),
-                text: "ESC - pause the game"
-            });
-        esc.textColor = Color.WHITE;
-        
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-300), "Controls")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-200), "ESC - pause the game")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-150), "P - panic button, resets the room to its original sate")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-100), "Shift/Right-Click to place flag")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-50), "W/Up-Arrow to move up")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y), "A/Left-Arrow to move left")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+50), "S/Down-Arrow to move down" )
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+100), "D/Right-Arrow to move right")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+150), "Space/Left-Click to attack")
         initButton(this.scene, LayerType.CONTROLS, new Vec2(center.x, center.y+250), 'Back', Events.SHOW_CONTROLS)
     }
 

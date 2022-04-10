@@ -95,7 +95,7 @@ export default class MainMenu extends Scene {
         initLabel(this, "controls", new Vec2(center.x,center.y+50), "S/Down-Arrow to move down" )
         initLabel(this, "controls", new Vec2(center.x,center.y+100), "D/Right-Arrow to move right")
         initLabel(this, "controls", new Vec2(center.x,center.y+150), "Space/Left-Click to attack")
-        initButton(this, 'controls', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
+        initButton(this, "controls", new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
     initHelpScene(center: Vec2) {
