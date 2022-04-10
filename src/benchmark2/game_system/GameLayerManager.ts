@@ -4,7 +4,6 @@ import Color from "../../Wolfie2D/Utils/Color";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
-import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";

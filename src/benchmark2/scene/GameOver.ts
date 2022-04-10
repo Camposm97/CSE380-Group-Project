@@ -7,7 +7,7 @@ import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import MainMenu from "./MainMenu";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameLevel from "./GameLevel";
-import { initButton, initButtonHandler } from "../ui/UIBuilder";
+import { initButton } from "../ui/UIBuilder";
 
 export default class GameOver extends Scene {
     private currentScore: number

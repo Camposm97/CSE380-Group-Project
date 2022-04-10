@@ -1,11 +1,7 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import Button from "../../Wolfie2D/Nodes/UIElements/Button";
-import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
-import Color from "../../Wolfie2D/Utils/Color";
-import { initButtonHandler } from "../ui/UIBuilder";
+import { initButton } from "../ui/UIBuilder";
 import MainMenu from "./MainMenu";
 
 export default class SplashScreen extends Scene {
@@ -45,7 +41,7 @@ export default class SplashScreen extends Scene {
         this.viewport.setZoomLevel(1);
 
         // Create a play button
-        let startBtn = initButtonHandler(this, 'primary', new Vec2(size.x, size.y), 'Click to Start', '')
+        let startBtn = initButton(this, 'primary', new Vec2(size.x, size.y), 'Click to Start')
         startBtn.size = new Vec2(250, 50)
 
         // When the play button is clicked, go to the next scene
