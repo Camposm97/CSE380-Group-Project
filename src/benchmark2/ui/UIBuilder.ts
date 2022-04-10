@@ -1,5 +1,6 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
@@ -23,5 +24,14 @@ export function initButton(scene: Scene, layer: string, v: Vec2, text: string, e
         x.fontSize = 30
         x.size = new Vec2(200,50)
     }
+    return x
+}
+
+export function initLabel(scene: Scene, layer: string, v: Vec2, text: string): Label {
+    let x = <Label> scene.add.uiElement(UIElementType.LABEL, layer, {
+        position: v,
+        text: text
+    })
+    x.textColor = Color.WHITE
     return x
 }

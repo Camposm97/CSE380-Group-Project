@@ -4,7 +4,7 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import { initButton } from "../ui/UIBuilder";
+import { initButton, initLabel } from "../ui/UIBuilder";
 import Room1 from "./level_1/Room1";
 
 enum MENU_EVENT {
@@ -70,11 +70,7 @@ export default class MainMenu extends Scene {
          this.levelSelect.setHidden(true);
  
          // Level Select Header
-         const leaderboardHeader = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {
-                 position: new Vec2(center.x, center.y - 300),
-                 text: "Level Select"
-             });
-         leaderboardHeader.textColor = Color.WHITE;
+         initLabel(this, 'levelSelect', new Vec2(center.x, center.y-300), 'Level Select')
 
          //  Level Select - Buttons
          initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-150), 'Level 1', '')
