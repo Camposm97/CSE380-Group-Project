@@ -36,8 +36,6 @@ export default class MainMenu extends Scene {
         this.initControlScene(center)
         this.initHelpScene(center)
         this.initLeaderboardScene(center)
-        
-
 
         // Subscribe to the button events
         this.receiver.subscribe(MENU_EVENT.MENU)
@@ -102,14 +100,7 @@ export default class MainMenu extends Scene {
         // Controls Scene
         this.help = this.addUILayer("help");
         this.help.setHidden(true);
-
-        // About Header
-        const aboutHeader = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        {
-            position: new Vec2(center.x, center.y - 350),
-            text: "Help"
-        });
-        aboutHeader.textColor = Color.WHITE;
+        initLabel(this, "help", new Vec2(center.x,center.y-350), "Help")
 
         const strAbout1 = "Developed by Andrew Ojeda, Michael Campos, and Tuyen Vo";
         const strAbout2 = "Professor McBendorjee was busy trying to recreate the Wolfie 2D engine";
@@ -120,58 +111,14 @@ export default class MainMenu extends Scene {
         const strAbout7 = "Now he will have to brave the Al robots he was creating to escape Wolfie 2D or be forever stuck.";
         const strAbout8 = "Cheat Codes: cheatCode1, cheatCode2, ...,cheatCodeN";
 
-
-
-        const lblAbout1 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        {
-            position: new Vec2(center.x, center.y - 250), 
-            text: strAbout1 
-        });
-        const lblAbout2 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        { 
-            position: new Vec2(center.x, center.y -150), 
-            text: strAbout2 
-        });
-        const lblAbout3 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        { 
-            position: new Vec2(center.x, center.y - 100), 
-            text: strAbout3 
-        });
-        const lblAbout4 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        {
-            position: new Vec2(center.x, center.y - 50), 
-            text: strAbout4 
-        });
-        const lblAbout5 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        { 
-            position: new Vec2(center.x, center.y -5), 
-            text: strAbout5 
-        });
-        const lblAbout6 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        { 
-            position: new Vec2(center.x, center.y + 50), 
-            text: strAbout6 
-        });
-        const lblAbout7 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        { 
-            position: new Vec2(center.x, center.y + 100), 
-            text: strAbout7 
-        });
-        const lblAbout8 = <Label>this.add.uiElement(UIElementType.LABEL, "help", 
-        { 
-            position: new Vec2(center.x, center.y + 150), 
-            text: strAbout8 
-        });
-        
-
-        lblAbout1.textColor = Color.WHITE;
-        lblAbout2.textColor = Color.WHITE;
-        lblAbout3.textColor = Color.WHITE;
-        lblAbout4.textColor = Color.WHITE;
-        lblAbout5.textColor = Color.WHITE;
-        lblAbout6.textColor = Color.WHITE;
-        lblAbout7.textColor = Color.WHITE;
-        lblAbout8.textColor = Color.WHITE;
+        const lblAbout1 = initLabel(this, "help", new Vec2(center.x,center.y-250), strAbout1)
+        const lblAbout2 = initLabel(this, "help", new Vec2(center.x,center.y-150), strAbout2)
+        const lblAbout3 = initLabel(this, "help", new Vec2(center.x,center.y-100), strAbout3)
+        const lblAbout4 = initLabel(this, "help", new Vec2(center.x,center.y-50), strAbout4)
+        const lblAbout5 = initLabel(this, "help", new Vec2(center.x,center.y-5), strAbout5)
+        const lblAbout6 = initLabel(this, "help", new Vec2(center.x,center.y+50), strAbout6)
+        const lblAbout7 = initLabel(this, "help", new Vec2(center.x,center.y+100), strAbout7)
+        const lblAbout8 = initLabel(this, "help", new Vec2(center.x,center.y+150), strAbout8)
 
         const FONT_SIZE = 24;
         lblAbout1.fontSize = FONT_SIZE;
@@ -182,7 +129,6 @@ export default class MainMenu extends Scene {
         lblAbout6.fontSize = FONT_SIZE;
         lblAbout7.fontSize = FONT_SIZE;
         lblAbout8.fontSize = FONT_SIZE;
-
 
         // About - Back Button
         initButton(this, 'help', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
