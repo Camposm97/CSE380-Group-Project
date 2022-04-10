@@ -195,7 +195,7 @@ export default abstract class GameLevel extends Scene {
     if (this.timeLeft !== undefined) {
       this.scoreTimer = new ScoreTimer(this.timeLeft, aux, false);
     } else {
-      this.scoreTimer = new ScoreTimer(15_000, aux, false);
+      this.scoreTimer = new ScoreTimer(300_000, aux, false);
     }
     this.scoreTimer.start();
   }
