@@ -34,6 +34,7 @@ export default class Room2 extends GameLevel {
     startScene(): void {
         super.startScene()
         this.setNextLvl(Room3)
+        this.setCurrentRoom(Room2)
     }
 
     updateScene(deltaT: number): void {

@@ -7,16 +7,21 @@ import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import MainMenu from "./MainMenu";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameLevel from "./GameLevel";
+import { initButton } from "../ui/UIBuilder";
 
 export default class GameOver extends Scene {
+    private currentScore: number
     private win: boolean
     private timeLeft: number
     private nextLvl: new (...args: any) => GameLevel
 
     initScene(options: Record<string, any>): void {
+        options.currentScore ? this.currentScore = options.currentScore : this.currentScore = 0
         this.win = options.win
         this.timeLeft = options.timeLeft
         this.nextLvl = options.nextLvl
+        console.log('score = ' + this.currentScore)
+        console.log('time = ' + this.timeLeft)
     }
 
     loadScene(): void {
@@ -32,17 +37,13 @@ export default class GameOver extends Scene {
 
         if (this.win) {
             lblStatus.text = 'You win!'
-            const lblScore = <Label> this.add.uiElement(UIElementType.LABEL, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y + 50), text: `Score: ${this.timeLeft}`})
+            const lblScore = <Label> this.add.uiElement(UIElementType.LABEL, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y + 50), text: `Total Score: ${(this.timeLeft + this.currentScore)}`})
             lblScore.textColor = Color.WHITE
         } else {
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
         }
 
-        const btOk = <Button> this.add.uiElement(UIElementType.BUTTON, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y + 300), text: 'Main Menu'})
-        btOk.size.set(200, 50)
-        btOk.borderWidth = 2
-        btOk.borderColor = Color.WHITE
-        btOk.backgroundColor = Color.TRANSPARENT
+        let btOk = initButton(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+300), 'Main Menu', '')
         btOk.onClick = () => {
             this.sceneManager.changeToScene(MainMenu, {})
         }
@@ -50,7 +51,7 @@ export default class GameOver extends Scene {
         if (this.nextLvl) {
             btOk.text = 'Next Room'
             btOk.onClick = () => {
-                this.sceneManager.changeToScene(this.nextLvl, {})
+                this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
             }
         }
     }

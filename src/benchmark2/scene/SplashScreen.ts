@@ -5,6 +5,7 @@ import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
+import { initButton } from "../ui/UIBuilder";
 import MainMenu from "./MainMenu";
 
 export default class SplashScreen extends Scene {
@@ -44,16 +45,20 @@ export default class SplashScreen extends Scene {
         this.viewport.setZoomLevel(1);
 
         // Create a play button
-        let startBtn = <Button>this.add.uiElement(UIElementType.BUTTON, "primary", {position: new Vec2(size.x, size.y), text: "Click to Start"});
-        startBtn.backgroundColor = Color.TRANSPARENT;
-        startBtn.borderColor = Color.WHITE;
-        startBtn.borderRadius = 2;
+        let startBtn = initButton(this, 'primary', new Vec2(size.x, size.y), 'Click to Start', '')
         startBtn.size = new Vec2(250, 50)
-        startBtn.font = "Comic Sans MS"
 
         // When the play button is clicked, go to the next scene
         startBtn.onClick = () => {
             this.sceneManager.changeToScene(MainMenu, {}, this.sceneOptions);   
+        }
+        startBtn.onEnter = () => {
+            startBtn.fontSize = 32
+            startBtn.size = new Vec2(255,55)
+        }
+        startBtn.onLeave = () => {
+            startBtn.fontSize = 30
+            startBtn.size = new Vec2(250,50)
         }
 
         // Scene has started, so start playing music

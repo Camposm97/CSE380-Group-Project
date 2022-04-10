@@ -9,6 +9,7 @@ import { Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
+import { initButton } from "../ui/UIBuilder";
 
 enum LayerType {
     PRIMARY = 'primary',
@@ -58,44 +59,11 @@ export class GameLayerManager {
 
     initPauseLayer(): void {
         let c = this.scene.getViewport().getCenter().clone()
-        const SIZE = new Vec2(200, 50) // size of each button
         this.pauseLayer = this.scene.addLayer(LayerType.PAUSE, 1)
-        let btResume = <Button>this.scene.add.uiElement(UIElementType.BUTTON, LayerType.PAUSE, {
-            position: new Vec2(c.x, c.y - 150),
-            text: 'Resume'
-        })
-        btResume.backgroundColor = Color.BLACK
-        btResume.borderColor = Color.WHITE
-        btResume.borderWidth = 2
-        btResume.size = SIZE
-        btResume.onClickEventId = Events.PAUSE_GAME
-        let btReset = <Button>this.scene.add.uiElement(UIElementType.BUTTON, LayerType.PAUSE, {
-            position: new Vec2(c.x, c.y - 75),
-            text: 'Reset Room'
-        })
-        btReset.backgroundColor = Color.BLACK
-        btReset.borderColor = Color.WHITE
-        btReset.borderWidth = 2
-        btReset.size = SIZE
-        btReset.onClickEventId = Events.RESET_ROOM
-        let btControls = <Button>this.scene.add.uiElement(UIElementType.BUTTON, LayerType.PAUSE, {
-            position: new Vec2(c.x, c.y),
-            text: 'Controls'
-        })
-        btControls.backgroundColor = Color.BLACK
-        btControls.borderColor = Color.WHITE
-        btControls.borderWidth = 2
-        btControls.size = SIZE
-        btControls.onClickEventId = Events.SHOW_CONTROLS
-        let btExit = <Button>this.scene.add.uiElement(UIElementType.BUTTON, LayerType.PAUSE, {
-            position: new Vec2(c.x, c.y + 75),
-            text: 'Exit'
-        })
-        btExit.backgroundColor = Color.BLACK
-        btExit.borderColor = Color.WHITE
-        btExit.borderWidth = 2
-        btExit.size = SIZE
-        btExit.onClickEventId = Events.EXIT_GAME
+        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
+        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
+        initButton(this.scene, LayerType.PAUSE, c, 'Controls', Events.SHOW_CONTROLS)
+        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y+75), 'Exit', Events.EXIT_GAME)
         this.pauseLayer.setHidden(true)
     }
 
@@ -160,17 +128,8 @@ export class GameLayerManager {
                 text: "ESC - pause the game"
             });
         esc.textColor = Color.WHITE;
-
-        const back = this.scene.add.uiElement(UIElementType.BUTTON, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y + 250),
-                text: "Back"
-            });
-        back.size.set(200, 50);
-        back.borderWidth = 2;
-        back.borderColor = Color.WHITE;
-        back.backgroundColor = Color.TRANSPARENT;
-        back.onClickEventId = Events.SHOW_CONTROLS;
+        
+        initButton(this.scene, LayerType.CONTROLS, new Vec2(center.x, center.y+250), 'Back', Events.SHOW_CONTROLS)
     }
 
     initRoomCompleteLayer(): void {

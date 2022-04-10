@@ -4,9 +4,8 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import GameLevel from "./GameLevel";
+import { initButton } from "../ui/UIBuilder";
 import Room1 from "./level_1/Room1";
-import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 
 enum MENU_EVENT {
     MENU = "menu",
@@ -58,23 +57,11 @@ export default class MainMenu extends Scene {
     initMenuButtons(v: Vec2): void {
         this.mainMenu = this.addUILayer('mainMenu')
         const layer = 'mainMenu'
-        this.initButton(layer, new Vec2(v.x, v.y - 150), 'New Game', MENU_EVENT.NEW_GAME)
-        this.initButton(layer, new Vec2(v.x, v.y - 75), 'Level Select', MENU_EVENT.LEVEL_SELECT)
-        this.initButton(layer, new Vec2(v.x, v.y - 0), 'Controls', MENU_EVENT.CONTROLS)
-        this.initButton(layer, new Vec2(v.x, v.y + 75), 'Help', MENU_EVENT.HELP)
-        this.initButton(layer, new Vec2(v.x, v.y + 150), 'Leaderboard', MENU_EVENT.LEADERBOARD)
-        
-    
-    }
-
-    initButton(layer: string, pos: Vec2, text: string, eventId: string): void {
-        let bt = <Button> this.add.uiElement(UIElementType.BUTTON, layer, {position: pos, text: text})
-        bt.size.set(200, 50)
-        bt.font = 'Comic Sans MS'
-        bt.borderWidth = 2
-        bt.borderColor = Color.WHITE
-        bt.backgroundColor = Color.TRANSPARENT
-        bt.onClickEventId = eventId
+        initButton(this, layer, new Vec2(v.x, v.y - 150), 'New Game', MENU_EVENT.NEW_GAME)
+        initButton(this, layer, new Vec2(v.x, v.y - 75), 'Level Select', MENU_EVENT.LEVEL_SELECT)
+        initButton(this, layer, new Vec2(v.x, v.y - 0), 'Controls', MENU_EVENT.CONTROLS)
+        initButton(this, layer, new Vec2(v.x, v.y + 75), 'Help', MENU_EVENT.HELP)
+        initButton(this, layer, new Vec2(v.x, v.y + 150), 'Leaderboard', MENU_EVENT.LEADERBOARD)
     }
  
     initLevelSelectScene(center: Vec2): void {
@@ -90,91 +77,13 @@ export default class MainMenu extends Scene {
          leaderboardHeader.textColor = Color.WHITE;
 
          //  Level Select - Buttons
-         const l1 = <Label>this.add.uiElement(UIElementType.BUTTON, "levelSelect",{
-             position: new Vec2(center.x-300, center.y -150),
-             text: "Level 1"
-         });
- 
-         const l2 = <Label>this.add.uiElement(UIElementType.BUTTON, "levelSelect", { 
-             position: new Vec2(center.x+300, center.y-150), 
-             text: "Level 2"
-         });
-
-         const l3 = <Label>this.add.uiElement(UIElementType.BUTTON, "levelSelect",{
-             position: new Vec2(center.x-300, center.y -50),
-             text: "Level 3"
-         });
- 
-         const l4 = <Label>this.add.uiElement(UIElementType.BUTTON, "levelSelect", { 
-             position: new Vec2(center.x+300, center.y-50), 
-             text: "Level 4"
-         });
-
-         const l5 = <Label>this.add.uiElement(UIElementType.BUTTON, "levelSelect",{
-             position: new Vec2(center.x-300, center.y +50),
-             text: "Level 5"
-         });
- 
-         const l6 = <Label>this.add.uiElement(UIElementType.BUTTON, "levelSelect", { 
-             position: new Vec2(center.x+300, center.y+50), 
-             text: "Level 6"
-         });
-         const back = this.add.uiElement(UIElementType.BUTTON, "levelSelect", 
-         {
-             position: new Vec2(center.x, center.y + 200),
-             text: "Back"
-         });
-         l1.size.set(200, 50);
-         l1.borderWidth = 2;
-         l1.borderColor = Color.WHITE;
-         l1.backgroundColor = Color.TRANSPARENT;
-         l1.font = "Comic Sans MS"
-         l1.onClickEventId = MENU_EVENT.LOAD_LVL_1
-
-         l2.size.set(200, 50);
-         l2.borderWidth = 2;
-         l2.borderColor = Color.WHITE;
-         l2.backgroundColor = Color.TRANSPARENT;
-         l2.font = "Comic Sans MS"
-         l2.onClickEventId = MENU_EVENT.LOAD_LVL_2
-
-         l3.size.set(200, 50);
-         l3.borderWidth = 2;
-         l3.borderColor = Color.WHITE;
-         l3.backgroundColor = Color.TRANSPARENT;
-         l3.onClickEventId = MENU_EVENT.MENU;
-         l3.font = "Comic Sans MS"
-         l3.onClickEventId = MENU_EVENT.LOAD_LVL_3
-
-         l4.size.set(200, 50);
-         l4.borderWidth = 2;
-         l4.borderColor = Color.WHITE;
-         l4.backgroundColor = Color.TRANSPARENT;
-         l4.onClickEventId = MENU_EVENT.MENU;
-         l4.font = "Comic Sans MS"
-         l4.onClickEventId = MENU_EVENT.LOAD_LVL_4
-
-         l5.size.set(200, 50);
-         l5.borderWidth = 2;
-         l5.borderColor = Color.WHITE;
-         l5.backgroundColor = Color.TRANSPARENT;
-         l5.onClickEventId = MENU_EVENT.MENU;
-         l5.font = "Comic Sans MS"
-         l5.onClickEventId = MENU_EVENT.LOAD_LVL_5
-
-         l6.size.set(200, 50);
-         l6.borderWidth = 2;
-         l6.borderColor = Color.WHITE;
-         l6.backgroundColor = Color.TRANSPARENT;
-         l6.onClickEventId = MENU_EVENT.MENU;
-         l6.font = "Comic Sans MS"
-         l6.onClickEventId = MENU_EVENT.LOAD_LVL_6
-
-         back.size.set(200, 50);
-         back.borderWidth = 2;
-         back.borderColor = Color.WHITE;
-         back.backgroundColor = Color.TRANSPARENT;
-         back.onClickEventId = MENU_EVENT.MENU;
+         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-150), 'Level 1', '')
+         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-50), 'Level 2', '')
+         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y+50), 'Level 3', '')
+         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-150), 'Level 4', '')
+         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-50), 'Level 5', '')
+         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y+50), 'Level 6', '')
+         initButton(this, 'levelSelect', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
     
 
@@ -242,20 +151,8 @@ export default class MainMenu extends Scene {
             });
         esc.textColor = Color.WHITE;
         esc.font = "Comic Sans MS"
-
-        const back = this.add.uiElement(UIElementType.BUTTON, "controls", 
-            {
-                position: new Vec2(center.x, center.y + 250), 
-                text: "Back" ,
-                font:  "Comic Sans MS"
-            });
-        back.size.set(200, 50);
-        back.borderWidth = 2;
-        back.borderColor = Color.WHITE;
-        back.backgroundColor = Color.TRANSPARENT;
-        back.onClickEventId = MENU_EVENT.MENU;
         
-        
+        initButton(this, 'controls', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
     initHelpScene(center: Vec2) {
@@ -345,16 +242,7 @@ export default class MainMenu extends Scene {
 
 
         // About - Back Button
-        const aboutBack = this.add.uiElement(UIElementType.BUTTON, "help", 
-            {
-                position: new Vec2(center.x, center.y + 250),
-                text: "Back"
-            });
-        aboutBack.size.set(200, 50);
-        aboutBack.borderWidth = 2;
-        aboutBack.borderColor = Color.WHITE;
-        aboutBack.backgroundColor = Color.TRANSPARENT;
-        aboutBack.onClickEventId = MENU_EVENT.MENU;
+        initButton(this, 'help', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
     initLeaderboardScene(center: Vec2): void {
@@ -391,17 +279,7 @@ export default class MainMenu extends Scene {
         score.font = "Comic Sans MS"
 
         // Leader Boards - Back Button
-        const back = this.add.uiElement(UIElementType.BUTTON, "leaderboard", 
-        {
-            position: new Vec2(center.x, center.y + 250),
-            text: "Back"
-        });
-        back.size.set(200, 50);
-        back.borderWidth = 2;
-        back.borderColor = Color.WHITE;
-        back.backgroundColor = Color.TRANSPARENT;
-        back.onClickEventId = MENU_EVENT.MENU;
-
+        initButton(this, 'leaderboard', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
     updateScene() {

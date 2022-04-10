@@ -6,7 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { CoatColor, Events, Names, RobotAction } from "./Constants";
+import { CoatColor, Control, Events, Names, RobotAction } from "./Constants";
 import BlueRobotAI from "../ai/BlueRobotAI";
 import WeaponType from "../game_system/items/weapon_types/WeaponType";
 import RegistryManager from "../../Wolfie2D/Registry/RegistryManager";
@@ -33,7 +33,8 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Block from "../game_system/objects/Block";
 import Timer from "../../Wolfie2D/Timing/Timer";
 
-export default class GameLevel extends Scene {
+export default abstract class GameLevel extends Scene {
+  private currentScore: number
   private timeLeft: number;
   private player: AnimatedSprite; // Player Sprite
   private enemies: Array<AnimatedSprite>; // List of Enemies
@@ -52,7 +53,8 @@ export default class GameLevel extends Scene {
   private nearestBomb: Bomb; //for detecting how close the player is to the nearest bomb
   private greenFlag: AnimatedSprite;
   private startNextLvl: boolean
-  private nextLvl: new (...args: any) => GameLevel
+  private currentRoom: new(...args: any) => GameLevel
+  private nextRoom: new (...args: any) => GameLevel
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -60,6 +62,7 @@ export default class GameLevel extends Scene {
     this.MAX_PROJECTILE_SIZE
   );
   initScene(options: Record<string, any>): void {
+    options.currentScore ? this.currentScore = options.currentScore : this.currentScore = 0
     this.timeLeft = options.timeLeft;
   }
 
@@ -148,7 +151,7 @@ export default class GameLevel extends Scene {
     this.initScoreTimer();
 
     this.startNextLvl = false
-    this.nextLvl = null
+    this.nextRoom = null
 
     // Send the player and enemies to the battle manager
     // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
@@ -234,8 +237,12 @@ export default class GameLevel extends Scene {
     this.sceneManager.changeToScene(GameOver, { win: false });
   }
 
+  setCurrentRoom(room: new (...args: any) => GameLevel): void {
+    this.currentRoom = room
+  }
+
   handleEvent(event: GameEvent): void {
-    switch (`event-type=${event.type}`) {
+    switch (event.type) {
       case Events.PAUSE_GAME:
         if (this.glm.showPause()) {
           this.scoreTimer.pause()
@@ -245,7 +252,7 @@ export default class GameLevel extends Scene {
         break;
       case Events.RESET_ROOM:
         this.glm.hideAllAndZoomOut()
-        this.sceneManager.changeToScene(GameLevel, {timeLeft: this.scoreTimer.getTimeLeftInMillis()})
+        this.sceneManager.changeToScene(this.currentRoom, {timeLeft: this.scoreTimer.getTimeLeftInMillis()})
         break;
       case Events.SHOW_CONTROLS:
         this.glm.showControls()
@@ -339,7 +346,7 @@ export default class GameLevel extends Scene {
         new Timer(3000, () => {
           this.viewport.setZoomLevel(1);
           this.viewport.disableZoom();
-          this.sceneManager.changeToScene(GameOver, {win: true, timeLeft: this.scoreTimer.getTimeLeftInSeconds(), nextLvl: this.nextLvl});
+          this.sceneManager.changeToScene(GameOver, {currentScore: this.currentScore, win: true, timeLeft: this.scoreTimer.getTimeLeftInSeconds(), nextLvl: this.nextRoom});
         }, false).start()
       }
       this.startNextLvl = true
@@ -407,10 +414,10 @@ export default class GameLevel extends Scene {
 
   handleInput(): void {
     // Debug mode graph
-    if (Input.isKeyJustPressed("g")) {
+    if (Input.isKeyJustPressed('g')) {
       this.getLayer("graph").setHidden(!this.getLayer("graph").isHidden());
     }
-    if (Input.isJustPressed("pause")) {
+    if (Input.isJustPressed(Control.PAUSE)) {
       this.emitter.fireEvent(Events.PAUSE_GAME, {});
     }
   }
@@ -666,7 +673,7 @@ export default class GameLevel extends Scene {
   }
 
   setNextLvl(nextLvl: new (...args: any) => GameLevel): void {
-    this.nextLvl = nextLvl
+    this.nextRoom = nextLvl
   }
 
   getPlayer(): AnimatedSprite {
