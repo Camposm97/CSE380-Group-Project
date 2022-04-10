@@ -33,5 +33,6 @@ export function initLabel(scene: Scene, layer: string, v: Vec2, text: string): L
         text: text
     })
     x.textColor = Color.WHITE
+    x.font = "Comic Sans MS"
     return x
 }

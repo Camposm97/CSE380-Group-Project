@@ -86,68 +86,15 @@ export default class MainMenu extends Scene {
     initControlScene(center: Vec2): void {
         this.controls = this.addUILayer("controls");
         this.controls.setHidden(true);
-
-        const controlsHeader = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
-            {
-                position: new Vec2(center.x, center.y - 300),
-                text: "Controls", 
-
-                
-            });
-        controlsHeader.textColor = Color.WHITE;
-
-        
-        const wu = <Label>this.add.uiElement(UIElementType.LABEL, "controls",
-            {
-                position: new Vec2(center.x, center.y - 50),
-                text: "W/Up-Arrow to move up"
-            });
-        wu.textColor = Color.WHITE;
-        const al = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
-            { 
-                position: new Vec2(center.x, center.y), 
-                text: "A/Left-Arrow to move left" 
-            });
-        al.textColor = Color.WHITE;
-        const sd = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
-            { 
-                position: new Vec2(center.x, center.y + 50), 
-                text: "S/Down-Arrow to move down" 
-            });
-        sd.textColor = Color.WHITE;
-        const dr = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
-            { 
-                position: new Vec2(center.x, center.y + 100),
-                text: "D/Right-Arrow to move right" 
-            });
-        dr.textColor = Color.WHITE;
-        const lclick = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
-            {
-                position: new Vec2(center.x, center.y + 150),
-                text: "Space/Left-Click to attack"
-            });
-        lclick.textColor = Color.WHITE;
-        const rclick = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
-            {
-                position: new Vec2(center.x, center.y - 100),
-                text: "Shift/Right-Click to place flag"
-            });
-        rclick.textColor = Color.WHITE;
-        const p = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
-            {
-                position: new Vec2(center.x, center.y - 150),
-                text: "P - panic button, resets the room to its original sate"
-            });
-        p.textColor = Color.WHITE;
-        p.font = "Comic Sans MS"
-        const esc = <Label>this.add.uiElement(UIElementType.LABEL, "controls", 
-            {
-                position: new Vec2(center.x, center.y - 200),
-                text: "ESC - pause the game"
-            });
-        esc.textColor = Color.WHITE;
-        esc.font = "Comic Sans MS"
-        
+        initLabel(this, "controls", new Vec2(center.x,center.y-300), "Controls")
+        initLabel(this, "controls", new Vec2(center.x,center.y-200), "ESC - pause the game")
+        initLabel(this, "controls", new Vec2(center.x,center.y-150), "P - panic button, resets the room to its original sate")
+        initLabel(this, "controls", new Vec2(center.x,center.y-100), "Shift/Right-Click to place flag")
+        initLabel(this, "controls", new Vec2(center.x,center.y-50), "W/Up-Arrow to move up")
+        initLabel(this, "controls", new Vec2(center.x,center.y), "A/Left-Arrow to move left")
+        initLabel(this, "controls", new Vec2(center.x,center.y+50), "S/Down-Arrow to move down" )
+        initLabel(this, "controls", new Vec2(center.x,center.y+100), "D/Right-Arrow to move right")
+        initLabel(this, "controls", new Vec2(center.x,center.y+150), "Space/Left-Click to attack")
         initButton(this, 'controls', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
