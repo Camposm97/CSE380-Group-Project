@@ -9,7 +9,7 @@ import { Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import { initButton, initLabel } from "../ui/UIBuilder";
+import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 
 enum LayerType {
     PRIMARY = 'primary',
@@ -60,10 +60,10 @@ export class GameLayerManager {
     initPauseLayer(): void {
         let c = this.scene.getViewport().getCenter().clone()
         this.pauseLayer = this.scene.addLayer(LayerType.PAUSE, 1)
-        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
-        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
-        initButton(this.scene, LayerType.PAUSE, c, 'Controls', Events.SHOW_CONTROLS)
-        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y+75), 'Exit', Events.EXIT_GAME)
+        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
+        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
+        initButtonHandler(this.scene, LayerType.PAUSE, c, 'Controls', Events.SHOW_CONTROLS)
+        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y+75), 'Exit', Events.EXIT_GAME)
         this.pauseLayer.setHidden(true)
     }
 
@@ -82,7 +82,7 @@ export class GameLayerManager {
         initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+50), "S/Down-Arrow to move down" )
         initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+100), "D/Right-Arrow to move right")
         initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+150), "Space/Left-Click to attack")
-        initButton(this.scene, LayerType.CONTROLS, new Vec2(center.x, center.y+250), 'Back', Events.SHOW_CONTROLS)
+        initButtonHandler(this.scene, LayerType.CONTROLS, new Vec2(center.x, center.y+250), 'Back', Events.SHOW_CONTROLS)
     }
 
     initRoomCompleteLayer(): void {

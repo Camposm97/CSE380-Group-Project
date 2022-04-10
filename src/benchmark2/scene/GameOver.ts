@@ -7,7 +7,7 @@ import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import MainMenu from "./MainMenu";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameLevel from "./GameLevel";
-import { initButton } from "../ui/UIBuilder";
+import { initButton, initButtonHandler } from "../ui/UIBuilder";
 
 export default class GameOver extends Scene {
     private currentScore: number
@@ -35,24 +35,22 @@ export default class GameOver extends Scene {
         const lblStatus = <Label>this.add.uiElement(UIElementType.LABEL, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y), text: 'Game Over'});
         lblStatus.textColor = Color.WHITE;
 
+        let btOk = initButton(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+300), 'Main Menu')
+
         if (this.win) {
             lblStatus.text = 'You win!'
             const lblScore = <Label> this.add.uiElement(UIElementType.LABEL, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y + 50), text: `Total Score: ${(this.timeLeft + this.currentScore)}`})
             lblScore.textColor = Color.WHITE
-        } else {
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
-        }
 
-        let btOk = initButton(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+300), 'Main Menu', '')
-        btOk.onClick = () => {
-            this.sceneManager.changeToScene(MainMenu, {})
-        }
-
-        if (this.nextLvl) {
-            btOk.text = 'Next Room'
-            btOk.onClick = () => {
-                this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
+            if (this.nextLvl) {
+                btOk.text = 'Next Room'
+                btOk.onClick = () => {
+                    this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
+                }
             }
+        } else {
+            btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
         }
     }
 }

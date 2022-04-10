@@ -4,7 +4,7 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import { initButton, initLabel } from "../ui/UIBuilder";
+import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import * as Level1 from "./Level1"
 
 enum MENU_EVENT {
@@ -55,11 +55,11 @@ export default class MainMenu extends Scene {
     initMenuButtons(v: Vec2): void {
         this.mainMenu = this.addUILayer('mainMenu')
         const layer = 'mainMenu'
-        initButton(this, layer, new Vec2(v.x, v.y - 150), 'New Game', MENU_EVENT.NEW_GAME)
-        initButton(this, layer, new Vec2(v.x, v.y - 75), 'Level Select', MENU_EVENT.LEVEL_SELECT)
-        initButton(this, layer, new Vec2(v.x, v.y - 0), 'Controls', MENU_EVENT.CONTROLS)
-        initButton(this, layer, new Vec2(v.x, v.y + 75), 'Help', MENU_EVENT.HELP)
-        initButton(this, layer, new Vec2(v.x, v.y + 150), 'Leaderboard', MENU_EVENT.LEADERBOARD)
+        initButtonHandler(this, layer, new Vec2(v.x, v.y - 150), 'New Game', MENU_EVENT.NEW_GAME)
+        initButtonHandler(this, layer, new Vec2(v.x, v.y - 75), 'Level Select', MENU_EVENT.LEVEL_SELECT)
+        initButtonHandler(this, layer, new Vec2(v.x, v.y - 0), 'Controls', MENU_EVENT.CONTROLS)
+        initButtonHandler(this, layer, new Vec2(v.x, v.y + 75), 'Help', MENU_EVENT.HELP)
+        initButtonHandler(this, layer, new Vec2(v.x, v.y + 150), 'Leaderboard', MENU_EVENT.LEADERBOARD)
     }
  
     initLevelSelectScene(center: Vec2): void {
@@ -71,13 +71,13 @@ export default class MainMenu extends Scene {
          initLabel(this, 'levelSelect', new Vec2(center.x, center.y-300), 'Level Select')
 
          //  Level Select - Buttons
-         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-150), 'Level 1', MENU_EVENT.LOAD_LVL_1)
-         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-50), 'Level 2', MENU_EVENT.LOAD_LVL_2)
-         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y+50), 'Level 3', MENU_EVENT.LOAD_LVL_3)
-         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-150), 'Level 4', MENU_EVENT.LOAD_LVL_4)
-         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-50), 'Level 5', MENU_EVENT.LOAD_LVL_5)
-         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y+50), 'Level 6', MENU_EVENT.LOAD_LVL_6)
-         initButton(this, 'levelSelect', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
+         initButtonHandler(this, 'levelSelect', new Vec2(center.x-200, center.y-150), 'Level 1', MENU_EVENT.LOAD_LVL_1)
+         initButtonHandler(this, 'levelSelect', new Vec2(center.x-200, center.y-50), 'Level 2', MENU_EVENT.LOAD_LVL_2)
+         initButtonHandler(this, 'levelSelect', new Vec2(center.x-200, center.y+50), 'Level 3', MENU_EVENT.LOAD_LVL_3)
+         initButtonHandler(this, 'levelSelect', new Vec2(center.x+200, center.y-150), 'Level 4', MENU_EVENT.LOAD_LVL_4)
+         initButtonHandler(this, 'levelSelect', new Vec2(center.x+200, center.y-50), 'Level 5', MENU_EVENT.LOAD_LVL_5)
+         initButtonHandler(this, 'levelSelect', new Vec2(center.x+200, center.y+50), 'Level 6', MENU_EVENT.LOAD_LVL_6)
+         initButtonHandler(this, 'levelSelect', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
     
 
@@ -93,7 +93,7 @@ export default class MainMenu extends Scene {
         initLabel(this, "controls", new Vec2(center.x,center.y+50), "S/Down-Arrow to move down" )
         initLabel(this, "controls", new Vec2(center.x,center.y+100), "D/Right-Arrow to move right")
         initLabel(this, "controls", new Vec2(center.x,center.y+150), "Space/Left-Click to attack")
-        initButton(this, "controls", new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
+        initButtonHandler(this, "controls", new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
     initHelpScene(center: Vec2) {
@@ -131,7 +131,7 @@ export default class MainMenu extends Scene {
         lblAbout8.fontSize = FONT_SIZE;
 
         // About - Back Button
-        initButton(this, 'help', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
+        initButtonHandler(this, 'help', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
     initLeaderboardScene(center: Vec2): void {
@@ -140,35 +140,12 @@ export default class MainMenu extends Scene {
         this.leaderboard.setHidden(true);
 
         // Leader Boards Header
-        const leaderboardHeader = <Label>this.add.uiElement(UIElementType.LABEL, "leaderboard",
-            {
-                position: new Vec2(center.x, center.y - 300),
-                text: "Leader Boards"
-            });
-        leaderboardHeader.textColor = Color.WHITE;
-
-        const name = <Label>this.add.uiElement(UIElementType.LABEL, "leaderboard",
-        {
-            position: new Vec2(center.x-300, center.y -200),
-            text: "Names"
-        
-            
-        });
-        name.textColor = Color.WHITE;
-        name.font = "Comic Sans MS"
-
-        const score = <Label>this.add.uiElement(UIElementType.LABEL, "leaderboard", 
-        { 
-            position: new Vec2(center.x+300, center.y-200), 
-            text: "Score"
-
-           
-        });
-        score.textColor = Color.WHITE;
-        score.font = "Comic Sans MS"
+        initLabel(this, "leaderboard", new Vec2(center.x,center.y-300), "Leaderboard")
+        initLabel(this, "leaderboard", new Vec2(center.x-300,center.y-200), "Name")
+        initLabel(this, "leaderboard", new Vec2(center.x+300,center.y-200), "High Score")
 
         // Leader Boards - Back Button
-        initButton(this, 'leaderboard', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
+        initButtonHandler(this, 'leaderboard', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
 
     updateScene() {
