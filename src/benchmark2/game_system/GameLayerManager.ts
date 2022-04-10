@@ -40,19 +40,9 @@ export class GameLayerManager {
         // Add a UI for health
         this.hudLayer = this.scene.addUILayer(LayerType.HUD)
 
-        let lblHealth = <Label>(this.scene.add.uiElement(UIElementType.LABEL, LayerType.HUD, {
-            position: new Vec2(60, 16),
-            text: `HP: ${(<BattlerAI>this.scene.getPlayer()._ai).health}`,
-        })
-        );
-        lblHealth.textColor = Color.WHITE;
+        let lblHealth = initLabel(this.scene, LayerType.HUD, new Vec2(60,16), `HP: ${(<BattlerAI>this.scene.getPlayer()._ai).health}`)
         this.scene.setLblHealth(lblHealth)
-
-        let lblTime = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.HUD, {
-            position: new Vec2(360, 16),
-            text: "",
-        });
-        lblTime.textColor = Color.WHITE;
+        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2(360,16), "")
         this.scene.setLblTime(lblTime)
     }
 
@@ -89,15 +79,11 @@ export class GameLayerManager {
         this.roomCompleteLayer.setHidden(true)
         let c = this.scene.getViewport().getCenter().clone()
         let scale = this.scene.getViewport().getZoomLevel()
-        this.lblRoomEnd = <Label> this.scene.add.uiElement(UIElementType.LABEL, LayerType.ROOM_COMPLETE, {
-            position: new Vec2((c.x/scale) - 600, c.y/scale), text: 'Room Complete!'
-        })
+        this.lblRoomEnd = initLabel(this.scene, LayerType.ROOM_COMPLETE, new Vec2((c.x/scale)-600, c.y/scale), "Room Complete!")
         this.lblRoomEnd.size.set(1200,60)
         this.lblRoomEnd.borderRadius = 0;
         this.lblRoomEnd.backgroundColor = new Color(34, 32, 52);
-        this.lblRoomEnd.textColor = Color.WHITE;
         this.lblRoomEnd.fontSize = 48;
-        this.lblRoomEnd.font = "Comic Sans MS";
         this.lblRoomEnd.tweens.add('slideIn', {
             startDelay: 300,
             duration: 1000,
