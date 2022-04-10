@@ -5,7 +5,7 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { initButton, initLabel } from "../ui/UIBuilder";
-import Room1 from "./level_1/Room1";
+import * as Level1 from "./Level1"
 
 enum MENU_EVENT {
     MENU = "menu",
@@ -73,12 +73,12 @@ export default class MainMenu extends Scene {
          initLabel(this, 'levelSelect', new Vec2(center.x, center.y-300), 'Level Select')
 
          //  Level Select - Buttons
-         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-150), 'Level 1', '')
-         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-50), 'Level 2', '')
-         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y+50), 'Level 3', '')
-         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-150), 'Level 4', '')
-         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-50), 'Level 5', '')
-         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y+50), 'Level 6', '')
+         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-150), 'Level 1', MENU_EVENT.LOAD_LVL_1)
+         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y-50), 'Level 2', MENU_EVENT.LOAD_LVL_2)
+         initButton(this, 'levelSelect', new Vec2(center.x-200, center.y+50), 'Level 3', MENU_EVENT.LOAD_LVL_3)
+         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-150), 'Level 4', MENU_EVENT.LOAD_LVL_4)
+         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y-50), 'Level 5', MENU_EVENT.LOAD_LVL_5)
+         initButton(this, 'levelSelect', new Vec2(center.x+200, center.y+50), 'Level 6', MENU_EVENT.LOAD_LVL_6)
          initButton(this, 'levelSelect', new Vec2(center.x, center.y+250), 'Back', MENU_EVENT.MENU)
     }
     
@@ -237,14 +237,14 @@ export default class MainMenu extends Scene {
                     this.levelSelect.setHidden(true)
                     break;
                 case MENU_EVENT.NEW_GAME:
-                    this.sceneManager.changeToScene(Room1, {});
+                    this.sceneManager.changeToScene(Level1.Room1, {});
                     break;
                 case MENU_EVENT.LEVEL_SELECT:
                     this.mainMenu.setHidden(true)
                     this.levelSelect.setHidden(false)
                     break;
                 case MENU_EVENT.LOAD_LVL_1:
-                    console.log('load a level here!')
+                    this.sceneManager.changeToScene(Level1.Room1, {})
                     break;
                 case MENU_EVENT.LOAD_LVL_2:
                     console.log('load a level here!')
