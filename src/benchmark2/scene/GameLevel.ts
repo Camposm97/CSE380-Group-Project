@@ -187,7 +187,6 @@ export default abstract class GameLevel extends Scene {
         this.sceneManager.changeToScene(MainMenu, {});
         break;
       case Events.ROOM_COMPLETE:
-        console.log('room complete!!!')
         new Timer(3000, () => {
           this.glm.showFadeIn()
         }, false).start();
@@ -252,6 +251,7 @@ export default abstract class GameLevel extends Scene {
 
     if (this.em.playerReachedGoal()) {
       if (!this.startNextLvl) {
+        this.scoreTimer.pause()
         this.glm.showRoomComplete();
       }
       this.startNextLvl = true;
