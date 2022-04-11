@@ -34,6 +34,7 @@ import Block from "../game_system/objects/Block";
 import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default abstract class GameLevel extends Scene {
+  private name: string
   private currentScore: number;
   private timeLeft: number;
   private player: AnimatedSprite; // Player Sprite
@@ -66,34 +67,6 @@ export default abstract class GameLevel extends Scene {
       ? (this.currentScore = options.currentScore)
       : (this.currentScore = 0);
     this.timeLeft = options.timeLeft;
-  }
-
-  loadScene() {
-    // Load the player and enemy spritesheets
-    this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
-    this.load.spritesheet("slice", "res/spritesheets/slice.json");
-    this.load.spritesheet("flag", "res/spritesheets/flag.json");
-    this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
-    this.load.spritesheet("blueMouse", "res/spritesheets/rm_blue.json");
-    this.load.spritesheet("blueStatue", "res/spritesheets/rs_blue.json");
-    this.load.spritesheet("projectile", "res/spritesheets/projectile.json");
-    this.load.spritesheet("bomb", "res/spritesheets/explode.json");
-    this.load.spritesheet("greenFlag", "res/spritesheets/green_flag.json");
-    this.load.tilemap("level", "res/tilemaps/testRoom.json"); // Load tile map
-    this.load.object("start_end", "res/data/start_end.json"); //Load player and green flag coordinates
-    this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
-    this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
-    this.load.object("enemyData", "res/data/enemy.json"); // Load enemy info
-    this.load.object("bombData", "res/data/bombs.json"); // Load bomb info
-    this.load.object("itemData", "res/data/items.json"); // Load item info
-    this.load.object("blockData", "res/data/blocks.json"); // Load block info
-    this.load.image("healthpack", "res/sprites/healthpack.png");
-    this.load.image("inventorySlot", "res/sprites/inventory.png");
-    this.load.image("knife", "res/sprites/knife.png");
-    this.load.image("laserGun", "res/sprites/laserGun.png");
-    this.load.image("pistol", "res/sprites/pistol.png");
-    this.load.image("block", "res/sprites/block.png");
-    this.load.audio("boom", "res/sound/explode.wav");
   }
 
   startScene() {
@@ -170,12 +143,15 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.RESET_ROOM);
     this.receiver.subscribe(Events.SHOW_CONTROLS);
     this.receiver.subscribe(Events.EXIT_GAME);
+    this.receiver.subscribe(Events.LEVEL_END)
+    this.receiver.subscribe(Events.ROOM_COMPLETE)
 
-    this.initScoreTimer();
-
+    this.initScoreTimer()
+    this.glm.showFadeOut()
     // Spawn items into the world
     // this.spawnItems();
   }
+
   initializeGreenFlag() {
     this.greenFlag = this.add.animatedSprite("greenFlag", "primary");
     let coord = this.load.getObject("start_end").greenFlagPos;
@@ -258,6 +234,21 @@ export default abstract class GameLevel extends Scene {
         break;
       case Events.EXIT_GAME:
         this.sceneManager.changeToScene(MainMenu, {});
+        break;
+      case Events.ROOM_COMPLETE:
+        console.log('room complete!!!')
+        new Timer(3000, () => {
+          this.glm.showFadeIn()
+        }, false).start();
+        break;
+      case Events.LEVEL_END:
+        this.viewport.setZoomLevel(1);
+          this.sceneManager.changeToScene(GameOver, {
+            currentScore: this.currentScore,
+            win: true,
+            timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
+            nextLvl: this.nextRoom,
+          })
         break;
       case "healthpack":
         this.createHealthpack(event.data.get("position"));
@@ -349,20 +340,6 @@ export default abstract class GameLevel extends Scene {
     ) {
       if (!this.startNextLvl) {
         this.glm.showRoomComplete();
-        new Timer(
-          3000,
-          () => {
-            this.viewport.setZoomLevel(1);
-            this.viewport.disableZoom();
-            this.sceneManager.changeToScene(GameOver, {
-              currentScore: this.currentScore,
-              win: true,
-              timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
-              nextLvl: this.nextRoom,
-            });
-          },
-          false
-        ).start();
       }
       this.startNextLvl = true;
     }
@@ -432,8 +409,13 @@ export default abstract class GameLevel extends Scene {
     if (Input.isKeyJustPressed("g")) {
       this.getLayer("graph").setHidden(!this.getLayer("graph").isHidden());
     }
-    if (Input.isJustPressed(Control.PAUSE)) {
-      this.emitter.fireEvent(Events.PAUSE_GAME, {});
+    /*
+      If we're transitioning to the next level, disable the pause button
+    */
+    if (!this.startNextLvl) { 
+      if (Input.isJustPressed(Control.PAUSE)) {
+        this.emitter.fireEvent(Events.PAUSE_GAME, {});
+      }
     }
   }
 
@@ -688,6 +670,14 @@ export default abstract class GameLevel extends Scene {
           break;
       }
     }
+  }
+
+  getName(): string {
+    return this.name
+  }
+
+  setName(name: string) {
+    this.name = name
   }
 
   setNextLvl(nextLvl: new (...args: any) => GameLevel): void {

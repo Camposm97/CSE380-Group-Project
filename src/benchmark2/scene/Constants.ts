@@ -18,6 +18,8 @@ export enum Control {
 }
 
 
+
+
 export enum Events {
     SHOT_FIRED = "SHOT_FIRED",
     UNLOAD_ASSET = "UNLOAD_ASSET",
@@ -28,7 +30,8 @@ export enum Events {
     SHOW_CONTROLS = "SHOW_CONTROLS",
     EXIT_GAME = "EXIT_GAME",
     DESTROY_BOMB = "DESTROY_BOMB",
-    ROOM_COMPLETE = "ROOM_COMPLETE"
+    ROOM_COMPLETE = "ROOM_COMPLETE",
+    LEVEL_END = "LEVEL_END"
 }
 
 export enum Statuses {

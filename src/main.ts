@@ -1,5 +1,4 @@
 import Game from "./Wolfie2D/Loop/Game";
-import MainMenu from "./benchmark2/scene/MainMenu";
 import RegistryManager from "./Wolfie2D/Registry/RegistryManager";
 import WeaponTemplateRegistry from "./benchmark2/registry/WeaponRegistry";
 import WeaponTypeRegistry from "./benchmark2/registry/WeaponTypeRegistry";

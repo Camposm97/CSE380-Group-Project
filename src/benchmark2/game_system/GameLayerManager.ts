@@ -3,12 +3,14 @@ import GameLevel from "../scene/GameLevel";
 import Color from "../../Wolfie2D/Utils/Color";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import { Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
+import Emitter from "../../Wolfie2D/Events/Emitter";
+import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
+import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 
 enum LayerType {
     PRIMARY = 'primary',
@@ -26,6 +28,7 @@ export class GameLayerManager {
     private controlsLayer: Layer
     private roomCompleteLayer: Layer
     private lblRoomEnd: Label
+    private levelTransitionScreen: Rect
 
     /**
      * Initializes primary layer when constructed
@@ -34,21 +37,56 @@ export class GameLayerManager {
     constructor(scene: GameLevel) {
         this.scene = scene
         this.primaryLayer = scene.addLayer('primary', 10);
+        scene.addUILayer("UI")
+        this.levelTransitionScreen = <Rect>scene.add.graphic(GraphicType.RECT, "UI", { position: new Vec2(300, 200), size: new Vec2(600, 400) });
+        this.levelTransitionScreen.color = new Color(34, 32, 52);
+        this.levelTransitionScreen.alpha = 1;
+
+        this.levelTransitionScreen.tweens.add("fadeIn", {
+            startDelay: 0,
+            duration: 1000,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ],
+            onEnd: Events.LEVEL_END
+        });
+
+        this.levelTransitionScreen.tweens.add("fadeOut", {
+            startDelay: 0,
+            duration: 1000,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 1,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ],
+            // onEnd: Events.LEVEL_START
+        });
     }
 
     initHudLayer(): void {
+        let c = this.scene.getViewport().getCenter().clone()
+        let s = this.scene.getViewport().getZoomLevel()
         // Add a UI for health
         this.hudLayer = this.scene.addUILayer(LayerType.HUD)
-
         let lblHealth = initLabel(this.scene, LayerType.HUD, new Vec2(60,16), `HP: ${(<BattlerAI>this.scene.getPlayer()._ai).health}`)
         this.scene.setLblHealth(lblHealth)
-        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2(360,16), "")
+        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, 16), "")
         this.scene.setLblTime(lblTime)
+        initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, (c.y/s)+120), `Level ${this.scene.getName()}`)
     }
 
     initPauseLayer(): void {
         let c = this.scene.getViewport().getCenter().clone()
         this.pauseLayer = this.scene.addLayer(LayerType.PAUSE, 1)
+        initLabel(this.scene, LayerType.PAUSE, new Vec2(c.x,c.y-250), `Level ${this.scene.getName()}`)
         initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
         initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
         initButtonHandler(this.scene, LayerType.PAUSE, c, 'Controls', Events.SHOW_CONTROLS)
@@ -94,13 +132,22 @@ export class GameLayerManager {
                     end: (c.x/scale),
                     ease: EaseFunctionType.OUT_SINE
                 }
-            ]
+            ],
+            onEnd: Events.ROOM_COMPLETE
         })
     }
 
-    showRoomComplete() {
+    showRoomComplete(): void {
         this.roomCompleteLayer.setHidden(false)
         this.lblRoomEnd.tweens.play('slideIn', false)
+    }
+
+    showFadeIn(): void {
+        this.levelTransitionScreen.tweens.play('fadeIn', false)
+    }
+
+    showFadeOut(): void {
+        this.levelTransitionScreen.tweens.play('fadeOut', false)
     }
 
     /**
