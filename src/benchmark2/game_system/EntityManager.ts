@@ -178,7 +178,7 @@ export default class EntityManager {
             this.enemies[i].animation.play("IDLE");
 
             // Activate physics
-            this.enemies[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(9, 9)));
+            this.enemies[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
 
             let enemyOptions = {
                 behavior: entity.behavior,
