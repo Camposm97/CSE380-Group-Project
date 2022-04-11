@@ -256,7 +256,7 @@ export default class EntityManager {
         } else (<PlayerController>this.player._ai).nearBomb = false;
     }
 
-    foo(): void {
+    handlePlayerBombCollision(): void {
         if (!(<PlayerController>this.player._ai).nearBomb) {
             (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
             for (let bomb of this.bombs) {

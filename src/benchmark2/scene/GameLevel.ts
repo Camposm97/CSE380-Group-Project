@@ -176,6 +176,7 @@ export default abstract class GameLevel extends Scene {
       case Events.RESET_ROOM:
         this.glm.hideAllAndZoomOut();
         this.sceneManager.changeToScene(this.currentRoom, {
+          currentScore: this.currentScore,
           timeLeft: this.scoreTimer.getTimeLeftInMillis(),
         });
         break;
@@ -256,7 +257,7 @@ export default abstract class GameLevel extends Scene {
       this.startNextLvl = true;
     }
 
-    this.em.foo()
+    this.em.handlePlayerBombCollision()
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
       this.em.bombCollision();
