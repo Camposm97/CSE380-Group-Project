@@ -34,7 +34,7 @@ import Block from "../game_system/objects/Block";
 import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default abstract class GameLevel extends Scene {
-  private currentScore: number
+  private currentScore: number;
   private timeLeft: number;
   private player: AnimatedSprite; // Player Sprite
   private enemies: Array<AnimatedSprite>; // List of Enemies
@@ -52,9 +52,9 @@ export default abstract class GameLevel extends Scene {
   private listeningEnemies: number; //number of enemies that listen for player movement events
   private nearestBomb: Bomb; //for detecting how close the player is to the nearest bomb
   private greenFlag: AnimatedSprite;
-  private startNextLvl: boolean
-  private currentRoom: new(...args: any) => GameLevel
-  private nextRoom: new (...args: any) => GameLevel
+  private startNextLvl: boolean;
+  private currentRoom: new (...args: any) => GameLevel;
+  private nextRoom: new (...args: any) => GameLevel;
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -62,7 +62,9 @@ export default abstract class GameLevel extends Scene {
     this.MAX_PROJECTILE_SIZE
   );
   initScene(options: Record<string, any>): void {
-    options.currentScore ? this.currentScore = options.currentScore : this.currentScore = 0
+    options.currentScore
+      ? (this.currentScore = options.currentScore)
+      : (this.currentScore = 0);
     this.timeLeft = options.timeLeft;
   }
 
@@ -150,8 +152,8 @@ export default abstract class GameLevel extends Scene {
 
     this.initScoreTimer();
 
-    this.startNextLvl = false
-    this.nextRoom = null
+    this.startNextLvl = false;
+    this.nextRoom = null;
 
     // Send the player and enemies to the battle manager
     // this.battleManager.setPlayers([<BattlerAI>this.players[0]._ai, <BattlerAI>this.players[1]._ai]);
@@ -180,8 +182,8 @@ export default abstract class GameLevel extends Scene {
     this.greenFlag = this.add.animatedSprite("greenFlag", "primary");
     let coord = this.load.getObject("start_end").greenFlagPos;
     this.greenFlag.position = new Vec2(
-      (coord[0] + 0.5) * 16,
-      (coord[1] + 1.0) * 16
+      (coord[0] - 0.5) * 16,
+      (coord[1] - 1.0) * 16
     );
     this.greenFlag.scale = new Vec2(0.5, 0.5);
     this.greenFlag.animation.play("IDLE");
@@ -238,32 +240,34 @@ export default abstract class GameLevel extends Scene {
   }
 
   setCurrentRoom(room: new (...args: any) => GameLevel): void {
-    this.currentRoom = room
+    this.currentRoom = room;
   }
 
   handleEvent(event: GameEvent): void {
     switch (event.type) {
       case Events.PAUSE_GAME:
         if (this.glm.showPause()) {
-          this.scoreTimer.pause()
+          this.scoreTimer.pause();
         } else {
-          this.scoreTimer.start(this.scoreTimer.getTimeLeftInMillis())
+          this.scoreTimer.start(this.scoreTimer.getTimeLeftInMillis());
         }
         break;
       case Events.RESET_ROOM:
-        this.glm.hideAllAndZoomOut()
-        this.sceneManager.changeToScene(this.currentRoom, {timeLeft: this.scoreTimer.getTimeLeftInMillis()})
+        this.glm.hideAllAndZoomOut();
+        this.sceneManager.changeToScene(this.currentRoom, {
+          timeLeft: this.scoreTimer.getTimeLeftInMillis(),
+        });
         break;
       case Events.SHOW_CONTROLS:
-        this.glm.showControls()
+        this.glm.showControls();
         break;
       case Events.EXIT_GAME:
         this.sceneManager.changeToScene(MainMenu, {});
         break;
-      case 'healthpack':
+      case "healthpack":
         this.createHealthpack(event.data.get("position"));
         break;
-      case 'enemyDied':
+      case "enemyDied":
         this.enemies = this.enemies.filter(
           (enemy) => enemy !== event.data.get("enemy")
         );
@@ -280,7 +284,7 @@ export default abstract class GameLevel extends Scene {
               this.flags.push(this.add.animatedSprite("flag", "primary"));
               this.flags[this.flags.length - 1].position = new Vec2(
                 (coord.x + 0.5) * 16,
-                (coord.y + 1.0) * 16
+                coord.y * 16
               );
               this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
               this.flags[this.flags.length - 1].animation.play("IDLE");
@@ -316,7 +320,11 @@ export default abstract class GameLevel extends Scene {
         }
         for (let bomb of this.bombs) {
           if (bomb && !bomb.isDestroyed) {
-            if (enemy && enemy.sweptRect && enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
+            if (
+              enemy &&
+              enemy.sweptRect &&
+              enemy.sweptRect.overlaps(bomb.collisionBoundary)
+            ) {
               if ((<RobotAI>enemy._ai).listening) this.listeningEnemies--;
               bomb.explode();
               this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
@@ -340,16 +348,28 @@ export default abstract class GameLevel extends Scene {
       }
     }
 
-    if (this.enemies.length === 0 && this.player.collisionShape.overlaps(this.greenFlag.collisionShape)) {
+    if (
+      this.enemies.length === 0 &&
+      this.player.collisionShape.overlaps(this.greenFlag.collisionShape)
+    ) {
       if (!this.startNextLvl) {
-        this.glm.showRoomComplete()
-        new Timer(3000, () => {
-          this.viewport.setZoomLevel(1);
-          this.viewport.disableZoom();
-          this.sceneManager.changeToScene(GameOver, {currentScore: this.currentScore, win: true, timeLeft: this.scoreTimer.getTimeLeftInSeconds(), nextLvl: this.nextRoom});
-        }, false).start()
+        this.glm.showRoomComplete();
+        new Timer(
+          3000,
+          () => {
+            this.viewport.setZoomLevel(1);
+            this.viewport.disableZoom();
+            this.sceneManager.changeToScene(GameOver, {
+              currentScore: this.currentScore,
+              win: true,
+              timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
+              nextLvl: this.nextRoom,
+            });
+          },
+          false
+        ).start();
       }
-      this.startNextLvl = true
+      this.startNextLvl = true;
     }
 
     // checks to see how close player is to bomb
@@ -414,7 +434,7 @@ export default abstract class GameLevel extends Scene {
 
   handleInput(): void {
     // Debug mode graph
-    if (Input.isKeyJustPressed('g')) {
+    if (Input.isKeyJustPressed("g")) {
       this.getLayer("graph").setHidden(!this.getLayer("graph").isHidden());
     }
     if (Input.isJustPressed(Control.PAUSE)) {
@@ -536,7 +556,7 @@ export default abstract class GameLevel extends Scene {
     // this.players = Array(2);
     this.player = this.add.animatedSprite("player1", "primary");
     let coord = this.load.getObject("start_end").playerStartPos;
-    this.player.position = new Vec2(coord[0] * 16 - 0.5, coord[1] * 16 - 0.5);
+    this.player.position = new Vec2((coord[0] - 0.5) * 16, (coord[1] - 1) * 16);
     this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
     //First player is melee based, starts off with a knife and is short ranged
     this.player.addAI(PlayerController, {
@@ -599,8 +619,8 @@ export default abstract class GameLevel extends Scene {
       let blockSprite = this.add.sprite("block", "primary");
       this.blocks[i] = new Block(
         new Vec2(
-          blockData.blocks[i].position[0],
-          blockData.blocks[i].position[1]
+          blockData.blocks[i].position[0] - 1,
+          blockData.blocks[i].position[1] - 1
         ),
         blockSprite
       );
@@ -619,7 +639,10 @@ export default abstract class GameLevel extends Scene {
     for (let i = 0; i < bombData.numBombs; i++) {
       let bombSprite = this.add.animatedSprite("bomb", "primary");
       this.bombs[i] = new Bomb(
-        new Vec2(bombData.bombs[i].position[0], bombData.bombs[i].position[1]),
+        new Vec2(
+          bombData.bombs[i].position[0] - 1,
+          bombData.bombs[i].position[1] - 1
+        ),
         bombSprite
       );
       this.bombs[i].hide();
@@ -639,8 +662,8 @@ export default abstract class GameLevel extends Scene {
       // Create an enemy
       this.enemies[i] = this.add.animatedSprite(entity.type, "primary");
       this.enemies[i].position.set(
-        entity.position[0] / 2,
-        entity.position[1] / 2
+        entity.position[0] * 16,
+        entity.position[1] * 16
       );
       this.enemies[i].animation.play("IDLE");
 
@@ -673,7 +696,7 @@ export default abstract class GameLevel extends Scene {
   }
 
   setNextLvl(nextLvl: new (...args: any) => GameLevel): void {
-    this.nextRoom = nextLvl
+    this.nextRoom = nextLvl;
   }
 
   getPlayer(): AnimatedSprite {
