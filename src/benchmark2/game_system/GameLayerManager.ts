@@ -4,12 +4,11 @@ import Color from "../../Wolfie2D/Utils/Color";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
-import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import { initButton } from "../ui/UIBuilder";
+import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 
 enum LayerType {
     PRIMARY = 'primary',
@@ -41,29 +40,19 @@ export class GameLayerManager {
         // Add a UI for health
         this.hudLayer = this.scene.addUILayer(LayerType.HUD)
 
-        let lblHealth = <Label>(this.scene.add.uiElement(UIElementType.LABEL, LayerType.HUD, {
-            position: new Vec2(60, 16),
-            text: `HP: ${(<BattlerAI>this.scene.getPlayer()._ai).health}`,
-        })
-        );
-        lblHealth.textColor = Color.WHITE;
+        let lblHealth = initLabel(this.scene, LayerType.HUD, new Vec2(60,16), `HP: ${(<BattlerAI>this.scene.getPlayer()._ai).health}`)
         this.scene.setLblHealth(lblHealth)
-
-        let lblTime = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.HUD, {
-            position: new Vec2(360, 16),
-            text: "",
-        });
-        lblTime.textColor = Color.WHITE;
+        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2(360,16), "")
         this.scene.setLblTime(lblTime)
     }
 
     initPauseLayer(): void {
         let c = this.scene.getViewport().getCenter().clone()
         this.pauseLayer = this.scene.addLayer(LayerType.PAUSE, 1)
-        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
-        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
-        initButton(this.scene, LayerType.PAUSE, c, 'Controls', Events.SHOW_CONTROLS)
-        initButton(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y+75), 'Exit', Events.EXIT_GAME)
+        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
+        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
+        initButtonHandler(this.scene, LayerType.PAUSE, c, 'Controls', Events.SHOW_CONTROLS)
+        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y+75), 'Exit', Events.EXIT_GAME)
         this.pauseLayer.setHidden(true)
     }
 
@@ -73,63 +62,16 @@ export class GameLayerManager {
 
         const center = this.scene.getViewport().getCenter().clone()
 
-        const controlsHeader = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 300),
-                text: "Controls"
-            });
-        controlsHeader.textColor = Color.WHITE;
-
-        const wu = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 50),
-                text: "W/Up-Arrow to move up"
-            });
-        wu.textColor = Color.WHITE;
-        const al = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y),
-                text: "A/Left-Arrow to move left"
-            });
-        al.textColor = Color.WHITE;
-        const sd = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y + 50),
-                text: "S/Down-Arrow to move down"
-            });
-        sd.textColor = Color.WHITE;
-        const dr = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y + 100),
-                text: "D/Right-Arrow to move right"
-            });
-        dr.textColor = Color.WHITE;
-        const lclick = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y + 150),
-                text: "Space/Left-Click to attack"
-            });
-        lclick.textColor = Color.WHITE;
-        const rclick = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 100),
-                text: "Shift/Right-Click to place flag"
-            });
-        rclick.textColor = Color.WHITE;
-        const p = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 150),
-                text: "P - panic button, resets the room to its original sate"
-            });
-        p.textColor = Color.WHITE;
-        const esc = <Label>this.scene.add.uiElement(UIElementType.LABEL, LayerType.CONTROLS,
-            {
-                position: new Vec2(center.x, center.y - 200),
-                text: "ESC - pause the game"
-            });
-        esc.textColor = Color.WHITE;
-        
-        initButton(this.scene, LayerType.CONTROLS, new Vec2(center.x, center.y+250), 'Back', Events.SHOW_CONTROLS)
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-300), "Controls")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-200), "ESC - pause the game")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-150), "P - panic button, resets the room to its original state")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-100), "Shift/Right-Click to place flag")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y-50), "W/Up-Arrow to move up")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y), "A/Left-Arrow to move left")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+50), "S/Down-Arrow to move down" )
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+100), "D/Right-Arrow to move right")
+        initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+150), "Space/Left-Click to attack")
+        initButtonHandler(this.scene, LayerType.CONTROLS, new Vec2(center.x, center.y+250), 'Back', Events.SHOW_CONTROLS)
     }
 
     initRoomCompleteLayer(): void {
@@ -137,15 +79,11 @@ export class GameLayerManager {
         this.roomCompleteLayer.setHidden(true)
         let c = this.scene.getViewport().getCenter().clone()
         let scale = this.scene.getViewport().getZoomLevel()
-        this.lblRoomEnd = <Label> this.scene.add.uiElement(UIElementType.LABEL, LayerType.ROOM_COMPLETE, {
-            position: new Vec2((c.x/scale) - 600, c.y/scale), text: 'Room Complete!'
-        })
+        this.lblRoomEnd = initLabel(this.scene, LayerType.ROOM_COMPLETE, new Vec2((c.x/scale)-600, c.y/scale), "Room Complete!")
         this.lblRoomEnd.size.set(1200,60)
         this.lblRoomEnd.borderRadius = 0;
         this.lblRoomEnd.backgroundColor = new Color(34, 32, 52);
-        this.lblRoomEnd.textColor = Color.WHITE;
         this.lblRoomEnd.fontSize = 48;
-        this.lblRoomEnd.font = "Comic Sans MS";
         this.lblRoomEnd.tweens.add('slideIn', {
             startDelay: 300,
             duration: 1000,

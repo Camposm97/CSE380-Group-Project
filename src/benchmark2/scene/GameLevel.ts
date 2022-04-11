@@ -150,8 +150,6 @@ export default abstract class GameLevel extends Scene {
     this.glm.initControlsLayer();
     this.glm.initRoomCompleteLayer();
 
-    this.initScoreTimer();
-
     this.startNextLvl = false;
     this.nextRoom = null;
 
@@ -173,7 +171,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.SHOW_CONTROLS);
     this.receiver.subscribe(Events.EXIT_GAME);
 
-    // this.setNextLvl(GameLevel)
+    this.initScoreTimer();
 
     // Spawn items into the world
     // this.spawnItems();
@@ -195,10 +193,11 @@ export default abstract class GameLevel extends Scene {
   }
 
   initScoreTimer(): void {
+    let aux = () => this.handleLoseCondition(0);
     if (this.timeLeft !== undefined) {
-      this.scoreTimer = new ScoreTimer(this.timeLeft, this.timesUp, false);
+      this.scoreTimer = new ScoreTimer(this.timeLeft, aux, false);
     } else {
-      this.scoreTimer = new ScoreTimer(300_000, this.timesUp, false);
+      this.scoreTimer = new ScoreTimer(300_000, aux, false);
     }
     this.scoreTimer.start();
   }
@@ -233,10 +232,6 @@ export default abstract class GameLevel extends Scene {
       (<ProjectileAI>projectile._ai).start_velocity = velocity;
       projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
     }
-  }
-
-  timesUp(): void {
-    this.sceneManager.changeToScene(GameOver, { win: false });
   }
 
   setCurrentRoom(room: new (...args: any) => GameLevel): void {
