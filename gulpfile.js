@@ -22,7 +22,7 @@ var watchedBrowserify = watchify(browserify({
 
 gulp.task('copy-html', function () {
     return gulp.src(paths.pages)
-        .pipe(gulp.dest('public/benchmark2'));
+        .pipe(gulp.dest('public/benchmark3'));
 });
 
 function bundle() {
@@ -30,7 +30,7 @@ function bundle() {
         .bundle()
         .on('error', fancy_log)
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('public/benchmark2'));
+        .pipe(gulp.dest('public/benchmark3'));
 }
 
 gulp.task('default', gulp.series(gulp.parallel('copy-html'), bundle));
