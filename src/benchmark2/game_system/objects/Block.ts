@@ -20,6 +20,8 @@ export default class Block {
   owner: Sprite;
   position: Vec2;
   tileCoord: Vec2;
+  velocity: Vec2;
+  speed: number;
 
   constructor(tileCoord: Vec2, owner: Sprite) {
     this.owner = owner;
@@ -30,13 +32,15 @@ export default class Block {
     );
     this.owner.position = this.position;
     this.owner.scale = new Vec2(0.5, 0.5);
+    this.speed = 16;
+    this.velocity = new Vec2(0, 0);
   }
 
   hit(direction: Vec2) {
-    this.owner.position = new Vec2(
-      this.owner.position.x + direction.x * 16,
-      this.owner.position.y + direction.y * -16
-    );
+    this.velocity.x = this.speed * direction.x;
+    this.velocity.y = this.speed * -direction.y;
+    this.owner.move(this.velocity);
+    console.log("block hit");
   }
 
   // displayFlag(sprite: Sprite) {
