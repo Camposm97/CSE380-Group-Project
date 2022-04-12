@@ -33,7 +33,7 @@
       ]
     },
     {
-      "name": "LOOK_UP",
+      "name": "LOOK_DOWN",
       "repeat": true,
       "frames": [
         {
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "name": "LOOK_DOWN",
+      "name": "LOOK_UP",
       "repeat": true,
       "frames": [
         {

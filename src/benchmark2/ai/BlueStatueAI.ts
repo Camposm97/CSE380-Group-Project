@@ -13,7 +13,13 @@ import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import Weapon from "../game_system/items/Weapon";
-import { Events, Names, RobotAction, Statuses } from "../scene/Constants";
+import {
+  Events,
+  Names,
+  RobotAction,
+  Statuses,
+  RobotStatueAnimations,
+} from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import { PlayerAction } from "../scene/Constants";
@@ -48,7 +54,9 @@ export default class BlueStatueAI implements RobotAI {
 
   private emitter: Emitter;
 
-  private direction: number; //0-down 1-left 2-up 3-right
+  private direction: Vec2;
+
+  private unitVector: Vec2;
 
   private moveSpaces: number;
 
@@ -57,6 +65,10 @@ export default class BlueStatueAI implements RobotAI {
   private projectileSpeed: number; //speed of projectile
 
   private projectileVel: Vec2; //velocity of projectile
+
+  private directionIndex: number;
+
+  private vecAnimationMap: Map<number, RobotStatueAnimations>;
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
@@ -67,7 +79,7 @@ export default class BlueStatueAI implements RobotAI {
 
     this.projectileSpeed = 100;
 
-    this.direction = 0;
+    this.direction = new Vec2(0, -1);
 
     this.moveSpaces = 3;
 
@@ -86,12 +98,9 @@ export default class BlueStatueAI implements RobotAI {
       if (options.damage) {
         this.damage = options.damage;
       }
-      if (
-        options.direction &&
-        options.direction >= 0 &&
-        options.direction <= 3
-      ) {
-        this.direction = options.direction;
+      if (options.direction) {
+        this.direction = new Vec2(options.direction[0], options.direction[1]);
+        this.directionIndex = options.directionIndex;
       }
       if (options.moveSpaces) this.moveSpaces = options.moveSpaces;
     }
@@ -104,6 +113,16 @@ export default class BlueStatueAI implements RobotAI {
     this.emitter = new Emitter();
 
     this.velocity = new Vec2(0, 0);
+
+    this.unitVector = new Vec2(-1, -1);
+
+    this.vecAnimationMap = new Map([
+      [0, RobotStatueAnimations.LOOK_DOWN],
+      [1, RobotStatueAnimations.LOOK_RIGHT],
+      [2, RobotStatueAnimations.LOOK_UP],
+      [3, RobotStatueAnimations.LOOK_LEFT],
+    ]);
+    this.directionIndex = 0;
   }
 
   hit(options: Record<string, any>): void {
@@ -118,31 +137,41 @@ export default class BlueStatueAI implements RobotAI {
   }
   shoot(): void {
     console.log("SHOOT");
-    let position = this.owner.position;
-    switch (this.direction) {
-      case 0:
-        position.y = position.y - 10;
-        this.projectileVel = new Vec2(0, -this.projectileSpeed);
-        break;
-      case 1:
-        position.x = position.x - 10;
-        this.projectileVel = new Vec2(-this.projectileSpeed, 0);
-        break;
-      case 2:
-        position.x = position.y + 10;
-        this.projectileVel = new Vec2(0, this.projectileSpeed);
-        break;
-      case 3:
-        position.x = position.x + 10;
-        this.projectileVel = new Vec2(this.projectileSpeed, 0);
-        break;
-    }
-    this.direction++;
-    if (this.direction > 3) this.direction = 0;
-    this.emitter.fireEvent(RobotAction.FIRE_PROJECTILE, {
-      position: position,
-      velocity: this.projectileVel,
-    });
+    this.direction.mult(this.unitVector);
+    this.direction = new Vec2(this.direction.y, this.direction.x);
+    this.unitVector.scale(-1);
+
+    this.directionIndex++;
+    if (this.directionIndex > 3) this.directionIndex = 0;
+    this.owner.animation.play(this.vecAnimationMap.get(this.directionIndex));
+
+    this.projectileTimer.start(5000);
+
+    // let position = this.owner.position;
+    // switch (this.direction) {
+    //   case 0:
+    //     position.y = position.y - 10;
+    //     this.projectileVel = new Vec2(0, -this.projectileSpeed);
+    //     break;
+    //   case 1:
+    //     position.x = position.x - 10;
+    //     this.projectileVel = new Vec2(-this.projectileSpeed, 0);
+    //     break;
+    //   case 2:
+    //     position.x = position.y + 10;
+    //     this.projectileVel = new Vec2(0, this.projectileSpeed);
+    //     break;
+    //   case 3:
+    //     position.x = position.x + 10;
+    //     this.projectileVel = new Vec2(this.projectileSpeed, 0);
+    //     break;
+    // }
+    // this.direction++;
+    // if (this.direction > 3) this.direction = 0;
+    // this.emitter.fireEvent(RobotAction.FIRE_PROJECTILE, {
+    //   position: position,
+    //   velocity: this.projectileVel,
+    // });
     this.projectileTimer.start();
   }
   destroy(): void {
@@ -158,7 +187,11 @@ export default class BlueStatueAI implements RobotAI {
     if (this.frozenTimer.isStopped()) {
       this.isFrozen = false;
     }
-    // if (this.projectileTimer.isStopped) this.shoot();
+
+    if (this.projectileTimer.isStopped()) {
+      console.log("timerStopped");
+      this.shoot();
+    }
 
     this.owner.move(this.velocity.scale(deltaT));
   }
