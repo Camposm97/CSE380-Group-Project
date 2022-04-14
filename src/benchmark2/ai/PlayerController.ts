@@ -18,6 +18,7 @@ import {
 import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Timer from "../../Wolfie2D/Timing/Timer";
+import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -48,14 +49,13 @@ export default class PlayerController implements BattlerAI {
   private overrideIdle: Boolean;
 
   // Movement
-  private speed: number;
+  public speed: number;
   public lookDirection: Vec2;
   private path: NavigationPath;
   private receiver: Receiver;
   private emitter: Emitter;
   private iFrame: boolean;
   private iFrameTimer: Timer;
-  private enemiesLeft: boolean;
 
   //Bomb Detection
   public nearBomb: boolean;
@@ -65,7 +65,6 @@ export default class PlayerController implements BattlerAI {
     this.owner.scale = new Vec2(0.5, 0.5);
 
     this.iFrameTimer = new Timer(5000);
-    this.enemiesLeft = true;
 
     this.nearBomb = false;
 
@@ -86,6 +85,13 @@ export default class PlayerController implements BattlerAI {
     this.receiver.subscribe(Events.OVERRIDE_IDLE);
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
+    // //allign bombHitBox with player sprites feet
+    // let bombHitBoxCenter = new Vec2(
+    //   this.owner.position.x - 0.8,
+    //   this.owner.position.y - 0.8
+    // );
+
+    // this.bombHitBox = new AABB(bombHitBoxCenter, new Vec2(8, 8));
   }
 
   activate(options: Record<string, any>): void {}
@@ -153,12 +159,12 @@ export default class PlayerController implements BattlerAI {
       this.handleAttack();
 
       if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
-        console.log("flag place");
-        let tileCoord = this.tilemap.getColRowAt(this.owner.position);
-        let tileCoordx = (tileCoord.x += this.lookDirection.x);
-        let tileCoordy = (tileCoord.y += this.lookDirection.y);
+        let center = new Vec2(this.owner.position.x, this.owner.position.y);
+        let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y * -1);
+        offSet.scale(16);
+        center.add(offSet);
         this.emitter.fireEvent(Events.PLACE_FLAG, {
-          coordinates: new Vec2(tileCoordx, tileCoordy),
+          flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
         });
       }
 
@@ -346,8 +352,4 @@ export default class PlayerController implements BattlerAI {
   }
 
   destroy() {}
-
-  noMoreEnemies(): void {
-    this.enemiesLeft = false;
-  }
 }

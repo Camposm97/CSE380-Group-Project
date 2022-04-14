@@ -14,7 +14,7 @@ import { Events } from "../../scene/Constants";
 /**
  * Block Class
  * Block with physics that will move
- * in the firection it is hit
+ * in the direction it is hit
  */
 export default class Block {
   owner: Sprite;
@@ -40,11 +40,9 @@ export default class Block {
     this.velocity.x = this.speed * direction.x;
     this.velocity.y = this.speed * -direction.y;
     this.owner.move(this.velocity);
-    console.log("block hit");
   }
 
-  // displayFlag(sprite: Sprite) {
-  //   this.sprite = sprite;
-  //   sprite.position = this.position;
-  // }
+  push(direction: Vec2) {
+    this.owner.move(direction);
+  }
 }

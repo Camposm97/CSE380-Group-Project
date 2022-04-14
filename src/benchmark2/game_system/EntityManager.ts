@@ -167,16 +167,18 @@ export default class EntityManager {
 
     // Create an array of the bombdata and flags
     this.bombs = new Array(bombData.numBombs);
-    this.flags = new Array(bombData.numBombs);
+    // this.flags = new Array(bombData.numBombs);
 
     for (let i = 0; i < bombData.numBombs; i++) {
       let bombSprite = this.scene.add.animatedSprite("bomb", "primary");
+      let flagSprite = this.scene.add.animatedSprite("flag", "primary");
       this.bombs[i] = new Bomb(
         new Vec2(
           bombData.bombs[i].position[0] - 1,
           bombData.bombs[i].position[1] - 1
         ),
-        bombSprite
+        bombSprite,
+        flagSprite
       );
       this.bombs[i].hide();
     }
@@ -304,6 +306,32 @@ export default class EntityManager {
             //TODO REMOVE ANY FLAG SPRITE THAT HAS BEEN PLACED
             bomb.setIsDestroyedTrue();
           }
+        }
+      }
+    }
+  }
+
+  blockCollision(deltaT: number): void {
+    for (let block of this.blocks) {
+      if (block.owner.sweptRect.overlaps(this.player.sweptRect)) {
+        let blockVec = new Vec2(
+          ((<PlayerController>this.player._ai).speed / 2) *
+            (<PlayerController>this.player._ai).lookDirection.x,
+          ((<PlayerController>this.player._ai).speed / 2) *
+            (<PlayerController>this.player._ai).lookDirection.y *
+            -1
+        );
+        blockVec.scale(deltaT);
+        block.push(blockVec);
+      }
+    }
+  }
+
+  placeFlag(flagPlaceHitBox: AABB): void {
+    for (let bomb of this.bombs) {
+      if (bomb && flagPlaceHitBox.overlaps(bomb.collisionBoundary)) {
+        if (!bomb.isFlagged || !bomb.isDestroyed) {
+          bomb.setIsFlaggedTrue();
         }
       }
     }

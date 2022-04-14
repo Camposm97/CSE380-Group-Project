@@ -41,6 +41,60 @@ export default abstract class GameLevel extends Scene {
     this.MAX_PROJECTILE_SIZE
   );
 
+  //this will be loaded in every single level, allows level classes to be abstracted out
+  loadMainResources(): void {
+    this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
+    this.load.spritesheet("slice", "res/spritesheets/slice.json");
+    this.load.spritesheet("flag", "res/spritesheets/flag.json");
+    this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
+    this.load.spritesheet("blueMouse", "res/spritesheets/rm_blue.json");
+    this.load.spritesheet("blueStatue", "res/spritesheets/rs_blue.json");
+    this.load.spritesheet("projectile", "res/spritesheets/projectile.json");
+    this.load.spritesheet("bomb", "res/spritesheets/explode.json");
+    this.load.spritesheet("greenFlag", "res/spritesheets/green_flag.json");
+    this.load.object("weaponData", "res/data/weaponData.json"); // Load scene info
+    this.load.object("navmesh", "res/data/navmesh.json"); // Load nav mesh
+    this.load.image("healthpack", "res/sprites/healthpack.png");
+    this.load.image("inventorySlot", "res/sprites/inventory.png");
+    this.load.image("knife", "res/sprites/knife.png");
+    this.load.image("laserGun", "res/sprites/laserGun.png");
+    this.load.image("pistol", "res/sprites/pistol.png");
+    this.load.image("block", "res/sprites/block.png");
+    this.load.audio("boom", "res/sound/explode.wav");
+  }
+
+  //allows for randomization of bomb layout
+  loadRandomBombsJSON(pathArray: string[]): void {
+    this.load.object(
+      "bombData",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
+  }
+
+  //allows for randomization of enemy layout
+  loadRandomEnemysJSON(pathArray: string[]): void {
+    this.load.object(
+      "enemyData",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
+  }
+
+  //allows for randomization of block layout
+  loadRandomBlocksJSON(pathArray: string[]): void {
+    this.load.object(
+      "blockData",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
+  }
+
+  //allows for randomization of player start and level end positions
+  loadRandomStartEndJSON(pathArray: string[]): void {
+    this.load.object(
+      "start_end",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
+  }
+
   initScene(options: Record<string, any>): void {
     options.currentScore
       ? (this.currentScore = options.currentScore)
@@ -128,39 +182,6 @@ export default abstract class GameLevel extends Scene {
     this.scoreTimer.start();
   }
 
-  // initializeProjectiles(): void {
-  //   for (let i = 0; i < this.projectiles.length; i++) {
-  //     this.projectiles[i] = this.add.animatedSprite("projectile", "primary");
-  //     this.projectiles[i].visible = false;
-  //     console.log(this.projectiles[i]);
-
-  //     // Add AI to our projectile
-  //     this.projectiles[i].addAI(ProjectileAI, { velocity: new Vec2(0, 0) });
-  //   }
-  // }
-
-  // spawnProjectile(position: Vec2, velocity: Vec2): void {
-  //   // Find the first viable bullet
-  //   let projectile: AnimatedSprite = null;
-  //   let randomNum = Math.random();
-
-  //   for (let p of this.projectiles) {
-  //     if (!p.visible) {
-  //       // We found a dead projectile
-  //       projectile = p;
-  //       break;
-  //     }
-  //   }
-
-  //   if (projectile !== null) {
-  //     // Spawn a projectile
-  //     projectile.visible = true;
-  //     projectile.position = position.add(new Vec2(0, -64));
-  //     (<ProjectileAI>projectile._ai).start_velocity = velocity;
-  //     projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
-  //   }
-  // }
-
   setCurrentRoom(room: new (...args: any) => GameLevel): void {
     this.currentRoom = room;
   }
@@ -205,39 +226,8 @@ export default abstract class GameLevel extends Scene {
           nextLvl: this.nextRoom,
         });
         break;
-      // case "healthpack":
-      //   this.createHealthpack(event.data.get("position"));
-      //   break;
-      // case "enemyDied":
-      //   this.enemies = this.enemies.filter(
-      //     (enemy) => enemy !== event.data.get("enemy")
-      //   );
-      //   this.battleManager.enemies = this.battleManager.enemies.filter(
-      //     (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
-      //   );
-      //   break;
       case Events.PLACE_FLAG:
-        // let coord = event.data.get("coordinates");
-        // for (let bomb of this.bombs) {
-        //   if (bomb && bomb.tileCoord.equals(coord)) {
-        //     if (!bomb.isFlagged) {
-        //       bomb.setIsFlaggedTrue();
-        //       this.flags.push(this.add.animatedSprite("flag", "primary"));
-        //       this.flags[this.flags.length - 1].position = new Vec2(
-        //         (coord.x + 0.5) * 16,
-        //         coord.y * 16
-        //       );
-        //       this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
-        //       this.flags[this.flags.length - 1].animation.play("IDLE");
-        //     }
-        //   }
-        // }
-        // if (event.isType(RobotAction.FIRE_PROJECTILE)) {
-        //   this.spawnProjectile(
-        //     event.data.get("position"),
-        //     event.data.get("velocity")
-        //   );
-        // }
+        this.em.placeFlag(event.data.get("flagPlaceHitBox"));
         break;
       case RobotAction.FIRE_PROJECTILE:
         this.em.spawnProjectile(
@@ -271,6 +261,7 @@ export default abstract class GameLevel extends Scene {
     }
 
     this.em.handlePlayerBombCollision();
+    this.em.blockCollision(deltaT);
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
       this.em.bombCollision();
