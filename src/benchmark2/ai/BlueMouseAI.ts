@@ -1,3 +1,5 @@
+import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
+import Shape from "../../Wolfie2D/DataTypes/Shapes/Shape";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
@@ -27,7 +29,8 @@ export default class BlueMouseAI implements RobotAI {
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
     this.listening = false;
-    this.owner.scale = new Vec2(0.12, 0.12);
+    this.owner.scale = new Vec2(0.11, 0.11);
+    this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4,4)))
     this.time = 5000;
     this.speed = 120;
     this.mainBehavior = true;

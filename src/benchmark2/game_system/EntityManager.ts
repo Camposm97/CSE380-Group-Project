@@ -287,17 +287,9 @@ export default class EntityManager {
       }
       for (let bomb of this.bombs) {
         if (bomb && !bomb.isDestroyed) {
-          if (
-            enemy &&
-            enemy.sweptRect &&
-            enemy.sweptRect.overlaps(bomb.collisionBoundary)
-          ) {
+          if (enemy && enemy.sweptRect && enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
             bomb.explode();
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
-              key: "boom",
-              loop: false,
-              holdReference: false,
-            });
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "boom",loop: false,holdReference: false});
 
             enemy.destroy();
             this.enemies = this.enemies.filter(

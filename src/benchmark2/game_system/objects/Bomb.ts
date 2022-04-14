@@ -58,7 +58,7 @@ export default class Bomb {
       (tileCoord.y + 0.5) * 16
     );
     this.explosionSprite.position = this.position;
-    this.explosionSprite.scale = new Vec2(2.0, 2.0);
+    this.explosionSprite.scale = new Vec2(1.25,1.25);
     this.explosionSprite.animation.play("HIDDEN", true, null);
     this.flagSprite.position = this.position;
     // this.position.x = tileCoord.x + 0.5 * 16;
