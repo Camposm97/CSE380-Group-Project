@@ -52,7 +52,7 @@ export default class EntityManager {
       (coord[0] - 0.5) * 16,
       (coord[1] - 1.0) * 16
     );
-    this.greenFlag.scale = new Vec2(0.5, 0.5);
+    this.greenFlag.scale = new Vec2(1.0, 1.0);
     this.greenFlag.animation.play("IDLE");
     this.greenFlag.collisionShape = new AABB(
       this.greenFlag.position,
