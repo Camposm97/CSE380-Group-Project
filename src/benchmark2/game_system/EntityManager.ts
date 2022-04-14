@@ -332,11 +332,6 @@ export default class EntityManager {
 
   //Once the player is near a bomb, we see how close to the bomb that player is
   bombCollision(): void {
-    let bombHitBoxCenter = new Vec2(
-      this.player.position.x - 0.8,
-      this.player.position.y - 0.8
-    );
-    let bombHitBox = new AABB(bombHitBoxCenter, new Vec2(8, 8));
     if (
       this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary)
     ) {

@@ -160,9 +160,13 @@ export default class PlayerController implements BattlerAI {
 
       if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
         let center = new Vec2(this.owner.position.x, this.owner.position.y);
-        let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y);
+        console.log("center before offset");
+        console.log(center.toString());
+        let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y * -1);
         offSet.scale(16);
         center.add(offSet);
+        console.log("center");
+        console.log(center.toString());
         this.emitter.fireEvent(Events.PLACE_FLAG, {
           flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
         });
