@@ -363,7 +363,6 @@ export default class MainMenu extends Scene {
           this.levelSelect.setHidden(false);
           break;
         case MENU_EVENT.LOAD_LVL_1:
-          this.load.image("load_lvl_1","res/sprites/Logo.png");
 
           this.sceneManager.changeToScene(Level1.Room1, {});
           break;
