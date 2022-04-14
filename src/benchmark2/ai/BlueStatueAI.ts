@@ -84,7 +84,7 @@ export default class BlueStatueAI implements RobotAI {
     this.moveSpaces = 3;
 
     this.owner.scale = new Vec2(0.125, 0.125);
-    this.time = 1000;
+    this.time = 5000;
     this.speed = 3000;
     this.mainBehavior = true;
     this.damage = 1;
@@ -115,6 +115,8 @@ export default class BlueStatueAI implements RobotAI {
     this.velocity = new Vec2(0, 0);
 
     this.unitVector = new Vec2(-1, -1);
+
+    this.projectileVel = new Vec2(1000, 1000);
 
     this.vecAnimationMap = new Map([
       [0, RobotStatueAnimations.LOOK_DOWN],
@@ -168,11 +170,18 @@ export default class BlueStatueAI implements RobotAI {
     // }
     // this.direction++;
     // if (this.direction > 3) this.direction = 0;
-    // this.emitter.fireEvent(RobotAction.FIRE_PROJECTILE, {
-    //   position: position,
-    //   velocity: this.projectileVel,
-    // });
-    this.projectileTimer.start();
+    let position = new Vec2(this.owner.position.x, this.owner.position.y);
+    let offset = new Vec2(this.direction.x * 16, this.direction.y * 16);
+
+    this.projectileVel = new Vec2(
+      this.projectileSpeed * this.direction.x,
+      this.projectileSpeed * this.direction.y
+    );
+
+    this.emitter.fireEvent(RobotAction.FIRE_PROJECTILE, {
+      position: position,
+      velocity: this.projectileVel,
+    });
   }
   destroy(): void {
     // throw new Error("Method not implemented.");

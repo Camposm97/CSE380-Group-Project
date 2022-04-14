@@ -28,8 +28,8 @@ export default class ProjectileAI implements AI {
     this.receiver = new Receiver();
   }
 
-  activate(options: Record<string, any>): void {
-    this.start_velocity = options.velocity;
+  activate(velocity: Vec2): void {
+    this.start_velocity = velocity;
     this.current_velocity = this.start_velocity;
   }
 
@@ -45,25 +45,9 @@ export default class ProjectileAI implements AI {
       this.handleEvent(this.receiver.getNextEvent());
     }
     if (this.owner.visible) {
-      //While this bullet is active, accelerate the bullet to a max speed over time.
-      this.current_velocity.x += deltaT * ProjectileAI.SPEED_INC;
-      this.current_velocity.y += deltaT * ProjectileAI.SPEED_INC;
-      this.current_velocity.x = MathUtils.clamp(
-        this.current_velocity.x,
-        this.start_velocity.x,
-        ProjectileAI.MAX_SPEED
-      );
-      this.current_velocity.y = MathUtils.clamp(
-        this.current_velocity.y,
-        this.start_velocity.y,
-        ProjectileAI.MAX_SPEED
-      );
-
-      // Update the position
-      this.owner.position.add(Vec2.UP.scaled(deltaT * this.current_velocity.y));
-      this.owner.position.add(
-        Vec2.RIGHT.scaled(deltaT * this.current_velocity.x)
-      );
+      this.owner.move(Vec2.UP.scaled(deltaT * this.current_velocity.y));
+      this.owner.move(Vec2.RIGHT.scaled(deltaT * this.current_velocity.x));
+      // this.owner.move(this.current_velocity.scale(deltaT));
     }
   }
 

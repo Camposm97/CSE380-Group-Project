@@ -21,7 +21,7 @@ import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
 
 export default abstract class GameLevel extends Scene {
-  private name: string
+  private name: string;
   private currentScore: number;
   private timeLeft: number;
   private walls: OrthogonalTilemap; // Wall Layer
@@ -29,7 +29,7 @@ export default abstract class GameLevel extends Scene {
   private lblHealth: Label;
   private lblTime: Label;
   private glm: GameLayerManager;
-  private em: EntityManager
+  private em: EntityManager;
   private scoreTimer: ScoreTimer;
   private startNextLvl: boolean;
   private currentRoom: new (...args: any) => GameLevel;
@@ -63,16 +63,16 @@ export default abstract class GameLevel extends Scene {
 
     this.glm = new GameLayerManager(this); // ***INITIALIZES PRIMARY LAYER***
 
-    this.em = new EntityManager(this)
+    this.em = new EntityManager(this);
 
     // this.initializeWeapons();
-    this.em.initWeapons()
+    this.em.initWeapons();
 
     // Create the player
-    this.em.initPlayer()
+    this.em.initPlayer();
 
     // Place the end level flag
-    this.em.initGreenFlag()
+    this.em.initGreenFlag();
 
     // Make the viewport follow the player
     this.viewport.follow(this.em.getPlayer());
@@ -83,24 +83,24 @@ export default abstract class GameLevel extends Scene {
     //initialize the number of enemies listening for player movement to 0
 
     // Initialize all enemies
-    this.em.initEnemies()
+    this.em.initEnemies();
 
     // Initalize all bombs
-    this.em.initBombs()
+    this.em.initBombs();
 
     // Initaize all blocks
-    this.em.initBlocks()
+    this.em.initBlocks();
 
     // Initialize projectiles
-    this.initializeProjectiles()
-    this.glm.initHudLayer()
-    this.glm.initPauseLayer()
-    this.glm.initControlsLayer()
-    this.glm.initRoomCompleteLayer()
+    this.em.initProjectiles();
+    this.glm.initHudLayer();
+    this.glm.initPauseLayer();
+    this.glm.initControlsLayer();
+    this.glm.initRoomCompleteLayer();
 
     this.startNextLvl = false;
     this.nextRoom = null;
-    this.em.initBattleManager()
+    this.em.initBattleManager();
 
     // Subscribe to relevant events
     this.receiver.subscribe("enemyDied");
@@ -111,11 +111,11 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.RESET_ROOM);
     this.receiver.subscribe(Events.SHOW_CONTROLS);
     this.receiver.subscribe(Events.EXIT_GAME);
-    this.receiver.subscribe(Events.LEVEL_END)
-    this.receiver.subscribe(Events.ROOM_COMPLETE)
+    this.receiver.subscribe(Events.LEVEL_END);
+    this.receiver.subscribe(Events.ROOM_COMPLETE);
 
-    this.initScoreTimer()
-    this.glm.showFadeOut()
+    this.initScoreTimer();
+    this.glm.showFadeOut();
   }
 
   initScoreTimer(): void {
@@ -128,37 +128,38 @@ export default abstract class GameLevel extends Scene {
     this.scoreTimer.start();
   }
 
-  initializeProjectiles(): void {
-    for (let i = 0; i < this.projectiles.length; i++) {
-      this.projectiles[i] = this.add.animatedSprite("projectile", "primary");
-      this.projectiles[i].visible = false;
+  // initializeProjectiles(): void {
+  //   for (let i = 0; i < this.projectiles.length; i++) {
+  //     this.projectiles[i] = this.add.animatedSprite("projectile", "primary");
+  //     this.projectiles[i].visible = false;
+  //     console.log(this.projectiles[i]);
 
-      // Add AI to our projectile
-      this.projectiles[i].addAI(ProjectileAI, { velocity: new Vec2(0, 0) });
-    }
-  }
+  //     // Add AI to our projectile
+  //     this.projectiles[i].addAI(ProjectileAI, { velocity: new Vec2(0, 0) });
+  //   }
+  // }
 
-  spawnProjectile(position: Vec2, velocity: Vec2): void {
-    // Find the first viable bullet
-    let projectile: AnimatedSprite = null;
-    let randomNum = Math.random();
+  // spawnProjectile(position: Vec2, velocity: Vec2): void {
+  //   // Find the first viable bullet
+  //   let projectile: AnimatedSprite = null;
+  //   let randomNum = Math.random();
 
-    for (let p of this.projectiles) {
-      if (!p.visible) {
-        // We found a dead projectile
-        projectile = p;
-        break;
-      }
-    }
+  //   for (let p of this.projectiles) {
+  //     if (!p.visible) {
+  //       // We found a dead projectile
+  //       projectile = p;
+  //       break;
+  //     }
+  //   }
 
-    if (projectile !== null) {
-      // Spawn a projectile
-      projectile.visible = true;
-      projectile.position = position.add(new Vec2(0, -64));
-      (<ProjectileAI>projectile._ai).start_velocity = velocity;
-      projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
-    }
-  }
+  //   if (projectile !== null) {
+  //     // Spawn a projectile
+  //     projectile.visible = true;
+  //     projectile.position = position.add(new Vec2(0, -64));
+  //     (<ProjectileAI>projectile._ai).start_velocity = velocity;
+  //     projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
+  //   }
+  // }
 
   setCurrentRoom(room: new (...args: any) => GameLevel): void {
     this.currentRoom = room;
@@ -187,18 +188,22 @@ export default abstract class GameLevel extends Scene {
         this.sceneManager.changeToScene(MainMenu, {});
         break;
       case Events.ROOM_COMPLETE:
-        new Timer(3000, () => {
-          this.glm.showFadeIn()
-        }, false).start();
+        new Timer(
+          3000,
+          () => {
+            this.glm.showFadeIn();
+          },
+          false
+        ).start();
         break;
       case Events.LEVEL_END:
         this.viewport.setZoomLevel(1);
-          this.sceneManager.changeToScene(GameOver, {
-            currentScore: this.currentScore,
-            win: true,
-            timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
-            nextLvl: this.nextRoom,
-          })
+        this.sceneManager.changeToScene(GameOver, {
+          currentScore: this.currentScore,
+          win: true,
+          timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
+          nextLvl: this.nextRoom,
+        });
         break;
       // case "healthpack":
       //   this.createHealthpack(event.data.get("position"));
@@ -234,6 +239,14 @@ export default abstract class GameLevel extends Scene {
         //   );
         // }
         break;
+      case RobotAction.FIRE_PROJECTILE:
+        this.em.spawnProjectile(
+          event.data.get("position"),
+          event.data.get("velocity")
+        );
+        break;
+      case Events.PROJECTILE_UNLOAD:
+        this.sceneGraph.getNode(event.data.get("id")).visible = false;
       case Events.UNLOAD_ASSET:
         let asset = this.sceneGraph.getNode(event.data.get("node"));
         asset.destroy();
@@ -247,21 +260,22 @@ export default abstract class GameLevel extends Scene {
     }
 
     //handleCollisions for
-    this.em.handleCollisions()
+    this.em.handleCollisions();
 
     if (this.em.playerReachedGoal()) {
       if (!this.startNextLvl) {
-        this.scoreTimer.pause()
+        this.scoreTimer.pause();
         this.glm.showRoomComplete();
       }
       this.startNextLvl = true;
     }
 
-    this.em.handlePlayerBombCollision()
+    this.em.handlePlayerBombCollision();
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
       this.em.bombCollision();
     }
+    this.em.projectileCollision();
     let health = (<BattlerAI>this.em.getPlayer()._ai).health;
     this.handleLoseCondition(health);
     this.updateHUD(health);
@@ -290,7 +304,7 @@ export default abstract class GameLevel extends Scene {
     /*
       If we're transitioning to the next level, disable the pause button
     */
-    if (!this.startNextLvl) { 
+    if (!this.startNextLvl) {
       if (Input.isJustPressed(Control.PAUSE)) {
         this.emitter.fireEvent(Events.PAUSE_GAME, {});
       }
@@ -331,26 +345,26 @@ export default abstract class GameLevel extends Scene {
   }
 
   getName(): string {
-    return this.name
+    return this.name;
   }
 
   setName(name: string): void {
-    this.name = name
+    this.name = name;
   }
 
   setNextLvl(nextLvl: new (...args: any) => GameLevel): void {
-    this.nextRoom = nextLvl
+    this.nextRoom = nextLvl;
   }
 
   getPlayer(): AnimatedSprite {
-    return this.em.getPlayer()
+    return this.em.getPlayer();
   }
 
   setLblHealth(lbl: Label): void {
-    this.lblHealth = lbl
+    this.lblHealth = lbl;
   }
 
   setLblTime(lbl: Label): void {
-    this.lblTime = lbl
+    this.lblTime = lbl;
   }
 }

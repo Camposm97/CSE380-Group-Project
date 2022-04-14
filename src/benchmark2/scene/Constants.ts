@@ -3,35 +3,33 @@ export enum Names {
 }
 
 export enum Control {
-  FORWARD = 'forward',
-  BACKWARD = 'backward',
-  LEFT = 'left',
-  RIGHT = 'right',
-  ATTACK = 'attack',
-  PLACE_FLAG = 'place-flag',
-  PANIC = 'panic',
-  PAUSE = 'pause',
-  PICK_UP = 'pickup',
-  DROP = 'drop',
-  SLOT1 = 'slot1',
-  SLOT2 = 'slot2'
+  FORWARD = "forward",
+  BACKWARD = "backward",
+  LEFT = "left",
+  RIGHT = "right",
+  ATTACK = "attack",
+  PLACE_FLAG = "place-flag",
+  PANIC = "panic",
+  PAUSE = "pause",
+  PICK_UP = "pickup",
+  DROP = "drop",
+  SLOT1 = "slot1",
+  SLOT2 = "slot2",
 }
 
-
-
-
 export enum Events {
-    SHOT_FIRED = "SHOT_FIRED",
-    UNLOAD_ASSET = "UNLOAD_ASSET",
-    PLACE_FLAG = "PLACE_FLAG",
-    OVERRIDE_IDLE = "OVERRIDE_IDLE",
-    RESET_ROOM = "RESET_ROOM",
-    PAUSE_GAME = "PAUSE_GAME",
-    SHOW_CONTROLS = "SHOW_CONTROLS",
-    EXIT_GAME = "EXIT_GAME",
-    DESTROY_BOMB = "DESTROY_BOMB",
-    ROOM_COMPLETE = "ROOM_COMPLETE",
-    LEVEL_END = "LEVEL_END"
+  SHOT_FIRED = "SHOT_FIRED",
+  UNLOAD_ASSET = "UNLOAD_ASSET",
+  PLACE_FLAG = "PLACE_FLAG",
+  OVERRIDE_IDLE = "OVERRIDE_IDLE",
+  RESET_ROOM = "RESET_ROOM",
+  PAUSE_GAME = "PAUSE_GAME",
+  SHOW_CONTROLS = "SHOW_CONTROLS",
+  EXIT_GAME = "EXIT_GAME",
+  DESTROY_BOMB = "DESTROY_BOMB",
+  ROOM_COMPLETE = "ROOM_COMPLETE",
+  LEVEL_END = "LEVEL_END",
+  PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
 }
 
 export enum Statuses {
@@ -105,14 +103,13 @@ export enum PlayerAnimations {
   DAMAGE = "DAMAGE",
 }
 
-
 export enum RobotMouseAnimations {
   WALK_UP = "WALK_UP",
   WALK_DOWN = "WALK_DOWN",
   WALK_LEFT = "WALK_LEFT",
   WALK_RIGHT = "WALK_RIGHT",
   DEATH = "DEATH",
-  OFF = "OFF"
+  OFF = "OFF",
 }
 
 export enum RobotAnimations {
@@ -122,7 +119,7 @@ export enum RobotAnimations {
   WALK_DOWN = "WALK_DOWN",
   WALK_LEFT = "WALK_LEFT",
   DAMAGE = "DAMAGE",
-  FROZEN = 'FROZEN'
+  FROZEN = "FROZEN",
 }
 
 export enum RobotStatueAnimations {
