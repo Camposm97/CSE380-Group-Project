@@ -207,6 +207,7 @@ export default abstract class GameLevel extends Scene {
     }
 
     this.em.handlePlayerBombCollision();
+    this.em.blockCollision(deltaT);
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
       this.em.bombCollision();

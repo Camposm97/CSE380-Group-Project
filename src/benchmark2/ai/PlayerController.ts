@@ -49,7 +49,7 @@ export default class PlayerController implements BattlerAI {
   private overrideIdle: Boolean;
 
   // Movement
-  private speed: number;
+  public speed: number;
   public lookDirection: Vec2;
   private path: NavigationPath;
   private receiver: Receiver;
@@ -160,13 +160,9 @@ export default class PlayerController implements BattlerAI {
 
       if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
         let center = new Vec2(this.owner.position.x, this.owner.position.y);
-        console.log("center before offset");
-        console.log(center.toString());
         let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y * -1);
         offSet.scale(16);
         center.add(offSet);
-        console.log("center");
-        console.log(center.toString());
         this.emitter.fireEvent(Events.PLACE_FLAG, {
           flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
         });

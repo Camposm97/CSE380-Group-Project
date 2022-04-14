@@ -18,11 +18,11 @@ export default class BattleManager {
           enemy.hit({ direction: this.players[0].lookDirection });
         }
       }
-      for (let block of this.blocks) {
-        if (block.owner.collisionShape && weapon.hits(block.owner)) {
-          block.hit(this.players[0].lookDirection);
-        }
-      }
+      // for (let block of this.blocks) {
+      //   if (block.owner.collisionShape && weapon.hits(block.owner)) {
+      //     block.hit(this.players[0].lookDirection);
+      //   }
+      // }
     }
   }
 

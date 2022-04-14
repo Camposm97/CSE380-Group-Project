@@ -311,6 +311,22 @@ export default class EntityManager {
     }
   }
 
+  blockCollision(deltaT: number): void {
+    for (let block of this.blocks) {
+      if (block.owner.sweptRect.overlaps(this.player.sweptRect)) {
+        let blockVec = new Vec2(
+          ((<PlayerController>this.player._ai).speed / 2) *
+            (<PlayerController>this.player._ai).lookDirection.x,
+          ((<PlayerController>this.player._ai).speed / 2) *
+            (<PlayerController>this.player._ai).lookDirection.y *
+            -1
+        );
+        blockVec.scale(deltaT);
+        block.push(blockVec);
+      }
+    }
+  }
+
   placeFlag(flagPlaceHitBox: AABB): void {
     for (let bomb of this.bombs) {
       if (bomb && flagPlaceHitBox.overlaps(bomb.collisionBoundary)) {
