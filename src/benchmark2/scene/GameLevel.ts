@@ -20,9 +20,6 @@ import ProjectileAI from "../ai/ProjectileAI";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
 import * as fs from "fs";
-import * as path from "path";
-// const glob = require("glob");
-// const fs = require('fs');
 
 export default abstract class GameLevel extends Scene {
   private name: string;
@@ -68,6 +65,8 @@ export default abstract class GameLevel extends Scene {
   }
 
   loadLevelFromFolder(levelName: string): void {
+    // let items = fs.readdirSync(levelName);
+    // console.log(items);
     // fs.readdirSync("res/" + levelName).forEach((file) => {
     //   console.log(file);
     // });

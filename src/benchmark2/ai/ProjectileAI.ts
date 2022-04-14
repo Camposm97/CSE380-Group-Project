@@ -20,12 +20,20 @@ export default class ProjectileAI implements AI {
   // An event emitter and receiver to hook into the event system
   private receiver: Receiver;
 
-  initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
+  public damage: number;
+
+  initializeAI(
+    owner: AnimatedSprite,
+    options: Record<string, any>,
+    damage: number = 1
+  ): void {
     this.owner = owner;
 
     this.current_velocity = options.velocity;
 
     this.receiver = new Receiver();
+
+    this.damage = damage;
   }
 
   activate(velocity: Vec2): void {
@@ -45,8 +53,10 @@ export default class ProjectileAI implements AI {
       this.handleEvent(this.receiver.getNextEvent());
     }
     if (this.owner.visible) {
-      this.owner.move(Vec2.UP.scaled(deltaT * this.current_velocity.y));
-      this.owner.move(Vec2.RIGHT.scaled(deltaT * this.current_velocity.x));
+      this.owner.position.add(Vec2.UP.scaled(deltaT * this.current_velocity.y));
+      this.owner.position.add(
+        Vec2.RIGHT.scaled(deltaT * this.current_velocity.x)
+      );
       // this.owner.move(this.current_velocity.scale(deltaT));
     }
   }

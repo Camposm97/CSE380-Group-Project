@@ -21,7 +21,9 @@
     "watchify": "^3.11.1"
   },
   "dependencies": {
+    "@types/fs-extra": "^9.0.13",
     "@types/glob": "^7.2.0",
+    "fs-extra": "^10.0.1",
     "glob": "^8.0.1"
   }
 }

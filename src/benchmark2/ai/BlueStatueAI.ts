@@ -170,12 +170,14 @@ export default class BlueStatueAI implements RobotAI {
     // this.direction++;
     // if (this.direction > 3) this.direction = 0;
     let position = new Vec2(this.owner.position.x, this.owner.position.y);
-    let offset = new Vec2(this.direction.x * 16, this.direction.y * 16);
+    let offset = new Vec2(this.direction.x * 16, this.direction.y * -16);
 
     this.projectileVel = new Vec2(
       this.projectileSpeed * this.direction.x,
       this.projectileSpeed * this.direction.y
     );
+    console.log(this.projectileVel.toString());
+    position.add(offset);
 
     this.emitter.fireEvent(RobotAction.FIRE_PROJECTILE, {
       position: position,

@@ -261,7 +261,7 @@ export default class EntityManager {
       // Spawn a projectile
       projectile.visible = true;
       projectile.position = position;
-      projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
+      // projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
       (<ProjectileAI>projectile._ai).activate(velocity);
       projectile.animation.play("IDLE");
     }
@@ -339,9 +339,19 @@ export default class EntityManager {
 
   projectileCollision(): void {
     for (let i = 0; i < this.projectiles.length; i++) {
-      if (this.projectiles[i] && this.projectiles[i].isColliding) {
+      if (
+        this.projectiles[i].position.x > 450 ||
+        this.projectiles[i].position.x < 0 ||
+        this.projectiles[i].position.y < 0 ||
+        this.projectiles[i].position.y > 450
+      ) {
         this.projectiles[i].visible = false;
-        // this.projectiles[i].removePhysics();
+      }
+      if (this.projectiles[i].boundary.overlaps(this.player.boundary)) {
+        (<PlayerController>this.player._ai).damage(
+          (<ProjectileAI>this.projectiles[i]._ai).damage
+        );
+        this.projectiles[i].visible = false;
       }
     }
   }
