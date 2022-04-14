@@ -5,7 +5,7 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 
-export function initButton(scene: Scene, layer: string, v: Vec2, text: string) {
+export function initButton(scene: Scene, layer: string, v: Vec2, text: string, voi: void) {
     let x = <Button> scene.add.uiElement(UIElementType.BUTTON, layer, {
         position: v,
         text: text

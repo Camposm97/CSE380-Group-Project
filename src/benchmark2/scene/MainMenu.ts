@@ -103,6 +103,7 @@ export default class MainMenu extends Scene {
       "levelSelect",
       new Vec2(center.x, center.y - 300),
       "Level Select"
+
     );
 
     //  Level Select - Buttons
@@ -111,7 +112,7 @@ export default class MainMenu extends Scene {
       "levelSelect",
       new Vec2(center.x - 200, center.y - 150),
       "Level 1",
-      MENU_EVENT.LOAD_LVL_1
+      MENU_EVENT.LOAD_LVL_1,          
     );
     initButtonHandler(
       this,
@@ -362,6 +363,8 @@ export default class MainMenu extends Scene {
           this.levelSelect.setHidden(false);
           break;
         case MENU_EVENT.LOAD_LVL_1:
+          this.load.image("load_lvl_1","res/sprites/Logo.png");
+
           this.sceneManager.changeToScene(Level1.Room1, {});
           break;
         case MENU_EVENT.LOAD_LVL_2:
