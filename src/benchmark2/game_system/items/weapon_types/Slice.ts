@@ -21,24 +21,27 @@ export default class Slice extends WeaponType {
     sliceSprite: AnimatedSprite
   ): void {
     // Handle rotation based on direction of player
-    sliceSprite.scale = new Vec2(1, 1);
     let halfSize = new Vec2(8, 8);
-    switch (direction.x) {
+    switch (direction.x) { // Left & Right
       case -1:
+        sliceSprite.scale = new Vec2(1.5,1)
         sliceSprite.rotation = Math.PI / 2;
         halfSize.set(16, 2);
         break;
       case 1:
+        sliceSprite.scale = new Vec2(1.5,1)
         sliceSprite.rotation = (-1 * Math.PI) / 2;
         halfSize.set(16, 2);
         break;
     }
-    switch (direction.y) {
+    switch (direction.y) { // Up & Down
       case -1:
+        sliceSprite.scale = new Vec2(1,1.5)
         sliceSprite.rotation = 0;
         halfSize.set(2, 16);
         break;
       case 1:
+        sliceSprite.scale = new Vec2(1,1.5)
         sliceSprite.rotation = Math.PI;
         halfSize.set(2, 16);
         break;
