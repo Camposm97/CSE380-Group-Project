@@ -138,7 +138,6 @@ export default class BlueStatueAI implements RobotAI {
     }
   }
   shoot(): void {
-    console.log("SHOOT");
     this.direction.mult(this.unitVector);
     this.direction = new Vec2(this.direction.y, this.direction.x);
     this.unitVector.scale(-1);
@@ -198,7 +197,6 @@ export default class BlueStatueAI implements RobotAI {
     }
 
     if (this.projectileTimer.isStopped()) {
-      console.log("timerStopped");
       this.shoot();
     }
 

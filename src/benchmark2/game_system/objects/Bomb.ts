@@ -1,7 +1,9 @@
 import AABB from "../../../Wolfie2D/DataTypes/Shapes/AABB";
 import Spritesheet from "../../../Wolfie2D/DataTypes/Spritesheet";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
-import GameNode, { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
+import GameNode, {
+  TweenableProperties,
+} from "../../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
@@ -18,7 +20,8 @@ import { Events } from "../../scene/Constants";
  * just yet.
  */
 export default class Bomb {
-  owner: AnimatedSprite
+  explosionSprite: AnimatedSprite;
+  flagSprite: AnimatedSprite;
   position: Vec2;
   tileCoord: Vec2;
   collisionBoundary: AABB;
@@ -28,20 +31,25 @@ export default class Bomb {
   isFlagged: boolean;
   isDestroyed: boolean;
 
-  constructor(tileCoord: Vec2, owner: AnimatedSprite) {
-    this.owner = owner
-    this.owner.tweens.add('fadeOut', {
+  constructor(
+    tileCoord: Vec2,
+    explosionSprite: AnimatedSprite,
+    flagSprite: AnimatedSprite
+  ) {
+    this.explosionSprite = explosionSprite;
+    this.explosionSprite.tweens.add("fadeOut", {
       startDelay: 1000,
       duration: 3000,
       effects: [
-          {
-              property: TweenableProperties.alpha,
-              start: 1.0,
-              end: 0,
-              ease: EaseFunctionType.IN_SINE,
-          }
-      ]
-    })
+        {
+          property: TweenableProperties.alpha,
+          start: 1.0,
+          end: 0,
+          ease: EaseFunctionType.IN_SINE,
+        },
+      ],
+    });
+    this.flagSprite = flagSprite;
     this.isFlagged = false;
     this.isDestroyed = false;
     this.tileCoord = tileCoord;
@@ -49,8 +57,10 @@ export default class Bomb {
       (tileCoord.x + 0.5) * 16,
       (tileCoord.y + 0.5) * 16
     );
-    this.owner.position = this.position
-    this.owner.scale = new Vec2(2.0,2.0)
+    this.explosionSprite.position = this.position;
+    this.explosionSprite.scale = new Vec2(2.0, 2.0);
+    this.explosionSprite.animation.play("HIDDEN", true, null);
+    this.flagSprite.position = this.position;
     // this.position.x = tileCoord.x + 0.5 * 16;
     // this.position.y = tileCoord.y + 0.5 * 16;
     this.collisionBoundary = new AABB(
@@ -74,6 +84,8 @@ export default class Bomb {
 
   setIsFlaggedTrue() {
     this.isFlagged = true;
+    this.flagSprite.visible = true;
+    this.flagSprite.animation.play("IDLE");
   }
 
   setIsDestroyedTrue() {
@@ -81,14 +93,15 @@ export default class Bomb {
   }
 
   hide() {
-    this.owner.animation.play('HIDDEN', true, null)
+    this.flagSprite.visible = false;
   }
 
   explode() {
-    this.isDestroyed = true
-    this.owner.animation.playIfNotAlready('IDLE', false, null)
-    this.owner.animation.queue('DEBRIS', true, null)
-    this.owner.tweens.play('fadeOut')
+    this.isDestroyed = true;
+    this.hide();
+    this.explosionSprite.animation.playIfNotAlready("IDLE", false, null);
+    this.explosionSprite.animation.queue("DEBRIS", true, null);
+    this.explosionSprite.tweens.play("fadeOut");
   }
 
   // displayFlag(sprite: Sprite) {

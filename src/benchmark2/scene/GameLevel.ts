@@ -128,39 +128,6 @@ export default abstract class GameLevel extends Scene {
     this.scoreTimer.start();
   }
 
-  // initializeProjectiles(): void {
-  //   for (let i = 0; i < this.projectiles.length; i++) {
-  //     this.projectiles[i] = this.add.animatedSprite("projectile", "primary");
-  //     this.projectiles[i].visible = false;
-  //     console.log(this.projectiles[i]);
-
-  //     // Add AI to our projectile
-  //     this.projectiles[i].addAI(ProjectileAI, { velocity: new Vec2(0, 0) });
-  //   }
-  // }
-
-  // spawnProjectile(position: Vec2, velocity: Vec2): void {
-  //   // Find the first viable bullet
-  //   let projectile: AnimatedSprite = null;
-  //   let randomNum = Math.random();
-
-  //   for (let p of this.projectiles) {
-  //     if (!p.visible) {
-  //       // We found a dead projectile
-  //       projectile = p;
-  //       break;
-  //     }
-  //   }
-
-  //   if (projectile !== null) {
-  //     // Spawn a projectile
-  //     projectile.visible = true;
-  //     projectile.position = position.add(new Vec2(0, -64));
-  //     (<ProjectileAI>projectile._ai).start_velocity = velocity;
-  //     projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
-  //   }
-  // }
-
   setCurrentRoom(room: new (...args: any) => GameLevel): void {
     this.currentRoom = room;
   }
@@ -205,39 +172,8 @@ export default abstract class GameLevel extends Scene {
           nextLvl: this.nextRoom,
         });
         break;
-      // case "healthpack":
-      //   this.createHealthpack(event.data.get("position"));
-      //   break;
-      // case "enemyDied":
-      //   this.enemies = this.enemies.filter(
-      //     (enemy) => enemy !== event.data.get("enemy")
-      //   );
-      //   this.battleManager.enemies = this.battleManager.enemies.filter(
-      //     (enemy) => enemy !== <RobotAI>event.data.get("enemy")._ai
-      //   );
-      //   break;
       case Events.PLACE_FLAG:
-        // let coord = event.data.get("coordinates");
-        // for (let bomb of this.bombs) {
-        //   if (bomb && bomb.tileCoord.equals(coord)) {
-        //     if (!bomb.isFlagged) {
-        //       bomb.setIsFlaggedTrue();
-        //       this.flags.push(this.add.animatedSprite("flag", "primary"));
-        //       this.flags[this.flags.length - 1].position = new Vec2(
-        //         (coord.x + 0.5) * 16,
-        //         coord.y * 16
-        //       );
-        //       this.flags[this.flags.length - 1].scale = new Vec2(0.5, 0.5);
-        //       this.flags[this.flags.length - 1].animation.play("IDLE");
-        //     }
-        //   }
-        // }
-        // if (event.isType(RobotAction.FIRE_PROJECTILE)) {
-        //   this.spawnProjectile(
-        //     event.data.get("position"),
-        //     event.data.get("velocity")
-        //   );
-        // }
+        this.em.placeFlag(event.data.get("flagPlaceHitBox"));
         break;
       case RobotAction.FIRE_PROJECTILE:
         this.em.spawnProjectile(

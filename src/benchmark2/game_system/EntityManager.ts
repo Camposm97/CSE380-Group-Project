@@ -167,16 +167,18 @@ export default class EntityManager {
 
     // Create an array of the bombdata and flags
     this.bombs = new Array(bombData.numBombs);
-    this.flags = new Array(bombData.numBombs);
+    // this.flags = new Array(bombData.numBombs);
 
     for (let i = 0; i < bombData.numBombs; i++) {
       let bombSprite = this.scene.add.animatedSprite("bomb", "primary");
+      let flagSprite = this.scene.add.animatedSprite("flag", "primary");
       this.bombs[i] = new Bomb(
         new Vec2(
           bombData.bombs[i].position[0] - 1,
           bombData.bombs[i].position[1] - 1
         ),
-        bombSprite
+        bombSprite,
+        flagSprite
       );
       this.bombs[i].hide();
     }
@@ -309,6 +311,16 @@ export default class EntityManager {
     }
   }
 
+  placeFlag(flagPlaceHitBox: AABB): void {
+    for (let bomb of this.bombs) {
+      if (bomb && flagPlaceHitBox.overlaps(bomb.collisionBoundary)) {
+        if (!bomb.isFlagged || !bomb.isDestroyed) {
+          bomb.setIsFlaggedTrue();
+        }
+      }
+    }
+  }
+
   projectileCollision(): void {
     for (let i = 0; i < this.projectiles.length; i++) {
       if (this.projectiles[i] && this.projectiles[i].isColliding) {
@@ -320,6 +332,11 @@ export default class EntityManager {
 
   //Once the player is near a bomb, we see how close to the bomb that player is
   bombCollision(): void {
+    let bombHitBoxCenter = new Vec2(
+      this.player.position.x - 0.8,
+      this.player.position.y - 0.8
+    );
+    let bombHitBox = new AABB(bombHitBoxCenter, new Vec2(8, 8));
     if (
       this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary)
     ) {
