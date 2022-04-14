@@ -42,7 +42,7 @@ export default abstract class GameLevel extends Scene {
   );
 
   //this will be loaded in every single level, allows level classes to be abstracted out
-  loadMainResources() {
+  loadMainResources(): void {
     this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
@@ -61,6 +61,38 @@ export default abstract class GameLevel extends Scene {
     this.load.image("pistol", "res/sprites/pistol.png");
     this.load.image("block", "res/sprites/block.png");
     this.load.audio("boom", "res/sound/explode.wav");
+  }
+
+  //allows for randomization of bomb layout
+  loadRandomBombsJSON(pathArray: string[]): void {
+    this.load.object(
+      "bombData",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
+  }
+
+  //allows for randomization of enemy layout
+  loadRandomEnemysJSON(pathArray: string[]): void {
+    this.load.object(
+      "enemyData",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
+  }
+
+  //allows for randomization of block layout
+  loadRandomBlocksJSON(pathArray: string[]): void {
+    this.load.object(
+      "blockData",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
+  }
+
+  //allows for randomization of player start and level end positions
+  loadRandomStartEndJSON(pathArray: string[]): void {
+    this.load.object(
+      "start_end",
+      pathArray[Math.floor(Math.random() * pathArray.length)]
+    );
   }
 
   initScene(options: Record<string, any>): void {
