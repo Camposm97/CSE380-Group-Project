@@ -28,7 +28,7 @@ export default class BlueMouseAI implements RobotAI {
     this.owner = owner;
     this.listening = false;
     this.owner.scale = new Vec2(0.12, 0.12);
-    this.time = 2000;
+    this.time = 5000;
     this.speed = 120;
     this.mainBehavior = true;
     this.damage = 1;
@@ -60,6 +60,12 @@ export default class BlueMouseAI implements RobotAI {
   collide(): void {
     if (!this.isFrozen) {
       this.direction *= -1;
+    }
+  }
+
+  push(v: Vec2): void {
+    if (this.isFrozen) {
+      this.owner.move(v)
     }
   }
 

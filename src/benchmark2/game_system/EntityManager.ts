@@ -277,9 +277,12 @@ export default class EntityManager {
     for (let enemy of this.enemies) {
       if (enemy && enemy.sweptRect) {
         if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
-          (<PlayerController>this.player._ai).damage(
-            (<RobotAI>enemy._ai).damage
-          );
+          let r = <RobotAI> enemy._ai
+          if (!r.isFrozen) {
+            (<PlayerController>this.player._ai).damage(
+              (<RobotAI>enemy._ai).damage
+            );
+          }
         }
       }
       for (let bomb of this.bombs) {
@@ -306,6 +309,26 @@ export default class EntityManager {
             //TODO REMOVE ANY FLAG SPRITE THAT HAS BEEN PLACED
             bomb.setIsDestroyedTrue();
           }
+        }
+      }
+    }
+  }
+
+  mouseCollision(deltaT: number): void {
+    for (let enemy of this.enemies) {
+      if (enemy._ai instanceof BlueMouseAI) {
+        console.log('i find mouse')
+        let bm = <BlueMouseAI> enemy._ai
+        if (bm.owner.sweptRect.overlaps(this.player.sweptRect)) {
+          let v = new Vec2(
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.x,
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.y *
+              -1
+          );
+          v.scale(deltaT)
+          bm.push(v)
         }
       }
     }

@@ -19,10 +19,6 @@ import { GameLayerManager } from "../game_system/GameLayerManager";
 import ProjectileAI from "../ai/ProjectileAI";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
-import * as fs from "fs";
-import * as path from "path";
-// const glob = require("glob");
-// const fs = require('fs');
 
 export default abstract class GameLevel extends Scene {
   private name: string;
@@ -272,6 +268,7 @@ export default abstract class GameLevel extends Scene {
 
     this.em.handlePlayerBombCollision();
     this.em.blockCollision(deltaT);
+    this.em.mouseCollision(deltaT)
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
       this.em.bombCollision();
