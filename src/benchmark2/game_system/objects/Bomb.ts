@@ -64,20 +64,20 @@ export default class Bomb {
     // this.position.x = tileCoord.x + 0.5 * 16;
     // this.position.y = tileCoord.y + 0.5 * 16;
     this.collisionBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y),
+      new Vec2(this.position.x, this.position.y - 8),
       new Vec2(0.8, 0.8)
     );
     console.log(this.collisionBoundary.toString());
     this.innerBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y),
+      new Vec2(this.position.x, this.position.y - 8),
       new Vec2(16.8, 16.8)
     );
     this.middleBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y),
+      new Vec2(this.position.x, this.position.y - 8),
       new Vec2(32.8, 32.8)
     );
     this.outerBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y),
+      new Vec2(this.position.x, this.position.y - 8),
       new Vec2(48.8, 48.8)
     );
   }
