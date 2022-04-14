@@ -19,6 +19,10 @@ import { GameLayerManager } from "../game_system/GameLayerManager";
 import ProjectileAI from "../ai/ProjectileAI";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
+import * as fs from "fs";
+import * as path from "path";
+// const glob = require("glob");
+// const fs = require('fs');
 
 export default abstract class GameLevel extends Scene {
   private name: string;
@@ -61,6 +65,12 @@ export default abstract class GameLevel extends Scene {
     this.load.image("pistol", "res/sprites/pistol.png");
     this.load.image("block", "res/sprites/block.png");
     this.load.audio("boom", "res/sound/explode.wav");
+  }
+
+  loadLevelFromFolder(levelName: string): void {
+    // fs.readdirSync("res/" + levelName).forEach((file) => {
+    //   console.log(file);
+    // });
   }
 
   //allows for randomization of bomb layout

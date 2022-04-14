@@ -4,6 +4,7 @@ export class Room1 extends GameLevel {
   loadScene(): void {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
+    this.loadLevelFromFolder("level1");
 
     /*
             TODO: To conserve time we should do approach the design of the levels as how Zach did in HW5 where each level is its own class
