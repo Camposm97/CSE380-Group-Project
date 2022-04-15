@@ -361,9 +361,7 @@ export default class EntityManager {
         this.projectiles[i].visible = false;
       }
       if (this.projectiles[i].boundary.overlaps(this.player.boundary)) {
-        (<PlayerController>this.player._ai).damage(
-          (<ProjectileAI>this.projectiles[i]._ai).damage
-        );
+        (<PlayerController>this.player._ai).damage((<ProjectileAI>this.projectiles[i]._ai).damage);
         this.projectiles[i].visible = false;
       }
     }
@@ -375,9 +373,9 @@ export default class EntityManager {
   bombCollision(): void {
     if (
       this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary) &&
-      !(<PlayerController>this.player._ai).died()
+      !(<PlayerController>this.player._ai).died() && !this.nearestBomb.isDestroyed
     ) {
-      (<PlayerController>this.player._ai).health = 0;
+      (<PlayerController>this.player._ai).damage(5)
       this.nearestBomb.explode();
     } else if (
       this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)

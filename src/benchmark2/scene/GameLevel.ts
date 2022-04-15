@@ -16,7 +16,6 @@ import ScoreTimer from "../game_system/ScoreTimer";
 import MainMenu from "./MainMenu";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
-import ProjectileAI from "../ai/ProjectileAI";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
 
@@ -281,23 +280,12 @@ export default abstract class GameLevel extends Scene {
       this.em.bombCollision();
     }
     this.em.projectileCollision();
-    let health = (<BattlerAI>this.em.getPlayer()._ai).health;
-    this.handleLoseCondition(health);
-    this.updateHUD(health);
+    this.updateHUD();
     this.handleInput();
   }
 
-  handleLoseCondition(health: number): void {
-    if (health <= 0 && !this.gameOver) { // If health below 0, Game Over!
-      this.gameOver = true;
-      this.scoreTimer.pause()
-      this.em.getPlayer().setAIActive(false, {});
-      (<PlayerController>this.em.getPlayer()._ai).doAnimation(PlayerAction.DAMAGE)
-      this.em.getPlayer().tweens.play('fadeOut')
-    }
-  }
-
-  updateHUD(health: number): void {
+  updateHUD(): void {
+    let health = (<BattlerAI>this.em.getPlayer()._ai).health;
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
   }

@@ -17,9 +17,8 @@ import {
 } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
-import Timer from "../../Wolfie2D/Timing/Timer";
+import Timer from "../../Wolfie2D/Timing/Timer";2
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
-import { formatWithOptions } from "util";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 
@@ -97,7 +96,7 @@ export default class PlayerController implements BattlerAI {
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
 
-    this.owner.tweens.add("fadeOut", {
+    this.owner.tweens.add('death', {
       startDelay: 0,
       duration: 3000,
       effects: [
@@ -271,10 +270,10 @@ export default class PlayerController implements BattlerAI {
       this.health -= damage;
       this.doAnimation(PlayerAction.DAMAGE);
       if (this.health <= 0) {
-        this.health = 0;
-        this.owner.setAIActive(false, {});
-        this.owner.visible = false;
-        this.owner.isCollidable = false;
+        this.health = 0
+        this.owner.setAIActive(false, {})
+        this.owner.isCollidable = false
+        this.owner.tweens.play('death')
       }
       this.iFrame = true;
       this.iFrameTimer.start();
