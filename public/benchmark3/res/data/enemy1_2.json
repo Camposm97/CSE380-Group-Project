@@ -4,26 +4,22 @@
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [5, 12],
-      "damage": 1
+      "position": [5, 12]
     },
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [4, 2],
-      "damage": 1
+      "position": [4, 2]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [4, 16],
-      "damage": 1
+      "position": [4, 16]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [7, 14],
-      "damage": 1
+      "position": [7, 14]
     }
   ]
 }

@@ -205,11 +205,7 @@ export default class EntityManager {
       // Activate physics
       this.enemies[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
 
-      let enemyOptions = {
-        behavior: entity.behavior,
-        time: entity.time,
-        damage: entity.damage,
-      };
+      let enemyOptions = entity.options;
 
       //TODO TRY AND FIND A WAY TO MAP STRINGS TO ROBOT AI CLASS TYPES
       //ADD MORE AI TYPES ONCE THEY ARE MADE
@@ -277,7 +273,7 @@ export default class EntityManager {
     for (let enemy of this.enemies) {
       if (enemy && enemy.sweptRect) {
         if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
-          let r = <RobotAI> enemy._ai
+          let r = <RobotAI>enemy._ai;
           if (!r.isFrozen) {
             (<PlayerController>this.player._ai).damage(
               (<RobotAI>enemy._ai).damage
@@ -287,7 +283,11 @@ export default class EntityManager {
       }
       for (let bomb of this.bombs) {
         if (bomb && !bomb.isDestroyed) {
-          if (enemy && enemy.sweptRect && enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
+          if (
+            enemy &&
+            enemy.sweptRect &&
+            enemy.sweptRect.overlaps(bomb.collisionBoundary)
+          ) {
             bomb.explode();
             enemy.destroy();
             this.enemies = this.enemies.filter(
@@ -307,8 +307,8 @@ export default class EntityManager {
   mouseCollision(deltaT: number): void {
     for (let enemy of this.enemies) {
       if (enemy._ai instanceof BlueMouseAI) {
-        console.log('i find mouse')
-        let bm = <BlueMouseAI> enemy._ai
+        console.log("i find mouse");
+        let bm = <BlueMouseAI>enemy._ai;
         if (bm.owner.sweptRect.overlaps(this.player.sweptRect)) {
           let v = new Vec2(
             ((<PlayerController>this.player._ai).speed / 2) *
@@ -317,8 +317,8 @@ export default class EntityManager {
               (<PlayerController>this.player._ai).lookDirection.y *
               -1
           );
-          v.scale(deltaT)
-          bm.push(v)
+          v.scale(deltaT);
+          bm.push(v);
         }
       }
     }
@@ -368,19 +368,28 @@ export default class EntityManager {
       }
     }
   }
-  
+
   /**
    * Handles player bomb collision (determines lab coat color)
    */
   bombCollision(): void {
-    if (this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary) && !(<PlayerController>this.player._ai).died()) {
+    if (
+      this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary) &&
+      !(<PlayerController>this.player._ai).died()
+    ) {
       (<PlayerController>this.player._ai).health = 0;
-      this.nearestBomb.explode()
-    } else if (this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)) {
+      this.nearestBomb.explode();
+    } else if (
+      this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)
+    ) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
-    } else if (this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)) {
+    } else if (
+      this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)
+    ) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
-    } else if (this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary)) {
+    } else if (
+      this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary)
+    ) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
     } else (<PlayerController>this.player._ai).nearBomb = false;
   }

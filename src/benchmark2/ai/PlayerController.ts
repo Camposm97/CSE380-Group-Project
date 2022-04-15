@@ -19,6 +19,7 @@ import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
+import { formatWithOptions } from "util";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 
@@ -65,11 +66,14 @@ export default class PlayerController implements BattlerAI {
   //Used to make movement more fluid
   private previousDirection: Vec2;
   private twoButtonsPressed: boolean;
+  private previousAxis: string;
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
-    this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4.5,4.5)))
+    this.owner.setCollisionShape(
+      new AABB(this.owner.position, new Vec2(4.5, 4.5))
+    );
 
     this.iFrameTimer = new Timer(5000);
 
@@ -93,19 +97,19 @@ export default class PlayerController implements BattlerAI {
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
 
-    this.owner.tweens.add('fadeOut', {
+    this.owner.tweens.add("fadeOut", {
       startDelay: 0,
-            duration: 3000,
-            effects: [
-                {
-                    property: TweenableProperties.alpha,
-                    start: 1,
-                    end: 0,
-                    ease: EaseFunctionType.IN_OUT_QUAD
-                }
-            ],
-            onEnd: Events.PLAYER_DIED
-    })
+      duration: 3000,
+      effects: [
+        {
+          property: TweenableProperties.alpha,
+          start: 1,
+          end: 0,
+          ease: EaseFunctionType.IN_OUT_QUAD,
+        },
+      ],
+      onEnd: Events.PLAYER_DIED,
+    });
     // //allign bombHitBox with player sprites feet
     // let bombHitBoxCenter = new Vec2(
     //   this.owner.position.x - 0.8,
@@ -115,6 +119,7 @@ export default class PlayerController implements BattlerAI {
     // this.bombHitBox = new AABB(bombHitBoxCenter, new Vec2(8, 8));
     this.twoButtonsPressed = false;
     this.previousDirection = new Vec2(0, 0);
+    this.previousAxis = "none";
   }
 
   activate(options: Record<string, any>): void {}
@@ -277,59 +282,56 @@ export default class PlayerController implements BattlerAI {
   }
 
   died(): boolean {
-    return this.health <= 0
+    return this.health <= 0;
   }
 
   handleMovement(deltaT: number): void {
     let forwardAxis = 0;
     let horizontalAxis = 0;
-    this.previousDirection.scale(0);
+
+    if (
+      Input.isJustPressed("forward") ||
+      Input.isJustPressed("up") ||
+      Input.isJustPressed("backward")
+    ) {
+      this.previousAxis = "foward";
+    }
+    if (Input.isJustPressed("left") || Input.isJustPressed("right")) {
+      this.previousAxis = "horizontal";
+    }
+
     if (
       Input.isPressed("forward") ||
       Input.isPressed("up") ||
       Input.isPressed("backward")
     ) {
-      if (!this.twoButtonsPressed) {
+      if (
+        this.previousAxis !== "horizontal" ||
+        (!Input.isPressed("left") && !Input.isPressed("right"))
+      ) {
         forwardAxis =
           (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
           (Input.isPressed("backward") ? -1 : 0);
-        if (Input.isPressed("left") || Input.isPressed("right")) {
-          this.twoButtonsPressed = true;
-          this.previousDirection.x = 0;
-        } else this.twoButtonsPressed = false;
-        this.previousDirection.y = forwardAxis;
-      } else {
-        forwardAxis = this.previousDirection.y;
+        this.previousAxis = "foward";
       }
     }
     if (Input.isPressed("left") || Input.isPressed("right")) {
-      if (!this.twoButtonsPressed) {
+      if (
+        this.previousAxis !== "foward" ||
+        (!Input.isPressed("forward") &&
+          !Input.isPressed("up") &&
+          !Input.isPressed("backward"))
+      ) {
         horizontalAxis =
           (Input.isPressed("left") ? -1 : 0) +
           (Input.isPressed("right") ? 1 : 0);
-        if (
-          Input.isPressed("forward") ||
-          Input.isPressed("up") ||
-          Input.isPressed("backward")
-        ) {
-          this.twoButtonsPressed = true;
-          this.previousDirection.y = 0;
-        } else this.twoButtonsPressed = false;
-        this.previousDirection.x = horizontalAxis;
-      } else {
-        horizontalAxis = this.previousDirection.x;
+        this.previousAxis = "horizontal";
       }
     }
-    if (horizontalAxis === 0 && forwardAxis === 0) {
-      this.twoButtonsPressed = false;
-      this.previousDirection.scale(0);
-    }
-
     if (
       (forwardAxis != 0 && horizontalAxis == 0) ||
       (forwardAxis == 0 && horizontalAxis != 0)
     ) {
-      //   if (forwardAxis || horizontalAxis) {
       let movement = Vec2.UP.scaled(forwardAxis * this.speed);
       movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
       let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
@@ -417,7 +419,7 @@ export default class PlayerController implements BattlerAI {
   }
 
   destroy() {
-    this.owner.visible = false
-    this.owner.setCollisionShape(new AABB(new Vec2(10,10), new Vec2(1,1)))
+    this.owner.visible = false;
+    this.owner.setCollisionShape(new AABB(new Vec2(10, 10), new Vec2(1, 1)));
   }
 }
