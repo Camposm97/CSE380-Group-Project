@@ -6,7 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { Control, Events, Names, RobotAction } from "./Constants";
+import { Control, Events, Names, PlayerAction, RobotAction } from "./Constants";
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import BattlerAI from "../ai/BattlerAI";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
@@ -31,7 +31,7 @@ export default abstract class GameLevel extends Scene {
   private glm: GameLayerManager;
   private em: EntityManager;
   private scoreTimer: ScoreTimer;
-  private startNextLvl: boolean;
+  private gameOver: boolean;
   private currentRoom: new (...args: any) => GameLevel;
   private nextRoom: new (...args: any) => GameLevel;
 
@@ -160,7 +160,7 @@ export default abstract class GameLevel extends Scene {
     this.glm.initControlsLayer();
     this.glm.initRoomCompleteLayer();
 
-    this.startNextLvl = false;
+    this.gameOver = false;
     this.nextRoom = null;
     this.em.initBattleManager();
 
@@ -175,6 +175,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.EXIT_GAME);
     this.receiver.subscribe(Events.LEVEL_END);
     this.receiver.subscribe(Events.ROOM_COMPLETE);
+    this.receiver.subscribe(Events.PLAYER_DIED)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -234,6 +235,10 @@ export default abstract class GameLevel extends Scene {
           nextLvl: this.nextRoom,
         });
         break;
+      case Events.PLAYER_DIED:
+        this.viewport.setZoomLevel(1);
+        this.sceneManager.changeToScene(GameOver, { win: false });
+        break;
       case Events.PLACE_FLAG:
         this.em.placeFlag(event.data.get("flagPlaceHitBox"));
         break;
@@ -261,11 +266,11 @@ export default abstract class GameLevel extends Scene {
     this.em.handleCollisions();
 
     if (this.em.playerReachedGoal()) {
-      if (!this.startNextLvl) {
+      if (!this.gameOver) {
         this.scoreTimer.pause();
         this.glm.showRoomComplete();
       }
-      this.startNextLvl = true;
+      this.gameOver = true;
     }
 
     this.em.handlePlayerBombCollision();
@@ -283,11 +288,12 @@ export default abstract class GameLevel extends Scene {
   }
 
   handleLoseCondition(health: number): void {
-    if (health <= 0) {
-      // If {health} <= 0, Game Over!
-      this.viewport.setZoomLevel(1);
-      this.viewport.disableZoom();
-      this.sceneManager.changeToScene(GameOver, { win: false });
+    if (health <= 0 && !this.gameOver) { // If health below 0, Game Over!
+      this.gameOver = true;
+      this.scoreTimer.pause()
+      this.em.getPlayer().setAIActive(false, {});
+      (<PlayerController>this.em.getPlayer()._ai).doAnimation(PlayerAction.DAMAGE)
+      this.em.getPlayer().tweens.play('fadeOut')
     }
   }
 
@@ -304,7 +310,7 @@ export default abstract class GameLevel extends Scene {
     /*
       If we're transitioning to the next level, disable the pause button
     */
-    if (!this.startNextLvl) {
+    if (!this.gameOver) {
       if (Input.isJustPressed(Control.PAUSE)) {
         this.emitter.fireEvent(Events.PAUSE_GAME, {});
       }

@@ -287,18 +287,8 @@ export default class EntityManager {
       }
       for (let bomb of this.bombs) {
         if (bomb && !bomb.isDestroyed) {
-          if (
-            enemy &&
-            enemy.sweptRect &&
-            enemy.sweptRect.overlaps(bomb.collisionBoundary)
-          ) {
+          if (enemy && enemy.sweptRect && enemy.sweptRect.overlaps(bomb.collisionBoundary)) {
             bomb.explode();
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
-              key: "boom",
-              loop: false,
-              holdReference: false,
-            });
-
             enemy.destroy();
             this.enemies = this.enemies.filter(
               (currentEnemy) => currentEnemy !== enemy
@@ -378,24 +368,19 @@ export default class EntityManager {
       }
     }
   }
-
-  //Once the player is near a bomb, we see how close to the bomb that player is
+  
+  /**
+   * Handles player bomb collision (determines lab coat color)
+   */
   bombCollision(): void {
-    if (
-      this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary)
-    ) {
+    if (this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary) && !(<PlayerController>this.player._ai).died()) {
       (<PlayerController>this.player._ai).health = 0;
-    } else if (
-      this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)
-    ) {
+      this.nearestBomb.explode()
+    } else if (this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
-    } else if (
-      this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)
-    ) {
+    } else if (this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
-    } else if (
-      this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary)
-    ) {
+    } else if (this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary)) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
     } else (<PlayerController>this.player._ai).nearBomb = false;
   }
