@@ -4,28 +4,28 @@
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [2, 11],
-      "damage": 1
+      "position": [2, 11]
     },
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [22, 16],
-      "damage": 1
+      "position": [22, 16]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
       "position": [4, 16],
-      "damage": 1,
-      "behavior": "secondary"
+      "options": {
+        "behavior": "secondary"
+      }
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
       "position": [22, 2],
-      "damage": 1,
-      "behavior": "secondary"
+      "options": {
+        "behavior": "secondary"
+      }
     }
   ]
 }
