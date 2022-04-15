@@ -29,7 +29,7 @@ export default class BlueMouseAI implements RobotAI {
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
     this.listening = false;
-    this.owner.scale = new Vec2(0.11, 0.11);
+    this.owner.scale = new Vec2(0.12, 0.12);
     this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4,4)))
     this.time = 5000;
     this.speed = 120;

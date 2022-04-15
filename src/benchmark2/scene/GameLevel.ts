@@ -264,8 +264,8 @@ export default abstract class GameLevel extends Scene {
       this.handleEvent(this.receiver.getNextEvent());
     }
 
-    //handleCollisions for
-    this.em.handleEnemyCollisions();
+    this.em.handleEnemyCollisions()
+    this.em.handleCollidables(deltaT)
 
     if (this.em.playerReachedGoal()) {
       if (!this.gameOver) {
@@ -277,7 +277,6 @@ export default abstract class GameLevel extends Scene {
 
     this.em.handlePlayerCoatColor();
     this.em.handleBlockCollision(deltaT);
-    this.em.handleMouseCollision(deltaT);
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
       this.em.handlePlayerBombCollision();

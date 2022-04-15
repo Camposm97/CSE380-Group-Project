@@ -269,15 +269,16 @@ export default class EntityManager {
     this.bm.setBlocks(this.blocks);
   }
 
+  /**
+   * Handles collisions between the enemy for the player and bombs
+   */
   handleEnemyCollisions(): void {
     for (let enemy of this.enemies) {
       if (enemy && enemy.sweptRect) {
         if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
           let r = <RobotAI>enemy._ai;
           if (!r.isFrozen) {
-            (<PlayerController>this.player._ai).damage(
-              (<RobotAI>enemy._ai).damage
-            );
+            (<PlayerController>this.player._ai).damage((<RobotAI>enemy._ai).damage);
           }
         }
       }
@@ -304,10 +305,9 @@ export default class EntityManager {
     }
   }
 
-  handleMouseCollision(deltaT: number): void {
+  handleCollidables(deltaT: number): void {
     for (let enemy of this.enemies) {
       if (enemy._ai instanceof BlueMouseAI) {
-        console.log("i find mouse");
         let bm = <BlueMouseAI>enemy._ai;
         if (bm.owner.sweptRect.overlaps(this.player.sweptRect)) {
           let v = new Vec2(
@@ -319,6 +319,22 @@ export default class EntityManager {
           );
           v.scale(deltaT);
           bm.push(v);
+        }
+      }
+    }
+    for (let enemy of this.enemies) {
+      if (enemy._ai instanceof BlueStatueAI) {
+        let bs = <BlueStatueAI>enemy._ai;
+        if (bs.owner.sweptRect.overlaps(this.player.sweptRect)) {
+          let v = new Vec2(
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.x,
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.y *
+              -1
+          );
+          v.scale(deltaT);
+          bs.push(v);
         }
       }
     }

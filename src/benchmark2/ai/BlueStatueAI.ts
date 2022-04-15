@@ -6,6 +6,7 @@ import Timer from "../../Wolfie2D/Timing/Timer";
 import {  RobotAction, RobotStatueAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
+import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 
 export default class BlueStatueAI implements RobotAI {
   owner: AnimatedSprite;
@@ -58,7 +59,7 @@ export default class BlueStatueAI implements RobotAI {
     this.projectileSpeed = 100;
     this.direction = new Vec2(0, -1);
     this.moveSpaces = 1;
-    this.owner.scale = new Vec2(0.125, 0.125);
+    this.owner.scale = new Vec2(0.12, 0.12);
     this.time = 5000;
     this.speed = 2000;
     this.mainBehavior = true;
@@ -113,6 +114,12 @@ export default class BlueStatueAI implements RobotAI {
     }
   }
 
+  push(v: Vec2): void {
+    if (this.isFrozen) {
+      this.owner.move(v)
+    }
+  }
+
   shoot(): void {
     this.direction.mult(this.unitVector);
     this.direction = new Vec2(this.direction.y, this.direction.x);
@@ -122,29 +129,8 @@ export default class BlueStatueAI implements RobotAI {
     if (this.directionIndex > 3) this.directionIndex = 0;
     this.owner.animation.play(this.vecAnimationMap.get(this.directionIndex));
 
-    this.projectileTimer.start(500);
+    this.projectileTimer.start(750);
 
-    // let position = this.owner.position;
-    // switch (this.direction) {
-    //   case 0:
-    //     position.y = position.y - 10;
-    //     this.projectileVel = new Vec2(0, -this.projectileSpeed);
-    //     break;
-    //   case 1:
-    //     position.x = position.x - 10;
-    //     this.projectileVel = new Vec2(-this.projectileSpeed, 0);
-    //     break;
-    //   case 2:
-    //     position.x = position.y + 10;
-    //     this.projectileVel = new Vec2(0, this.projectileSpeed);
-    //     break;
-    //   case 3:
-    //     position.x = position.x + 10;
-    //     this.projectileVel = new Vec2(this.projectileSpeed, 0);
-    //     break;
-    // }
-    // this.direction++;
-    // if (this.direction > 3) this.direction = 0;
     let position = new Vec2(this.owner.position.x, this.owner.position.y);
     let offset = new Vec2(this.direction.x * 16, this.direction.y * -16);
 
@@ -174,7 +160,11 @@ export default class BlueStatueAI implements RobotAI {
       this.isFrozen = false;
     }
 
-    if (this.projectileTimer.isStopped()) {
+    if (this.isFrozen) {
+      this.owner.animation.playIfNotAlready(RobotStatueAnimations.DEATH, true)
+    }
+
+    if (!this.isFrozen && this.projectileTimer.isStopped()) {
       this.shoot();
     }
 
