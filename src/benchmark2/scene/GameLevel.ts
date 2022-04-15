@@ -64,6 +64,8 @@ export default abstract class GameLevel extends Scene {
   }
 
   loadLevelFromFolder(levelName: string): void {
+    // let items = fs.readdirSync(levelName);
+    // console.log(items);
     // fs.readdirSync("res/" + levelName).forEach((file) => {
     //   console.log(file);
     // });
@@ -273,7 +275,7 @@ export default abstract class GameLevel extends Scene {
 
     this.em.handlePlayerBombCollision();
     this.em.blockCollision(deltaT);
-    this.em.mouseCollision(deltaT)
+    this.em.mouseCollision(deltaT);
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
       this.em.bombCollision();

@@ -62,6 +62,10 @@ export default class PlayerController implements BattlerAI {
   //Bomb Detection
   public nearBomb: boolean;
 
+  //Used to make movement more fluid
+  private previousDirection: Vec2;
+  private twoButtonsPressed: boolean;
+
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
@@ -109,6 +113,8 @@ export default class PlayerController implements BattlerAI {
     // );
 
     // this.bombHitBox = new AABB(bombHitBoxCenter, new Vec2(8, 8));
+    this.twoButtonsPressed = false;
+    this.previousDirection = new Vec2(0, 0);
   }
 
   activate(options: Record<string, any>): void {}
@@ -275,11 +281,49 @@ export default class PlayerController implements BattlerAI {
   }
 
   handleMovement(deltaT: number): void {
-    let forwardAxis =
-      (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
-      (Input.isPressed("backward") ? -1 : 0);
-    let horizontalAxis =
-      (Input.isPressed("left") ? -1 : 0) + (Input.isPressed("right") ? 1 : 0);
+    let forwardAxis = 0;
+    let horizontalAxis = 0;
+    this.previousDirection.scale(0);
+    if (
+      Input.isPressed("forward") ||
+      Input.isPressed("up") ||
+      Input.isPressed("backward")
+    ) {
+      if (!this.twoButtonsPressed) {
+        forwardAxis =
+          (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
+          (Input.isPressed("backward") ? -1 : 0);
+        if (Input.isPressed("left") || Input.isPressed("right")) {
+          this.twoButtonsPressed = true;
+          this.previousDirection.x = 0;
+        } else this.twoButtonsPressed = false;
+        this.previousDirection.y = forwardAxis;
+      } else {
+        forwardAxis = this.previousDirection.y;
+      }
+    }
+    if (Input.isPressed("left") || Input.isPressed("right")) {
+      if (!this.twoButtonsPressed) {
+        horizontalAxis =
+          (Input.isPressed("left") ? -1 : 0) +
+          (Input.isPressed("right") ? 1 : 0);
+        if (
+          Input.isPressed("forward") ||
+          Input.isPressed("up") ||
+          Input.isPressed("backward")
+        ) {
+          this.twoButtonsPressed = true;
+          this.previousDirection.y = 0;
+        } else this.twoButtonsPressed = false;
+        this.previousDirection.x = horizontalAxis;
+      } else {
+        horizontalAxis = this.previousDirection.x;
+      }
+    }
+    if (horizontalAxis === 0 && forwardAxis === 0) {
+      this.twoButtonsPressed = false;
+      this.previousDirection.scale(0);
+    }
 
     if (
       (forwardAxis != 0 && horizontalAxis == 0) ||
@@ -294,10 +338,10 @@ export default class PlayerController implements BattlerAI {
         .getNavigationManager()
         .getPath(Names.NAVMESH, this.owner.position, newPos, true);
 
-      let tileCoord = this.tilemap.getColRowAt(this.owner.position);
-      tileCoord = new Vec2(tileCoord.x, tileCoord.y);
-      let tile = this.tilemap.getTileAtRowCol(tileCoord);
-      let tileWorldcoord = this.tilemap.getTileWorldPosition(tile);
+      // let tileCoord = this.tilemap.getColRowAt(this.owner.position);
+      // tileCoord = new Vec2(tileCoord.x, tileCoord.y);
+      // let tile = this.tilemap.getTileAtRowCol(tileCoord);
+      // let tileWorldcoord = this.tilemap.getTileWorldPosition(tile);
       // console.log(this.owner.position.toString());
       // console.log(tileWorldcoord.toString());
       // console.log(`x=${tileCoord.x} y=${tileCoord.y}`);
