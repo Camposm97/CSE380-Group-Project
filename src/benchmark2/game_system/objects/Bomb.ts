@@ -1,15 +1,10 @@
 import AABB from "../../../Wolfie2D/DataTypes/Shapes/AABB";
-import Spritesheet from "../../../Wolfie2D/DataTypes/Spritesheet";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
-import GameNode, {
-  TweenableProperties,
-} from "../../../Wolfie2D/Nodes/GameNode";
+import Emitter from "../../../Wolfie2D/Events/Emitter";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
-import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
-import { TweenEffect } from "../../../Wolfie2D/Rendering/Animations/AnimationTypes";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
-import { Events } from "../../scene/Constants";
 
 /**
  * Bomb class
@@ -30,6 +25,7 @@ export default class Bomb {
   outerBoundary: AABB;
   isFlagged: boolean;
   isDestroyed: boolean;
+  emitter: Emitter;
 
   constructor(
     tileCoord: Vec2,
@@ -64,22 +60,23 @@ export default class Bomb {
     // this.position.x = tileCoord.x + 0.5 * 16;
     // this.position.y = tileCoord.y + 0.5 * 16;
     this.collisionBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y - 8),
+      new Vec2(this.position.x, this.position.y),
       new Vec2(0.8, 0.8)
     );
     console.log(this.collisionBoundary.toString());
     this.innerBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y - 8),
+      new Vec2(this.position.x, this.position.y),
       new Vec2(16.8, 16.8)
     );
     this.middleBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y - 8),
+      new Vec2(this.position.x, this.position.y),
       new Vec2(32.8, 32.8)
     );
     this.outerBoundary = new AABB(
-      new Vec2(this.position.x, this.position.y - 8),
+      new Vec2(this.position.x, this.position.y),
       new Vec2(48.8, 48.8)
     );
+    this.emitter = new Emitter()
   }
 
   setIsFlaggedTrue() {
@@ -97,6 +94,7 @@ export default class Bomb {
   }
 
   explode() {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "boom",loop: false,holdReference: false});
     this.isDestroyed = true;
     this.hide();
     this.explosionSprite.animation.playIfNotAlready("IDLE", false, null);

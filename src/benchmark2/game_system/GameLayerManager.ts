@@ -66,7 +66,7 @@ export class GameLayerManager {
                     end: 0,
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
-            ],
+            ]
             // onEnd: Events.LEVEL_START
         });
     }

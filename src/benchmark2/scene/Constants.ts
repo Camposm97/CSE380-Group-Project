@@ -17,6 +17,7 @@ export enum Control {
   SLOT2 = "slot2",
 }
 
+
 export enum Events {
   SHOT_FIRED = "SHOT_FIRED",
   UNLOAD_ASSET = "UNLOAD_ASSET",
@@ -30,6 +31,7 @@ export enum Events {
   ROOM_COMPLETE = "ROOM_COMPLETE",
   LEVEL_END = "LEVEL_END",
   PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
+  PLAYER_DIED = "PLAYER_DIED"
 }
 
 export enum Statuses {

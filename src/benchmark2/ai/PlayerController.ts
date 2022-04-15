@@ -19,6 +19,8 @@ import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
+import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
+import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -63,6 +65,7 @@ export default class PlayerController implements BattlerAI {
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
+    this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4.5,4.5)))
 
     this.iFrameTimer = new Timer(5000);
 
@@ -85,6 +88,20 @@ export default class PlayerController implements BattlerAI {
     this.receiver.subscribe(Events.OVERRIDE_IDLE);
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
+
+    this.owner.tweens.add('fadeOut', {
+      startDelay: 0,
+            duration: 3000,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 1,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ],
+            onEnd: Events.PLAYER_DIED
+    })
     // //allign bombHitBox with player sprites feet
     // let bombHitBoxCenter = new Vec2(
     //   this.owner.position.x - 0.8,
@@ -253,6 +270,10 @@ export default class PlayerController implements BattlerAI {
     }
   }
 
+  died(): boolean {
+    return this.health <= 0
+  }
+
   handleMovement(deltaT: number): void {
     let forwardAxis =
       (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
@@ -351,5 +372,8 @@ export default class PlayerController implements BattlerAI {
     this.coatColor = color;
   }
 
-  destroy() {}
+  destroy() {
+    this.owner.visible = false
+    this.owner.setCollisionShape(new AABB(new Vec2(10,10), new Vec2(1,1)))
+  }
 }
