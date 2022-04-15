@@ -6,8 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { Control, Events, Names, PlayerAction, RobotAction } from "./Constants";
-import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
+import { Control, Events, Names, RobotAction } from "./Constants";
 import BattlerAI from "../ai/BattlerAI";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Input from "../../Wolfie2D/Input/Input";
@@ -181,7 +180,7 @@ export default abstract class GameLevel extends Scene {
   }
 
   initScoreTimer(): void {
-    let aux = () => this.handleLoseCondition(0);
+    let aux = () => (<PlayerController> this.em.getPlayer()._ai).kill()
     if (this.timeLeft !== undefined) {
       this.scoreTimer = new ScoreTimer(this.timeLeft, aux, false);
     } else {
@@ -235,8 +234,12 @@ export default abstract class GameLevel extends Scene {
         });
         break;
       case Events.PLAYER_DIED:
-        this.viewport.setZoomLevel(1);
-        this.sceneManager.changeToScene(GameOver, { win: false });
+        this.glm.showFadeIn()
+        new Timer(1000, () => {
+          this.glm.hideAllAndZoomOut()
+          this.sceneManager.changeToScene(GameOver, { win: false });
+        }, false).start()
+                
         break;
       case Events.PLACE_FLAG:
         this.em.placeFlag(event.data.get("flagPlaceHitBox"));
@@ -262,7 +265,7 @@ export default abstract class GameLevel extends Scene {
     }
 
     //handleCollisions for
-    this.em.handleCollisions();
+    this.em.handleEnemyCollisions();
 
     if (this.em.playerReachedGoal()) {
       if (!this.gameOver) {
@@ -272,14 +275,14 @@ export default abstract class GameLevel extends Scene {
       this.gameOver = true;
     }
 
-    this.em.handlePlayerBombCollision();
-    this.em.blockCollision(deltaT);
-    this.em.mouseCollision(deltaT);
+    this.em.handlePlayerCoatColor();
+    this.em.handleBlockCollision(deltaT);
+    this.em.handleMouseCollision(deltaT);
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
-      this.em.bombCollision();
+      this.em.handlePlayerBombCollision();
     }
-    this.em.projectileCollision();
+    this.em.handleProjectileCollision();
     this.updateHUD();
     this.handleInput();
   }

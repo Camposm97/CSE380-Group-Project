@@ -98,7 +98,7 @@ export default class PlayerController implements BattlerAI {
 
     this.owner.tweens.add('death', {
       startDelay: 0,
-      duration: 3000,
+      duration: 2500,
       effects: [
         {
           property: TweenableProperties.alpha,
@@ -282,6 +282,10 @@ export default class PlayerController implements BattlerAI {
 
   died(): boolean {
     return this.health <= 0;
+  }
+
+  kill(): void {
+    this.damage(this.health)
   }
 
   handleMovement(deltaT: number): void {
