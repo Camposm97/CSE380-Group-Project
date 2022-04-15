@@ -176,7 +176,7 @@ export default class BlueStatueAI implements RobotAI {
       this.projectileSpeed * this.direction.x,
       this.projectileSpeed * this.direction.y
     );
-    console.log(this.projectileVel.toString());
+
     position.add(offset);
 
     this.emitter.fireEvent(RobotAction.FIRE_PROJECTILE, {
