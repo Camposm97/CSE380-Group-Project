@@ -71,7 +71,7 @@ export default class PlayerController implements BattlerAI {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
     this.owner.setCollisionShape(
-      new AABB(this.owner.position, new Vec2(6,10))
+      new AABB(this.owner.position, new Vec2(6,9))
     );
 
     this.iFrameTimer = new Timer(5000);
@@ -416,6 +416,10 @@ export default class PlayerController implements BattlerAI {
           break;
       }
     }
+  }
+
+  collisionShapeHalf(): AABB {
+    return new AABB(new Vec2(this.owner.position.x, this.owner.position.y+5), new Vec2(6,6))
   }
 
   setCoatColor(color: string) {

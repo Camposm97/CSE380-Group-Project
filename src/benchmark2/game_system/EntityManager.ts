@@ -391,7 +391,7 @@ export default class EntityManager {
    */
   handlePlayerBombCollision(): void {
     if (
-      this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary) &&
+      (<PlayerController>this.player._ai).collisionShapeHalf().overlaps(this.nearestBomb.collisionBoundary) &&
       !(<PlayerController>this.player._ai).died() && !this.nearestBomb.isDestroyed
     ) {
       (<PlayerController>this.player._ai).kill()
