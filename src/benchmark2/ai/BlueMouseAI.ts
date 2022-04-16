@@ -21,7 +21,7 @@ export default class BlueMouseAI implements RobotAI {
   speed: number;
   private deltaT: number;
   private path: NavigationPath;
-  time: number;
+  frozenTimeInMillis: number;
   direction: number;
   listening: boolean;
   offState: boolean
@@ -31,7 +31,7 @@ export default class BlueMouseAI implements RobotAI {
     this.listening = false;
     this.owner.scale = new Vec2(0.12, 0.12);
     this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4,4)))
-    this.time = 5000;
+    this.frozenTimeInMillis = 5000;
     this.speed = 120;
     this.mainBehavior = true;
     this.damage = 1;
@@ -41,13 +41,13 @@ export default class BlueMouseAI implements RobotAI {
         this.mainBehavior = false;
       }
       if (options.time) {
-        this.time = options.time;
+        this.frozenTimeInMillis = options.time;
       }
       if (options.damage) {
         this.damage = options.damage;
       }
     }
-    this.frozenTimer = new Timer(this.time)
+    this.frozenTimer = new Timer(this.frozenTimeInMillis)
     this.isFrozen = false;
     this.offState = false
   }
@@ -55,7 +55,7 @@ export default class BlueMouseAI implements RobotAI {
   hit(): void {
     if (!this.isFrozen) {
       this.isFrozen = true;
-      this.frozenTimer.start(this.time);
+      this.frozenTimer.start(this.frozenTimeInMillis);
       this.mainBehavior = !this.mainBehavior;
     }
   }

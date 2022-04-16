@@ -16,7 +16,7 @@ export default interface RobotAI extends AI {
   //speed of robot
   speed: number;
   //time of frozenTimer
-  time: number;
+  frozenTimeInMillis: number;
   //does AI listen for player movement
   listening: boolean;
 

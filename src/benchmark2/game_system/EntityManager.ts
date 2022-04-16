@@ -36,7 +36,7 @@ export default class EntityManager {
   private bm: BattleManager;
   private enemiesLeft: number;
   private emitter: Emitter;
-  private MAX_BULLETS_SIZE = 5;
+  private MAX_BULLETS_SIZE = 100;
 
   constructor(scene: GameLevel) {
     this.scene = scene;

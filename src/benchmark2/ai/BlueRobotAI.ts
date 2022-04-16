@@ -23,7 +23,7 @@ export default class BlueRobotAI implements RobotAI {
   private deltaT: number;
   private path: NavigationPath;
 
-  time: number;
+  frozenTimeInMillis: number;
 
   listening: boolean;
 
@@ -32,7 +32,7 @@ export default class BlueRobotAI implements RobotAI {
     this.listening = true;
     this.projectile = false;
     this.owner.scale = new Vec2(0.125, 0.125);
-    this.time = 5000;
+    this.frozenTimeInMillis = 5000;
     this.speed = 100;
     this.mainBehavior = true;
     this.damage = 1;
@@ -43,7 +43,7 @@ export default class BlueRobotAI implements RobotAI {
         this.mainBehavior = false;
       }
       if (options.time) {
-        this.time = options.time;
+        this.frozenTimeInMillis = options.time;
       }
       if (options.damage) {
         this.damage = options.damage;
@@ -51,7 +51,7 @@ export default class BlueRobotAI implements RobotAI {
     }
 
     this.frozenTimer = new Timer(
-      this.time,
+      this.frozenTimeInMillis,
       () => {
         this.isFrozen = false;
         this.owner.animation.play(RobotAnimations.IDLE, true, null);
@@ -64,7 +64,7 @@ export default class BlueRobotAI implements RobotAI {
     if (!this.isFrozen) {
       this.isFrozen = true;
       this.owner.animation.play(RobotAnimations.DAMAGE, false, null);
-      this.frozenTimer.start(this.time);
+      this.frozenTimer.start(this.frozenTimeInMillis);
       this.mainBehavior = !this.mainBehavior;
     }
   }

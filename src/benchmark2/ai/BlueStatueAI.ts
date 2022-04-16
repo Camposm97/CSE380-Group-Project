@@ -24,25 +24,21 @@ export default class BlueStatueAI implements RobotAI {
 
   speed: number;
 
-  private deltaT: number;
+  frozenTimeInMillis: number;
 
-  time: number;
+  currentProjFreq: number
+
+  projFreqMin: number
 
   listening: boolean;
 
   projectile: boolean;
-
-  private path: NavigationPath;
 
   private emitter: Emitter;
 
   private direction: Vec2;
 
   private unitVector: Vec2;
-
-  private moveSpaces: number;
-
-  private velocity: Vec2; //velocity statue will go once it is hit by the player
 
   private projectileSpeed: number; //speed of projectile
 
@@ -58,9 +54,10 @@ export default class BlueStatueAI implements RobotAI {
     this.projectile = true;
     this.projectileSpeed = 100;
     this.direction = new Vec2(0, -1);
-    this.moveSpaces = 1;
     this.owner.scale = new Vec2(0.12, 0.12);
-    this.time = 5000;
+    this.frozenTimeInMillis = 4000;
+    this.currentProjFreq = 750;
+    this.projFreqMin = 500;
     this.speed = 2000;
     this.mainBehavior = true;
     this.damage = 1;
@@ -69,7 +66,7 @@ export default class BlueStatueAI implements RobotAI {
         this.mainBehavior = false;
       }
       if (options.time) {
-        this.time = options.time;
+        this.frozenTimeInMillis = options.time;
       }
       if (options.damage) {
         this.damage = options.damage;
@@ -78,17 +75,14 @@ export default class BlueStatueAI implements RobotAI {
         this.direction = new Vec2(options.direction[0], options.direction[1]);
         this.directionIndex = options.directionIndex;
       }
-      if (options.moveSpaces) this.moveSpaces = options.moveSpaces;
     }
-    this.frozenTimer = new Timer(this.time);
+    this.frozenTimer = new Timer(this.frozenTimeInMillis);
 
-    this.projectileTimer = new Timer(this.time);
+    this.projectileTimer = new Timer(this.currentProjFreq);
 
     this.isFrozen = false;
 
     this.emitter = new Emitter();
-
-    this.velocity = new Vec2(0, 0);
 
     this.unitVector = new Vec2(-1, -1);
 
@@ -105,12 +99,10 @@ export default class BlueStatueAI implements RobotAI {
 
   hit(options: Record<string, any>): void {
     if (!this.isFrozen) {
-      let playerDirection = options.direction;
       this.isFrozen = true;
-      this.frozenTimer.start(this.time);
+      this.frozenTimer.start(this.frozenTimeInMillis);
       this.projectileTimer.update(0);
-      this.velocity.x = this.speed * playerDirection.x;
-      this.velocity.y = this.speed * -playerDirection.y;
+      this.currentProjFreq = this.currentProjFreq <= this.projFreqMin ? this.projFreqMin : this.currentProjFreq - 50
     }
   }
 
@@ -129,7 +121,7 @@ export default class BlueStatueAI implements RobotAI {
     if (this.directionIndex > 3) this.directionIndex = 0;
     this.owner.animation.play(this.vecAnimationMap.get(this.directionIndex));
 
-    this.projectileTimer.start(750);
+    this.projectileTimer.start(this.currentProjFreq);
 
     let position = new Vec2(this.owner.position.x, this.owner.position.y);
     let offset = new Vec2(this.direction.x * 16, this.direction.y * -16);
@@ -155,7 +147,6 @@ export default class BlueStatueAI implements RobotAI {
   handleEvent(event: GameEvent): void {}
 
   update(deltaT: number): void {
-    this.deltaT = deltaT;
     if (this.frozenTimer.isStopped()) {
       this.isFrozen = false;
     }
@@ -167,7 +158,5 @@ export default class BlueStatueAI implements RobotAI {
     if (!this.isFrozen && this.projectileTimer.isStopped()) {
       this.shoot();
     }
-
-    this.owner.move(this.velocity.scale(deltaT));
   }
 }
