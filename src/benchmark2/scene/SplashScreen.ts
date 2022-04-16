@@ -9,7 +9,8 @@ export default class SplashScreen extends Scene {
         this.load.image("logo","res/sprites/Logo.png");
         this.load.image('prof', 'res/sprites/professor.png')  
         this.load.image('rm', 'res/sprites/rm.png')
-    } 
+        this.load.audio('select', 'res/sound/select.wav')
+    }
 
     startScene(): void {
         // First, create a layer for it to go on
@@ -44,17 +45,25 @@ export default class SplashScreen extends Scene {
         let startBtn = initButton(this, 'primary', new Vec2(size.x, size.y), 'Click to Start')
         startBtn.size = new Vec2(250, 50)
 
+        let flag = false
+
         // When the play button is clicked, go to the next scene
         startBtn.onClick = () => {
-            this.sceneManager.changeToScene(MainMenu, {}, this.sceneOptions);   
+            this.sceneManager.changeToScene(MainMenu, {}, this.sceneOptions);
+            // this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'select', loop: false})             
         }
         startBtn.onEnter = () => {
             startBtn.fontSize = 32
             startBtn.size = new Vec2(255,55)
+            if (!flag) {
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'select', loop: false})
+            }
+            flag = true
         }
         startBtn.onLeave = () => {
             startBtn.fontSize = 30
             startBtn.size = new Vec2(250,50)
+            flag = false
         }
 
         // Scene has started, so start playing music
@@ -64,5 +73,7 @@ export default class SplashScreen extends Scene {
     unloadScene(): void {
         // The scene is being destroyed, so we can stop playing the song
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "menu"});
+        this.load.keepAudio('select')
+        this.load.keepAudio('select_hover')
     }
 }

@@ -21,6 +21,7 @@ import Timer from "../../Wolfie2D/Timing/Timer";2
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -70,9 +71,6 @@ export default class PlayerController implements BattlerAI {
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
-    this.owner.setCollisionShape(
-      new AABB(this.owner.position, new Vec2(6,10))
-    );
 
     this.iFrameTimer = new Timer(5000);
 
@@ -130,6 +128,10 @@ export default class PlayerController implements BattlerAI {
   }
 
   update(deltaT: number): void {
+    this.owner.setCollisionShape(
+      new AABB(new Vec2(this.owner.position.x, this.owner.position.y+5), new Vec2(6,8))
+    );
+
     if (this.iFrameTimer.isStopped()) this.iFrame = false;
 
     while (this.receiver.hasNextEvent()) {
@@ -268,6 +270,7 @@ export default class PlayerController implements BattlerAI {
 
   damage(damage: number): void {
     if (!this.iFrame) {
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'damage', loop: false})
       this.health -= damage;
       this.doAnimation(PlayerAction.DAMAGE);
       if (this.health <= 0) {
