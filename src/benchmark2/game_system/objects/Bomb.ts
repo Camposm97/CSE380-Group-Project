@@ -61,7 +61,7 @@ export default class Bomb {
     // this.position.y = tileCoord.y + 0.5 * 16;
     this.collisionBoundary = new AABB(
       new Vec2(this.position.x, this.position.y),
-      new Vec2(0.8, 0.8)
+      new Vec2(5,5)
     );
     console.log(this.collisionBoundary.toString());
     this.innerBoundary = new AABB(
@@ -79,10 +79,11 @@ export default class Bomb {
     this.emitter = new Emitter()
   }
 
-  setIsFlaggedTrue() {
+  setFlagged() {
     this.isFlagged = true;
     this.flagSprite.visible = true;
     this.flagSprite.animation.play("IDLE");
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'flag_place', loop: false})
   }
 
   setIsDestroyedTrue() {

@@ -8,8 +8,11 @@ import RobotAI from "./RobotAI";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import { PlayerAction } from "../scene/Constants";
 import Input from "../../Wolfie2D/Input/Input";
+import Emitter from "../../Wolfie2D/Events/Emitter";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class BlueRobotAI implements RobotAI {
+  emitter: Emitter;
   projectile: boolean;
   owner: AnimatedSprite;
   //whether or not robot is frozen
@@ -37,6 +40,7 @@ export default class BlueRobotAI implements RobotAI {
     this.mainBehavior = true;
     this.damage = 1;
     this.isFrozen = false;
+    this.emitter = new Emitter()
 
     if (options) {
       if (options.behavior === "secondary") {
@@ -66,6 +70,7 @@ export default class BlueRobotAI implements RobotAI {
       this.owner.animation.play(RobotAnimations.DAMAGE, false, null);
       this.frozenTimer.start(this.frozenTimeInMillis);
       this.mainBehavior = !this.mainBehavior;
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'r_freeze', loop: false})
     }
   }
 

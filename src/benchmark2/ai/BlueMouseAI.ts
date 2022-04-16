@@ -1,7 +1,9 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Shape from "../../Wolfie2D/DataTypes/Shapes/Shape";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import Emitter from "../../Wolfie2D/Events/Emitter";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
@@ -9,6 +11,7 @@ import { Names, RobotMouseAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 
 export default class BlueMouseAI implements RobotAI {
+  emitter: Emitter;
   owner: AnimatedSprite;
   //whether or not robot is frozen
   isFrozen: boolean;
@@ -36,6 +39,8 @@ export default class BlueMouseAI implements RobotAI {
     this.mainBehavior = true;
     this.damage = 1;
     this.direction = 1;
+    this.emitter = new Emitter()
+
     if (options) {
       if (options.behavior === "secondary") {
         this.mainBehavior = false;
@@ -57,6 +62,7 @@ export default class BlueMouseAI implements RobotAI {
       this.isFrozen = true;
       this.frozenTimer.start(this.frozenTimeInMillis);
       this.mainBehavior = !this.mainBehavior;
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'rm_freeze', loop: false})
     }
   }
 

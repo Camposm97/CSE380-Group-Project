@@ -7,8 +7,10 @@ import {  RobotAction, RobotStatueAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class BlueStatueAI implements RobotAI {
+  emitter: Emitter;
   owner: AnimatedSprite;
   //whether or not robot is frozen
   isFrozen: boolean;
@@ -33,9 +35,7 @@ export default class BlueStatueAI implements RobotAI {
   listening: boolean;
 
   projectile: boolean;
-
-  private emitter: Emitter;
-
+  
   private direction: Vec2;
 
   private unitVector: Vec2;
@@ -103,6 +103,7 @@ export default class BlueStatueAI implements RobotAI {
       this.frozenTimer.start(this.frozenTimeInMillis);
       this.projectileTimer.update(0);
       this.currentProjFreq = this.currentProjFreq <= this.projFreqMin ? this.projFreqMin : this.currentProjFreq - 50
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: 'rs_freeze', loop: false })
     }
   }
 

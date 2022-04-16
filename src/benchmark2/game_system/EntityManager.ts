@@ -358,9 +358,9 @@ export default class EntityManager {
 
   placeFlag(flagPlaceHitBox: AABB): void {
     for (let bomb of this.bombs) {
-      if (bomb && flagPlaceHitBox.overlaps(bomb.collisionBoundary)) {
-        if (!bomb.isFlagged || !bomb.isDestroyed) {
-          bomb.setIsFlaggedTrue();
+      if (bomb && flagPlaceHitBox.overlaps(bomb.innerBoundary)) {
+        if (!bomb.isFlagged && !bomb.isDestroyed) {
+          bomb.setFlagged();
         }
       }
     }

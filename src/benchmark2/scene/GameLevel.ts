@@ -59,6 +59,10 @@ export default abstract class GameLevel extends Scene {
     this.load.image("pistol", "res/sprites/pistol.png");
     this.load.image("block", "res/sprites/block.png");
     this.load.audio("boom", "res/sound/explode.wav");
+    this.load.audio('rs_freeze', 'res/sound/rs_freeze.wav')
+    this.load.audio('rm_freeze', 'res/sound/rm_freeze.wav')
+    this.load.audio('r_freeze', 'res/sound/r_freeze.wav')
+    this.load.audio('flag_place', 'res/sound/flag_place.wav')
   }
 
   loadLevelFromFolder(levelName: string): void {

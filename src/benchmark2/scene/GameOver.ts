@@ -36,6 +36,7 @@ export default class GameOver extends Scene {
         lblStatus.textColor = Color.WHITE;
 
         let btOk = initButton(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+300), 'Main Menu')
+        btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
 
         if (this.win) {
             lblStatus.text = 'You win!'
@@ -49,7 +50,6 @@ export default class GameOver extends Scene {
                 }
             }
         } else {
-            btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
         }
     }

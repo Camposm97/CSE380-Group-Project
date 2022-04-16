@@ -71,7 +71,7 @@ export default class PlayerController implements BattlerAI {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
     this.owner.setCollisionShape(
-      new AABB(this.owner.position, new Vec2(4.5, 4.5))
+      new AABB(this.owner.position, new Vec2(6,10))
     );
 
     this.iFrameTimer = new Timer(5000);
@@ -186,12 +186,13 @@ export default class PlayerController implements BattlerAI {
       this.handleAttack();
 
       if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
-        let center = new Vec2(this.owner.position.x, this.owner.position.y);
-        let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y * -1);
-        offSet.scale(16);
-        center.add(offSet);
+        // let center = new Vec2(this.owner.position.x, this.owner.position.y);
+        // let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y * -1);
+        // offSet.scale(16);
+        // center.add(offSet);
         this.emitter.fireEvent(Events.PLACE_FLAG, {
-          flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
+          flagPlaceHitBox: this.owner.collisionShape.getBoundingRect().clone()
+          // flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
         });
       }
 
