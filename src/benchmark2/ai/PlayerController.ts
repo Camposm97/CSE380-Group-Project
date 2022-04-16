@@ -71,7 +71,7 @@ export default class PlayerController implements BattlerAI {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
     this.owner.setCollisionShape(
-      new AABB(this.owner.position, new Vec2(6,9))
+      new AABB(this.owner.position, new Vec2(6,10))
     );
 
     this.iFrameTimer = new Timer(5000);

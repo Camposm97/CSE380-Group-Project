@@ -231,8 +231,8 @@ export default abstract class GameLevel extends Scene {
       case Events.LEVEL_END:
         this.viewport.setZoomLevel(1);
         this.sceneManager.changeToScene(GameOver, {
-          currentScore: this.currentScore,
           win: true,
+          currentScore: this.currentScore,
           timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
           nextLvl: this.nextRoom,
         });
@@ -241,7 +241,7 @@ export default abstract class GameLevel extends Scene {
         this.glm.showFadeIn()
         new Timer(1000, () => {
           this.glm.hideAllAndZoomOut()
-          this.sceneManager.changeToScene(GameOver, { win: false });
+          this.sceneManager.changeToScene(GameOver, { win: false, currentScore: this.currentScore });
         }, false).start()
                 
         break;
