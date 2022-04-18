@@ -1,3 +1,19 @@
+export enum CheatCode {
+  INVINCIBLE = 'invincible',
+  UNLOCK_ALL_LVLS = 'unlockAllLvls',
+  LVL_1 = '1',
+  LVL_2 = '2',
+  LVL_3 = '3',
+  LVL_4 = '4',
+  LVL_5 = '5',
+  LVL_6 = '6'
+}
+
+export const Cheats = {
+  invincible: false,
+  unlockAllLevels: false
+}
+
 export enum Names {
   NAVMESH = "navmesh",
 }
@@ -18,20 +34,23 @@ export enum Control {
 }
 
 
+
+
 export enum Events {
-  SHOT_FIRED = "SHOT_FIRED",
-  UNLOAD_ASSET = "UNLOAD_ASSET",
-  PLACE_FLAG = "PLACE_FLAG",
-  OVERRIDE_IDLE = "OVERRIDE_IDLE",
-  RESET_ROOM = "RESET_ROOM",
-  PAUSE_GAME = "PAUSE_GAME",
-  SHOW_CONTROLS = "SHOW_CONTROLS",
-  EXIT_GAME = "EXIT_GAME",
-  DESTROY_BOMB = "DESTROY_BOMB",
-  ROOM_COMPLETE = "ROOM_COMPLETE",
-  LEVEL_END = "LEVEL_END",
-  PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
-  PLAYER_DIED = "PLAYER_DIED"
+    SHOT_FIRED = "SHOT_FIRED",
+    UNLOAD_ASSET = "UNLOAD_ASSET",
+    PLACE_FLAG = "PLACE_FLAG",
+    OVERRIDE_IDLE = "OVERRIDE_IDLE",
+    RESET_ROOM = "RESET_ROOM",
+    PAUSE_GAME = "PAUSE_GAME",
+    SHOW_CONTROLS = "SHOW_CONTROLS",
+    EXIT_GAME = "EXIT_GAME",
+    DESTROY_BOMB = "DESTROY_BOMB",
+    ROOM_COMPLETE = "ROOM_COMPLETE",
+    LEVEL_END = "LEVEL_END",
+    PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
+    PLAYER_DIED = "PLAYER_DIED",
+    SHOW_CHEATS = "SHOW_CHEATS"
 }
 
 export enum Statuses {

@@ -3,7 +3,7 @@ import GameLevel from "../scene/GameLevel";
 import Color from "../../Wolfie2D/Utils/Color";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import { Events } from "../scene/Constants";
+import { CheatCode, Cheats, Events } from "../scene/Constants";
 import BattlerAI from "../ai/BattlerAI";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
@@ -11,13 +11,18 @@ import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
+import UIElement from "../../Wolfie2D/Nodes/UIElement";
+import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
+import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 
 enum LayerType {
     PRIMARY = 'primary',
     HUD = 'hud',
     PAUSE = 'pause',
     CONTROLS = 'controls',
-    ROOM_COMPLETE = 'ROOM_COMPLETE'
+    ROOM_COMPLETE = 'ROOM_COMPLETE',
+    CHEAT = "CHEAT"
 }
 
 export class GameLayerManager {
@@ -27,6 +32,9 @@ export class GameLayerManager {
     private pauseLayer: Layer
     private controlsLayer: Layer
     private roomCompleteLayer: Layer
+    private cheatCodeLayer: Layer
+    private btCheat: Button
+    private tfCheat: TextInput
     private lblRoomEnd: Label
     private levelTransitionScreen: Rect
 
@@ -90,7 +98,8 @@ export class GameLayerManager {
         initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
         initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
         initButtonHandler(this.scene, LayerType.PAUSE, c, 'Controls', Events.SHOW_CONTROLS)
-        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y+75), 'Exit', Events.EXIT_GAME)
+        this.btCheat = initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x,c.y+75), 'Cheat Codes', Events.SHOW_CHEATS)
+        initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y+150), 'Exit', Events.EXIT_GAME)
         this.pauseLayer.setHidden(true)
     }
 
@@ -110,6 +119,49 @@ export class GameLayerManager {
         initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+100), "D/Right-Arrow to move right")
         initLabel(this.scene, LayerType.CONTROLS, new Vec2(center.x,center.y+150), "Space/Left-Click to attack")
         initButtonHandler(this.scene, LayerType.CONTROLS, new Vec2(center.x, center.y+250), 'Back', Events.SHOW_CONTROLS)
+    }
+
+    initCheatCodeLayer(): void {
+        const c = this.scene.getViewport().getCenter().clone()
+        this.cheatCodeLayer = this.scene.addUILayer(LayerType.CHEAT)
+        this.cheatCodeLayer.setHidden(true)
+        this.tfCheat = <TextInput> this.scene.add.uiElement(UIElementType.TEXT_INPUT, LayerType.PAUSE, {position: new Vec2(c.x, c.y+75)})
+        this.tfCheat.visible = false
+        this.tfCheat.size = new Vec2(200, 50)
+        this.tfCheat.fontSize = 28
+        this.tfCheat.setHAlign('center')
+        this.tfCheat.borderRadius = 15.0
+        this.tfCheat.onClick = () => {
+            let code = this.tfCheat.text
+            console.log(`cheat=${code}`)
+            switch(code) {
+                case CheatCode.INVINCIBLE:
+                    Cheats.invincible = !Cheats.invincible
+                    break;
+                case CheatCode.UNLOCK_ALL_LVLS:
+                    Cheats.unlockAllLevels = !Cheats.unlockAllLevels
+                    break;
+                case CheatCode.LVL_1:
+                    // TODO: Go to specified level
+                    break;
+                case CheatCode.LVL_2:
+                    // TODO: Go to specified level
+                    break;
+                case CheatCode.LVL_3:
+                    // TODO: Go to specified level
+                    break;
+                case CheatCode.LVL_4:
+                    // TODO: Go to specified level
+                    break;
+                case CheatCode.LVL_5:
+                    // TODO: Go to specified level
+                    break;
+                case CheatCode.LVL_6:
+                    // TODO: Go to specified level
+                    break;
+            }
+            this.tfCheat.text = ''
+        }
     }
 
     initRoomCompleteLayer(): void {
@@ -174,6 +226,12 @@ export class GameLayerManager {
     showControls() {
         this.controlsLayer.setHidden(!this.controlsLayer.isHidden())
         this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
+    }
+
+    showCheatCodes() {
+        // this.cheatCodeLayer.setHidden(false)
+        this.btCheat.visible = false
+        this.tfCheat.visible = true
     }
 
     hideAllAndZoomOut() {

@@ -14,6 +14,7 @@ import {
   PlayerAction,
   PlayerAnimations,
   CoatColor,
+  Cheats,
 } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
@@ -269,15 +270,16 @@ export default class PlayerController implements BattlerAI {
   }
 
   damage(damage: number): void {
+    if (Cheats.invincible) return;
     if (!this.iFrame) {
       this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'damage', loop: false})
       this.health -= damage;
       this.doAnimation(PlayerAction.DAMAGE);
-      if (this.health <= 0) {
-        this.health = 0
-        this.owner.setAIActive(false, {})
-        this.owner.isCollidable = false
-        this.owner.tweens.play('death')
+        if (this.health <= 0) {
+          this.health = 0
+          this.owner.setAIActive(false, {})
+          this.owner.isCollidable = false
+          this.owner.tweens.play('death')
       }
       this.iFrame = true;
       this.iFrameTimer.start();

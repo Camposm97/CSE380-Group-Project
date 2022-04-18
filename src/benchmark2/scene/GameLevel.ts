@@ -161,6 +161,7 @@ export default abstract class GameLevel extends Scene {
     this.glm.initHudLayer();
     this.glm.initPauseLayer();
     this.glm.initControlsLayer();
+    this.glm.initCheatCodeLayer();
     this.glm.initRoomCompleteLayer();
 
     this.gameOver = false;
@@ -179,6 +180,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.LEVEL_END);
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED)
+    this.receiver.subscribe(Events.SHOW_CHEATS)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -216,6 +218,9 @@ export default abstract class GameLevel extends Scene {
         break;
       case Events.SHOW_CONTROLS:
         this.glm.showControls();
+        break;
+      case Events.SHOW_CHEATS:
+        this.glm.showCheatCodes();
         break;
       case Events.EXIT_GAME:
         this.sceneManager.changeToScene(MainMenu, {});
