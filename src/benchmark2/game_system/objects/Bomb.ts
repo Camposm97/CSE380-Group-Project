@@ -54,16 +54,14 @@ export default class Bomb {
       (tileCoord.y + 0.5) * 16
     );
     this.explosionSprite.position = this.position;
-    this.explosionSprite.scale = new Vec2(1.25,1.25);
+    this.explosionSprite.scale = new Vec2(1.25, 1.25);
     this.explosionSprite.animation.play("HIDDEN", true, null);
     this.flagSprite.position = this.position;
-    // this.position.x = tileCoord.x + 0.5 * 16;
-    // this.position.y = tileCoord.y + 0.5 * 16;
+
     this.collisionBoundary = new AABB(
       new Vec2(this.position.x, this.position.y),
       new Vec2(0.8, 0.8)
     );
-    console.log(this.collisionBoundary.toString());
     this.innerBoundary = new AABB(
       new Vec2(this.position.x, this.position.y),
       new Vec2(16.8, 16.8)
@@ -76,7 +74,7 @@ export default class Bomb {
       new Vec2(this.position.x, this.position.y),
       new Vec2(48.8, 48.8)
     );
-    this.emitter = new Emitter()
+    this.emitter = new Emitter();
   }
 
   setIsFlaggedTrue() {
@@ -94,16 +92,15 @@ export default class Bomb {
   }
 
   explode() {
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "boom",loop: false,holdReference: false});
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+      key: "boom",
+      loop: false,
+      holdReference: false,
+    });
     this.isDestroyed = true;
     this.hide();
     this.explosionSprite.animation.playIfNotAlready("IDLE", false, null);
     this.explosionSprite.animation.queue("DEBRIS", true, null);
     this.explosionSprite.tweens.play("fadeOut");
   }
-
-  // displayFlag(sprite: Sprite) {
-  //   this.sprite = sprite;
-  //   sprite.position = this.position;
-  // }
 }
