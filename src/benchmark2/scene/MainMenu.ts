@@ -238,7 +238,7 @@ export default class MainMenu extends Scene {
       "getting his own conscience written into the main character sprite.";
     const strAbout7 =
       "Now he will have to brave the Al robots he was creating to escape Wolfie 2D or be forever stuck.";
-    const strAbout8 = "Cheat Codes: cheatCode1, cheatCode2, ...,cheatCodeN";
+    const strAbout8 = "Cheat Codes: invincible, unlock-all-levels, 1, 2, 3, 4, 5, 6";
 
     const lblAbout1 = initLabel(
       this,

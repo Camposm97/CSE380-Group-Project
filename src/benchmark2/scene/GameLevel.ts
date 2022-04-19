@@ -6,8 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { Control, Events, Names, PlayerAction, RobotAction } from "./Constants";
-import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
+import { Control, Events, Names, RobotAction } from "./Constants";
 import BattlerAI from "../ai/BattlerAI";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Input from "../../Wolfie2D/Input/Input";
@@ -16,7 +15,6 @@ import ScoreTimer from "../game_system/ScoreTimer";
 import MainMenu from "./MainMenu";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
-import ProjectileAI from "../ai/ProjectileAI";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
 
@@ -61,6 +59,11 @@ export default abstract class GameLevel extends Scene {
     this.load.image("pistol", "res/sprites/pistol.png");
     this.load.image("block", "res/sprites/block.png");
     this.load.audio("boom", "res/sound/explode.wav");
+    this.load.audio('rs_freeze', 'res/sound/rs_freeze.wav')
+    this.load.audio('rm_freeze', 'res/sound/rm_freeze.wav')
+    this.load.audio('r_freeze', 'res/sound/r_freeze.wav')
+    this.load.audio('flag_place', 'res/sound/flag_place.wav')
+    this.load.audio('damage', 'res/sound/damage.wav')
   }
 
   loadLevelFromFolder(levelName: string): void {
@@ -158,6 +161,7 @@ export default abstract class GameLevel extends Scene {
     this.glm.initHudLayer();
     this.glm.initPauseLayer();
     this.glm.initControlsLayer();
+    this.glm.initCheatCodeLayer();
     this.glm.initRoomCompleteLayer();
 
     this.gameOver = false;
@@ -176,13 +180,14 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.LEVEL_END);
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED)
+    this.receiver.subscribe(Events.SHOW_CHEATS)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
   }
 
   initScoreTimer(): void {
-    let aux = () => this.handleLoseCondition(0);
+    let aux = () => (<PlayerController> this.em.getPlayer()._ai).kill()
     if (this.timeLeft !== undefined) {
       this.scoreTimer = new ScoreTimer(this.timeLeft, aux, false);
     } else {
@@ -214,6 +219,9 @@ export default abstract class GameLevel extends Scene {
       case Events.SHOW_CONTROLS:
         this.glm.showControls();
         break;
+      case Events.SHOW_CHEATS:
+        this.glm.showCheatCodes();
+        break;
       case Events.EXIT_GAME:
         this.sceneManager.changeToScene(MainMenu, {});
         break;
@@ -229,15 +237,19 @@ export default abstract class GameLevel extends Scene {
       case Events.LEVEL_END:
         this.viewport.setZoomLevel(1);
         this.sceneManager.changeToScene(GameOver, {
-          currentScore: this.currentScore,
           win: true,
+          currentScore: this.currentScore,
           timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
           nextLvl: this.nextRoom,
         });
         break;
       case Events.PLAYER_DIED:
-        this.viewport.setZoomLevel(1);
-        this.sceneManager.changeToScene(GameOver, { win: false });
+        this.glm.showFadeIn()
+        new Timer(1000, () => {
+          this.glm.hideAllAndZoomOut()
+          this.sceneManager.changeToScene(GameOver, { win: false, currentScore: this.currentScore });
+        }, false).start()
+                
         break;
       case Events.PLACE_FLAG:
         this.em.placeFlag(event.data.get("flagPlaceHitBox"));
@@ -262,8 +274,8 @@ export default abstract class GameLevel extends Scene {
       this.handleEvent(this.receiver.getNextEvent());
     }
 
-    //handleCollisions for
-    this.em.handleCollisions();
+    this.em.handleEnemyCollisions()
+    this.em.handleCollidables(deltaT)
 
     if (this.em.playerReachedGoal()) {
       if (!this.gameOver) {
@@ -273,31 +285,19 @@ export default abstract class GameLevel extends Scene {
       this.gameOver = true;
     }
 
-    this.em.handlePlayerBombCollision();
-    this.em.blockCollision(deltaT);
-    this.em.mouseCollision(deltaT);
+    this.em.handlePlayerCoatColor();
+    this.em.handleBlockCollision(deltaT);
 
     if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
-      this.em.bombCollision();
+      this.em.handlePlayerBombCollision();
     }
-    this.em.projectileCollision();
-    let health = (<BattlerAI>this.em.getPlayer()._ai).health;
-    this.handleLoseCondition(health);
-    this.updateHUD(health);
+    this.em.handleProjectileCollision();
+    this.updateHUD();
     this.handleInput();
   }
 
-  handleLoseCondition(health: number): void {
-    if (health <= 0 && !this.gameOver) { // If health below 0, Game Over!
-      this.gameOver = true;
-      this.scoreTimer.pause()
-      this.em.getPlayer().setAIActive(false, {});
-      (<PlayerController>this.em.getPlayer()._ai).doAnimation(PlayerAction.DAMAGE)
-      this.em.getPlayer().tweens.play('fadeOut')
-    }
-  }
-
-  updateHUD(health: number): void {
+  updateHUD(): void {
+    let health = (<BattlerAI>this.em.getPlayer()._ai).health;
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
   }

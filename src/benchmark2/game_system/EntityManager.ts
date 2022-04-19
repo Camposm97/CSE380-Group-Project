@@ -36,7 +36,7 @@ export default class EntityManager {
   private bm: BattleManager;
   private enemiesLeft: number;
   private emitter: Emitter;
-  private MAX_BULLETS_SIZE = 5;
+  private MAX_BULLETS_SIZE = 100;
 
   constructor(scene: GameLevel) {
     this.scene = scene;
@@ -269,15 +269,16 @@ export default class EntityManager {
     this.bm.setBlocks(this.blocks);
   }
 
-  handleCollisions(): void {
+  /**
+   * Handles collisions between the enemy for the player and bombs
+   */
+  handleEnemyCollisions(): void {
     for (let enemy of this.enemies) {
       if (enemy && enemy.sweptRect) {
         if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
           let r = <RobotAI>enemy._ai;
           if (!r.isFrozen) {
-            (<PlayerController>this.player._ai).damage(
-              (<RobotAI>enemy._ai).damage
-            );
+            (<PlayerController>this.player._ai).damage((<RobotAI>enemy._ai).damage);
           }
         }
       }
@@ -304,10 +305,9 @@ export default class EntityManager {
     }
   }
 
-  mouseCollision(deltaT: number): void {
+  handleCollidables(deltaT: number): void {
     for (let enemy of this.enemies) {
       if (enemy._ai instanceof BlueMouseAI) {
-        console.log("i find mouse");
         let bm = <BlueMouseAI>enemy._ai;
         if (bm.owner.sweptRect.overlaps(this.player.sweptRect)) {
           let v = new Vec2(
@@ -322,9 +322,25 @@ export default class EntityManager {
         }
       }
     }
+    for (let enemy of this.enemies) {
+      if (enemy._ai instanceof BlueStatueAI) {
+        let bs = <BlueStatueAI>enemy._ai;
+        if (bs.owner.sweptRect.overlaps(this.player.sweptRect)) {
+          let v = new Vec2(
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.x,
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.y *
+              -1
+          );
+          v.scale(deltaT);
+          bs.push(v);
+        }
+      }
+    }
   }
 
-  blockCollision(deltaT: number): void {
+  handleBlockCollision(deltaT: number): void {
     for (let block of this.blocks) {
       if (block.owner.sweptRect.overlaps(this.player.sweptRect)) {
         let blockVec = new Vec2(
@@ -342,15 +358,18 @@ export default class EntityManager {
 
   placeFlag(flagPlaceHitBox: AABB): void {
     for (let bomb of this.bombs) {
-      if (bomb && flagPlaceHitBox.overlaps(bomb.collisionBoundary)) {
-        if (!bomb.isFlagged || !bomb.isDestroyed) {
-          bomb.setIsFlaggedTrue();
+      if (bomb && flagPlaceHitBox.overlaps(bomb.innerBoundary)) {
+        if (!bomb.isFlagged && !bomb.isDestroyed) {
+          bomb.setFlagged();
         }
       }
     }
   }
 
-  projectileCollision(): void {
+  /**
+   * Handles collisions between projectiles and the player
+   */
+  handleProjectileCollision(): void {
     for (let i = 0; i < this.projectiles.length; i++) {
       if (
         this.projectiles[i].position.x > 450 ||
@@ -360,10 +379,8 @@ export default class EntityManager {
       ) {
         this.projectiles[i].visible = false;
       }
-      if (this.projectiles[i].boundary.overlaps(this.player.boundary)) {
-        (<PlayerController>this.player._ai).damage(
-          (<ProjectileAI>this.projectiles[i]._ai).damage
-        );
+      if (this.projectiles[i].collisionShape.overlaps(this.player.collisionShape)) {
+        (<PlayerController>this.player._ai).damage((<ProjectileAI>this.projectiles[i]._ai).damage);
         this.projectiles[i].visible = false;
       }
     }
@@ -372,12 +389,12 @@ export default class EntityManager {
   /**
    * Handles player bomb collision (determines lab coat color)
    */
-  bombCollision(): void {
+  handlePlayerBombCollision(): void {
     if (
-      this.player.collisionShape.overlaps(this.nearestBomb.collisionBoundary) &&
-      !(<PlayerController>this.player._ai).died()
+      (<PlayerController>this.player._ai).collisionShapeHalf().overlaps(this.nearestBomb.collisionBoundary) &&
+      !(<PlayerController>this.player._ai).died() && !this.nearestBomb.isDestroyed
     ) {
-      (<PlayerController>this.player._ai).health = 0;
+      (<PlayerController>this.player._ai).kill()
       this.nearestBomb.explode();
     } else if (
       this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)
@@ -394,7 +411,7 @@ export default class EntityManager {
     } else (<PlayerController>this.player._ai).nearBomb = false;
   }
 
-  handlePlayerBombCollision(): void {
+  handlePlayerCoatColor(): void {
     if (!(<PlayerController>this.player._ai).nearBomb) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.WHITE);
       for (let bomb of this.bombs) {

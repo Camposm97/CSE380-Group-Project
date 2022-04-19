@@ -292,7 +292,7 @@ export default abstract class GameNode
    */
   setCollisionShape(collider: Shape): void {
     this.collisionShape = collider;
-    this.collisionShape.center.copy(this.position);
+    // this.collisionShape.center.copy(this.position); // Commented out by Michael Campos
   }
 
   // @implemented

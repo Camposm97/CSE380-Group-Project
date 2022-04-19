@@ -1,32 +1,16 @@
-import GoapActionPlanner from "../../Wolfie2D/AI/GoapActionPlanner";
-import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
-import StateMachineGoapAI from "../../Wolfie2D/AI/StateMachineGoapAI";
-import GoapAction from "../../Wolfie2D/DataTypes/Interfaces/GoapAction";
-import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
-import Stack from "../../Wolfie2D/DataTypes/Stack";
-import State from "../../Wolfie2D/DataTypes/State/State";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
-import GameNode from "../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
-import Weapon from "../game_system/items/Weapon";
-import {
-  Events,
-  Names,
-  RobotAction,
-  Statuses,
-  RobotStatueAnimations,
-} from "../scene/Constants";
+import {  RobotAction, RobotStatueAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
-import Receiver from "../../Wolfie2D/Events/Receiver";
-import { PlayerAction } from "../scene/Constants";
 import Emitter from "../../Wolfie2D/Events/Emitter";
-import PlayerController from "./PlayerController";
+import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class BlueStatueAI implements RobotAI {
+  emitter: Emitter;
   owner: AnimatedSprite;
   //whether or not robot is frozen
   isFrozen: boolean;
@@ -42,25 +26,19 @@ export default class BlueStatueAI implements RobotAI {
 
   speed: number;
 
-  private deltaT: number;
+  frozenTimeInMillis: number;
 
-  time: number;
+  currentProjFreq: number
+
+  projFreqMin: number
 
   listening: boolean;
 
   projectile: boolean;
-
-  private path: NavigationPath;
-
-  private emitter: Emitter;
-
+  
   private direction: Vec2;
 
   private unitVector: Vec2;
-
-  private moveSpaces: number;
-
-  private velocity: Vec2; //velocity statue will go once it is hit by the player
 
   private projectileSpeed: number; //speed of projectile
 
@@ -72,20 +50,15 @@ export default class BlueStatueAI implements RobotAI {
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
-
     this.listening = false;
-
     this.projectile = true;
-
     this.projectileSpeed = 100;
-
     this.direction = new Vec2(0, -1);
-
-    this.moveSpaces = 3;
-
-    this.owner.scale = new Vec2(0.125, 0.125);
-    this.time = 5000;
-    this.speed = 3000;
+    this.owner.scale = new Vec2(0.12, 0.12);
+    this.frozenTimeInMillis = 4000;
+    this.currentProjFreq = 750;
+    this.projFreqMin = 500;
+    this.speed = 2000;
     this.mainBehavior = true;
     this.damage = 1;
     if (options) {
@@ -93,7 +66,7 @@ export default class BlueStatueAI implements RobotAI {
         this.mainBehavior = false;
       }
       if (options.time) {
-        this.time = options.time;
+        this.frozenTimeInMillis = options.time;
       }
       if (options.damage) {
         this.damage = options.damage;
@@ -102,17 +75,14 @@ export default class BlueStatueAI implements RobotAI {
         this.direction = new Vec2(options.direction[0], options.direction[1]);
         this.directionIndex = options.directionIndex;
       }
-      if (options.moveSpaces) this.moveSpaces = options.moveSpaces;
     }
-    this.frozenTimer = new Timer(this.time);
+    this.frozenTimer = new Timer(this.frozenTimeInMillis);
 
-    this.projectileTimer = new Timer(this.time);
+    this.projectileTimer = new Timer(this.currentProjFreq);
 
     this.isFrozen = false;
 
     this.emitter = new Emitter();
-
-    this.velocity = new Vec2(0, 0);
 
     this.unitVector = new Vec2(-1, -1);
 
@@ -129,14 +99,20 @@ export default class BlueStatueAI implements RobotAI {
 
   hit(options: Record<string, any>): void {
     if (!this.isFrozen) {
-      let playerDirection = options.direction;
       this.isFrozen = true;
-      this.frozenTimer.start(this.time);
+      this.frozenTimer.start(this.frozenTimeInMillis);
       this.projectileTimer.update(0);
-      this.velocity.x = this.speed * playerDirection.x;
-      this.velocity.y = this.speed * -playerDirection.y;
+      this.currentProjFreq = this.currentProjFreq <= this.projFreqMin ? this.projFreqMin : this.currentProjFreq - 50
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: 'rs_freeze', loop: false })
     }
   }
+
+  push(v: Vec2): void {
+    if (this.isFrozen) {
+      this.owner.move(v)
+    }
+  }
+
   shoot(): void {
     this.direction.mult(this.unitVector);
     this.direction = new Vec2(this.direction.y, this.direction.x);
@@ -146,29 +122,8 @@ export default class BlueStatueAI implements RobotAI {
     if (this.directionIndex > 3) this.directionIndex = 0;
     this.owner.animation.play(this.vecAnimationMap.get(this.directionIndex));
 
-    this.projectileTimer.start(5000);
+    this.projectileTimer.start(this.currentProjFreq);
 
-    // let position = this.owner.position;
-    // switch (this.direction) {
-    //   case 0:
-    //     position.y = position.y - 10;
-    //     this.projectileVel = new Vec2(0, -this.projectileSpeed);
-    //     break;
-    //   case 1:
-    //     position.x = position.x - 10;
-    //     this.projectileVel = new Vec2(-this.projectileSpeed, 0);
-    //     break;
-    //   case 2:
-    //     position.x = position.y + 10;
-    //     this.projectileVel = new Vec2(0, this.projectileSpeed);
-    //     break;
-    //   case 3:
-    //     position.x = position.x + 10;
-    //     this.projectileVel = new Vec2(this.projectileSpeed, 0);
-    //     break;
-    // }
-    // this.direction++;
-    // if (this.direction > 3) this.direction = 0;
     let position = new Vec2(this.owner.position.x, this.owner.position.y);
     let offset = new Vec2(this.direction.x * 16, this.direction.y * -16);
 
@@ -193,15 +148,17 @@ export default class BlueStatueAI implements RobotAI {
   handleEvent(event: GameEvent): void {}
 
   update(deltaT: number): void {
-    this.deltaT = deltaT;
+    this.owner.setCollisionShape(new AABB(new Vec2(this.owner.position.x, this.owner.position.y+10), new Vec2(5,5)))
     if (this.frozenTimer.isStopped()) {
       this.isFrozen = false;
     }
 
-    if (this.projectileTimer.isStopped()) {
-      this.shoot();
+    if (this.isFrozen) {
+      this.owner.animation.playIfNotAlready(RobotStatueAnimations.DEATH, true)
     }
 
-    this.owner.move(this.velocity.scale(deltaT));
+    if (!this.isFrozen && this.projectileTimer.isStopped()) {
+      this.shoot();
+    }
   }
 }

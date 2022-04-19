@@ -1,4 +1,5 @@
 import AI from "../../Wolfie2D/DataTypes/Interfaces/AI";
+import Emitter from "../../Wolfie2D/Events/Emitter";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import GameNode from "../../Wolfie2D/Nodes/GameNode";
 import Timer from "../../Wolfie2D/Timing/Timer";
@@ -16,9 +17,11 @@ export default interface RobotAI extends AI {
   //speed of robot
   speed: number;
   //time of frozenTimer
-  time: number;
+  frozenTimeInMillis: number;
   //does AI listen for player movement
   listening: boolean;
+
+  emitter: Emitter
 
   //method for handling taking a hit from the player
   hit: (options?: Record<string, any>) => void;

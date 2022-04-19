@@ -1,4 +1,5 @@
 import AI from "../../Wolfie2D/DataTypes/Interfaces/AI";
+import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import Receiver from "../../Wolfie2D/Events/Receiver";
@@ -28,6 +29,8 @@ export default class ProjectileAI implements AI {
     damage: number = 1
   ): void {
     this.owner = owner;
+
+    this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(10,10)))
 
     this.current_velocity = options.velocity;
 

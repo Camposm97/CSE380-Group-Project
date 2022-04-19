@@ -14,14 +14,15 @@ import {
   PlayerAction,
   PlayerAnimations,
   CoatColor,
+  Cheats,
 } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
-import Timer from "../../Wolfie2D/Timing/Timer";
+import Timer from "../../Wolfie2D/Timing/Timer";2
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
-import { formatWithOptions } from "util";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -71,9 +72,6 @@ export default class PlayerController implements BattlerAI {
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
-    this.owner.setCollisionShape(
-      new AABB(this.owner.position, new Vec2(4.5, 4.5))
-    );
 
     this.iFrameTimer = new Timer(5000);
 
@@ -97,9 +95,9 @@ export default class PlayerController implements BattlerAI {
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
 
-    this.owner.tweens.add("fadeOut", {
+    this.owner.tweens.add('death', {
       startDelay: 0,
-      duration: 3000,
+      duration: 2500,
       effects: [
         {
           property: TweenableProperties.alpha,
@@ -131,6 +129,10 @@ export default class PlayerController implements BattlerAI {
   }
 
   update(deltaT: number): void {
+    this.owner.setCollisionShape(
+      new AABB(new Vec2(this.owner.position.x, this.owner.position.y+5), new Vec2(6,8))
+    );
+
     if (this.iFrameTimer.isStopped()) this.iFrame = false;
 
     while (this.receiver.hasNextEvent()) {
@@ -187,12 +189,13 @@ export default class PlayerController implements BattlerAI {
       this.handleAttack();
 
       if (Input.isMouseJustPressed(2) || Input.isKeyJustPressed("f")) {
-        let center = new Vec2(this.owner.position.x, this.owner.position.y);
-        let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y * -1);
-        offSet.scale(16);
-        center.add(offSet);
+        // let center = new Vec2(this.owner.position.x, this.owner.position.y);
+        // let offSet = new Vec2(this.lookDirection.x, this.lookDirection.y * -1);
+        // offSet.scale(16);
+        // center.add(offSet);
         this.emitter.fireEvent(Events.PLACE_FLAG, {
-          flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
+          flagPlaceHitBox: this.owner.collisionShape.getBoundingRect().clone()
+          // flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
         });
       }
 
@@ -267,14 +270,16 @@ export default class PlayerController implements BattlerAI {
   }
 
   damage(damage: number): void {
+    if (Cheats.invincible) return;
     if (!this.iFrame) {
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'damage', loop: false})
       this.health -= damage;
       this.doAnimation(PlayerAction.DAMAGE);
-      if (this.health <= 0) {
-        this.health = 0;
-        this.owner.setAIActive(false, {});
-        this.owner.visible = false;
-        this.owner.isCollidable = false;
+        if (this.health <= 0) {
+          this.health = 0
+          this.owner.setAIActive(false, {})
+          this.owner.isCollidable = false
+          this.owner.tweens.play('death')
       }
       this.iFrame = true;
       this.iFrameTimer.start();
@@ -283,6 +288,10 @@ export default class PlayerController implements BattlerAI {
 
   died(): boolean {
     return this.health <= 0;
+  }
+
+  kill(): void {
+    this.damage(this.health)
   }
 
   handleMovement(deltaT: number): void {
@@ -412,6 +421,10 @@ export default class PlayerController implements BattlerAI {
           break;
       }
     }
+  }
+
+  collisionShapeHalf(): AABB {
+    return new AABB(new Vec2(this.owner.position.x, this.owner.position.y+5), new Vec2(6,6))
   }
 
   setCoatColor(color: string) {

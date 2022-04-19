@@ -1,7 +1,9 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Shape from "../../Wolfie2D/DataTypes/Shapes/Shape";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import Emitter from "../../Wolfie2D/Events/Emitter";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
@@ -9,6 +11,7 @@ import { Names, RobotMouseAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 
 export default class BlueMouseAI implements RobotAI {
+  emitter: Emitter;
   owner: AnimatedSprite;
   //whether or not robot is frozen
   isFrozen: boolean;
@@ -21,7 +24,7 @@ export default class BlueMouseAI implements RobotAI {
   speed: number;
   private deltaT: number;
   private path: NavigationPath;
-  time: number;
+  frozenTimeInMillis: number;
   direction: number;
   listening: boolean;
   offState: boolean
@@ -29,25 +32,27 @@ export default class BlueMouseAI implements RobotAI {
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
     this.listening = false;
-    this.owner.scale = new Vec2(0.11, 0.11);
+    this.owner.scale = new Vec2(0.12, 0.12);
     this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4,4)))
-    this.time = 5000;
+    this.frozenTimeInMillis = 5000;
     this.speed = 120;
     this.mainBehavior = true;
     this.damage = 1;
     this.direction = 1;
+    this.emitter = new Emitter()
+
     if (options) {
       if (options.behavior === "secondary") {
         this.mainBehavior = false;
       }
       if (options.time) {
-        this.time = options.time;
+        this.frozenTimeInMillis = options.time;
       }
       if (options.damage) {
         this.damage = options.damage;
       }
     }
-    this.frozenTimer = new Timer(this.time)
+    this.frozenTimer = new Timer(this.frozenTimeInMillis)
     this.isFrozen = false;
     this.offState = false
   }
@@ -55,8 +60,9 @@ export default class BlueMouseAI implements RobotAI {
   hit(): void {
     if (!this.isFrozen) {
       this.isFrozen = true;
-      this.frozenTimer.start(this.time);
+      this.frozenTimer.start(this.frozenTimeInMillis);
       this.mainBehavior = !this.mainBehavior;
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'rm_freeze', loop: false})
     }
   }
 

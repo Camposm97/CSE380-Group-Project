@@ -7,7 +7,8 @@ import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import MainMenu from "./MainMenu";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameLevel from "./GameLevel";
-import { initButton } from "../ui/UIBuilder";
+import { initButton, initLabel } from "../ui/UIBuilder";
+import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
 
 export default class GameOver extends Scene {
     private currentScore: number
@@ -16,12 +17,10 @@ export default class GameOver extends Scene {
     private nextLvl: new (...args: any) => GameLevel
 
     initScene(options: Record<string, any>): void {
-        options.currentScore ? this.currentScore = options.currentScore : this.currentScore = 0
+        this.currentScore = options.currentScore ? options.currentScore : 0
         this.win = options.win
-        this.timeLeft = options.timeLeft
+        this.timeLeft = options.timeLeft ? options.timeLeft : 0
         this.nextLvl = options.nextLvl
-        console.log('score = ' + this.currentScore)
-        console.log('time = ' + this.timeLeft)
     }
 
     loadScene(): void {
@@ -36,20 +35,22 @@ export default class GameOver extends Scene {
         lblStatus.textColor = Color.WHITE;
 
         let btOk = initButton(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+300), 'Main Menu')
+        btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
 
+        initLabel(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+50), `High Score: ${this.timeLeft + this.currentScore}`)
+        
         if (this.win) {
             lblStatus.text = 'You win!'
-            const lblScore = <Label> this.add.uiElement(UIElementType.LABEL, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y + 50), text: `Total Score: ${(this.timeLeft + this.currentScore)}`})
-            lblScore.textColor = Color.WHITE
-
             if (this.nextLvl) {
                 btOk.text = 'Next Room'
-                btOk.onClick = () => {
-                    this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
-                }
+                btOk.onClick = () => this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
             }
         } else {
-            btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
+            let tf = <TextInput> this.add.uiElement(UIElementType.TEXT_INPUT, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y+100)})
+            tf.size = new Vec2(230, 40)
+            tf.fontSize = 24
+            tf.setHAlign('center')
+            tf.onClick = () => tf.text = ''
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
         }
     }
