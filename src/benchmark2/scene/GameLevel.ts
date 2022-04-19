@@ -17,6 +17,7 @@ import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default abstract class GameLevel extends Scene {
   private name: string;
@@ -181,6 +182,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED)
     this.receiver.subscribe(Events.SHOW_CHEATS)
+    this.receiver.subscribe(GameEventType.KEY_DOWN)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -202,6 +204,9 @@ export default abstract class GameLevel extends Scene {
 
   handleEvent(event: GameEvent): void {
     switch (event.type) {
+      case GameEventType.KEY_DOWN:
+        console.log(event.data)
+        break;
       case Events.PAUSE_GAME:
         if (this.glm.showPause()) {
           this.scoreTimer.pause();

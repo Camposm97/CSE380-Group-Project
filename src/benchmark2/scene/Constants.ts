@@ -1,5 +1,6 @@
 export enum CheatCode {
   INVINCIBLE = 'invincible',
+  SKIP_LVL = 'skipLvl',
   UNLOCK_ALL_LVLS = 'unlockAllLvls',
   LVL_1 = '1',
   LVL_2 = '2',
@@ -33,9 +34,6 @@ export enum Control {
   SLOT2 = "slot2",
 }
 
-
-
-
 export enum Events {
     SHOT_FIRED = "SHOT_FIRED",
     UNLOAD_ASSET = "UNLOAD_ASSET",
@@ -50,7 +48,7 @@ export enum Events {
     LEVEL_END = "LEVEL_END",
     PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
     PLAYER_DIED = "PLAYER_DIED",
-    SHOW_CHEATS = "SHOW_CHEATS"
+    SHOW_CHEATS = "SHOW_CHEATS",
 }
 
 export enum Statuses {

@@ -37,6 +37,7 @@ export class GameLayerManager {
     private tfCheat: TextInput
     private lblRoomEnd: Label
     private levelTransitionScreen: Rect
+    private emitter: Emitter
 
     /**
      * Initializes primary layer when constructed
@@ -77,6 +78,7 @@ export class GameLayerManager {
             ]
             // onEnd: Events.LEVEL_START
         });
+        this.emitter = new Emitter()
     }
 
     initHudLayer(): void {
@@ -131,6 +133,7 @@ export class GameLayerManager {
         this.tfCheat.fontSize = 28
         this.tfCheat.setHAlign('center')
         this.tfCheat.borderRadius = 15.0
+        
         this.tfCheat.onClick = () => {
             let code = this.tfCheat.text
             console.log(`cheat=${code}`)
@@ -140,6 +143,9 @@ export class GameLayerManager {
                     break;
                 case CheatCode.UNLOCK_ALL_LVLS:
                     Cheats.unlockAllLevels = !Cheats.unlockAllLevels
+                    break;
+                case CheatCode.SKIP_LVL:
+                    this.emitter.fireEvent(Events.ROOM_COMPLETE)
                     break;
                 case CheatCode.LVL_1:
                     // TODO: Go to specified level
