@@ -3,6 +3,7 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { Level1_1 } from "./Level1";
+import { Level3_1 } from "./Level3";
 import { Level5_1 } from "./Level5";
 import { Level6_1 } from "./Level6";
 
@@ -369,6 +370,7 @@ export default class MainMenu extends Scene {
           break;
         case MENU_EVENT.LOAD_LVL_3:
           console.log("load a level here!");
+          this.sceneManager.changeToScene(Level3_1, {})
           break;
         case MENU_EVENT.LOAD_LVL_4:
           console.log("load a level here!");

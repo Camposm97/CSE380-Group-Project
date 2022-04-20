@@ -1,7 +1,6 @@
 import GameLevel from "./GameLevel";
-import { Level6_1 } from "./Level6";
 
-export class Level5_1 extends GameLevel {
+export class Level3_1 extends GameLevel {
     loadScene(): void {
         this.loadMainResources()
         let bombJSONArray = [
@@ -11,7 +10,7 @@ export class Level5_1 extends GameLevel {
 
         this.loadRandomBombsJSON(bombJSONArray);
 
-        this.load.tilemap("level", "res/tilemaps/level5/Level5_1.json"); // Load tile map
+        this.load.tilemap("level", "res/tilemaps/level3/Level3_1.json"); // Load tile map
         this.load.object("start_end", "res/data/start_end1_1.json"); //Load player and green flag coordinates
         this.load.object("enemyData", "res/data/enemy1_1.json"); // Load enemy info
         this.load.object("itemData", "res/data/items.json"); // Load item info
@@ -19,10 +18,10 @@ export class Level5_1 extends GameLevel {
     }
 
     startScene(): void {
-        this.setName('5-1')
+        this.setName('3-1')
         super.startScene()
-        this.setNextLvl(Level5_2)
-        this.setCurrentRoom(Level5_1)
+        this.setNextLvl(Level3_2)
+        this.setCurrentRoom(Level3_1)
     }
     
     updateScene(deltaT: number): void {
@@ -30,11 +29,11 @@ export class Level5_1 extends GameLevel {
     }
 }
 
-export class Level5_2 extends GameLevel {
+export class Level3_2 extends GameLevel {
     loadScene(): void {
       this.loadMainResources();
   
-      this.load.tilemap("level", "res/tilemaps/level5/Level5_2.json"); // Load tile map
+      this.load.tilemap("level", "res/tilemaps/level3/Level3_2.json"); // Load tile map
       this.load.object("start_end", "res/data/start_end1_2.json"); //Load player and green flag coordinates
       this.load.object("enemyData", "res/data/enemy1_2.json"); // Load enemy info
       this.load.object("bombData", "res/data/bombs1_2.json"); // Load bomb info
@@ -43,10 +42,10 @@ export class Level5_2 extends GameLevel {
     }
   
     startScene(): void {
-      this.setName("5-2");
+      this.setName("3-2");
       super.startScene();
-      this.setNextLvl(Level5_3);
-      this.setCurrentRoom(Level5_2);
+      this.setNextLvl(Level3_3);
+      this.setCurrentRoom(Level3_2);
     }
   
     updateScene(deltaT: number): void {
@@ -54,10 +53,10 @@ export class Level5_2 extends GameLevel {
     }
   }
   
-export class Level5_3 extends GameLevel {
+export class Level3_3 extends GameLevel {
   loadScene(): void {
     this.loadMainResources();
-    this.load.tilemap("level", "res/tilemaps/level5/Level5_3.json"); // Load tile map
+    this.load.tilemap("level", "res/tilemaps/Level3_3.json"); // Load tile map
     this.load.object("start_end", "res/data/start_end1_3.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/enemy1_3.json"); // Load enemy info
     this.load.object("bombData", "res/data/bombs1_3.json"); // Load bomb info
@@ -66,10 +65,10 @@ export class Level5_3 extends GameLevel {
   }
 
   startScene(): void {
-    this.setName("5-3");
+    this.setName("3-3");
     super.startScene();
-    this.setNextLvl(Level5_4);
-    this.setCurrentRoom(Level5_3);
+    this.setNextLvl(Level3_4);
+    this.setCurrentRoom(Level3_3);
   }
 
   updateScene(deltaT: number): void {
@@ -77,11 +76,11 @@ export class Level5_3 extends GameLevel {
   }
 }
   
-export class Level5_4 extends GameLevel {
+export class Level3_4 extends GameLevel {
   loadScene(): void {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
-    this.load.tilemap("level", "res/tilemaps/level5/Level5_4.json"); // Load tile map
+    this.load.tilemap("level", "res/tilemaps/Level5_4.json"); // Load tile map
     this.load.object("start_end", "res/data/start_end1_4.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/enemy1_4.json"); // Load enemy info
     this.load.object("bombData", "res/data/bombs1_4.json"); // Load bomb info
@@ -90,10 +89,10 @@ export class Level5_4 extends GameLevel {
   }
 
   startScene(): void {
-    this.setName("5-4");
+    this.setName("3-4");
     super.startScene();
-    super.setNextLvl(Level6_1);
-    this.setCurrentRoom(Level5_4);
+    super.setNextLvl(Level3_1);
+    this.setCurrentRoom(Level3_4);
   }
 
   updateScene(deltaT: number): void {

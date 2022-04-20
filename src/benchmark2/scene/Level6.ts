@@ -4,7 +4,6 @@ export class Level6_1 extends GameLevel {
     loadScene(): void {
         // Load resources (tilemap, audio, spritesheets)
         this.loadMainResources();
-        this.loadLevelFromFolder("level1");
 
         let bombJSONArray = [
             "res/data/bombs1_1.json",
@@ -13,7 +12,7 @@ export class Level6_1 extends GameLevel {
 
         this.loadRandomBombsJSON(bombJSONArray);
 
-        this.load.tilemap("level", "res/tilemaps/Level6_1.json"); // Load tile map
+        this.load.tilemap("level", "res/tilemaps/level6/Level6_1.json"); // Load tile map
         this.load.object("start_end", "res/data/start_end1_1.json"); //Load player and green flag coordinates
         this.load.object("enemyData", "res/data/enemy1_1.json"); // Load enemy info
         // this.load.object("bombData", "res/data/bombs1_1.json"); // Load bomb info
@@ -38,7 +37,7 @@ export class Level6_2 extends GameLevel {
       // Load resources (tilemap, audio, spritesheets)
       this.loadMainResources();
   
-      this.load.tilemap("level", "res/tilemaps/Level6_2.json"); // Load tile map
+      this.load.tilemap("level", "res/tilemaps/level6/Level6_2.json"); // Load tile map
       this.load.object("start_end", "res/data/start_end1_2.json"); //Load player and green flag coordinates
       this.load.object("enemyData", "res/data/enemy1_2.json"); // Load enemy info
       this.load.object("bombData", "res/data/bombs1_2.json"); // Load bomb info
@@ -63,7 +62,7 @@ export class Level6_2 extends GameLevel {
       this.loadMainResources();
       // Load resources (tilemap, audio, spritesheets)
   
-      this.load.tilemap("level", "res/tilemaps/Level6_3.json"); // Load tile map
+      this.load.tilemap("level", "res/tilemaps/level6/Level6_3.json"); // Load tile map
       this.load.object("start_end", "res/data/start_end1_3.json"); //Load player and green flag coordinates
       this.load.object("enemyData", "res/data/enemy1_3.json"); // Load enemy info
       this.load.object("bombData", "res/data/bombs1_3.json"); // Load bomb info
@@ -88,7 +87,7 @@ export class Level6_2 extends GameLevel {
       // Load resources (tilemap, audio, spritesheets)
       this.loadMainResources();
   
-      this.load.tilemap("level", "res/tilemaps/Level6_4.json"); // Load tile map
+      this.load.tilemap("level", "res/tilemaps/level6/Level6_4.json"); // Load tile map
       this.load.object("start_end", "res/data/start_end1_4.json"); //Load player and green flag coordinates
       this.load.object("enemyData", "res/data/enemy1_4.json"); // Load enemy info
       this.load.object("bombData", "res/data/bombs1_4.json"); // Load bomb info

@@ -120,11 +120,11 @@
         {
          "columns":40,
          "firstgid":1,
-         "image":"testing1.png",
+         "image":"level3_1.png",
          "imageheight":1280,
          "imagewidth":1280,
          "margin":0,
-         "name":"testing1",
+         "name":"level3_1",
          "spacing":0,
          "tilecount":1600,
          "tileheight":32,
