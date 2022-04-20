@@ -65,6 +65,7 @@ export default abstract class GameLevel extends Scene {
     this.load.audio('r_freeze', 'res/sound/r_freeze.wav')
     this.load.audio('flag_place', 'res/sound/flag_place.wav')
     this.load.audio('damage', 'res/sound/damage.wav')
+    this.load.audio('cheat', 'res/sound/cheat.wav')
   }
 
   loadLevelFromFolder(levelName: string): void {
@@ -182,7 +183,8 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED)
     this.receiver.subscribe(Events.SHOW_CHEATS)
-    this.receiver.subscribe(GameEventType.KEY_DOWN)
+    this.receiver.subscribe(Events.SHOW_ALL_BOMBS)
+    this.receiver.subscribe(GameEventType.KEY_UP)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -204,8 +206,11 @@ export default abstract class GameLevel extends Scene {
 
   handleEvent(event: GameEvent): void {
     switch (event.type) {
-      case GameEventType.KEY_DOWN:
-        console.log(event.data)
+      case GameEventType.KEY_UP:
+        this.glm.identifyCheatCode()
+        break;
+      case Events.SHOW_ALL_BOMBS:
+        this.em.showAllBombs()
         break;
       case Events.PAUSE_GAME:
         if (this.glm.showPause()) {
@@ -377,5 +382,9 @@ export default abstract class GameLevel extends Scene {
 
   setLblTime(lbl: Label): void {
     this.lblTime = lbl;
+  }
+
+  changeLevel(level: new (...args: any) => Scene) {
+    this.sceneManager.changeToScene(level, {})
   }
 }

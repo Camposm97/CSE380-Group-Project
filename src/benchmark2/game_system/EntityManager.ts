@@ -435,4 +435,9 @@ export default class EntityManager {
   getPlayer(): AnimatedSprite {
     return this.player;
   }
+
+  showAllBombs() {
+    for (let b in this.bombs)
+      this.bombs[b].setFlagged()
+  }
 }

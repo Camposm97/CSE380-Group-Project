@@ -1,11 +1,10 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
-import Color from "../../Wolfie2D/Utils/Color";
-import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
-import * as Level1 from "./Level1";
+import { Level1_1 } from "./Level1";
+import { Level5_1 } from "./Level5";
+import { Level6_1 } from "./Level6";
 
 enum MENU_EVENT {
   MENU = "menu",
@@ -356,15 +355,14 @@ export default class MainMenu extends Scene {
           this.levelSelect.setHidden(true);
           break;
         case MENU_EVENT.NEW_GAME:
-          this.sceneManager.changeToScene(Level1.Room1, {});
+          this.sceneManager.changeToScene(Level1_1, {});
           break;
         case MENU_EVENT.LEVEL_SELECT:
           this.mainMenu.setHidden(true);
           this.levelSelect.setHidden(false);
           break;
         case MENU_EVENT.LOAD_LVL_1:
-
-          this.sceneManager.changeToScene(Level1.Room1, {});
+          this.sceneManager.changeToScene(Level1_1, {});
           break;
         case MENU_EVENT.LOAD_LVL_2:
           console.log("load a level here!");
@@ -377,9 +375,11 @@ export default class MainMenu extends Scene {
           break;
         case MENU_EVENT.LOAD_LVL_5:
           console.log("load a level here!");
+          this.sceneManager.changeToScene(Level5_1, {})
           break;
         case MENU_EVENT.LOAD_LVL_6:
           console.log("load a level here!");
+          this.sceneManager.changeToScene(Level6_1, {})
           break;
         case MENU_EVENT.CONTROLS:
           this.mainMenu.setHidden(true);
