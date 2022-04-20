@@ -1,6 +1,6 @@
 export enum CheatCode {
   INVINCIBLE = 'invincible',
-  SKIP_LVL = 'skipLvl',
+  SKIP_LEVEL = 'skip',
   SHOW_ALL_BOMBS = 'showAllBombs',
   UNLOCK_ALL_LVLS = 'unlockAllLvls',
   LVL_1 = '1',

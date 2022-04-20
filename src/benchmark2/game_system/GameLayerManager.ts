@@ -240,7 +240,7 @@ export class GameLayerManager {
                     this.tfCheat.text = ''
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
                     break;
-                case CheatCode.SKIP_LVL:
+                case CheatCode.SKIP_LEVEL:
                     this.emitter.fireEvent(Events.LEVEL_END)
                     this.tfCheat.text = ''
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
