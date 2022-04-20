@@ -32,7 +32,7 @@ export default abstract class GameLevel extends Scene {
   private scoreTimer: ScoreTimer;
   private gameOver: boolean;
   private currentRoom: new (...args: any) => GameLevel;
-  private nextRoom: new (...args: any) => GameLevel;
+  private nextRoom: new (...args: any) => Scene;
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -368,7 +368,7 @@ export default abstract class GameLevel extends Scene {
     this.name = name;
   }
 
-  setNextLvl(nextLvl: new (...args: any) => GameLevel): void {
+  setNextLevel(nextLvl: new (...args: any) => Scene): void {
     this.nextRoom = nextLvl;
   }
 

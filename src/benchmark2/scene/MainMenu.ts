@@ -6,6 +6,7 @@ import { Level1_1 } from "./Level1";
 import { Level3_1 } from "./Level3";
 import { Level5_1 } from "./Level5";
 import { Level6_1 } from "./Level6";
+import { Tutorial1_1 } from "./Tutorial";
 
 enum MENU_EVENT {
   MENU = "menu",
@@ -356,7 +357,7 @@ export default class MainMenu extends Scene {
           this.levelSelect.setHidden(true);
           break;
         case MENU_EVENT.NEW_GAME:
-          this.sceneManager.changeToScene(Level1_1, {});
+          this.sceneManager.changeToScene(Tutorial1_1);
           break;
         case MENU_EVENT.LEVEL_SELECT:
           this.mainMenu.setHidden(true);
@@ -366,21 +367,16 @@ export default class MainMenu extends Scene {
           this.sceneManager.changeToScene(Level1_1, {});
           break;
         case MENU_EVENT.LOAD_LVL_2:
-          console.log("load a level here!");
           break;
         case MENU_EVENT.LOAD_LVL_3:
-          console.log("load a level here!");
           this.sceneManager.changeToScene(Level3_1, {})
           break;
         case MENU_EVENT.LOAD_LVL_4:
-          console.log("load a level here!");
           break;
         case MENU_EVENT.LOAD_LVL_5:
-          console.log("load a level here!");
           this.sceneManager.changeToScene(Level5_1, {})
           break;
         case MENU_EVENT.LOAD_LVL_6:
-          console.log("load a level here!");
           this.sceneManager.changeToScene(Level6_1, {})
           break;
         case MENU_EVENT.CONTROLS:

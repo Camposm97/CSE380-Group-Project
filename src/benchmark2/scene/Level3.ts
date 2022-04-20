@@ -20,7 +20,7 @@ export class Level3_1 extends GameLevel {
     startScene(): void {
         this.setName('3-1')
         super.startScene()
-        this.setNextLvl(Level3_2)
+        this.setNextLevel(Level3_2)
         this.setCurrentRoom(Level3_1)
     }
     
@@ -44,7 +44,7 @@ export class Level3_2 extends GameLevel {
     startScene(): void {
       this.setName("3-2");
       super.startScene();
-      this.setNextLvl(Level3_3);
+      this.setNextLevel(Level3_3);
       this.setCurrentRoom(Level3_2);
     }
   
@@ -67,7 +67,7 @@ export class Level3_3 extends GameLevel {
   startScene(): void {
     this.setName("3-3");
     super.startScene();
-    this.setNextLvl(Level3_4);
+    this.setNextLevel(Level3_4);
     this.setCurrentRoom(Level3_3);
   }
 
@@ -91,7 +91,7 @@ export class Level3_4 extends GameLevel {
   startScene(): void {
     this.setName("3-4");
     super.startScene();
-    super.setNextLvl(Level3_1);
+    super.setNextLevel(Level3_1);
     this.setCurrentRoom(Level3_4);
   }
 

@@ -23,7 +23,7 @@ export class Level6_1 extends GameLevel {
     startScene(): void {
         this.setName("6-1");
         super.startScene();
-        this.setNextLvl(Level6_2);
+        this.setNextLevel(Level6_2);
         this.setCurrentRoom(Level6_1); // We need this in order for the room to be reset back to itself
     }
 
@@ -48,7 +48,7 @@ export class Level6_2 extends GameLevel {
     startScene(): void {
       this.setName("6-2");
       super.startScene();
-      this.setNextLvl(Level6_3);
+      this.setNextLevel(Level6_3);
       this.setCurrentRoom(Level6_2);
     }
   
@@ -73,7 +73,7 @@ export class Level6_2 extends GameLevel {
     startScene(): void {
       this.setName("6-3");
       super.startScene();
-      this.setNextLvl(Level6_4);
+      this.setNextLevel(Level6_4);
       this.setCurrentRoom(Level6_3);
     }
   
@@ -98,7 +98,7 @@ export class Level6_2 extends GameLevel {
     startScene(): void {
       this.setName("6-4");
       super.startScene();
-      super.setNextLvl(null);
+      super.setNextLevel(null);
       this.setCurrentRoom(Level6_4);
     }
   

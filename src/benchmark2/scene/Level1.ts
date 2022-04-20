@@ -13,7 +13,7 @@ export class Level1_1 extends GameLevel {
 
     this.loadRandomBombsJSON(bombJSONArray);
 
-    this.load.tilemap("level", "res/tilemaps/Level1_1.json"); // Load tile map
+    this.load.tilemap("level", "res/tilemaps/level1/Level1_1.json"); // Load tile map
     this.load.object("start_end", "res/data/start_end1_1.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/enemy1_1.json"); // Load enemy info
     // this.load.object("bombData", "res/data/bombs1_1.json"); // Load bomb info
@@ -24,7 +24,7 @@ export class Level1_1 extends GameLevel {
   startScene(): void {
     this.setName("1-1");
     super.startScene();
-    this.setNextLvl(Level1_2);
+    this.setNextLevel(Level1_2);
     this.setCurrentRoom(Level1_1); // We need this in order for the room to be reset back to itself
   }
 
@@ -38,7 +38,7 @@ export class Level1_2 extends GameLevel {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
 
-    this.load.tilemap("level", "res/tilemaps/Level1_2.json"); // Load tile map
+    this.load.tilemap("level", "res/tilemaps/level1/Level1_2.json"); // Load tile map
     this.load.object("start_end", "res/data/start_end1_2.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/enemy1_2.json"); // Load enemy info
     this.load.object("bombData", "res/data/bombs1_2.json"); // Load bomb info
@@ -49,7 +49,7 @@ export class Level1_2 extends GameLevel {
   startScene(): void {
     this.setName("1-2");
     super.startScene();
-    this.setNextLvl(Level1_3);
+    this.setNextLevel(Level1_3);
     this.setCurrentRoom(Level1_2);
   }
 
@@ -63,7 +63,7 @@ export class Level1_3 extends GameLevel {
     this.loadMainResources();
     // Load resources (tilemap, audio, spritesheets)
 
-    this.load.tilemap("level", "res/tilemaps/Level1_3.json"); // Load tile map
+    this.load.tilemap("level", "res/tilemaps/level1/Level1_3.json"); // Load tile map
     this.load.object("start_end", "res/data/start_end1_3.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/enemy1_3.json"); // Load enemy info
     this.load.object("bombData", "res/data/bombs1_3.json"); // Load bomb info
@@ -74,7 +74,7 @@ export class Level1_3 extends GameLevel {
   startScene(): void {
     this.setName("1-3");
     super.startScene();
-    this.setNextLvl(Level1_4);
+    this.setNextLevel(Level1_4);
     this.setCurrentRoom(Level1_3);
   }
 
@@ -88,7 +88,7 @@ export class Level1_4 extends GameLevel {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
 
-    this.load.tilemap("level", "res/tilemaps/Level1_4.json"); // Load tile map
+    this.load.tilemap("level", "res/tilemaps/level1/Level1_4.json"); // Load tile map
     this.load.object("start_end", "res/data/start_end1_4.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/enemy1_4.json"); // Load enemy info
     this.load.object("bombData", "res/data/bombs1_4.json"); // Load bomb info
@@ -99,7 +99,7 @@ export class Level1_4 extends GameLevel {
   startScene(): void {
     this.setName("1-4");
     super.startScene();
-    super.setNextLvl(null);
+    super.setNextLevel(null);
     this.setCurrentRoom(Level1_4);
   }
 

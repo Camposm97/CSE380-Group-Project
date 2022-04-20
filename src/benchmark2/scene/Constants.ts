@@ -127,13 +127,15 @@ export enum PlayerAnimations {
   DAMAGE = "DAMAGE",
 }
 
+
 export enum RobotMouseAnimations {
-  WALK_UP = "WALK_UP",
-  WALK_DOWN = "WALK_DOWN",
-  WALK_LEFT = "WALK_LEFT",
-  WALK_RIGHT = "WALK_RIGHT",
-  DEATH = "DEATH",
-  OFF = "OFF",
+    WALK_UP = "WALK_UP",
+    WALK_DOWN = "WALK_DOWN",
+    WALK_LEFT = "WALK_LEFT",
+    WALK_RIGHT = "WALK_RIGHT",
+    DEATH = "DEATH",
+    OFF = "OFF",
+    IDLE = "IDLE"
 }
 
 export enum RobotAnimations {
