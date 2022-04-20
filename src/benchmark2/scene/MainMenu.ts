@@ -4,6 +4,7 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { Level1_1 } from "./Level1";
 import { Level3_1 } from "./Level3";
+import { Level4_1 } from "./Level4";
 import { Level5_1 } from "./Level5";
 import { Level6_1 } from "./Level6";
 import { Tutorial1_1 } from "./Tutorial";
@@ -372,6 +373,7 @@ export default class MainMenu extends Scene {
           this.sceneManager.changeToScene(Level3_1, {})
           break;
         case MENU_EVENT.LOAD_LVL_4:
+          this.sceneManager.changeToScene(Level4_1, {})
           break;
         case MENU_EVENT.LOAD_LVL_5:
           this.sceneManager.changeToScene(Level5_1, {})
