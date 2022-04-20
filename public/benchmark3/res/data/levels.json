@@ -1,7 +1,0 @@
-[
-    {
-        "tilemapPath": "path/to/tilemap",
-        "enemeyDataPath": "path/to/enemy/data",
-        "bombDataPath": "path/to/bomb/data"
-    }
-]
