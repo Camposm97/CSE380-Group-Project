@@ -305,49 +305,86 @@ export default class PlayerController implements BattlerAI {
     let forwardAxis = 0;
     let horizontalAxis = 0;
 
-    if (
-      Input.isJustPressed("forward") ||
-      Input.isJustPressed("up") ||
-      Input.isJustPressed("backward")
-    ) {
-      this.previousAxis = "foward";
-    }
-    if (Input.isJustPressed("left") || Input.isJustPressed("right")) {
-      this.previousAxis = "horizontal";
-    }
+    if (Input.isJustPressed("forward") || Input.isJustPressed("up"))
+      this.previousAxis = "forward";
+    if (Input.isJustPressed("backward")) this.previousAxis = "backward";
 
-    if (
-      Input.isPressed("forward") ||
-      Input.isPressed("up") ||
-      Input.isPressed("backward")
-    ) {
+    if (Input.isJustPressed("left")) this.previousAxis = "left";
+
+    if (Input.isJustPressed("right")) this.previousAxis = "right";
+
+    if (Input.isPressed("forward") || Input.isJustPressed("up")) {
       if (
-        this.previousAxis !== "horizontal" ||
-        (!Input.isPressed("left") && !Input.isPressed("right"))
-      ) {
-        forwardAxis =
-          (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
-          (Input.isPressed("backward") ? -1 : 0);
-        this.previousAxis = "foward";
-      }
-    }
-    if (Input.isPressed("left") || Input.isPressed("right")) {
-      if (
-        this.previousAxis !== "foward" ||
-        (!Input.isPressed("forward") &&
-          !Input.isPressed("up") &&
+        this.previousAxis === "forward" ||
+        (!Input.isPressed("left") &&
+          !Input.isPressed("right") &&
           !Input.isPressed("backward"))
       ) {
-        horizontalAxis =
-          (Input.isPressed("left") ? -1 : 0) +
-          (Input.isPressed("right") ? 1 : 0);
-        this.previousAxis = "horizontal";
+        forwardAxis = 1;
+      }
+    }
+    if (Input.isPressed("backward")) {
+      if (
+        this.previousAxis === "backward" ||
+        (!Input.isPressed("left") &&
+          !Input.isPressed("right") &&
+          !Input.isPressed("forward"))
+      ) {
+        forwardAxis = -1;
+      }
+    }
+    if (Input.isPressed("left")) {
+      if (
+        this.previousAxis === "left" ||
+        (!Input.isPressed("backward") &&
+          !Input.isPressed("right") &&
+          !Input.isPressed("forward"))
+      ) {
+        horizontalAxis = -1;
+      }
+    }
+    if (Input.isPressed("right")) {
+      if (
+        this.previousAxis === "right" ||
+        (!Input.isPressed("left") &&
+          !Input.isPressed("backward") &&
+          !Input.isPressed("forward"))
+      ) {
+        horizontalAxis = 1;
       }
     }
     if (
       (forwardAxis != 0 && horizontalAxis == 0) ||
       (forwardAxis == 0 && horizontalAxis != 0)
     ) {
+      // if (
+      //   Input.isPressed("forward") ||
+      //   Input.isPressed("up") ||
+      //   Input.isPressed("backward")
+      // ) {
+      //   if (
+      //     this.previousAxis !== "horizontal" ||
+      //     (!Input.isPressed("left") && !Input.isPressed("right"))
+      //   ) {
+      //     forwardAxis =
+      //       (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
+      //       (Input.isPressed("backward") ? -1 : 0);
+      //     this.previousAxis = "foward";
+      //   }
+      // }
+      // if (Input.isPressed("left") || Input.isPressed("right")) {
+      //   if (
+      //     this.previousAxis !== "foward" ||
+      //     (!Input.isPressed("forward") &&
+      //       !Input.isPressed("up") &&
+      //       !Input.isPressed("backward"))
+      //   ) {
+      //     horizontalAxis =
+      //       (Input.isPressed("left") ? -1 : 0) +
+      //       (Input.isPressed("right") ? 1 : 0);
+      //     this.previousAxis = "horizontal";
+      //   }
+      // }
       let movement = Vec2.UP.scaled(forwardAxis * this.speed);
       movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
       let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
