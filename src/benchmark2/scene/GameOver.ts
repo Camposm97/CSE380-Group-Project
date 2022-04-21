@@ -46,11 +46,11 @@ export default class GameOver extends Scene {
                 btOk.onClick = () => this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
             }
         } else {
-            let tf = <TextInput> this.add.uiElement(UIElementType.TEXT_INPUT, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y+100)})
-            tf.size = new Vec2(230, 40)
-            tf.fontSize = 24
-            tf.setHAlign('center')
-            tf.onClick = () => tf.text = ''
+            // let tf = <TextInput> this.add.uiElement(UIElementType.TEXT_INPUT, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y+100)})
+            // tf.size = new Vec2(230, 40)
+            // tf.fontSize = 24
+            // tf.setHAlign('center')
+            // tf.onClick = () => tf.text = ''
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'lose', loop: false, holdReference: false})
         }
     }
