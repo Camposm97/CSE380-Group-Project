@@ -22,6 +22,7 @@ enum MENU_EVENT {
   LOAD_LVL_4 = "load_lvl_4",
   LOAD_LVL_5 = "load_lvl_5",
   LOAD_LVL_6 = "load_lvl_6",
+  HOW_TO_PLAY = "HOW_TO_PLAY"
 }
 
 export default class MainMenu extends Scene {
@@ -42,6 +43,7 @@ export default class MainMenu extends Scene {
     // Subscribe to the button events
     this.receiver.subscribe(MENU_EVENT.MENU);
     this.receiver.subscribe(MENU_EVENT.NEW_GAME);
+    this.receiver.subscribe(MENU_EVENT.HOW_TO_PLAY)
     this.receiver.subscribe(MENU_EVENT.LEVEL_SELECT);
     this.receiver.subscribe(MENU_EVENT.LOAD_LVL_1);
     this.receiver.subscribe(MENU_EVENT.LOAD_LVL_2);
@@ -57,6 +59,9 @@ export default class MainMenu extends Scene {
   initMenuButtons(v: Vec2): void {
     this.mainMenu = this.addUILayer("mainMenu");
     const layer = "mainMenu";
+
+    initButtonHandler(this, layer, new Vec2(v.x, v.y-225), 'How to Play', MENU_EVENT.HOW_TO_PLAY)
+
     initButtonHandler(
       this,
       layer,
@@ -74,7 +79,7 @@ export default class MainMenu extends Scene {
     initButtonHandler(
       this,
       layer,
-      new Vec2(v.x, v.y - 0),
+      new Vec2(v.x, v.y),
       "Controls",
       MENU_EVENT.CONTROLS
     );
@@ -105,7 +110,6 @@ export default class MainMenu extends Scene {
       "levelSelect",
       new Vec2(center.x, center.y - 300),
       "Level Select"
-
     );
 
     //  Level Select - Buttons
@@ -122,21 +126,21 @@ export default class MainMenu extends Scene {
       new Vec2(center.x - 200, center.y - 50),
       "Level 2",
       MENU_EVENT.LOAD_LVL_2
-    );
+    ).visible = false
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x - 200, center.y + 50),
       "Level 3",
       MENU_EVENT.LOAD_LVL_3
-    );
+    ).visible = false
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x + 200, center.y - 150),
       "Level 4",
       MENU_EVENT.LOAD_LVL_4
-    );
+    ).visible = false
     initButtonHandler(
       this,
       "levelSelect",
@@ -150,7 +154,7 @@ export default class MainMenu extends Scene {
       new Vec2(center.x + 200, center.y + 50),
       "Level 6",
       MENU_EVENT.LOAD_LVL_6
-    );
+    ).visible = false
     initButtonHandler(
       this,
       "levelSelect",
@@ -357,8 +361,11 @@ export default class MainMenu extends Scene {
           this.leaderboard.setHidden(true);
           this.levelSelect.setHidden(true);
           break;
+        case MENU_EVENT.HOW_TO_PLAY:
+          this.sceneManager.changeToScene(Tutorial1_1, {})
+          break;
         case MENU_EVENT.NEW_GAME:
-          this.sceneManager.changeToScene(Tutorial1_1);
+          this.sceneManager.changeToScene(Level1_1, {});
           break;
         case MENU_EVENT.LEVEL_SELECT:
           this.mainMenu.setHidden(true);

@@ -4,6 +4,7 @@ import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { PlayerAnimations, RobotAnimations, RobotMouseAnimations, RobotStatueAnimations } from "./Constants";
 import { Level1_1 } from "./Level1";
 import { LevelT_1, LevelT_2, LevelT_3, LevelT_4 } from "./LevelT";
+import MainMenu from "./MainMenu";
 
 const TUTORIAL_LAYER = 'TUTORIAL'
 
@@ -275,7 +276,7 @@ export class Tutorial1_4 extends Scene {
                     this.sceneManager.changeToScene(LevelT_4, {})
                     break;
                 case GO_TO.SKIP_TUTORIAL:
-                    this.sceneManager.changeToScene(Level1_1, {})
+                    this.sceneManager.changeToScene(MainMenu, {})
                     break;
             }
         }

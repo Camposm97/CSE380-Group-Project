@@ -81,7 +81,7 @@ export class LevelT_4 extends GameLevel {
     startScene(): void {
         this.setName('T-4')
         super.startScene()
-        this.setNextLevel(Level1_1)
+        this.setNextLevel(null)
         this.setCurrentRoom(LevelT_4)
     }
     
