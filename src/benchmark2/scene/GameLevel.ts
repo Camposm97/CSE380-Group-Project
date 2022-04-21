@@ -17,7 +17,7 @@ import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
-import * as fs from "fs";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default abstract class GameLevel extends Scene {
   private name: string;
@@ -32,7 +32,7 @@ export default abstract class GameLevel extends Scene {
   private scoreTimer: ScoreTimer;
   private gameOver: boolean;
   private currentRoom: new (...args: any) => GameLevel;
-  private nextRoom: new (...args: any) => GameLevel;
+  private nextRoom: new (...args: any) => Scene;
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -65,6 +65,7 @@ export default abstract class GameLevel extends Scene {
     this.load.audio("r_freeze", "res/sound/r_freeze.wav");
     this.load.audio("flag_place", "res/sound/flag_place.wav");
     this.load.audio("damage", "res/sound/damage.wav");
+    this.load.audio("cheat", "res/sound/cheat.wav");
   }
 
   loadLevelFromFolder(levelName: string): void {
@@ -182,6 +183,8 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED);
     this.receiver.subscribe(Events.SHOW_CHEATS);
+    this.receiver.subscribe(Events.SHOW_ALL_BOMBS);
+    this.receiver.subscribe(GameEventType.KEY_UP);
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -203,6 +206,12 @@ export default abstract class GameLevel extends Scene {
 
   handleEvent(event: GameEvent): void {
     switch (event.type) {
+      case GameEventType.KEY_UP:
+        this.glm.identifyCheatCode();
+        break;
+      case Events.SHOW_ALL_BOMBS:
+        this.em.showAllBombs();
+        break;
       case Events.PAUSE_GAME:
         if (this.glm.showPause()) {
           this.scoreTimer.pause();
@@ -366,7 +375,7 @@ export default abstract class GameLevel extends Scene {
     this.name = name;
   }
 
-  setNextLvl(nextLvl: new (...args: any) => GameLevel): void {
+  setNextLevel(nextLvl: new (...args: any) => Scene): void {
     this.nextRoom = nextLvl;
   }
 
@@ -380,5 +389,9 @@ export default abstract class GameLevel extends Scene {
 
   setLblTime(lbl: Label): void {
     this.lblTime = lbl;
+  }
+
+  changeLevel(level: new (...args: any) => Scene) {
+    this.sceneManager.changeToScene(level, {});
   }
 }

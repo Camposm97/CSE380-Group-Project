@@ -1,0 +1,11 @@
+{
+    "numEnemies": 1,
+    "enemies": [
+        {
+            "ai": "BlueMouseAI",
+            "type": "blueMouse",
+            "position": [14,14],
+            "damage": 1
+        }
+    ]
+}

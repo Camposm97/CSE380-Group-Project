@@ -1,0 +1,50 @@
+{
+  "numEnemies": 8,
+  "enemies": [
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [2,2]
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [2, 15]
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [25, 14]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [2, 5.5]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [26, 6.5]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [2, 8.5]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [26, 9.5]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [2, 11.5]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [26, 12.5]
+    }
+  ]
+}

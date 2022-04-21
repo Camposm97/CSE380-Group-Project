@@ -1,5 +1,7 @@
 export enum CheatCode {
   INVINCIBLE = 'invincible',
+  SKIP_LEVEL = 'skip',
+  SHOW_ALL_BOMBS = 'showAllBombs',
   UNLOCK_ALL_LVLS = 'unlockAllLvls',
   LVL_1 = '1',
   LVL_2 = '2',
@@ -50,7 +52,8 @@ export enum Events {
     LEVEL_END = "LEVEL_END",
     PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
     PLAYER_DIED = "PLAYER_DIED",
-    SHOW_CHEATS = "SHOW_CHEATS"
+    SHOW_CHEATS = "SHOW_CHEATS",
+    SHOW_ALL_BOMBS = "SHOW_ALL_BOMBS"
 }
 
 export enum Statuses {
@@ -124,13 +127,15 @@ export enum PlayerAnimations {
   DAMAGE = "DAMAGE",
 }
 
+
 export enum RobotMouseAnimations {
-  WALK_UP = "WALK_UP",
-  WALK_DOWN = "WALK_DOWN",
-  WALK_LEFT = "WALK_LEFT",
-  WALK_RIGHT = "WALK_RIGHT",
-  DEATH = "DEATH",
-  OFF = "OFF",
+    WALK_UP = "WALK_UP",
+    WALK_DOWN = "WALK_DOWN",
+    WALK_LEFT = "WALK_LEFT",
+    WALK_RIGHT = "WALK_RIGHT",
+    DEATH = "DEATH",
+    OFF = "OFF",
+    IDLE = "IDLE"
 }
 
 export enum RobotAnimations {

@@ -1,0 +1,36 @@
+{
+    "numBombs": 10,
+    "bombs": [
+      {
+        "position": [8, 4]
+      },
+      {
+        "position": [19, 5]
+      },
+      {
+        "position": [8, 14]
+      },
+      {
+        "position": [19, 14]
+      },
+      {
+        "position": [10,15]
+      },
+      {
+        "position": [12,15]
+      },
+      {
+        "position": [6, 3]
+      },
+      {
+        "position": [20, 3]
+      },
+      {
+        "position": [13,9]
+      },
+      {
+        "position": [16,9]
+      }
+    ]
+  }
+  
