@@ -49,18 +49,11 @@ export class LevelT_2 extends GameLevel {
 export class LevelT_3 extends GameLevel {
     loadScene(): void {
         this.loadMainResources()
-        let bombJSONArray = [
-        "res/data/bombs1_1.json",
-        "res/data/bombs1_1var2.json",
-        ];
-
-        this.loadRandomBombsJSON(bombJSONArray);
-
+        this.loadRandomBombsJSON(['res/data/tutorial/bombs_t_3.json'])
         this.load.tilemap("level", "res/tilemaps/tutorial/LevelT.json"); // Load tile map
-        this.load.object("start_end", "res/data/start_end1_1.json"); //Load player and green flag coordinates
-        this.load.object("enemyData", "res/data/enemy1_1.json"); // Load enemy info
-        this.load.object("itemData", "res/data/items.json"); // Load item info
-        this.load.object("blockData", "res/data/blocks1_1.json"); // Load block info
+        this.load.object("start_end", "res/data/tutorial/start_end_t_3.json"); //Load player and green flag coordinates
+        this.load.object("enemyData", "res/data/tutorial/enemy_t_3.json"); // Load enemy info
+        this.load.object("blockData", "res/data/tutorial/blocks_t_3.json"); // Load block info
     }
 
     startScene(): void {
@@ -78,18 +71,11 @@ export class LevelT_3 extends GameLevel {
 export class LevelT_4 extends GameLevel {
     loadScene(): void {
         this.loadMainResources()
-        let bombJSONArray = [
-        "res/data/bombs1_1.json",
-        "res/data/bombs1_1var2.json",
-        ];
-
-        this.loadRandomBombsJSON(bombJSONArray);
-
+        this.loadRandomBombsJSON(['res/data/tutorial/bombs_t_4.json']);
         this.load.tilemap("level", "res/tilemaps/tutorial/LevelT.json"); // Load tile map
-        this.load.object("start_end", "res/data/start_end1_1.json"); //Load player and green flag coordinates
-        this.load.object("enemyData", "res/data/enemy1_1.json"); // Load enemy info
-        this.load.object("itemData", "res/data/items.json"); // Load item info
-        this.load.object("blockData", "res/data/blocks1_1.json"); // Load block info
+        this.load.object("start_end", "res/data/tutorial/start_end_t_4.json"); //Load player and green flag coordinates
+        this.load.object("enemyData", "res/data/tutorial/enemy_t_4.json"); // Load enemy info
+        this.load.object("blockData", "res/data/tutorial/blocks_t_4.json"); // Load block info
     }
 
     startScene(): void {

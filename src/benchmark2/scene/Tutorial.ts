@@ -2,6 +2,7 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { PlayerAnimations, RobotAnimations, RobotMouseAnimations, RobotStatueAnimations } from "./Constants";
+import { Level1_1 } from "./Level1";
 import { LevelT_1, LevelT_2, LevelT_3, LevelT_4 } from "./LevelT";
 
 const TUTORIAL_LAYER = 'TUTORIAL'
@@ -10,7 +11,8 @@ const enum GO_TO {
     LEVELT_1 = 'LEVELT_1',
     LEVELT_2 = 'LEVELT_2',
     LEVELT_3 = 'LEVELT_3',
-    LEVELT_4 = 'LEVELT_4'
+    LEVELT_4 = 'LEVELT_4',
+    SKIP_TUTORIAL = 'LEVEL1_1'
 }
 
 // Tutorial Room 1
@@ -59,7 +61,7 @@ const t3_2 = 'and one hidden bomb. '
 const t3_3 = 'This robot moves left and right, reversing it\'s direction everytime to collides with something. '
 const t3_4 = 'If McBendorjee attacks the robot mouse, it will freeze for a moment, and McBendorjee will be able to '
 const t3_5 = 'push it just like a block. Once the robot mouse unfreezes, it will start moving up and down instead. '
-const t3_6 = 'Once again, you must get the robot to move over the bomb to destory, then step on the green flag '
+const t3_6 = 'Once again, you must get the robot to move over the bomb to destory it, then step on the green flag '
 const t3_7 = 'to beat the room.'
 
 // Tutorial Room 4
@@ -79,7 +81,7 @@ export class Tutorial1_1 extends Scene {
     }
 
     startScene(): void {
-        this.receiver.subscribe([GO_TO.LEVELT_1, GO_TO.LEVELT_2, GO_TO.LEVELT_3, GO_TO.LEVELT_4])
+        this.receiver.subscribe([GO_TO.LEVELT_1, GO_TO.SKIP_TUTORIAL])
         this.addUILayer(TUTORIAL_LAYER)
         const c = this.viewport.getCenter().clone()
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x, c.y-350), t1_1 + t1_2 + t1_3).fontSize = 18
@@ -128,8 +130,8 @@ export class Tutorial1_1 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+200), t1_16).fontSize = 18
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+225), t1_17 + t1_18).fontSize = 18
 
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+275), 'OK', GO_TO.LEVELT_1)
-        
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_1)
     }
 
     updateScene(deltaT: number): void {
@@ -138,6 +140,9 @@ export class Tutorial1_1 extends Scene {
             switch (e.type) {
                 case GO_TO.LEVELT_1:
                     this.sceneManager.changeToScene(LevelT_1, {})
+                    break;
+                case GO_TO.SKIP_TUTORIAL:
+                    this.sceneManager.changeToScene(Tutorial1_2, {})
                     break;
             }
         }
@@ -150,7 +155,7 @@ export class Tutorial1_2 extends Scene {
     }
 
     startScene(): void {
-        this.receiver.subscribe([GO_TO.LEVELT_1, GO_TO.LEVELT_2, GO_TO.LEVELT_3, GO_TO.LEVELT_4])
+        this.receiver.subscribe([GO_TO.LEVELT_2, GO_TO.SKIP_TUTORIAL])
         this.addUILayer(TUTORIAL_LAYER)
         const c = this.viewport.getCenter().clone()
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-350), t2_1).fontSize = 24
@@ -174,7 +179,8 @@ export class Tutorial1_2 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+100), t2_8).fontSize = 24
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+140), t2_9).fontSize = 24
 
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+275), 'OK', GO_TO.LEVELT_2)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_2)
     }
 
     updateScene(deltaT: number): void {
@@ -183,6 +189,9 @@ export class Tutorial1_2 extends Scene {
             switch (e.type) {
                 case GO_TO.LEVELT_2:
                     this.sceneManager.changeToScene(LevelT_2, {})
+                    break;
+                case GO_TO.SKIP_TUTORIAL:
+                    this.sceneManager.changeToScene(Tutorial1_3, {})
                     break;
             }
         }
@@ -195,7 +204,7 @@ export class Tutorial1_3 extends Scene {
     }
 
     startScene(): void {
-        this.receiver.subscribe([GO_TO.LEVELT_1, GO_TO.LEVELT_2, GO_TO.LEVELT_3, GO_TO.LEVELT_4])
+        this.receiver.subscribe([GO_TO.LEVELT_3, GO_TO.SKIP_TUTORIAL])
         this.addUILayer(TUTORIAL_LAYER)
         const c = this.viewport.getCenter().clone()
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-350), t3_1).fontSize = 24
@@ -213,7 +222,8 @@ export class Tutorial1_3 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-50), t3_6).fontSize = 24
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-10), t3_7).fontSize = 24
 
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+275), 'OK', GO_TO.LEVELT_3)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_3)
     }
     
     updateScene(deltaT: number): void {
@@ -222,6 +232,9 @@ export class Tutorial1_3 extends Scene {
             switch (e.type) {
                 case GO_TO.LEVELT_3:
                     this.sceneManager.changeToScene(LevelT_3, {})
+                    break;
+                case GO_TO.SKIP_TUTORIAL:
+                    this.sceneManager.changeToScene(Tutorial1_4)
                     break;
             }
         }
@@ -234,7 +247,7 @@ export class Tutorial1_4 extends Scene {
     }
 
     startScene(): void {
-        this.receiver.subscribe([GO_TO.LEVELT_1, GO_TO.LEVELT_2, GO_TO.LEVELT_3, GO_TO.LEVELT_4])
+        this.receiver.subscribe([GO_TO.LEVELT_4, GO_TO.SKIP_TUTORIAL])
         this.addUILayer(TUTORIAL_LAYER)
         const c = this.viewport.getCenter().clone()
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-350), t4_1).fontSize = 22
@@ -250,7 +263,8 @@ export class Tutorial1_4 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-130), t4_4).fontSize = 22
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-90), t4_5).fontSize = 22
 
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+275), 'OK', GO_TO.LEVELT_4)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_4)
     }
 
     updateScene(deltaT: number): void {
@@ -259,6 +273,9 @@ export class Tutorial1_4 extends Scene {
             switch (e.type) {
                 case GO_TO.LEVELT_4:
                     this.sceneManager.changeToScene(LevelT_4, {})
+                    break;
+                case GO_TO.SKIP_TUTORIAL:
+                    this.sceneManager.changeToScene(Level1_1, {})
                     break;
             }
         }
