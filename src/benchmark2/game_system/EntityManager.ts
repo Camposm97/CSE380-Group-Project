@@ -215,7 +215,7 @@ export default class EntityManager {
           // this.listeningEnemies++;
           break;
         case "BlueMouseAI":
-          this.enemies[i].addAI(BlueMouseAI, enemyOptions);
+          this.enemies[i].addAI(BlueMouseAI, entity);
           break;
         case "BlueStatueAI":
           this.enemies[i].addAI(BlueStatueAI, enemyOptions);

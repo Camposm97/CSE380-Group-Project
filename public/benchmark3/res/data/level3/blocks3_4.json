@@ -2,16 +2,16 @@
   "numBlocks": 8,
   "blocks": [
     {
-      "position": [4, 5]
+      "position": [24, 21]
     },
     {
-      "position": [5, 14]
+      "position": [27, 21]
     },
     {
-      "position": [22, 5]
+      "position": [32, 21]
     },
     {
-      "position": [23, 14]
+      "position": [34, 19]
     },
     {
       "position": [12, 7]

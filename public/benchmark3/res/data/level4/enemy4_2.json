@@ -9,12 +9,12 @@
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [4, 2]
+      "position": [28, 32]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [4, 16]
+      "position": [20, 23]
     },
     {
       "ai": "BlueMouseAI",
