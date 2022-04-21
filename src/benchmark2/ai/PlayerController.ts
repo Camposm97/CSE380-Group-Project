@@ -24,6 +24,7 @@ import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import { runInThisContext } from "vm";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -62,13 +63,16 @@ export default class PlayerController implements BattlerAI {
   private iFrame: boolean;
   private iFrameTimer: Timer;
 
+  //testing only
+  private frameCount: number;
+
   //Bomb Detection
   public nearBomb: boolean;
 
   //Used to make movement more fluid
-  private previousDirection: Vec2;
-  private twoButtonsPressed: boolean;
   private previousAxis: string;
+  private previousButton: string;
+  private moveFrameCount: number;
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
@@ -109,16 +113,10 @@ export default class PlayerController implements BattlerAI {
       ],
       onEnd: Events.PLAYER_DIED,
     });
-    // //allign bombHitBox with player sprites feet
-    // let bombHitBoxCenter = new Vec2(
-    //   this.owner.position.x - 0.8,
-    //   this.owner.position.y - 0.8
-    // );
 
-    // this.bombHitBox = new AABB(bombHitBoxCenter, new Vec2(8, 8));
-    this.twoButtonsPressed = false;
-    this.previousDirection = new Vec2(0, 0);
     this.previousAxis = "none";
+    this.previousButton = "none";
+    this.frameCount = 0;
   }
 
   activate(options: Record<string, any>): void {}
@@ -136,6 +134,8 @@ export default class PlayerController implements BattlerAI {
         new Vec2(6, 8)
       )
     );
+
+    this.frameCount++;
 
     if (this.iFrameTimer.isStopped()) this.iFrame = false;
 
@@ -305,13 +305,32 @@ export default class PlayerController implements BattlerAI {
     let forwardAxis = 0;
     let horizontalAxis = 0;
 
-    if (Input.isJustPressed("forward") || Input.isJustPressed("up"))
+    if (Input.isJustPressed("forward") || Input.isJustPressed("up")) {
+      this.doAnimation(PlayerAction.LOOK_UP);
       this.previousAxis = "forward";
-    if (Input.isJustPressed("backward")) this.previousAxis = "backward";
+      this.lookDirection.y = 1;
+      this.lookDirection.x = 0;
+    }
+    if (Input.isJustPressed("backward")) {
+      this.doAnimation(PlayerAction.LOOK_DOWN);
+      this.previousAxis = "backward";
+      this.lookDirection.y = -1;
+      this.lookDirection.x = 0;
+    }
 
-    if (Input.isJustPressed("left")) this.previousAxis = "left";
+    if (Input.isJustPressed("left")) {
+      this.doAnimation(PlayerAction.LOOK_LEFT);
+      this.previousAxis = "left";
+      this.lookDirection.y = 0;
+      this.lookDirection.x = -1;
+    }
 
-    if (Input.isJustPressed("right")) this.previousAxis = "right";
+    if (Input.isJustPressed("right")) {
+      this.doAnimation(PlayerAction.LOOK_RIGHT);
+      this.previousAxis = "right";
+      this.lookDirection.y = 0;
+      this.lookDirection.x = 1;
+    }
 
     if (Input.isPressed("forward") || Input.isJustPressed("up")) {
       if (
@@ -320,7 +339,12 @@ export default class PlayerController implements BattlerAI {
           !Input.isPressed("right") &&
           !Input.isPressed("backward"))
       ) {
-        forwardAxis = 1;
+        if (this.previousButton === "forward") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) forwardAxis = 1;
+        } else {
+          this.previousButton = "forward";
+        }
       }
     }
     if (Input.isPressed("backward")) {
@@ -330,7 +354,12 @@ export default class PlayerController implements BattlerAI {
           !Input.isPressed("right") &&
           !Input.isPressed("forward"))
       ) {
-        forwardAxis = -1;
+        if (this.previousButton === "backward") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) forwardAxis = -1;
+        } else {
+          this.previousButton = "backward";
+        }
       }
     }
     if (Input.isPressed("left")) {
@@ -340,7 +369,12 @@ export default class PlayerController implements BattlerAI {
           !Input.isPressed("right") &&
           !Input.isPressed("forward"))
       ) {
-        horizontalAxis = -1;
+        if (this.previousButton === "left") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) horizontalAxis = -1;
+        } else {
+          this.previousButton = "left";
+        }
       }
     }
     if (Input.isPressed("right")) {
@@ -350,13 +384,28 @@ export default class PlayerController implements BattlerAI {
           !Input.isPressed("backward") &&
           !Input.isPressed("forward"))
       ) {
-        horizontalAxis = 1;
+        if (this.previousButton === "right") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) horizontalAxis = 1;
+        } else {
+          this.previousButton = "right";
+        }
       }
     }
+    if (
+      !Input.isPressed("right") &&
+      !Input.isPressed("left") &&
+      !Input.isPressed("forward") &&
+      !Input.isPressed("up") &&
+      !Input.isPressed("backward")
+    )
+      this.moveFrameCount = 0;
     if (
       (forwardAxis != 0 && horizontalAxis == 0) ||
       (forwardAxis == 0 && horizontalAxis != 0)
     ) {
+      // if (forwardAxis === 0 && horizontalAxis === 0 && this.moveFrameCount < 1)
+      //   this.moveFrameCount = 0;
       // if (
       //   Input.isPressed("forward") ||
       //   Input.isPressed("up") ||
@@ -405,8 +454,6 @@ export default class PlayerController implements BattlerAI {
       if (Input.isPressed("forward")) {
         this.doAnimation(PlayerAction.WALK_UP);
         // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_UP);
-        this.lookDirection.y = 1;
-        this.lookDirection.x = 0;
       }
       if (Input.isPressed("left")) {
         this.doAnimation(PlayerAction.WALK_LEFT);
