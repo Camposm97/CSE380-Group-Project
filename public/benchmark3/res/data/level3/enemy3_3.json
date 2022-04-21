@@ -1,5 +1,5 @@
 {
-  "numEnemies": 4,
+  "numEnemies": 5,
   "enemies": [
     {
       "ai": "BlueRobotAI",
@@ -26,6 +26,15 @@
       "options": {
         "behavior": "secondary"
       }
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [26, 28],
+      "options": {
+        "behavior": "secondary"
+      }
     }
+    
   ]
 }
