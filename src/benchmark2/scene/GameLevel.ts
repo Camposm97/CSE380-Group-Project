@@ -17,6 +17,7 @@ import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameLayerManager } from "../game_system/GameLayerManager";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
+import * as fs from "fs";
 
 export default abstract class GameLevel extends Scene {
   private name: string;
@@ -59,17 +60,17 @@ export default abstract class GameLevel extends Scene {
     this.load.image("pistol", "res/sprites/pistol.png");
     this.load.image("block", "res/sprites/block.png");
     this.load.audio("boom", "res/sound/explode.wav");
-    this.load.audio('rs_freeze', 'res/sound/rs_freeze.wav')
-    this.load.audio('rm_freeze', 'res/sound/rm_freeze.wav')
-    this.load.audio('r_freeze', 'res/sound/r_freeze.wav')
-    this.load.audio('flag_place', 'res/sound/flag_place.wav')
-    this.load.audio('damage', 'res/sound/damage.wav')
+    this.load.audio("rs_freeze", "res/sound/rs_freeze.wav");
+    this.load.audio("rm_freeze", "res/sound/rm_freeze.wav");
+    this.load.audio("r_freeze", "res/sound/r_freeze.wav");
+    this.load.audio("flag_place", "res/sound/flag_place.wav");
+    this.load.audio("damage", "res/sound/damage.wav");
   }
 
   loadLevelFromFolder(levelName: string): void {
-    // let items = fs.readdirSync(levelName);
-    // console.log(items);
-    // fs.readdirSync("res/" + levelName).forEach((file) => {
+    // fs.readdirSync("res/" + levelName, {
+    //   encoding: "utf8",
+    // }).forEach((file) => {
     //   console.log(file);
     // });
   }
@@ -179,15 +180,15 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.EXIT_GAME);
     this.receiver.subscribe(Events.LEVEL_END);
     this.receiver.subscribe(Events.ROOM_COMPLETE);
-    this.receiver.subscribe(Events.PLAYER_DIED)
-    this.receiver.subscribe(Events.SHOW_CHEATS)
+    this.receiver.subscribe(Events.PLAYER_DIED);
+    this.receiver.subscribe(Events.SHOW_CHEATS);
 
     this.initScoreTimer();
     this.glm.showFadeOut();
   }
 
   initScoreTimer(): void {
-    let aux = () => (<PlayerController> this.em.getPlayer()._ai).kill()
+    let aux = () => (<PlayerController>this.em.getPlayer()._ai).kill();
     if (this.timeLeft !== undefined) {
       this.scoreTimer = new ScoreTimer(this.timeLeft, aux, false);
     } else {
@@ -244,12 +245,19 @@ export default abstract class GameLevel extends Scene {
         });
         break;
       case Events.PLAYER_DIED:
-        this.glm.showFadeIn()
-        new Timer(1000, () => {
-          this.glm.hideAllAndZoomOut()
-          this.sceneManager.changeToScene(GameOver, { win: false, currentScore: this.currentScore });
-        }, false).start()
-                
+        this.glm.showFadeIn();
+        new Timer(
+          1000,
+          () => {
+            this.glm.hideAllAndZoomOut();
+            this.sceneManager.changeToScene(GameOver, {
+              win: false,
+              currentScore: this.currentScore,
+            });
+          },
+          false
+        ).start();
+
         break;
       case Events.PLACE_FLAG:
         this.em.placeFlag(event.data.get("flagPlaceHitBox"));
@@ -274,8 +282,8 @@ export default abstract class GameLevel extends Scene {
       this.handleEvent(this.receiver.getNextEvent());
     }
 
-    this.em.handleEnemyCollisions()
-    this.em.handleCollidables(deltaT)
+    this.em.handleEnemyCollisions();
+    this.em.handleCollidables(deltaT);
 
     if (this.em.playerReachedGoal()) {
       if (!this.gameOver) {
