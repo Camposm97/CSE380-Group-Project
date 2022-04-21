@@ -98,7 +98,7 @@ export class GameLayerManager {
 
     initPauseLayer(): void {
         let c = this.scene.getViewport().getCenter().clone()
-        this.pauseLayer = this.scene.addLayer(LayerType.PAUSE, 1)
+        this.pauseLayer = this.scene.addUILayer(LayerType.PAUSE)
         initLabel(this.scene, LayerType.PAUSE, new Vec2(c.x,c.y-250), `Level ${this.scene.getName()}`)
         initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-150), 'Resume', Events.PAUSE_GAME)
         initButtonHandler(this.scene, LayerType.PAUSE, new Vec2(c.x, c.y-75), 'Reset Room', Events.RESET_ROOM)
