@@ -404,36 +404,6 @@ export default class PlayerController implements BattlerAI {
       (forwardAxis != 0 && horizontalAxis == 0) ||
       (forwardAxis == 0 && horizontalAxis != 0)
     ) {
-      // if (forwardAxis === 0 && horizontalAxis === 0 && this.moveFrameCount < 1)
-      //   this.moveFrameCount = 0;
-      // if (
-      //   Input.isPressed("forward") ||
-      //   Input.isPressed("up") ||
-      //   Input.isPressed("backward")
-      // ) {
-      //   if (
-      //     this.previousAxis !== "horizontal" ||
-      //     (!Input.isPressed("left") && !Input.isPressed("right"))
-      //   ) {
-      //     forwardAxis =
-      //       (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
-      //       (Input.isPressed("backward") ? -1 : 0);
-      //     this.previousAxis = "foward";
-      //   }
-      // }
-      // if (Input.isPressed("left") || Input.isPressed("right")) {
-      //   if (
-      //     this.previousAxis !== "foward" ||
-      //     (!Input.isPressed("forward") &&
-      //       !Input.isPressed("up") &&
-      //       !Input.isPressed("backward"))
-      //   ) {
-      //     horizontalAxis =
-      //       (Input.isPressed("left") ? -1 : 0) +
-      //       (Input.isPressed("right") ? 1 : 0);
-      //     this.previousAxis = "horizontal";
-      //   }
-      // }
       let movement = Vec2.UP.scaled(forwardAxis * this.speed);
       movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
       let newPos = this.owner.position.clone().add(movement.scaled(deltaT));

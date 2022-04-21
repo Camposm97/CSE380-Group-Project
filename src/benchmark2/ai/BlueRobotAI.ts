@@ -31,6 +31,8 @@ export default class BlueRobotAI implements RobotAI {
   listening: boolean;
 
   private previousAxis: string;
+  private previousButton: string;
+  private moveFrameCount: number;
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
@@ -66,6 +68,8 @@ export default class BlueRobotAI implements RobotAI {
     );
 
     this.previousAxis = "none";
+    this.previousButton = "none";
+    this.moveFrameCount = 0;
   }
 
   hit(): void {
@@ -114,6 +118,21 @@ export default class BlueRobotAI implements RobotAI {
         forwardAxis = 1;
       }
     }
+    if (Input.isPressed("forward") || Input.isJustPressed("up")) {
+      if (
+        this.previousAxis === "forward" ||
+        (!Input.isPressed("left") &&
+          !Input.isPressed("right") &&
+          !Input.isPressed("backward"))
+      ) {
+        if (this.previousButton === "forward") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) forwardAxis = 1;
+        } else {
+          this.previousButton = "forward";
+        }
+      }
+    }
     if (Input.isPressed("backward")) {
       if (
         this.previousAxis === "backward" ||
@@ -121,7 +140,12 @@ export default class BlueRobotAI implements RobotAI {
           !Input.isPressed("right") &&
           !Input.isPressed("forward"))
       ) {
-        forwardAxis = -1;
+        if (this.previousButton === "backward") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) forwardAxis = -1;
+        } else {
+          this.previousButton = "backward";
+        }
       }
     }
     if (Input.isPressed("left")) {
@@ -131,7 +155,12 @@ export default class BlueRobotAI implements RobotAI {
           !Input.isPressed("right") &&
           !Input.isPressed("forward"))
       ) {
-        horizontalAxis = -1;
+        if (this.previousButton === "left") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) horizontalAxis = -1;
+        } else {
+          this.previousButton = "left";
+        }
       }
     }
     if (Input.isPressed("right")) {
@@ -141,9 +170,22 @@ export default class BlueRobotAI implements RobotAI {
           !Input.isPressed("backward") &&
           !Input.isPressed("forward"))
       ) {
-        horizontalAxis = 1;
+        if (this.previousButton === "right") {
+          this.moveFrameCount++;
+          if (this.moveFrameCount >= 5) horizontalAxis = 1;
+        } else {
+          this.previousButton = "right";
+        }
       }
     }
+    if (
+      !Input.isPressed("right") &&
+      !Input.isPressed("left") &&
+      !Input.isPressed("forward") &&
+      !Input.isPressed("up") &&
+      !Input.isPressed("backward")
+    )
+      this.moveFrameCount = 0;
     if (this.mainBehavior) {
       forwardAxis *= -1;
       horizontalAxis *= -1;
