@@ -22,7 +22,7 @@
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [22, 2],
+      "position": [30, 8],
       "options": {
         "behavior": "secondary"
       }

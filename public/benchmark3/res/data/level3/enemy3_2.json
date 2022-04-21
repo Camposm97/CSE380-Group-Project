@@ -4,22 +4,22 @@
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [5, 12]
+      "position": [26, 28]
     },
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [4, 2]
+      "position": [6, 35]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [4, 16]
+      "position": [12, 19]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [7, 14]
+      "position": [19, 13]
     }
   ]
 }

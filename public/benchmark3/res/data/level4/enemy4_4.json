@@ -4,7 +4,7 @@
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [2, 8]
+      "position": [25, 23]
     },
     {
       "ai": "BlueMouseAI",
@@ -14,7 +14,7 @@
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [13, 2],
+      "position": [34, 9],
       "options": {
         "damage": 1,
         "behavior": "secondary"
