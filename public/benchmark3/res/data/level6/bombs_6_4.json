@@ -1,0 +1,8 @@
+{
+    "numBombs": 1,
+    "bombs": [
+        {
+            "position": [7,10]
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "numEnemies": 1,
+    "enemies": [
+        {
+            "ai": "BlueStatueAI",
+            "type": "blueStatue",
+            "position": [5, 6]
+        }
+    ]
+}

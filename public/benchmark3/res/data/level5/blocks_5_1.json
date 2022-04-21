@@ -1,12 +1,6 @@
 {
-    "numBlocks": 13,
+    "numBlocks": 19,
     "blocks": [
-      {
-        "position": [5, 7]
-      },
-      {
-        "position": [5, 9]
-      },
       {
         "position": [4, 8]
       },
@@ -14,16 +8,25 @@
         "position": [6, 8]
       },
       {
+        "position": [7, 8]
+      },
+      {
+        "position": [8, 8]
+      },
+      {
+        "position": [9, 8]
+      },
+      {
+        "position": [21, 6]
+      },
+      {
         "position": [21, 7]
       },
       {
+        "position": [21, 8]
+      },
+      {
         "position": [21, 9]
-      },
-      {
-        "position": [22, 8]
-      },
-      {
-        "position": [20, 8]
       },
       {
         "position": [25, 13]
@@ -39,6 +42,21 @@
       },
       {
         "position": [21, 17]
+      },
+      {
+        "position": [8, 17]
+      },
+      {
+        "position": [7, 16]
+      },
+      {
+        "position": [6, 15]
+      },
+      {
+        "position": [5, 14]
+      },
+      {
+        "position": [4, 13]
       }
     ]
   }

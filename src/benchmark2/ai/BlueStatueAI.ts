@@ -148,7 +148,6 @@ export default class BlueStatueAI implements RobotAI {
   handleEvent(event: GameEvent): void {}
 
   update(deltaT: number): void {
-    this.owner.setCollisionShape(new AABB(new Vec2(this.owner.position.x, this.owner.position.y), new Vec2(5,10)))
     if (this.frozenTimer.isStopped()) {
       this.isFrozen = false;
     }
