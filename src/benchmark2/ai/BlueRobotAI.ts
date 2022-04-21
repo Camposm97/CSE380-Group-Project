@@ -30,6 +30,8 @@ export default class BlueRobotAI implements RobotAI {
 
   listening: boolean;
 
+  private previousAxis: string;
+
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
     this.listening = true;
@@ -40,7 +42,7 @@ export default class BlueRobotAI implements RobotAI {
     this.mainBehavior = true;
     this.damage = 1;
     this.isFrozen = false;
-    this.emitter = new Emitter()
+    this.emitter = new Emitter();
 
     if (options) {
       if (options.behavior === "secondary") {
@@ -62,6 +64,8 @@ export default class BlueRobotAI implements RobotAI {
       },
       false
     );
+
+    this.previousAxis = "none";
   }
 
   hit(): void {
@@ -70,7 +74,10 @@ export default class BlueRobotAI implements RobotAI {
       this.owner.animation.play(RobotAnimations.DAMAGE, false, null);
       this.frozenTimer.start(this.frozenTimeInMillis);
       this.mainBehavior = !this.mainBehavior;
-      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'r_freeze', loop: false})
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+        key: "r_freeze",
+        loop: false,
+      });
     }
   }
 
@@ -86,11 +93,48 @@ export default class BlueRobotAI implements RobotAI {
   }
 
   move(): void {
-    let forwardAxis =
-      (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
-      (Input.isPressed("backward") ? -1 : 0);
-    let horizontalAxis =
-      (Input.isPressed("left") ? -1 : 0) + (Input.isPressed("right") ? 1 : 0);
+    let forwardAxis = 0;
+    let horizontalAxis = 0;
+
+    if (
+      Input.isJustPressed("forward") ||
+      Input.isJustPressed("up") ||
+      Input.isJustPressed("backward")
+    ) {
+      this.previousAxis = "foward";
+    }
+    if (Input.isJustPressed("left") || Input.isJustPressed("right")) {
+      this.previousAxis = "horizontal";
+    }
+
+    if (
+      Input.isPressed("forward") ||
+      Input.isPressed("up") ||
+      Input.isPressed("backward")
+    ) {
+      if (
+        this.previousAxis !== "horizontal" ||
+        (!Input.isPressed("left") && !Input.isPressed("right"))
+      ) {
+        forwardAxis =
+          (Input.isPressed("forward") || Input.isPressed("up") ? 1 : 0) +
+          (Input.isPressed("backward") ? -1 : 0);
+        this.previousAxis = "foward";
+      }
+    }
+    if (Input.isPressed("left") || Input.isPressed("right")) {
+      if (
+        this.previousAxis !== "foward" ||
+        (!Input.isPressed("forward") &&
+          !Input.isPressed("up") &&
+          !Input.isPressed("backward"))
+      ) {
+        horizontalAxis =
+          (Input.isPressed("left") ? -1 : 0) +
+          (Input.isPressed("right") ? 1 : 0);
+        this.previousAxis = "horizontal";
+      }
+    }
     if (this.mainBehavior) {
       forwardAxis *= -1;
       horizontalAxis *= -1;

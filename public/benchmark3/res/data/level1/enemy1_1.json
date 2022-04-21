@@ -2,8 +2,8 @@
   "numEnemies": 4,
   "enemies": [
     {
-      "ai": "BlueStatueAI",
-      "type": "blueStatue",
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
       "position": [5, 6]
     },
     {

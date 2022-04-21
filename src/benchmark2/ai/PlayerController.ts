@@ -18,7 +18,8 @@ import {
 } from "../scene/Constants";
 import BattlerAI from "./BattlerAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
-import Timer from "../../Wolfie2D/Timing/Timer";2
+import Timer from "../../Wolfie2D/Timing/Timer";
+2;
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
@@ -95,7 +96,7 @@ export default class PlayerController implements BattlerAI {
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
 
-    this.owner.tweens.add('death', {
+    this.owner.tweens.add("death", {
       startDelay: 0,
       duration: 2500,
       effects: [
@@ -130,7 +131,10 @@ export default class PlayerController implements BattlerAI {
 
   update(deltaT: number): void {
     this.owner.setCollisionShape(
-      new AABB(new Vec2(this.owner.position.x, this.owner.position.y+5), new Vec2(6,8))
+      new AABB(
+        new Vec2(this.owner.position.x, this.owner.position.y + 5),
+        new Vec2(6, 8)
+      )
     );
 
     if (this.iFrameTimer.isStopped()) this.iFrame = false;
@@ -194,7 +198,7 @@ export default class PlayerController implements BattlerAI {
         // offSet.scale(16);
         // center.add(offSet);
         this.emitter.fireEvent(Events.PLACE_FLAG, {
-          flagPlaceHitBox: this.owner.collisionShape.getBoundingRect().clone()
+          flagPlaceHitBox: this.owner.collisionShape.getBoundingRect().clone(),
           // flagPlaceHitBox: new AABB(center, new Vec2(16, 16)),
         });
       }
@@ -272,14 +276,17 @@ export default class PlayerController implements BattlerAI {
   damage(damage: number): void {
     if (Cheats.invincible) return;
     if (!this.iFrame) {
-      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'damage', loop: false})
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+        key: "damage",
+        loop: false,
+      });
       this.health -= damage;
       this.doAnimation(PlayerAction.DAMAGE);
-        if (this.health <= 0) {
-          this.health = 0
-          this.owner.setAIActive(false, {})
-          this.owner.isCollidable = false
-          this.owner.tweens.play('death')
+      if (this.health <= 0) {
+        this.health = 0;
+        this.owner.setAIActive(false, {});
+        this.owner.isCollidable = false;
+        this.owner.tweens.play("death");
       }
       this.iFrame = true;
       this.iFrameTimer.start();
@@ -291,7 +298,7 @@ export default class PlayerController implements BattlerAI {
   }
 
   kill(): void {
-    this.damage(this.health)
+    this.damage(this.health);
   }
 
   handleMovement(deltaT: number): void {
@@ -424,7 +431,10 @@ export default class PlayerController implements BattlerAI {
   }
 
   collisionShapeHalf(): AABB {
-    return new AABB(new Vec2(this.owner.position.x, this.owner.position.y+5), new Vec2(6,6))
+    return new AABB(
+      new Vec2(this.owner.position.x, this.owner.position.y + 5),
+      new Vec2(6, 6)
+    );
   }
 
   setCoatColor(color: string) {
