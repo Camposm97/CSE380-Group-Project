@@ -181,6 +181,12 @@ export class GameLayerManager {
      * @returns false if primaryLayer is hidden, else it returns true
      */
     showPause(): boolean {
+        // If the control layer is showing and the user presses 'ESC', then hide the controls and show the pause menu
+        if (!this.controlsLayer.isHidden()) {
+            this.controlsLayer.setHidden(true)
+            this.pauseLayer.setHidden(false)
+            return this.primaryLayer.isHidden()
+        }
         this.primaryLayer.setHidden(!this.primaryLayer.isHidden())
         this.hudLayer.setHidden(!this.hudLayer.isHidden())
         this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
