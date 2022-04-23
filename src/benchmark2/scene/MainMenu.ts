@@ -126,21 +126,21 @@ export default class MainMenu extends Scene {
       new Vec2(center.x - 200, center.y - 50),
       "Level 2",
       MENU_EVENT.LOAD_LVL_2
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x - 200, center.y + 50),
       "Level 3",
       MENU_EVENT.LOAD_LVL_3
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x + 200, center.y - 150),
       "Level 4",
       MENU_EVENT.LOAD_LVL_4
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",
@@ -154,7 +154,7 @@ export default class MainMenu extends Scene {
       new Vec2(center.x + 200, center.y + 50),
       "Level 6",
       MENU_EVENT.LOAD_LVL_6
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",
