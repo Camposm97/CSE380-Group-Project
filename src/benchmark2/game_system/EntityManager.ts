@@ -440,4 +440,8 @@ export default class EntityManager {
     for (let b in this.bombs)
       this.bombs[b].setFlagged()
   }
+
+  getRobotsLeft(): number {
+    return this.enemies.length
+  }
 }

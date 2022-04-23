@@ -90,9 +90,14 @@ export class GameLayerManager {
         // Add a UI for health
         this.hudLayer = this.scene.addUILayer(LayerType.HUD)
         let lblHealth = initLabel(this.scene, LayerType.HUD, new Vec2(60,16), `HP: ${(<BattlerAI>this.scene.getPlayer()._ai).health}`)
+        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, 16), '')
+        let lblEnemiesLeft = initLabel(this.scene, LayerType.HUD, new Vec2(c.x/s, 16), '')
+
         this.scene.setLblHealth(lblHealth)
-        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, 16), "")
         this.scene.setLblTime(lblTime)
+        this.scene.setLblEnemiesLeft(lblEnemiesLeft)
+
+        // Add label of level name
         initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, (c.y/s)+120), `Level ${this.scene.getName()}`)
     }
 
