@@ -60,7 +60,7 @@ export default class MainMenu extends Scene {
     this.mainMenu = this.addUILayer("mainMenu");
     const layer = "mainMenu";
 
-    initButtonHandler(this, layer, new Vec2(v.x, v.y-225), 'How to Play', MENU_EVENT.HOW_TO_PLAY)
+    initButtonHandler(this, layer, new Vec2(v.x, v.y - 225), 'How to Play', MENU_EVENT.HOW_TO_PLAY)
 
     initButtonHandler(
       this,
@@ -118,7 +118,7 @@ export default class MainMenu extends Scene {
       "levelSelect",
       new Vec2(center.x - 200, center.y - 150),
       "Level 1",
-      MENU_EVENT.LOAD_LVL_1,          
+      MENU_EVENT.LOAD_LVL_1,
     );
     initButtonHandler(
       this,
@@ -126,21 +126,21 @@ export default class MainMenu extends Scene {
       new Vec2(center.x - 200, center.y - 50),
       "Level 2",
       MENU_EVENT.LOAD_LVL_2
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x - 200, center.y + 50),
       "Level 3",
       MENU_EVENT.LOAD_LVL_3
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x + 200, center.y - 150),
       "Level 4",
       MENU_EVENT.LOAD_LVL_4
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",
@@ -154,7 +154,7 @@ export default class MainMenu extends Scene {
       new Vec2(center.x + 200, center.y + 50),
       "Level 6",
       MENU_EVENT.LOAD_LVL_6
-    ).visible = false
+    )
     initButtonHandler(
       this,
       "levelSelect",

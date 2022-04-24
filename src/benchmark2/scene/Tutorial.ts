@@ -2,7 +2,6 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { PlayerAnimations, RobotAnimations, RobotMouseAnimations, RobotStatueAnimations } from "./Constants";
-import { Level1_1 } from "./Level1";
 import { LevelT_1, LevelT_2, LevelT_3, LevelT_4 } from "./LevelT";
 import MainMenu from "./MainMenu";
 
@@ -22,11 +21,11 @@ const t1_2 = 'As McBendojee gets closer to the bombs, his coat color will change
 const t1_3 = 'If his coat is white, '
 // {insert White Player sprite here} 
 const t1_4 = 'then he is near none of the bombs. '
-const t1_5 = 'If his coat is green, '
-// {insert Green Player sprite here} 
+const t1_5 = 'If his coat is yellow, '
+// {insert Yellow Player sprite here} 
 const t1_6 = 'then he is 3 spaces away from the bomb. '
-const t1_7 = 'If his coat is blue, '
-// {insert Blue Player sprite here}
+const t1_7 = 'If his coat is orange, '
+// {insert Orange Player sprite here}
 const t1_8 = 'then he is 2 spaces away from the bomb. '
 const t1_9 = 'If his coat is red,'
 // {insert Red Player sprite here} 
@@ -94,12 +93,12 @@ export class Tutorial1_1 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x, c.y-270), t1_4 + t1_5).fontSize = 18
 
         let sprite2 = this.add.animatedSprite('mcbendorjee', TUTORIAL_LAYER)
-        sprite2.animation.play(PlayerAnimations.IDLE_GREEN, true)
+        sprite2.animation.play(PlayerAnimations.IDLE_YELLOW, true)
         sprite2.position = new Vec2(c.x, c.y-230)
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x, c.y-190), t1_6 + t1_7).fontSize = 18
 
         let sprite3 = this.add.animatedSprite('mcbendorjee', TUTORIAL_LAYER)
-        sprite3.animation.play(PlayerAnimations.IDLE_BLUE, true)
+        sprite3.animation.play(PlayerAnimations.IDLE_ORANGE, true)
         sprite3.position = new Vec2(c.x, c.y-150)
 
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-110), t1_8 + t1_9).fontSize = 18
@@ -132,7 +131,7 @@ export class Tutorial1_1 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+225), t1_17 + t1_18).fontSize = 18
 
         initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_1)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'Try', GO_TO.LEVELT_1)
     }
 
     updateScene(deltaT: number): void {
@@ -181,7 +180,7 @@ export class Tutorial1_2 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y+140), t2_9).fontSize = 24
 
         initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_2)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'Try', GO_TO.LEVELT_2)
     }
 
     updateScene(deltaT: number): void {
@@ -224,7 +223,7 @@ export class Tutorial1_3 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-10), t3_7).fontSize = 24
 
         initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_3)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'Try', GO_TO.LEVELT_3)
     }
     
     updateScene(deltaT: number): void {
@@ -264,8 +263,8 @@ export class Tutorial1_4 extends Scene {
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-130), t4_4).fontSize = 22
         initLabel(this, TUTORIAL_LAYER, new Vec2(c.x,c.y-90), t4_5).fontSize = 22
 
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Skip', GO_TO.SKIP_TUTORIAL)
-        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'OK', GO_TO.LEVELT_4)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x-120,c.y+275), 'Main Menu', GO_TO.SKIP_TUTORIAL)
+        initButtonHandler(this, TUTORIAL_LAYER, new Vec2(c.x+120,c.y+275), 'Try', GO_TO.LEVELT_4)
     }
 
     updateScene(deltaT: number): void {

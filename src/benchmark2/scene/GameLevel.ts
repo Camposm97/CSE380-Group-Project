@@ -20,6 +20,7 @@ import EntityManager from "../game_system/EntityManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default abstract class GameLevel extends Scene {
+  private isTutorial: boolean
   private name: string;
   private currentScore: number;
   private timeLeft: number;
@@ -27,6 +28,7 @@ export default abstract class GameLevel extends Scene {
   private graph: PositionGraph; // Nav Mesh
   private lblHealth: Label;
   private lblTime: Label;
+  private lblEnemiesLeft: Label;
   private glm: GameLayerManager;
   private em: EntityManager;
   private scoreTimer: ScoreTimer;
@@ -118,46 +120,31 @@ export default abstract class GameLevel extends Scene {
   startScene() {
     // Add in the tilemap
     let tilemapLayers = this.add.tilemap("level", new Vec2(0.5, 0.5));
-
     // Get the wall layer
     this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
-
     // Set the viewport bounds to the tilemap
     let tilemapSize: Vec2 = this.walls.size.scaled(0.5);
-
     this.viewport.setBounds(0, 0, tilemapSize.x, tilemapSize.y);
     this.viewport.setZoomLevel(3);
-
     this.glm = new GameLayerManager(this); // ***INITIALIZES PRIMARY LAYER***
-
-    this.em = new EntityManager(this);
-
+    this.em = new EntityManager(this);    // **HANDLES PLAYER, ENEMIES, and OBJECT RENDER**
     // this.initializeWeapons();
     this.em.initWeapons();
-
     // Create the player
     this.em.initPlayer();
-
     // Place the end level flag
     this.em.initGreenFlag();
-
     // Make the viewport follow the player
     this.viewport.follow(this.em.getPlayer());
-
     // Create the navmesh
     this.createNavmesh();
-
     //initialize the number of enemies listening for player movement to 0
-
     // Initialize all enemies
     this.em.initEnemies();
-
     // Initalize all bombs
     this.em.initBombs();
-
     // Initaize all blocks
     this.em.initBlocks();
-
     // Initialize projectiles
     this.em.initProjectiles();
     this.glm.initHudLayer();
@@ -170,7 +157,7 @@ export default abstract class GameLevel extends Scene {
     this.nextRoom = null;
     this.em.initBattleManager();
 
-    // Subscribe to relevant events
+    // SUBSCRIBE TO EVENTS
     this.receiver.subscribe("enemyDied");
     this.receiver.subscribe(RobotAction.FIRE_PROJECTILE);
     this.receiver.subscribe(Events.PLACE_FLAG);
@@ -179,7 +166,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.RESET_ROOM);
     this.receiver.subscribe(Events.SHOW_CONTROLS);
     this.receiver.subscribe(Events.EXIT_GAME);
-    this.receiver.subscribe(Events.LEVEL_END);
+    this.receiver.subscribe(Events.PLAYER_WON);
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED);
     this.receiver.subscribe(Events.SHOW_CHEATS);
@@ -244,13 +231,14 @@ export default abstract class GameLevel extends Scene {
           false
         ).start();
         break;
-      case Events.LEVEL_END:
+      case Events.PLAYER_WON:
         this.viewport.setZoomLevel(1);
         this.sceneManager.changeToScene(GameOver, {
           win: true,
           currentScore: this.currentScore,
           timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
           nextLvl: this.nextRoom,
+          isTutorial: this.isTutorial
         });
         break;
       case Events.PLAYER_DIED:
@@ -262,6 +250,7 @@ export default abstract class GameLevel extends Scene {
             this.sceneManager.changeToScene(GameOver, {
               win: false,
               currentScore: this.currentScore,
+              isTutorial: this.isTutorial
             });
           },
           false
@@ -317,6 +306,7 @@ export default abstract class GameLevel extends Scene {
     let health = (<BattlerAI>this.em.getPlayer()._ai).health;
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
+    this.lblEnemiesLeft.text = `Robots Left: ${this.em.getRobotsLeft()}`
   }
 
   handleInput(): void {
@@ -367,6 +357,10 @@ export default abstract class GameLevel extends Scene {
     this.navManager.addNavigableEntity(Names.NAVMESH, navmesh);
   }
 
+  setIsTutorial(isTutorial: boolean) {
+    this.isTutorial = isTutorial
+  }
+
   getName(): string {
     return this.name;
   }
@@ -389,6 +383,10 @@ export default abstract class GameLevel extends Scene {
 
   setLblTime(lbl: Label): void {
     this.lblTime = lbl;
+  }
+
+  setLblEnemiesLeft(lbl: Label) {
+    this.lblEnemiesLeft = lbl
   }
 
   changeLevel(level: new (...args: any) => Scene) {

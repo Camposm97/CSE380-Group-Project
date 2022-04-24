@@ -14,6 +14,7 @@ export default class GameOver extends Scene {
     private currentScore: number
     private win: boolean
     private timeLeft: number
+    private isTutorial: boolean
     private nextLvl: new (...args: any) => GameLevel
 
     initScene(options: Record<string, any>): void {
@@ -21,6 +22,7 @@ export default class GameOver extends Scene {
         this.win = options.win
         this.timeLeft = options.timeLeft ? options.timeLeft : 0
         this.nextLvl = options.nextLvl
+        this.isTutorial = options.isTutorial
     }
 
     loadScene(): void {
@@ -37,15 +39,29 @@ export default class GameOver extends Scene {
         let btOk = initButton(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+300), 'Main Menu')
         btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
 
-        initLabel(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+50), `High Score: ${this.timeLeft + this.currentScore}`)
+        let lblScore = initLabel(this, MAIN_LAYER, new Vec2(ctr.x, ctr.y+50), `High Score: ${this.timeLeft + this.currentScore}`)
         
         if (this.win) {
-            lblStatus.text = 'You win!'
-            if (this.nextLvl) {
-                btOk.text = 'Next Room'
-                btOk.onClick = () => this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
+            if (this.isTutorial) {
+                lblStatus.text = 'Tutorial Complete!'
+                lblScore.text = ''
+                if (this.nextLvl) {
+                    btOk.text = 'Next Tutorial'
+                    btOk.onClick = () => this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
+                }
+            } else {
+                lblStatus.text = 'You win!'
+                if (this.nextLvl) {
+                    btOk.text = 'Next Room'
+                    btOk.onClick = () => this.sceneManager.changeToScene(this.nextLvl, {currentScore: (this.currentScore + this.timeLeft)})
+                }
             }
+            
         } else {
+            if (this.isTutorial) {
+                lblStatus.text = 'Tutorial Failed'
+                lblScore.text = ''
+            }
             // let tf = <TextInput> this.add.uiElement(UIElementType.TEXT_INPUT, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y+100)})
             // tf.size = new Vec2(230, 40)
             // tf.fontSize = 24

@@ -403,11 +403,11 @@ export default class EntityManager {
     } else if (
       this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)
     ) {
-      (<PlayerController>this.player._ai).setCoatColor(CoatColor.BLUE);
+      (<PlayerController>this.player._ai).setCoatColor(CoatColor.ORANGE);
     } else if (
       this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary)
     ) {
-      (<PlayerController>this.player._ai).setCoatColor(CoatColor.GREEN);
+      (<PlayerController>this.player._ai).setCoatColor(CoatColor.YELLOW);
     } else (<PlayerController>this.player._ai).nearBomb = false;
   }
 
@@ -439,5 +439,9 @@ export default class EntityManager {
   showAllBombs() {
     for (let b in this.bombs)
       this.bombs[b].setFlagged()
+  }
+
+  getRobotsLeft(): number {
+    return this.enemies.length
   }
 }

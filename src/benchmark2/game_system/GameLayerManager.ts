@@ -65,7 +65,7 @@ export class GameLayerManager {
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ],
-            onEnd: Events.LEVEL_END
+            onEnd: Events.PLAYER_WON
         });
 
         this.levelTransitionScreen.tweens.add("fadeOut", {
@@ -90,9 +90,14 @@ export class GameLayerManager {
         // Add a UI for health
         this.hudLayer = this.scene.addUILayer(LayerType.HUD)
         let lblHealth = initLabel(this.scene, LayerType.HUD, new Vec2(60,16), `HP: ${(<BattlerAI>this.scene.getPlayer()._ai).health}`)
+        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, 16), '')
+        let lblEnemiesLeft = initLabel(this.scene, LayerType.HUD, new Vec2(c.x/s, 16), '')
+
         this.scene.setLblHealth(lblHealth)
-        let lblTime = initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, 16), "")
         this.scene.setLblTime(lblTime)
+        this.scene.setLblEnemiesLeft(lblEnemiesLeft)
+
+        // Add label of level name
         initLabel(this.scene, LayerType.HUD, new Vec2((c.x/s)+170, (c.y/s)+120), `Level ${this.scene.getName()}`)
     }
 
@@ -181,6 +186,12 @@ export class GameLayerManager {
      * @returns false if primaryLayer is hidden, else it returns true
      */
     showPause(): boolean {
+        // If the control layer is showing and the user presses 'ESC', then hide the controls and show the pause menu
+        if (!this.controlsLayer.isHidden()) {
+            this.controlsLayer.setHidden(true)
+            this.pauseLayer.setHidden(false)
+            return this.primaryLayer.isHidden()
+        }
         this.primaryLayer.setHidden(!this.primaryLayer.isHidden())
         this.hudLayer.setHidden(!this.hudLayer.isHidden())
         this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
@@ -241,7 +252,7 @@ export class GameLayerManager {
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
                     break;
                 case CheatCode.SKIP_LEVEL:
-                    this.emitter.fireEvent(Events.LEVEL_END)
+                    this.emitter.fireEvent(Events.PLAYER_WON)
                     this.tfCheat.text = ''
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
                     break;

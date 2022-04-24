@@ -191,7 +191,7 @@
       ]
     },
     {
-      "name": "IDLE_GREEN",
+      "name": "IDLE_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -217,7 +217,7 @@
       ]
     },
     {
-      "name": "LOOK_DOWN_GREEN",
+      "name": "LOOK_DOWN_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -227,7 +227,7 @@
       ]
     },
     {
-      "name": "LOOK_UP_GREEN",
+      "name": "LOOK_UP_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -237,7 +237,7 @@
       ]
     },
     {
-      "name": "LOOK_RIGHT_GREEN",
+      "name": "LOOK_RIGHT_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -247,7 +247,7 @@
       ]
     },
     {
-      "name": "LOOK_LEFT_GREEN",
+      "name": "LOOK_LEFT_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -257,7 +257,7 @@
       ]
     },
     {
-      "name": "WALK_DOWN_GREEN",
+      "name": "WALK_DOWN_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -275,7 +275,7 @@
       ]
     },
     {
-      "name": "WALK_UP_GREEN",
+      "name": "WALK_UP_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -293,7 +293,7 @@
       ]
     },
     {
-      "name": "WALK_RIGHT_GREEN",
+      "name": "WALK_RIGHT_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -311,7 +311,7 @@
       ]
     },
     {
-      "name": "WALK_LEFT_GREEN",
+      "name": "WALK_LEFT_YELLOW",
       "repeat": true,
       "frames": [
         {
@@ -329,7 +329,7 @@
       ]
     },
     {
-      "name": "IDLE_BLUE",
+      "name": "IDLE_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -355,7 +355,7 @@
       ]
     },
     {
-      "name": "LOOK_DOWN_BLUE",
+      "name": "LOOK_DOWN_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -365,7 +365,7 @@
       ]
     },
     {
-      "name": "LOOK_UP_BLUE",
+      "name": "LOOK_UP_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -375,7 +375,7 @@
       ]
     },
     {
-      "name": "LOOK_RIGHT_BLUE",
+      "name": "LOOK_RIGHT_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -385,7 +385,7 @@
       ]
     },
     {
-      "name": "LOOK_LEFT_BLUE",
+      "name": "LOOK_LEFT_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -395,7 +395,7 @@
       ]
     },
     {
-      "name": "WALK_DOWN_BLUE",
+      "name": "WALK_DOWN_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -413,7 +413,7 @@
       ]
     },
     {
-      "name": "WALK_UP_BLUE",
+      "name": "WALK_UP_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -431,7 +431,7 @@
       ]
     },
     {
-      "name": "WALK_RIGHT_BLUE",
+      "name": "WALK_RIGHT_ORANGE",
       "repeat": true,
       "frames": [
         {
@@ -449,7 +449,7 @@
       ]
     },
     {
-      "name": "WALK_LEFT_BLUE",
+      "name": "WALK_LEFT_ORANGE",
       "repeat": true,
       "frames": [
         {
