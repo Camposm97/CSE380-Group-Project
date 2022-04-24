@@ -20,6 +20,7 @@ import EntityManager from "../game_system/EntityManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default abstract class GameLevel extends Scene {
+  private isTutorial: boolean
   private name: string;
   private currentScore: number;
   private timeLeft: number;
@@ -165,7 +166,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.RESET_ROOM);
     this.receiver.subscribe(Events.SHOW_CONTROLS);
     this.receiver.subscribe(Events.EXIT_GAME);
-    this.receiver.subscribe(Events.LEVEL_END);
+    this.receiver.subscribe(Events.PLAYER_WON);
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED);
     this.receiver.subscribe(Events.SHOW_CHEATS);
@@ -230,13 +231,14 @@ export default abstract class GameLevel extends Scene {
           false
         ).start();
         break;
-      case Events.LEVEL_END:
+      case Events.PLAYER_WON:
         this.viewport.setZoomLevel(1);
         this.sceneManager.changeToScene(GameOver, {
           win: true,
           currentScore: this.currentScore,
           timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
           nextLvl: this.nextRoom,
+          isTutorial: this.isTutorial
         });
         break;
       case Events.PLAYER_DIED:
@@ -248,6 +250,7 @@ export default abstract class GameLevel extends Scene {
             this.sceneManager.changeToScene(GameOver, {
               win: false,
               currentScore: this.currentScore,
+              isTutorial: this.isTutorial
             });
           },
           false
@@ -352,6 +355,10 @@ export default abstract class GameLevel extends Scene {
     let navmesh = new Navmesh(this.graph);
 
     this.navManager.addNavigableEntity(Names.NAVMESH, navmesh);
+  }
+
+  setIsTutorial(isTutorial: boolean) {
+    this.isTutorial = isTutorial
   }
 
   getName(): string {

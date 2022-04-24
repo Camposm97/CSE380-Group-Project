@@ -65,7 +65,7 @@ export class GameLayerManager {
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ],
-            onEnd: Events.LEVEL_END
+            onEnd: Events.PLAYER_WON
         });
 
         this.levelTransitionScreen.tweens.add("fadeOut", {
@@ -252,7 +252,7 @@ export class GameLayerManager {
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
                     break;
                 case CheatCode.SKIP_LEVEL:
-                    this.emitter.fireEvent(Events.LEVEL_END)
+                    this.emitter.fireEvent(Events.PLAYER_WON)
                     this.tfCheat.text = ''
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
                     break;

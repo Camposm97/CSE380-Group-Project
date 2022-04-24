@@ -14,6 +14,7 @@ export class LevelT_1 extends GameLevel {
 
     startScene(): void {
         this.setName('T-1')
+        this.setIsTutorial(true)
         super.startScene()
         this.setNextLevel(Tutorial1_2)
         this.setCurrentRoom(LevelT_1)
@@ -36,6 +37,7 @@ export class LevelT_2 extends GameLevel {
 
     startScene(): void {
         this.setName('T-2')
+        this.setIsTutorial(true)
         super.startScene()
         this.setNextLevel(Tutorial1_3)
         this.setCurrentRoom(LevelT_2)
@@ -58,6 +60,7 @@ export class LevelT_3 extends GameLevel {
 
     startScene(): void {
         this.setName('T-3')
+        this.setIsTutorial(true)
         super.startScene()
         this.setNextLevel(Tutorial1_4)
         this.setCurrentRoom(LevelT_3)
@@ -80,6 +83,7 @@ export class LevelT_4 extends GameLevel {
 
     startScene(): void {
         this.setName('T-4')
+        this.setIsTutorial(true)
         super.startScene()
         this.setNextLevel(null)
         this.setCurrentRoom(LevelT_4)
