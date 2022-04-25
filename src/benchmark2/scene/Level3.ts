@@ -4,16 +4,10 @@ import { Level4_1 } from "./Level4";
 export class Level3_1 extends GameLevel {
     loadScene(): void {
         this.loadMainResources()
-        let bombJSONArray = [
-        "res/data/level1/bombs1_1.json",
-        "res/data/level1/bombs1_1var2.json",
-        ];
-
-        this.loadRandomBombsJSON(bombJSONArray);
-
         this.load.tilemap("level", "res/tilemaps/level3/Level3_1.json"); // Load tile map
         this.load.object("start_end", "res/data/level3/start_end_3_1.json"); //Load player and green flag coordinates
         this.load.object("enemyData", "res/data/level3/enemy3_1.json"); // Load enemy info
+        this.load.object("bombData", "res/data/level3/bombs3_1.json"); // Load bomb info
         this.load.object("blockData", "res/data/level3/blocks3_1.json"); // Load block info
     }
 

@@ -9,7 +9,7 @@
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [34, 33]
+      "position": [7, 12]
     },
     {
       "ai": "BlueRobotAI",
@@ -19,7 +19,7 @@
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [8, 33]
+      "position": [13, 23]
     }
   ]
 }

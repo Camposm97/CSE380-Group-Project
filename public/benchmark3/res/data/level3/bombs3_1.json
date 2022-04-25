@@ -1,17 +1,41 @@
 {
-  "numBombs": 4,
+  "numBombs": 9,
   "bombs": [
     {
-      "position": [8, 5]
+      "position": [9, 22]
     },
     {
-      "position": [19, 5]
+      "position": [13, 17]
     },
     {
-      "position": [8, 14]
+      "position": [13, 19]
     },
     {
-      "position": [19, 14]
+      "position": [6, 9]
+    },
+    {
+      "position": [13,26]
+    },
+    {
+      "position": [15,24]
+    },
+    {
+      "position": [13,6]
+    },
+    {
+      "position": [15,8]
+    },
+    {
+      "position": [27,11]
+    },
+    {
+      "position": [25,11]
+    },
+    {
+      "position": [23,11]
+    },
+    {
+      "position": [21,11]
     }
   ]
 }
