@@ -1,17 +1,20 @@
 {
-  "numBombs": 4,
+  "numBombs": 5,
   "bombs": [
     {
-      "position": [4, 2]
+      "position": [11, 21]
     },
     {
-      "position": [5, 17]
+      "position": [12, 20]
     },
     {
-      "position": [23, 17]
+      "position": [13, 19]
     },
     {
-      "position": [22, 2]
+      "position": [14, 18]
+    },
+    {
+      "position": [3, 24]
     }
   ]
 }
