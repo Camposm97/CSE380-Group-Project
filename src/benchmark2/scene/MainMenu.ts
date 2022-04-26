@@ -4,6 +4,7 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { Level1_1 } from "./Level1";
+import { Level2_1 } from "./Level2";
 import { Level3_1 } from "./Level3";
 import { Level4_1 } from "./Level4";
 import { Level5_1 } from "./Level5";
@@ -393,6 +394,7 @@ export default class MainMenu extends Scene {
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LOAD_LVL_2:
+          this.sceneManager.changeToScene(Level2_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LOAD_LVL_3:
