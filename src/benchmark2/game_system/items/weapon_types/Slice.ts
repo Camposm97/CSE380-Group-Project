@@ -3,6 +3,7 @@ import Vec2 from "../../../../Wolfie2D/DataTypes/Vec2";
 import GameNode from "../../../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Scene from "../../../../Wolfie2D/Scene/Scene";
+import BlueMouseAI from "../../../ai/BlueMouseAI";
 import WeaponType from "./WeaponType";
 
 export default class Slice extends WeaponType {
@@ -71,6 +72,9 @@ export default class Slice extends WeaponType {
   }
 
   hits(node: GameNode, sliceSprite: AnimatedSprite): boolean {
+    if (node._ai instanceof BlueMouseAI) { // Will this satisfy collision detection when hitting the mouse?
+      return this.hitBox.overlaps((<BlueMouseAI>node._ai).owner.boundary)
+    }
     return this.hitBox.overlaps(node.collisionShape);
   }
 
