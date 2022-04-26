@@ -278,7 +278,9 @@ export default class EntityManager {
         if (this.player.sweptRect.overlaps(enemy.sweptRect)) {
           let r = <RobotAI>enemy._ai;
           if (!r.isFrozen) {
-            (<PlayerController>this.player._ai).damage((<RobotAI>enemy._ai).damage);
+            (<PlayerController>this.player._ai).damage(
+              (<RobotAI>enemy._ai).damage
+            );
           }
         }
       }
@@ -379,8 +381,12 @@ export default class EntityManager {
       ) {
         this.projectiles[i].visible = false;
       }
-      if (this.projectiles[i].collisionShape.overlaps(this.player.collisionShape)) {
-        (<PlayerController>this.player._ai).damage((<ProjectileAI>this.projectiles[i]._ai).damage);
+      if (
+        this.projectiles[i].collisionShape.overlaps(this.player.collisionShape)
+      ) {
+        (<PlayerController>this.player._ai).damage(
+          (<ProjectileAI>this.projectiles[i]._ai).damage
+        );
         this.projectiles[i].visible = false;
       }
     }
@@ -390,15 +396,20 @@ export default class EntityManager {
    * Handles player bomb collision (determines lab coat color)
    */
   handlePlayerBombCollision(): void {
-    if (
-      (<PlayerController>this.player._ai).collisionShapeHalf().overlaps(this.nearestBomb.collisionBoundary) &&
-      !(<PlayerController>this.player._ai).died() && !this.nearestBomb.isDestroyed
-    ) {
-      (<PlayerController>this.player._ai).kill()
-      this.nearestBomb.explode();
-    } else if (
-      this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)
-    ) {
+    //in case any bombs are near the nearest bomb, their collisions will still register
+    for (let i = 0; i < this.bombs.length; i++) {
+      if (
+        (<PlayerController>this.player._ai)
+          .collisionShapeHalf()
+          .overlaps(this.bombs[i].collisionBoundary) &&
+        !(<PlayerController>this.player._ai).died() &&
+        !this.bombs[i].isDestroyed
+      ) {
+        (<PlayerController>this.player._ai).kill();
+        this.bombs[i].explode();
+      }
+    }
+    if (this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
     } else if (
       this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)
@@ -437,11 +448,10 @@ export default class EntityManager {
   }
 
   showAllBombs() {
-    for (let b in this.bombs)
-      this.bombs[b].setFlagged()
+    for (let b in this.bombs) this.bombs[b].setFlagged();
   }
 
   getRobotsLeft(): number {
-    return this.enemies.length
+    return this.enemies.length;
   }
 }
