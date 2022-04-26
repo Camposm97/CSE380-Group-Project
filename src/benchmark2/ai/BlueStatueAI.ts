@@ -3,7 +3,7 @@ import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
-import {  RobotAction, RobotStatueAnimations } from "../scene/Constants";
+import { RobotAction, RobotStatueAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
@@ -28,14 +28,14 @@ export default class BlueStatueAI implements RobotAI {
 
   frozenTimeInMillis: number;
 
-  currentProjFreq: number
+  currentProjFreq: number;
 
-  projFreqMin: number
+  projFreqMin: number;
 
   listening: boolean;
 
   projectile: boolean;
-  
+
   private direction: Vec2;
 
   private unitVector: Vec2;
@@ -55,8 +55,8 @@ export default class BlueStatueAI implements RobotAI {
     this.projectileSpeed = 100;
     this.direction = new Vec2(0, -1);
     this.owner.scale = new Vec2(0.12, 0.12);
-    this.frozenTimeInMillis = 4000;
-    this.currentProjFreq = 750;
+    this.frozenTimeInMillis = 7000;
+    this.currentProjFreq = 1500;
     this.projFreqMin = 500;
     this.speed = 2000;
     this.mainBehavior = true;
@@ -102,14 +102,20 @@ export default class BlueStatueAI implements RobotAI {
       this.isFrozen = true;
       this.frozenTimer.start(this.frozenTimeInMillis);
       this.projectileTimer.update(0);
-      this.currentProjFreq = this.currentProjFreq <= this.projFreqMin ? this.projFreqMin : this.currentProjFreq - 50
-      this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: 'rs_freeze', loop: false })
+      this.currentProjFreq =
+        this.currentProjFreq <= this.projFreqMin
+          ? this.projFreqMin
+          : this.currentProjFreq - 50;
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+        key: "rs_freeze",
+        loop: false,
+      });
     }
   }
 
   push(v: Vec2): void {
     if (this.isFrozen) {
-      this.owner.move(v)
+      this.owner.move(v);
     }
   }
 
@@ -153,7 +159,7 @@ export default class BlueStatueAI implements RobotAI {
     }
 
     if (this.isFrozen) {
-      this.owner.animation.playIfNotAlready(RobotStatueAnimations.DEATH, true)
+      this.owner.animation.playIfNotAlready(RobotStatueAnimations.DEATH, true);
     }
 
     if (!this.isFrozen && this.projectileTimer.isStopped()) {

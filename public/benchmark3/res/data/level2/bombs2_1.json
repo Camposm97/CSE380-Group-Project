@@ -1,3 +1,68 @@
 {
-  "numBombs": 0
+  "numBombs": 21,
+  "bombs": [
+    {
+      "position": [4, 8]
+    },
+    {
+      "position": [3, 9]
+    },
+    {
+      "position": [2, 10]
+    },
+    {
+      "position": [9, 4]
+    },
+    {
+      "position": [8, 5]
+    },
+    {
+      "position": [9, 8]
+    },
+    {
+      "position": [8, 9]
+    },
+    {
+      "position": [9, 16]
+    },
+    {
+      "position": [8, 17]
+    },
+    {
+      "position": [17, 2]
+    },
+    {
+      "position": [16, 3]
+    },
+    {
+      "position": [17, 10]
+    },
+    {
+      "position": [16, 11]
+    },
+    {
+      "position": [17, 14]
+    },
+    {
+      "position": [16, 15]
+    },
+    {
+      "position": [21, 2]
+    },
+    {
+      "position": [20, 3]
+    },
+    {
+      "position": [21, 10]
+    },
+    {
+      "position": [20, 11]
+    },
+    {
+      "position": [21, 14]
+    },
+    {
+      "position": [20, 15]
+    }
+  ]
 }
