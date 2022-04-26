@@ -15,7 +15,6 @@ export default class SplashScreen extends Scene {
   // }
   loadScene(): void {
     this.load.image("logo", "res/sprites/Logo.png");
-    // this.load.image('prof', 'res/sprites/professor.png')
     this.load.image("rm", "res/sprites/rm.png");
     this.load.spritesheet("prof", "res/spritesheets/mcbendorjee.json");
     this.load.audio("select", "res/sound/select.wav");
@@ -33,7 +32,7 @@ export default class SplashScreen extends Scene {
     // Center the viewport
     let c = this.viewport.getCenter().clone();
 
-    let x = this.add.tilemap("background", new Vec2(1.35, 1.25));
+    let x = this.add.tilemap("background", new Vec2(1.34, 1.39));
 
     let sprite = this.add.sprite("logo", "primary");
     sprite.positionX = 610;

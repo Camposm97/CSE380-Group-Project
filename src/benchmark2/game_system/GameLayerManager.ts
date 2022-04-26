@@ -232,9 +232,8 @@ export class GameLayerManager {
     }
 
     identifyCheatCode(): void {
-        if (this.tfCheat.visible) {
+        if (!this.pauseLayer.isHidden()) {
             let code = this.tfCheat.text
-            console.log(`cheat=${code}`)
             switch(code) {
                 case CheatCode.INVINCIBLE:
                     Cheats.invincible = !Cheats.invincible
@@ -287,6 +286,8 @@ export class GameLayerManager {
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
                     break;
             }
+        } else {
+            this.tfCheat.text = ''
         }
     }
 }
