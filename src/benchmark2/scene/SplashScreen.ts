@@ -2,14 +2,17 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButton } from "../ui/UIBuilder";
+import { PlayerAnimations } from "./Constants";
 import MainMenu from "./MainMenu";
 
 export default class SplashScreen extends Scene {
     loadScene(): void {
         this.load.image("logo","res/sprites/Logo.png");
-        this.load.image('prof', 'res/sprites/professor.png')  
+        // this.load.image('prof', 'res/sprites/professor.png')  
         this.load.image('rm', 'res/sprites/rm.png')
+        this.load.spritesheet('prof', 'res/spritesheets/mcbendorjee.json')
         this.load.audio('select', 'res/sound/select.wav')
+        this.load.tilemap('background', 'res/tilemaps/tutorial/SplashScreenBackground.json')
     }
 
     startScene(): void {
@@ -19,15 +22,18 @@ export default class SplashScreen extends Scene {
         // Center the viewport
         let c = this.viewport.getCenter().clone();
 
+        let x = this.add.tilemap('background', new Vec2(1.35, 1.25))
+
         let sprite = this.add.sprite("logo", "primary");
         sprite.positionX = 610;
         sprite.positionY = 200;
 
         sprite.scale = new Vec2(0.75,0.75);
         
-        let profSprite = this.add.sprite('prof', 'primary')
+        let profSprite = this.add.animatedSprite('prof', 'primary')
         profSprite.scale = new Vec2(5.0,5.0)
         profSprite.position = new Vec2(c.x/2, c.y+50)
+        profSprite.animation.play(PlayerAnimations.IDLE_WHITE)
 
         let rm1 = this.add.sprite('rm', 'primary')
         rm1.position = new Vec2(c.x+300, c.y)
