@@ -1,4 +1,5 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
@@ -22,7 +23,7 @@ enum MENU_EVENT {
   LOAD_LVL_4 = "load_lvl_4",
   LOAD_LVL_5 = "load_lvl_5",
   LOAD_LVL_6 = "load_lvl_6",
-  HOW_TO_PLAY = "HOW_TO_PLAY"
+  HOW_TO_PLAY = "HOW_TO_PLAY",
 }
 
 export default class MainMenu extends Scene {
@@ -33,6 +34,7 @@ export default class MainMenu extends Scene {
   private leaderboard: Layer;
 
   startScene(): void {
+    this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
     let center = this.viewport.getCenter().clone();
     this.initMenuButtons(center);
     this.initLevelSelectScene(center);
@@ -43,7 +45,7 @@ export default class MainMenu extends Scene {
     // Subscribe to the button events
     this.receiver.subscribe(MENU_EVENT.MENU);
     this.receiver.subscribe(MENU_EVENT.NEW_GAME);
-    this.receiver.subscribe(MENU_EVENT.HOW_TO_PLAY)
+    this.receiver.subscribe(MENU_EVENT.HOW_TO_PLAY);
     this.receiver.subscribe(MENU_EVENT.LEVEL_SELECT);
     this.receiver.subscribe(MENU_EVENT.LOAD_LVL_1);
     this.receiver.subscribe(MENU_EVENT.LOAD_LVL_2);
@@ -60,7 +62,13 @@ export default class MainMenu extends Scene {
     this.mainMenu = this.addUILayer("mainMenu");
     const layer = "mainMenu";
 
-    initButtonHandler(this, layer, new Vec2(v.x, v.y - 225), 'How to Play', MENU_EVENT.HOW_TO_PLAY)
+    initButtonHandler(
+      this,
+      layer,
+      new Vec2(v.x, v.y - 225),
+      "How to Play",
+      MENU_EVENT.HOW_TO_PLAY
+    );
 
     initButtonHandler(
       this,
@@ -118,7 +126,7 @@ export default class MainMenu extends Scene {
       "levelSelect",
       new Vec2(center.x - 200, center.y - 150),
       "Level 1",
-      MENU_EVENT.LOAD_LVL_1,
+      MENU_EVENT.LOAD_LVL_1
     );
     initButtonHandler(
       this,
@@ -126,21 +134,21 @@ export default class MainMenu extends Scene {
       new Vec2(center.x - 200, center.y - 50),
       "Level 2",
       MENU_EVENT.LOAD_LVL_2
-    )
+    );
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x - 200, center.y + 50),
       "Level 3",
       MENU_EVENT.LOAD_LVL_3
-    )
+    );
     initButtonHandler(
       this,
       "levelSelect",
       new Vec2(center.x + 200, center.y - 150),
       "Level 4",
       MENU_EVENT.LOAD_LVL_4
-    )
+    );
     initButtonHandler(
       this,
       "levelSelect",
@@ -154,7 +162,7 @@ export default class MainMenu extends Scene {
       new Vec2(center.x + 200, center.y + 50),
       "Level 6",
       MENU_EVENT.LOAD_LVL_6
-    )
+    );
     initButtonHandler(
       this,
       "levelSelect",
@@ -223,6 +231,12 @@ export default class MainMenu extends Scene {
       "Back",
       MENU_EVENT.MENU
     );
+    // Scene has started, so start playing music
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+      key: "menu",
+      loop: true,
+      holdReference: true,
+    });
   }
 
   initHelpScene(center: Vec2) {
@@ -244,7 +258,8 @@ export default class MainMenu extends Scene {
       "getting his own conscience written into the main character sprite.";
     const strAbout7 =
       "Now he will have to brave the Al robots he was creating to escape Wolfie 2D or be forever stuck.";
-    const strAbout8 = "Cheat Codes: invincible, skip, showAllBombs, unlock-all-levels, 1, 2, 3, 4, 5, 6";
+    const strAbout8 =
+      "Cheat Codes: invincible, skip, showAllBombs, unlock-all-levels, 1, 2, 3, 4, 5, 6";
 
     const lblAbout1 = initLabel(
       this,
@@ -362,10 +377,12 @@ export default class MainMenu extends Scene {
           this.levelSelect.setHidden(true);
           break;
         case MENU_EVENT.HOW_TO_PLAY:
-          this.sceneManager.changeToScene(Tutorial1_1, {})
+          this.sceneManager.changeToScene(Tutorial1_1, {});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.NEW_GAME:
           this.sceneManager.changeToScene(Level1_1, {});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LEVEL_SELECT:
           this.mainMenu.setHidden(true);
@@ -373,20 +390,26 @@ export default class MainMenu extends Scene {
           break;
         case MENU_EVENT.LOAD_LVL_1:
           this.sceneManager.changeToScene(Level1_1, {});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LOAD_LVL_2:
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LOAD_LVL_3:
-          this.sceneManager.changeToScene(Level3_1, {})
+          this.sceneManager.changeToScene(Level3_1, {});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LOAD_LVL_4:
-          this.sceneManager.changeToScene(Level4_1, {})
+          this.sceneManager.changeToScene(Level4_1, {});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LOAD_LVL_5:
-          this.sceneManager.changeToScene(Level5_1, {})
+          this.sceneManager.changeToScene(Level5_1, {});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.LOAD_LVL_6:
-          this.sceneManager.changeToScene(Level6_1, {})
+          this.sceneManager.changeToScene(Level6_1, {});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MENU_EVENT.CONTROLS:
           this.mainMenu.setHidden(true);

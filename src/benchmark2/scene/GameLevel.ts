@@ -20,7 +20,7 @@ import EntityManager from "../game_system/EntityManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default abstract class GameLevel extends Scene {
-  private isTutorial: boolean
+  private isTutorial: boolean;
   private name: string;
   private currentScore: number;
   private timeLeft: number;
@@ -35,6 +35,8 @@ export default abstract class GameLevel extends Scene {
   private gameOver: boolean;
   private currentRoom: new (...args: any) => GameLevel;
   private nextRoom: new (...args: any) => Scene;
+  private playMusic: boolean;
+  private lastLevel: boolean = false;
 
   // Create an object pool for our projectives
   private MAX_PROJECTILE_SIZE = 5;
@@ -115,9 +117,21 @@ export default abstract class GameLevel extends Scene {
       ? (this.currentScore = options.currentScore)
       : (this.currentScore = 0);
     this.timeLeft = options.timeLeft;
+    //prevents music from playing again when reseting the room
+    options.playMusic !== undefined
+      ? (this.playMusic = options.playMusic)
+      : (this.playMusic = true);
   }
 
   startScene() {
+    if (this.playMusic) {
+      // Scene has started, so start playing music
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+        key: "levelMusic",
+        loop: true,
+        holdReference: true,
+      });
+    }
     // Add in the tilemap
     let tilemapLayers = this.add.tilemap("level", new Vec2(0.5, 0.5));
     // Get the wall layer
@@ -127,7 +141,7 @@ export default abstract class GameLevel extends Scene {
     this.viewport.setBounds(0, 0, tilemapSize.x, tilemapSize.y);
     this.viewport.setZoomLevel(3);
     this.glm = new GameLayerManager(this); // ***INITIALIZES PRIMARY LAYER***
-    this.em = new EntityManager(this);    // **HANDLES PLAYER, ENEMIES, and OBJECT RENDER**
+    this.em = new EntityManager(this); // **HANDLES PLAYER, ENEMIES, and OBJECT RENDER**
     // this.initializeWeapons();
     this.em.initWeapons();
     // Create the player
@@ -210,6 +224,7 @@ export default abstract class GameLevel extends Scene {
         this.glm.hideAllAndZoomOut();
         this.sceneManager.changeToScene(this.currentRoom, {
           currentScore: this.currentScore,
+          playMusic: false,
           timeLeft: this.scoreTimer.getTimeLeftInMillis(),
         });
         break;
@@ -221,6 +236,7 @@ export default abstract class GameLevel extends Scene {
         break;
       case Events.EXIT_GAME:
         this.sceneManager.changeToScene(MainMenu, {});
+
         break;
       case Events.ROOM_COMPLETE:
         new Timer(
@@ -238,8 +254,13 @@ export default abstract class GameLevel extends Scene {
           currentScore: this.currentScore,
           timeLeft: this.scoreTimer.getTimeLeftInSeconds(),
           nextLvl: this.nextRoom,
-          isTutorial: this.isTutorial
+          isTutorial: this.isTutorial,
+          lastLevel: this.lastLevel,
         });
+        // if (this.lastLevel)
+        //   this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+        //     key: "levelMusic",
+        //   });
         break;
       case Events.PLAYER_DIED:
         this.glm.showFadeIn();
@@ -250,7 +271,7 @@ export default abstract class GameLevel extends Scene {
             this.sceneManager.changeToScene(GameOver, {
               win: false,
               currentScore: this.currentScore,
-              isTutorial: this.isTutorial
+              isTutorial: this.isTutorial,
             });
           },
           false
@@ -306,7 +327,7 @@ export default abstract class GameLevel extends Scene {
     let health = (<BattlerAI>this.em.getPlayer()._ai).health;
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
-    this.lblEnemiesLeft.text = `Robots Left: ${this.em.getRobotsLeft()}`
+    this.lblEnemiesLeft.text = `Robots Left: ${this.em.getRobotsLeft()}`;
   }
 
   handleInput(): void {
@@ -358,7 +379,7 @@ export default abstract class GameLevel extends Scene {
   }
 
   setIsTutorial(isTutorial: boolean) {
-    this.isTutorial = isTutorial
+    this.isTutorial = isTutorial;
   }
 
   getName(): string {
@@ -373,6 +394,10 @@ export default abstract class GameLevel extends Scene {
     this.nextRoom = nextLvl;
   }
 
+  setLastLevel(isLastLevel: boolean): void {
+    this.lastLevel = isLastLevel;
+  }
+
   getPlayer(): AnimatedSprite {
     return this.em.getPlayer();
   }
@@ -381,12 +406,16 @@ export default abstract class GameLevel extends Scene {
     this.lblHealth = lbl;
   }
 
+  setPlayMusic(playMusic: boolean): void {
+    this.playMusic = playMusic;
+  }
+
   setLblTime(lbl: Label): void {
     this.lblTime = lbl;
   }
 
   setLblEnemiesLeft(lbl: Label) {
-    this.lblEnemiesLeft = lbl
+    this.lblEnemiesLeft = lbl;
   }
 
   changeLevel(level: new (...args: any) => Scene) {
