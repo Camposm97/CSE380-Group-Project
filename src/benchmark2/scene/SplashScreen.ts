@@ -1,27 +1,18 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Scene from "../../Wolfie2D/Scene/Scene";
+import Timer from "../../Wolfie2D/Timing/Timer";
 import { initButton } from "../ui/UIBuilder";
-import { PlayerAnimations } from "./Constants";
+import { PlayerAnimations, RobotMouseAnimations } from "./Constants";
 import MainMenu from "./MainMenu";
 
 export default class SplashScreen extends Scene {
-  // loadScene(): void {
-  //   this.load.image("logo", "res/sprites/Logo.png");
-  //   this.load.image("prof", "res/sprites/professor.png");
-  //   this.load.image("rm", "res/sprites/rm.png");
-  //   this.load.audio("select", "res/sound/select.wav");
-  //   this.load.audio("menu", "res/music/CSE_380_Splash_Screen.mp3");
-  // }
   loadScene(): void {
     this.load.image("logo", "res/sprites/Logo.png");
-    this.load.image("rm", "res/sprites/rm.png");
+    this.load.spritesheet("rm", "res/spritesheets/rm_blue.json");
     this.load.spritesheet("prof", "res/spritesheets/mcbendorjee.json");
     this.load.audio("select", "res/sound/select.wav");
-    this.load.tilemap(
-      "background",
-      "res/tilemaps/tutorial/SplashScreenBackground.json"
-    );
+    this.load.tilemap("background", "res/tilemaps/tutorial/SplashScreenBackground.json");
     this.load.audio("menu", "res/music/CSE_380_Splash_Screen.mp3");
   }
 
@@ -47,12 +38,21 @@ export default class SplashScreen extends Scene {
 
     sprite.scale = new Vec2(0.75, 0.75);
 
-    let rm1 = this.add.sprite("rm", "primary");
+    let rm1 = this.add.animatedSprite("rm", "primary");
+    let rm2 = this.add.animatedSprite("rm", "primary");
+    let rm3 = this.add.animatedSprite("rm", "primary");
+
     rm1.position = new Vec2(c.x + 300, c.y);
-    let rm2 = this.add.sprite("rm", "primary");
     rm2.position = new Vec2(c.x + 350, c.y + 50);
-    let rm3 = this.add.sprite("rm", "primary");
     rm3.position = new Vec2(c.x + 275, c.y + 75);
+
+    rm1.animation.play(RobotMouseAnimations.IDLE)
+    new Timer(250, () => {
+      rm2.animation.play(RobotMouseAnimations.IDLE)
+      new Timer(250, () => {
+        rm3.animation.play(RobotMouseAnimations.IDLE)
+      }, false).start()
+    }, false).start() 
 
     let size = this.viewport.getHalfSize();
     this.viewport.setFocus(size);
