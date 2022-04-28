@@ -97,6 +97,7 @@ export default class PlayerController implements BattlerAI {
 
     this.receiver = new Receiver();
     this.receiver.subscribe(Events.OVERRIDE_IDLE);
+    this.receiver.subscribe(Events.END_I_FRAMES);
     this.emitter = new Emitter();
     this.coatColor = CoatColor.WHITE;
 
@@ -267,7 +268,7 @@ export default class PlayerController implements BattlerAI {
         this.owner.animation.play(
           PlayerAnimations.DAMAGE,
           false,
-          Events.OVERRIDE_IDLE
+          Events.END_I_FRAMES
         );
         break;
     }
@@ -283,10 +284,7 @@ export default class PlayerController implements BattlerAI {
       this.health -= damage;
       this.doAnimation(PlayerAction.DAMAGE);
       if (this.health <= 0) {
-        this.health = 0;
-        this.owner.setAIActive(false, {});
-        this.owner.isCollidable = false;
-        this.owner.tweens.play("death");
+        this.kill();
       }
       this.iFrame = true;
       this.iFrameTimer.start();
@@ -298,7 +296,10 @@ export default class PlayerController implements BattlerAI {
   }
 
   kill(): void {
-    this.damage(this.health);
+    this.health = 0;
+    this.owner.setAIActive(false, {});
+    this.owner.isCollidable = false;
+    this.owner.tweens.play("death");
   }
 
   handleMovement(deltaT: number): void {

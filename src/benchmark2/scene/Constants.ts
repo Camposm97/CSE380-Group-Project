@@ -1,20 +1,20 @@
 export enum CheatCode {
-  INVINCIBLE = 'invincible',
-  SKIP_LEVEL = 'skip',
-  SHOW_ALL_BOMBS = 'showAllBombs',
-  UNLOCK_ALL_LVLS = 'unlockAllLvls',
-  LVL_1 = '1',
-  LVL_2 = '2',
-  LVL_3 = '3',
-  LVL_4 = '4',
-  LVL_5 = '5',
-  LVL_6 = '6'
+  INVINCIBLE = "invincible",
+  SKIP_LEVEL = "skip",
+  SHOW_ALL_BOMBS = "showAllBombs",
+  UNLOCK_ALL_LVLS = "unlockAllLvls",
+  LVL_1 = "1",
+  LVL_2 = "2",
+  LVL_3 = "3",
+  LVL_4 = "4",
+  LVL_5 = "5",
+  LVL_6 = "6",
 }
 
 export const Cheats = {
   invincible: false,
-  unlockAllLevels: false
-}
+  unlockAllLevels: false,
+};
 
 export enum Names {
   NAVMESH = "navmesh",
@@ -35,25 +35,23 @@ export enum Control {
   SLOT2 = "slot2",
 }
 
-
-
-
 export enum Events {
-    SHOT_FIRED = "SHOT_FIRED",
-    UNLOAD_ASSET = "UNLOAD_ASSET",
-    PLACE_FLAG = "PLACE_FLAG",
-    OVERRIDE_IDLE = "OVERRIDE_IDLE",
-    RESET_ROOM = "RESET_ROOM",
-    PAUSE_GAME = "PAUSE_GAME",
-    SHOW_CONTROLS = "SHOW_CONTROLS",
-    EXIT_GAME = "EXIT_GAME",
-    DESTROY_BOMB = "DESTROY_BOMB",
-    ROOM_COMPLETE = "ROOM_COMPLETE",
-    PLAYER_WON = "LEVEL_END",
-    PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
-    PLAYER_DIED = "PLAYER_DIED",
-    SHOW_CHEATS = "SHOW_CHEATS",
-    SHOW_ALL_BOMBS = "SHOW_ALL_BOMBS"
+  SHOT_FIRED = "SHOT_FIRED",
+  UNLOAD_ASSET = "UNLOAD_ASSET",
+  PLACE_FLAG = "PLACE_FLAG",
+  OVERRIDE_IDLE = "OVERRIDE_IDLE",
+  RESET_ROOM = "RESET_ROOM",
+  PAUSE_GAME = "PAUSE_GAME",
+  SHOW_CONTROLS = "SHOW_CONTROLS",
+  EXIT_GAME = "EXIT_GAME",
+  DESTROY_BOMB = "DESTROY_BOMB",
+  ROOM_COMPLETE = "ROOM_COMPLETE",
+  PLAYER_WON = "LEVEL_END",
+  PROJECTILE_UNLOAD = "PROJECTILE_UNLOAD",
+  PLAYER_DIED = "PLAYER_DIED",
+  SHOW_CHEATS = "SHOW_CHEATS",
+  SHOW_ALL_BOMBS = "SHOW_ALL_BOMBS",
+  END_I_FRAMES = "END_I_FRAMES",
 }
 
 export enum Statuses {
@@ -127,15 +125,14 @@ export enum PlayerAnimations {
   DAMAGE = "DAMAGE",
 }
 
-
 export enum RobotMouseAnimations {
-    WALK_UP = "WALK_UP",
-    WALK_DOWN = "WALK_DOWN",
-    WALK_LEFT = "WALK_LEFT",
-    WALK_RIGHT = "WALK_RIGHT",
-    DEATH = "DEATH",
-    OFF = "OFF",
-    IDLE = "IDLE"
+  WALK_UP = "WALK_UP",
+  WALK_DOWN = "WALK_DOWN",
+  WALK_LEFT = "WALK_LEFT",
+  WALK_RIGHT = "WALK_RIGHT",
+  DEATH = "DEATH",
+  OFF = "OFF",
+  IDLE = "IDLE",
 }
 
 export enum RobotAnimations {
