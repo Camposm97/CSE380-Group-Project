@@ -205,20 +205,19 @@ export default class EntityManager {
       // Activate physics
       this.enemies[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
 
-      // let enemyOptions = entity.options;
+      let enemyOptions = entity.options;
 
       //TODO TRY AND FIND A WAY TO MAP STRINGS TO ROBOT AI CLASS TYPES
       //ADD MORE AI TYPES ONCE THEY ARE MADE
       switch (entity.ai) {
         case "BlueRobotAI":
-          this.enemies[i].addAI(BlueRobotAI, entity);
-          // this.listeningEnemies++;
+          this.enemies[i].addAI(BlueRobotAI, enemyOptions);
           break;
         case "BlueMouseAI":
-          this.enemies[i].addAI(BlueMouseAI, entity);
+          this.enemies[i].addAI(BlueMouseAI, enemyOptions);
           break;
         case "BlueStatueAI":
-          this.enemies[i].addAI(BlueStatueAI, entity);
+          this.enemies[i].addAI(BlueStatueAI, enemyOptions);
           break;
         default:
           break;
