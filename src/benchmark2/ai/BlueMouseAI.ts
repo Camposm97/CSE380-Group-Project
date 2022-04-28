@@ -4,13 +4,15 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import Receiver from "../../Wolfie2D/Events/Receiver";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
-import { Names, RobotMouseAnimations } from "../scene/Constants";
+import { Events, Names, RobotMouseAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 
 export default class BlueMouseAI implements RobotAI {
+  receiver: Receiver;
   emitter: Emitter;
   owner: AnimatedSprite;
   //whether or not robot is frozen
@@ -27,19 +29,20 @@ export default class BlueMouseAI implements RobotAI {
   frozenTimeInMillis: number;
   direction: number;
   listening: boolean;
-  offState: boolean
+  offState: boolean;
+  paused: boolean;
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
     this.listening = false;
     this.owner.scale = new Vec2(0.12, 0.12);
-    this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4,4)))
+    this.owner.setCollisionShape(new AABB(this.owner.position, new Vec2(4, 4)));
     this.frozenTimeInMillis = 5000;
     this.speed = 120;
     this.mainBehavior = true;
     this.damage = 1;
     this.direction = 1;
-    this.emitter = new Emitter()
+    this.emitter = new Emitter();
 
     if (options) {
       if (options.behavior === "secondary") {
@@ -52,9 +55,12 @@ export default class BlueMouseAI implements RobotAI {
         this.damage = options.damage;
       }
     }
-    this.frozenTimer = new Timer(this.frozenTimeInMillis)
+    this.frozenTimer = new Timer(this.frozenTimeInMillis);
     this.isFrozen = false;
-    this.offState = false
+    this.offState = false;
+
+    this.receiver = new Receiver();
+    this.receiver.subscribe(Events.PAUSE_GAME);
   }
 
   hit(): void {
@@ -62,7 +68,10 @@ export default class BlueMouseAI implements RobotAI {
       this.isFrozen = true;
       this.frozenTimer.start(this.frozenTimeInMillis);
       this.mainBehavior = !this.mainBehavior;
-      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'rm_freeze', loop: false})
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+        key: "rm_freeze",
+        loop: false,
+      });
     }
   }
 
@@ -74,21 +83,23 @@ export default class BlueMouseAI implements RobotAI {
 
   push(v: Vec2): void {
     if (this.isFrozen) {
-      this.owner.move(v)
+      this.owner.move(v);
     }
   }
 
   setPath() {
     let movement = null;
     let newPos = null;
-    if (this.mainBehavior) { // left=1, right=-1
+    if (this.mainBehavior) {
+      // left=1, right=-1
       movement = Vec2.LEFT.scaled(this.speed * this.direction);
       newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
       this.path = this.owner
         .getScene()
         .getNavigationManager()
         .getPath(Names.NAVMESH, this.owner.position, newPos, true);
-    } else { // up=1, down=-1
+    } else {
+      // up=1, down=-1
       movement = Vec2.UP.scaled(this.speed * this.direction);
       newPos = this.owner.position.clone().add(movement.scaled(this.deltaT));
       this.path = this.owner
@@ -96,28 +107,41 @@ export default class BlueMouseAI implements RobotAI {
         .getNavigationManager()
         .getPath(Names.NAVMESH, this.owner.position, newPos, true);
     }
-    this.doAnimation()
+    this.doAnimation();
   }
-  
+
   /**
    * Plays an animation based on @param this.direction and @param this.mainBehavior
    */
   doAnimation() {
     if (this.isFrozen) {
       if (this.offState) {
-        this.owner.animation.queue(RobotMouseAnimations.OFF, true)
+        this.owner.animation.queue(RobotMouseAnimations.OFF, true);
       } else {
-        this.owner.animation.playIfNotAlready(RobotMouseAnimations.DEATH, false)
-        this.offState = true
+        this.owner.animation.playIfNotAlready(
+          RobotMouseAnimations.DEATH,
+          false
+        );
+        this.offState = true;
       }
-      return
+      return;
     }
     switch (this.direction) {
       case -1: // right/up
-        this.owner.animation.playIfNotAlready(this.mainBehavior ? RobotMouseAnimations.WALK_RIGHT : RobotMouseAnimations.WALK_DOWN, true)
+        this.owner.animation.playIfNotAlready(
+          this.mainBehavior
+            ? RobotMouseAnimations.WALK_RIGHT
+            : RobotMouseAnimations.WALK_DOWN,
+          true
+        );
         break;
       case 1: //left/down
-        this.owner.animation.playIfNotAlready(this.mainBehavior ? RobotMouseAnimations.WALK_LEFT : RobotMouseAnimations.WALK_UP, true)
+        this.owner.animation.playIfNotAlready(
+          this.mainBehavior
+            ? RobotMouseAnimations.WALK_LEFT
+            : RobotMouseAnimations.WALK_UP,
+          true
+        );
         break;
     }
   }
@@ -128,31 +152,50 @@ export default class BlueMouseAI implements RobotAI {
   activate(options: Record<string, any>): void {
     // throw new Error("Method not implemented.");
   }
-  handleEvent(event: GameEvent): void {}
+
+  handleEvent(event: GameEvent): void {
+    switch (event.type) {
+      case Events.PAUSE_GAME:
+        this.paused = !this.paused;
+        if (this.paused) {
+          this.frozenTimer.pause();
+        } else {
+          this.frozenTimer.resume();
+        }
+        break;
+      default:
+        break;
+    }
+  }
 
   update(deltaT: number): void {
     this.deltaT = deltaT;
-
-    if (this.frozenTimer.isStopped()) {
-      this.isFrozen = false;
-      this.offState = false
+    while (this.receiver.hasNextEvent()) {
+      this.handleEvent(this.receiver.getNextEvent());
     }
 
-    if (this.owner.isColliding) this.collide();
+    if (!this.paused) {
+      if (this.frozenTimer.isStopped()) {
+        this.isFrozen = false;
+        this.offState = false;
+      }
 
-    if (this.isFrozen) {
-      this.path = null;
-      this.doAnimation()
-    } else {
-      this.setPath();
-    }
+      if (this.owner.isColliding) this.collide();
 
-    if (this.path != null && !this.isFrozen) {
-      //Move on path if selected
-      if (this.path.isDone()) {
+      if (this.isFrozen) {
         this.path = null;
+        this.doAnimation();
       } else {
-        this.owner.moveOnPath(this.speed * deltaT, this.path);
+        this.setPath();
+      }
+
+      if (this.path != null && !this.isFrozen) {
+        //Move on path if selected
+        if (this.path.isDone()) {
+          this.path = null;
+        } else {
+          this.owner.moveOnPath(this.speed * deltaT, this.path);
+        }
       }
     }
   }

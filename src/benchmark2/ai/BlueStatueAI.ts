@@ -3,13 +3,15 @@ import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
-import { RobotAction, RobotStatueAnimations } from "../scene/Constants";
+import { Events, RobotAction, RobotStatueAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import Receiver from "../../Wolfie2D/Events/Receiver";
 
 export default class BlueStatueAI implements RobotAI {
+  receiver: Receiver;
   emitter: Emitter;
   owner: AnimatedSprite;
   //whether or not robot is frozen
@@ -47,6 +49,8 @@ export default class BlueStatueAI implements RobotAI {
   private directionIndex: number;
 
   private vecAnimationMap: Map<number, RobotStatueAnimations>;
+
+  paused: boolean;
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
@@ -95,6 +99,9 @@ export default class BlueStatueAI implements RobotAI {
       [3, RobotStatueAnimations.LOOK_LEFT],
     ]);
     this.directionIndex = 0;
+
+    this.receiver = new Receiver();
+    this.receiver.subscribe(Events.PAUSE_GAME);
   }
 
   hit(options: Record<string, any>): void {
@@ -151,19 +158,42 @@ export default class BlueStatueAI implements RobotAI {
   activate(options: Record<string, any>): void {
     // throw new Error("Method not implemented.");
   }
-  handleEvent(event: GameEvent): void {}
+  handleEvent(event: GameEvent): void {
+    switch (event.type) {
+      case Events.PAUSE_GAME:
+        this.paused = !this.paused;
+        if (this.paused) {
+          this.frozenTimer.pause();
+          this.projectileTimer.pause();
+        } else {
+          this.frozenTimer.resume();
+          this.projectileTimer.resume();
+        }
+        break;
+      default:
+        break;
+    }
+  }
 
   update(deltaT: number): void {
-    if (this.frozenTimer.isStopped()) {
-      this.isFrozen = false;
+    while (this.receiver.hasNextEvent()) {
+      this.handleEvent(this.receiver.getNextEvent());
     }
+    if (!this.paused) {
+      if (this.frozenTimer.isStopped()) {
+        this.isFrozen = false;
+      }
 
-    if (this.isFrozen) {
-      this.owner.animation.playIfNotAlready(RobotStatueAnimations.DEATH, true);
-    }
+      if (this.isFrozen) {
+        this.owner.animation.playIfNotAlready(
+          RobotStatueAnimations.DEATH,
+          true
+        );
+      }
 
-    if (!this.isFrozen && this.projectileTimer.isStopped()) {
-      this.shoot();
+      if (!this.isFrozen && this.projectileTimer.isStopped()) {
+        this.shoot();
+      }
     }
   }
 }

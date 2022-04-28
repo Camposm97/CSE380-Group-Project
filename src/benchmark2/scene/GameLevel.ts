@@ -192,7 +192,7 @@ export default abstract class GameLevel extends Scene {
   }
 
   initScoreTimer(): void {
-    let aux = () => (<PlayerController>this.em.getPlayer()._ai).kill();
+    let aux = () => (<PlayerController>this.getPlayer()._ai).kill();
     if (this.timeLeft !== undefined) {
       this.scoreTimer = new ScoreTimer(this.timeLeft, aux, false);
     } else {
@@ -257,10 +257,10 @@ export default abstract class GameLevel extends Scene {
           isTutorial: this.isTutorial,
           lastLevel: this.lastLevel,
         });
-        // if (this.lastLevel)
-        //   this.emitter.fireEvent(GameEventType.STOP_SOUND, {
-        //     key: "levelMusic",
-        //   });
+        if (this.lastLevel)
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+            key: "levelMusic",
+          });
         break;
       case Events.PLAYER_DIED:
         this.glm.showFadeIn();
@@ -315,7 +315,7 @@ export default abstract class GameLevel extends Scene {
     this.em.handlePlayerCoatColor();
     this.em.handleBlockCollision(deltaT);
 
-    if ((<PlayerController>this.em.getPlayer()._ai).nearBomb) {
+    if ((<PlayerController>this.getPlayer()._ai).nearBomb) {
       this.em.handlePlayerBombCollision();
     }
     this.em.handleProjectileCollision();
@@ -324,7 +324,7 @@ export default abstract class GameLevel extends Scene {
   }
 
   updateHUD(): void {
-    let health = (<BattlerAI>this.em.getPlayer()._ai).health;
+    let health = (<BattlerAI>this.getPlayer()._ai).health;
     this.lblHealth.text = `HP: ${health}`;
     this.lblTime.text = `${this.scoreTimer.toString()}`;
     this.lblEnemiesLeft.text = `Robots Left: ${this.em.getRobotsLeft()}`;
@@ -338,7 +338,7 @@ export default abstract class GameLevel extends Scene {
     /*
       If we're transitioning to the next level, disable the pause button
     */
-    if (!this.gameOver) {
+    if (!this.gameOver && (<PlayerController>this.getPlayer()._ai).health > 0) {
       if (Input.isJustPressed(Control.PAUSE)) {
         this.emitter.fireEvent(Events.PAUSE_GAME, {});
       }

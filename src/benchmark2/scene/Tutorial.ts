@@ -516,6 +516,9 @@ export class Tutorial1_4 extends Scene {
           this.sceneManager.changeToScene(LevelT_4, {});
           break;
         case GO_TO.SKIP_TUTORIAL:
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+            key: "levelMusic",
+          });
           this.sceneManager.changeToScene(MainMenu, {});
           break;
       }

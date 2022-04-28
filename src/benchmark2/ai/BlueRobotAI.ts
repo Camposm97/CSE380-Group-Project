@@ -3,7 +3,7 @@ import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Timer from "../../Wolfie2D/Timing/Timer";
-import { Control, Names, RobotAnimations } from "../scene/Constants";
+import { Control, Events, Names, RobotAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import { PlayerAction } from "../scene/Constants";
@@ -12,6 +12,7 @@ import Emitter from "../../Wolfie2D/Events/Emitter";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class BlueRobotAI implements RobotAI {
+  receiver: Receiver;
   emitter: Emitter;
   projectile: boolean;
   owner: AnimatedSprite;
@@ -33,6 +34,7 @@ export default class BlueRobotAI implements RobotAI {
   private previousAxis: string;
   private previousButton: string;
   private moveFrameCount: number;
+  paused: boolean;
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
@@ -70,6 +72,9 @@ export default class BlueRobotAI implements RobotAI {
     this.previousAxis = "none";
     this.previousButton = "none";
     this.moveFrameCount = 0;
+
+    this.receiver = new Receiver();
+    this.receiver.subscribe(Events.PAUSE_GAME);
   }
 
   hit(): void {
@@ -93,7 +98,18 @@ export default class BlueRobotAI implements RobotAI {
   }
 
   handleEvent(event: GameEvent): void {
-    // throw new Error("Method not implemented.");
+    switch (event.type) {
+      case Events.PAUSE_GAME:
+        this.paused = !this.paused;
+        if (this.paused) {
+          this.frozenTimer.pause();
+        } else {
+          this.frozenTimer.resume();
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   move(): void {
@@ -265,18 +281,23 @@ export default class BlueRobotAI implements RobotAI {
   update(deltaT: number): void {
     this.deltaT = deltaT;
 
-    if (this.isFrozen) {
-      this.owner.animation.queue(RobotAnimations.FROZEN, true, null);
-      this.path = null;
-    } else {
-      this.move();
+    while (this.receiver.hasNextEvent()) {
+      this.handleEvent(this.receiver.getNextEvent());
     }
+    if (!this.paused) {
+      if (this.isFrozen) {
+        this.owner.animation.queue(RobotAnimations.FROZEN, true, null);
+        this.path = null;
+      } else {
+        this.move();
+      }
 
-    if (this.path != null && !this.isFrozen) {
-      //Move on path if selected
-      this.path.isDone()
-        ? (this.path = null)
-        : this.owner.moveOnPath(this.speed * deltaT, this.path);
+      if (this.path != null && !this.isFrozen) {
+        //Move on path if selected
+        this.path.isDone()
+          ? (this.path = null)
+          : this.owner.moveOnPath(this.speed * deltaT, this.path);
+      }
     }
   }
 }

@@ -181,7 +181,7 @@ export default class PlayerController implements BattlerAI {
         }
       }
 
-      if (Input.isJustPressed("panic")) {
+      if (Input.isJustPressed("panic") && this.health > 0) {
         this.emitter.fireEvent(Events.RESET_ROOM, {});
       }
 
