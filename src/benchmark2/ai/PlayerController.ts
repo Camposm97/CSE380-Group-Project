@@ -297,6 +297,7 @@ export default class PlayerController implements BattlerAI {
 
   kill(): void {
     this.health = 0;
+    this.doAnimation(PlayerAction.DAMAGE);
     this.owner.setAIActive(false, {});
     this.owner.isCollidable = false;
     this.owner.tweens.play("death");
