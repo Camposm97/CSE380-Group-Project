@@ -1,6 +1,6 @@
 {
   "name": "Blue Robot",
-  "spriteSheetImage": "r_blue.png",
+  "spriteSheetImage": "robot_blue.png",
   "spriteWidth": 256,
   "spriteHeight": 256,
   "topBuffer": 0,

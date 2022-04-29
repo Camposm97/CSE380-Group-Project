@@ -1,5 +1,6 @@
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameLevel from "./GameLevel";
+import { Level2_1 } from "./Level2";
 import { Level5_1 } from "./Level5";
 
 export class Level1_1 extends GameLevel {
@@ -103,7 +104,7 @@ export class Level1_4 extends GameLevel {
     this.setPlayMusic(false);
     this.setName("1-4");
     super.startScene();
-    super.setNextLevel(Level5_1); // TODO - Go to Level2_1
+    super.setNextLevel(Level2_1); // TODO - Go to Level2_1
     this.setCurrentRoom(Level1_4);
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "Projectile",
-  "spriteSheetImage": "Projectile.png",
+  "spriteSheetImage": "projectile.png",
   "spriteWidth": 32,
   "spriteHeight": 32,
   "columns": 2,

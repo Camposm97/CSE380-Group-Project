@@ -244,7 +244,7 @@ export class Tutorial1_1 extends Scene {
 
 export class Tutorial1_2 extends Scene {
   loadScene(): void {
-    this.load.spritesheet("blue_robot", "res/spritesheets/r_blue.json");
+    this.load.spritesheet("blue_robot", "res/spritesheets/robots/robot_blue.json");
   }
 
   startScene(): void {
@@ -351,7 +351,7 @@ export class Tutorial1_2 extends Scene {
 
 export class Tutorial1_3 extends Scene {
   loadScene(): void {
-    this.load.spritesheet("blue_mouse", "res/spritesheets/rm_blue.json");
+    this.load.spritesheet("blue_mouse", "res/spritesheets/robots/robot_mouse_blue.json");
   }
 
   startScene(): void {
@@ -444,7 +444,7 @@ export class Tutorial1_3 extends Scene {
 
 export class Tutorial1_4 extends Scene {
   loadScene(): void {
-    this.load.spritesheet("blue_statue", "res/spritesheets/rs_blue.json");
+    this.load.spritesheet("blue_statue", "res/spritesheets/robots/robot_statue_blue.json");
   }
 
   startScene(): void {

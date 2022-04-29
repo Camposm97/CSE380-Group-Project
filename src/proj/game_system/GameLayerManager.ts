@@ -16,8 +16,7 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Level1_1 } from "../scene/Level1";
-import { Level5_1 } from "../scene/Level5";
-import { Level6_1 } from "../scene/Level6";
+import { Level2_1 } from "../scene/Level2";
 
 enum LayerType {
     PRIMARY = 'primary',
@@ -28,6 +27,9 @@ enum LayerType {
     CHEAT = "CHEAT"
 }
 
+/**
+ * Manages HUD, Pause, Controls, Cheat Code, and Room Complete layer
+ */
 export class GameLayerManager {
     private scene: GameLevel
     private primaryLayer: Layer
@@ -185,7 +187,7 @@ export class GameLayerManager {
      * 
      * @returns false if primaryLayer is hidden, else it returns true
      */
-    showPause(): boolean {
+    togglePauseScreen(): boolean {
         // If the control layer is showing and the user presses 'ESC', then hide the controls and show the pause menu
         if (!this.controlsLayer.isHidden()) {
             this.controlsLayer.setHidden(true)
@@ -199,7 +201,6 @@ export class GameLayerManager {
         this.scene.getTilemap('Walls').visible = !this.scene.getTilemap('Walls').visible
         this.scene.getLayer('slots1').setHidden(!this.scene.getLayer('slots1').isHidden())
         this.scene.getLayer('items1').setHidden(!this.scene.getLayer('items1').isHidden())
-        this.scene.getPlayer().setAIActive(!this.scene.getPlayer().aiActive, {})
         if (this.pauseLayer.isHidden()) {
             this.scene.getViewport().setZoomLevel(3)
         } else {
@@ -214,7 +215,6 @@ export class GameLayerManager {
     }
 
     showCheatCodes() {
-        // this.cheatCodeLayer.setHidden(false)
         this.btCheat.visible = false
         this.tfCheat.visible = true
     }

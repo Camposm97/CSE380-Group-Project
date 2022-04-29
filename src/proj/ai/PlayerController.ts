@@ -24,7 +24,6 @@ import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import { runInThisContext } from "vm";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map

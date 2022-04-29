@@ -36,7 +36,7 @@ export default class MainMenu extends Scene {
   private leaderboard: Layer;
 
   loadScene(): void {
-    this.load.spritesheet('r_blue', 'res/spritesheets/r_blue.json')
+    this.load.spritesheet('r_blue', 'res/spritesheets/robots/robot_blue.json')
   }
 
   startScene(): void {

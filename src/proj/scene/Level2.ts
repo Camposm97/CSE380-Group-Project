@@ -75,7 +75,7 @@ export class Level2_3 extends GameLevel {
 
   startScene(): void {
     this.setPlayMusic(false); //so music doesn't loop
-    this.setName("1-3");
+    this.setName("2-3");
     super.startScene();
     this.setNextLevel(Level2_4);
     this.setCurrentRoom(Level2_3);
@@ -102,7 +102,7 @@ export class Level2_4 extends GameLevel {
   startScene(): void {
     this.setLastLevel(true);
     this.setPlayMusic(false);
-    this.setName("1-4");
+    this.setName("2-4");
     super.startScene();
     super.setNextLevel(Level3_1); // TODO - Go to Level3_1
     this.setCurrentRoom(Level2_4);

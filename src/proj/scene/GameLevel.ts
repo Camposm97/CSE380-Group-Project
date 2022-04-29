@@ -49,9 +49,9 @@ export default abstract class GameLevel extends Scene {
     this.load.spritesheet("player1", "res/spritesheets/mcbendorjee.json");
     this.load.spritesheet("slice", "res/spritesheets/slice.json");
     this.load.spritesheet("flag", "res/spritesheets/flag.json");
-    this.load.spritesheet("blueRobot", "res/spritesheets/r_blue.json");
-    this.load.spritesheet("blueMouse", "res/spritesheets/rm_blue.json");
-    this.load.spritesheet("blueStatue", "res/spritesheets/rs_blue.json");
+    this.load.spritesheet("blueRobot", "res/spritesheets/robots/robot_blue.json");
+    this.load.spritesheet("blueMouse", "res/spritesheets/robots/robot_mouse_blue.json");
+    this.load.spritesheet("blueStatue", "res/spritesheets/robots/robot_statue_blue.json");
     this.load.spritesheet("projectile", "res/spritesheets/projectile.json");
     this.load.spritesheet("bomb", "res/spritesheets/explode.json");
     this.load.spritesheet("greenFlag", "res/spritesheets/green_flag.json");
@@ -214,7 +214,9 @@ export default abstract class GameLevel extends Scene {
         this.em.showAllBombs();
         break;
       case Events.PAUSE_GAME:
-        if (this.glm.showPause()) {
+        this.em.getPlayer().setAIActive(!this.em.getPlayer().aiActive, {})
+        // this.em.toggleAI()
+        if (this.glm.togglePauseScreen()) {
           this.scoreTimer.pause();
         } else {
           this.scoreTimer.start(this.scoreTimer.getTimeLeftInMillis());
@@ -236,16 +238,9 @@ export default abstract class GameLevel extends Scene {
         break;
       case Events.EXIT_GAME:
         this.sceneManager.changeToScene(MainMenu, {});
-
         break;
       case Events.ROOM_COMPLETE:
-        new Timer(
-          3000,
-          () => {
-            this.glm.showFadeIn();
-          },
-          false
-        ).start();
+        new Timer(3000, () => this.glm.showFadeIn(), false).start();
         break;
       case Events.PLAYER_WON:
         this.viewport.setZoomLevel(1);
@@ -264,28 +259,16 @@ export default abstract class GameLevel extends Scene {
         break;
       case Events.PLAYER_DIED:
         this.glm.showFadeIn();
-        new Timer(
-          1000,
-          () => {
-            this.glm.hideAllAndZoomOut();
-            this.sceneManager.changeToScene(GameOver, {
-              win: false,
-              currentScore: this.currentScore,
-              isTutorial: this.isTutorial,
-            });
-          },
-          false
-        ).start();
-
+        new Timer(1000, () => { 
+          this.glm.hideAllAndZoomOut(); 
+          this.sceneManager.changeToScene(GameOver, { win: false, currentScore: this.currentScore, isTutorial: this.isTutorial });
+        }, false).start();
         break;
       case Events.PLACE_FLAG:
         this.em.placeFlag(event.data.get("flagPlaceHitBox"));
         break;
       case RobotAction.FIRE_PROJECTILE:
-        this.em.spawnProjectile(
-          event.data.get("position"),
-          event.data.get("velocity")
-        );
+        this.em.spawnProjectile(event.data.get("position"), event.data.get("velocity"));
         break;
       case Events.PROJECTILE_UNLOAD:
         this.sceneGraph.getNode(event.data.get("id")).visible = false;
