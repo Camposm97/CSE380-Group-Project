@@ -168,7 +168,7 @@ export default class MainMenu extends Scene {
       this,
       "controls",
       new Vec2(center.x, center.y - 100),
-      "Shift/Right-Click to place flag"
+      "f - to place flag"
     );
     initLabel(
       this,
