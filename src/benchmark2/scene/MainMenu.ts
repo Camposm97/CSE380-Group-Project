@@ -3,6 +3,7 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
+import { RobotAnimations } from "./Constants";
 import { Level1_1 } from "./Level1";
 import { Level2_1 } from "./Level2";
 import { Level3_1 } from "./Level3";
@@ -34,10 +35,14 @@ export default class MainMenu extends Scene {
   private help: Layer;
   private leaderboard: Layer;
 
+  loadScene(): void {
+    this.load.spritesheet('r_blue', 'res/spritesheets/r_blue.json')
+  }
+
   startScene(): void {
     this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
     let center = this.viewport.getCenter().clone();
-    this.initMenuButtons(center);
+    this.initMainMenuScene(center);
     this.initLevelSelectScene(center);
     this.initControlScene(center);
     this.initHelpScene(center);
@@ -59,53 +64,23 @@ export default class MainMenu extends Scene {
     this.receiver.subscribe(MENU_EVENT.LEADERBOARD);
   }
 
-  initMenuButtons(v: Vec2): void {
+  initMainMenuScene(v: Vec2): void {
     this.mainMenu = this.addUILayer("mainMenu");
+    let c = this.viewport.getCenter().clone()
     const layer = "mainMenu";
+    initButtonHandler(this, layer, new Vec2(v.x, v.y - 225), "How to Play", MENU_EVENT.HOW_TO_PLAY);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y - 150), "New Game", MENU_EVENT.NEW_GAME);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y - 75), "Level Select", MENU_EVENT.LEVEL_SELECT);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y), "Controls", MENU_EVENT.CONTROLS);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y + 75), "Help", MENU_EVENT.HELP);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y + 150), "Leaderboard", MENU_EVENT.LEADERBOARD);
 
-    initButtonHandler(
-      this,
-      layer,
-      new Vec2(v.x, v.y - 225),
-      "How to Play",
-      MENU_EVENT.HOW_TO_PLAY
-    );
-
-    initButtonHandler(
-      this,
-      layer,
-      new Vec2(v.x, v.y - 150),
-      "New Game",
-      MENU_EVENT.NEW_GAME
-    );
-    initButtonHandler(
-      this,
-      layer,
-      new Vec2(v.x, v.y - 75),
-      "Level Select",
-      MENU_EVENT.LEVEL_SELECT
-    );
-    initButtonHandler(
-      this,
-      layer,
-      new Vec2(v.x, v.y),
-      "Controls",
-      MENU_EVENT.CONTROLS
-    );
-    initButtonHandler(
-      this,
-      layer,
-      new Vec2(v.x, v.y + 75),
-      "Help",
-      MENU_EVENT.HELP
-    );
-    initButtonHandler(
-      this,
-      layer,
-      new Vec2(v.x, v.y + 150),
-      "Leaderboard",
-      MENU_EVENT.LEADERBOARD
-    );
+    let r1 = this.add.animatedSprite('r_blue', layer)
+    r1.animation.play(RobotAnimations.IDLE, true)
+    r1.position = new Vec2(c.x-300, c.y)
+    let r2 = this.add.animatedSprite('r_blue', layer)
+    r2.animation.play(RobotAnimations.IDLE, true)
+    r2.position = new Vec2(c.x+300, c.y)
   }
 
   initLevelSelectScene(center: Vec2): void {
