@@ -1,0 +1,35 @@
+{
+  "numEnemies": 6,
+  "enemies": [
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [19, 18]
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [25, 23]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [14, 3]
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "blueMouse",
+      "position": [14, 13]
+    },
+    {
+      "ai": "BlueStatueAI",
+      "type": "blueStatue",
+      "position": [10,5]
+    },
+    {
+      "ai": "BlueStatueAI",
+      "type": "blueStatue",
+      "position": [9,18]
+    }
+  ]
+}

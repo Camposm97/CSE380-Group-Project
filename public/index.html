@@ -1,29 +1,72 @@
 <!DOCTYPE html>
 <html>
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
+  <head>
+    <meta charset="UTF-8" />
+    <link rel='icon' href='./res/sprites/rm.png'>
+    <title>McBendorjee vs Robots</title>
+    <style>
+      #main {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
 
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-      apiKey: "AIzaSyDG4MBYUN6V2q453v98cdL8JXGU5xcucNg",
-      authDomain: "mcbendorjee-vs-robots.firebaseapp.com",
-      projectId: "mcbendorjee-vs-robots",
-      storageBucket: "mcbendorjee-vs-robots.appspot.com",
-      messagingSenderId: "468606948223",
-      appId: "1:468606948223:web:06636b16d0db87d390c04a",
-      measurementId: "G-C41T8FY2X3",
-    };
+      #game-window {
+        position: relative;
+      }
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
+      #game-canvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+
+      #text-canvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        pointer-events: none;
+      }
+
+      #debug-canvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        pointer-events: none;
+      }
+
+      @font-face {
+        font-family: 'NoPixel';
+        src: url('hw4_assets/fonts/NoPixel.ttf');
+      }
+    </style>
+  </head>
   <body>
-    Completed Game Goes Here
+    <div id="main">
+      <!-- The main window of the game. This contains the rendered game and any debug text -->
+      <div id="game-window">
+        <!-- This is the canvas where the actual game is rendered -->
+        <canvas id="game-canvas"></canvas>
+        <!-- This is the canvas where text is rendered in WebGL -->
+        <canvas id="text-canvas" hidden></canvas>
+        <!-- This is the canvas where the debug text and graphics are rendered -->
+        <canvas id="debug-canvas"></canvas>
+      </div>
+
+      <!-- This contains stats about the game for development purposes, such as the average update time -->
+      <div id="stats" hidden>
+        <canvas id="stats-canvas"></canvas>
+        <select name="Display" id="chart-option">
+        </select>
+        <div id="stats-display"></div>
+      </div>
+    </div>
+    <script src="bundle.js"></script>
   </body>
 </html>

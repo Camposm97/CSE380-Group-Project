@@ -1,0 +1,75 @@
+{
+    "numEnemies": 14,
+    "enemies": [
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [7,21]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [7,23]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [7,25.5]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [7,28]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [7,23]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [26,21]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [26,23]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [26,25.5]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [26,28]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [23,4]
+        },
+        {
+            "ai": "BlueRobotAI",
+            "type": "blueRobot",
+            "position": [29,4]
+        },
+        {
+            "ai": "BlueStatueAI",
+            "type": "blueStatue",
+            "position": [6.5,7]
+        },
+        {
+            "ai": "BlueStatueAI",
+            "type": "blueStatue",
+            "position": [26,11]
+        },
+        {
+            "ai": "BlueMouseAI",
+            "type": "blueMouse",
+            "position": [10,11]
+        }
+    ]
+}

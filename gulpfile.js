@@ -8,10 +8,6 @@ var paths = {
     pages: ['src/*.html']
 };
 
-/*
-    This gulp file can only compile benchmark2 as of now
-*/
-
 var watchedBrowserify = watchify(browserify({
     basedir: '.',
     debug: true,
@@ -22,7 +18,7 @@ var watchedBrowserify = watchify(browserify({
 
 gulp.task('copy-html', function () {
     return gulp.src(paths.pages)
-        .pipe(gulp.dest('public/benchmark3'));
+        .pipe(gulp.dest('public/'));
 });
 
 function bundle() {
@@ -30,7 +26,7 @@ function bundle() {
         .bundle()
         .on('error', fancy_log)
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('public/benchmark3'));
+        .pipe(gulp.dest('public/'));
 }
 
 gulp.task('default', gulp.series(gulp.parallel('copy-html'), bundle));

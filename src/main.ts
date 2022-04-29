@@ -1,9 +1,9 @@
 import Game from "./Wolfie2D/Loop/Game";
 import RegistryManager from "./Wolfie2D/Registry/RegistryManager";
-import WeaponTemplateRegistry from "./benchmark2/registry/WeaponRegistry";
-import WeaponTypeRegistry from "./benchmark2/registry/WeaponTypeRegistry";
-import SplashScreen from "./benchmark2/scene/SplashScreen";
-import { Control } from "./benchmark2/scene/Constants";
+import WeaponTemplateRegistry from "./proj/registry/WeaponRegistry";
+import WeaponTypeRegistry from "./proj/registry/WeaponTypeRegistry";
+import SplashScreen from "./proj/scene/SplashScreen";
+import { Control } from "./proj/scene/Constants";
 
 // The main function is your entrypoint into Wolfie2D. Specify your first scene and any options here.
 (function main(){

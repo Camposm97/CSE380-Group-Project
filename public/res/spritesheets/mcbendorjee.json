@@ -1,0 +1,608 @@
+{
+  "name": "McBendorjee",
+  "spriteSheetImage": "mcbendorjee.png",
+  "spriteWidth": 32,
+  "spriteHeight": 64,
+  "topBuffer": 0,
+  "rightBuffer": 0,
+  "bottomBuffer": 0,
+  "leftBuffer": 0,
+  "rows": 6,
+  "columns": 12,
+  "animations": [
+    {
+      "name": "IDLE_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 0,
+          "duration": 80
+        },
+        {
+          "index": 1,
+          "duration": 40
+        },
+        {
+          "index": 2,
+          "duration": 40
+        },
+        {
+          "index": 3,
+          "duration": 40
+        },
+        {
+          "index": 4,
+          "duration": 40
+        }
+      ]
+    },
+    {
+      "name": "LOOK_DOWN_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 0,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_UP_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 7,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_RIGHT_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 10,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_LEFT_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 13,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "WALK_DOWN_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 0,
+          "duration": 10
+        },
+        {
+          "index": 5,
+          "duration": 10
+        },
+        {
+          "index": 6,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_UP_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 7,
+          "duration": 10
+        },
+        {
+          "index": 8,
+          "duration": 10
+        },
+        {
+          "index": 9,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_RIGHT_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 10,
+          "duration": 10
+        },
+        {
+          "index": 11,
+          "duration": 10
+        },
+        {
+          "index": 12,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_LEFT_WHITE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 13,
+          "duration": 10
+        },
+        {
+          "index": 14,
+          "duration": 10
+        },
+        {
+          "index": 15,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "DAMAGE",
+      "repeat": false,
+      "frames": [
+        {
+          "index": 16,
+          "duration": 5
+        },
+        {
+          "index": 21,
+          "duration": 5
+        },
+        {
+          "index": 17,
+          "duration": 5
+        },
+        {
+          "index": 21,
+          "duration": 5
+        },
+        {
+          "index": 18,
+          "duration": 5
+        },
+        {
+          "index": 21,
+          "duration": 5
+        },
+        {
+          "index": 19,
+          "duration": 5
+        },
+        {
+          "index": 21,
+          "duration": 5
+        },
+        {
+          "index": 20,
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "name": "IDLE_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 22,
+          "duration": 80
+        },
+        {
+          "index": 23,
+          "duration": 40
+        },
+        {
+          "index": 24,
+          "duration": 40
+        },
+        {
+          "index": 25,
+          "duration": 40
+        },
+        {
+          "index": 26,
+          "duration": 40
+        }
+      ]
+    },
+    {
+      "name": "LOOK_DOWN_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 22,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_UP_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 29,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_RIGHT_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 32,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_LEFT_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 35,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "WALK_DOWN_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 22,
+          "duration": 10
+        },
+        {
+          "index": 27,
+          "duration": 10
+        },
+        {
+          "index": 28,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_UP_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 29,
+          "duration": 10
+        },
+        {
+          "index": 30,
+          "duration": 10
+        },
+        {
+          "index": 31,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_RIGHT_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 32,
+          "duration": 10
+        },
+        {
+          "index": 33,
+          "duration": 10
+        },
+        {
+          "index": 34,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_LEFT_YELLOW",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 35,
+          "duration": 10
+        },
+        {
+          "index": 36,
+          "duration": 10
+        },
+        {
+          "index": 37,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "IDLE_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 38,
+          "duration": 80
+        },
+        {
+          "index": 39,
+          "duration": 40
+        },
+        {
+          "index": 40,
+          "duration": 40
+        },
+        {
+          "index": 41,
+          "duration": 40
+        },
+        {
+          "index": 42,
+          "duration": 40
+        }
+      ]
+    },
+    {
+      "name": "LOOK_DOWN_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 38,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_UP_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 45,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_RIGHT_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 48,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_LEFT_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 51,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "WALK_DOWN_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 38,
+          "duration": 10
+        },
+        {
+          "index": 43,
+          "duration": 10
+        },
+        {
+          "index": 44,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_UP_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 45,
+          "duration": 10
+        },
+        {
+          "index": 46,
+          "duration": 10
+        },
+        {
+          "index": 47,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_RIGHT_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 48,
+          "duration": 10
+        },
+        {
+          "index": 49,
+          "duration": 10
+        },
+        {
+          "index": 50,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_LEFT_ORANGE",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 51,
+          "duration": 10
+        },
+        {
+          "index": 52,
+          "duration": 10
+        },
+        {
+          "index": 53,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "IDLE_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 54,
+          "duration": 80
+        },
+        {
+          "index": 55,
+          "duration": 40
+        },
+        {
+          "index": 56,
+          "duration": 40
+        },
+        {
+          "index": 57,
+          "duration": 40
+        },
+        {
+          "index": 58,
+          "duration": 40
+        }
+      ]
+    },
+    {
+      "name": "LOOK_DOWN_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 54,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_UP_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 61,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_RIGHT_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 64,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "LOOK_LEFT_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 67,
+          "duration": 60
+        }
+      ]
+    },
+    {
+      "name": "WALK_DOWN_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 54,
+          "duration": 10
+        },
+        {
+          "index": 59,
+          "duration": 10
+        },
+        {
+          "index": 60,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_UP_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 61,
+          "duration": 10
+        },
+        {
+          "index": 62,
+          "duration": 10
+        },
+        {
+          "index": 63,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_RIGHT_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 64,
+          "duration": 10
+        },
+        {
+          "index": 65,
+          "duration": 10
+        },
+        {
+          "index": 66,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "name": "WALK_LEFT_RED",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 67,
+          "duration": 10
+        },
+        {
+          "index": 68,
+          "duration": 10
+        },
+        {
+          "index": 69,
+          "duration": 10
+        }
+      ]
+    }
+  ]
+}

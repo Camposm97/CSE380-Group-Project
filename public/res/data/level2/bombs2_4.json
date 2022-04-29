@@ -1,0 +1,50 @@
+{
+  "numBombs": 15,
+  "bombs": [
+    {
+      "position": [8, 4]
+    },
+    {
+      "position": [9, 4]
+    },
+    {
+      "position": [8, 5]
+    },
+    {
+      "position": [9, 5]
+    },
+    {
+      "position": [8, 14]
+    },
+    {
+      "position": [9, 14]
+    },
+    {
+      "position": [14, 11]
+    },
+    {
+      "position": [19, 3]
+    },
+    {
+      "position": [20, 3]
+    },
+    {
+      "position": [19, 10]
+    },
+    {
+      "position": [20, 10]
+    },
+    {
+      "position": [23, 6]
+    },
+    {
+      "position": [23, 7]
+    },
+    {
+      "position": [16, 6]
+    },
+    {
+      "position": [16, 7]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "numBombs": 5,
+  "bombs": [
+    {
+      "position": [11, 21]
+    },
+    {
+      "position": [12, 20]
+    },
+    {
+      "position": [13, 19]
+    },
+    {
+      "position": [14, 18]
+    },
+    {
+      "position": [3, 24]
+    }
+  ]
+}
