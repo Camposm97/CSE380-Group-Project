@@ -2,6 +2,7 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
+import { getCookie } from "../game_system/Cookies";
 import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { RobotAnimations } from "./Constants";
 import { Level1_1 } from "./Level1";
@@ -89,63 +90,21 @@ export default class MainMenu extends Scene {
     this.levelSelect.setHidden(true);
 
     // Level Select Header
-    initLabel(
-      this,
-      "levelSelect",
-      new Vec2(center.x, center.y - 300),
-      "Level Select"
-    );
+    initLabel(this,"levelSelect",new Vec2(center.x, center.y - 300),"Level Select");
 
     //  Level Select - Buttons
-    initButtonHandler(
-      this,
-      "levelSelect",
-      new Vec2(center.x - 200, center.y - 150),
-      "Level 1",
-      MENU_EVENT.LOAD_LVL_1
-    );
-    initButtonHandler(
-      this,
-      "levelSelect",
-      new Vec2(center.x - 200, center.y - 50),
-      "Level 2",
-      MENU_EVENT.LOAD_LVL_2
-    );
-    initButtonHandler(
-      this,
-      "levelSelect",
-      new Vec2(center.x - 200, center.y + 50),
-      "Level 3",
-      MENU_EVENT.LOAD_LVL_3
-    );
-    initButtonHandler(
-      this,
-      "levelSelect",
-      new Vec2(center.x + 200, center.y - 150),
-      "Level 4",
-      MENU_EVENT.LOAD_LVL_4
-    );
-    initButtonHandler(
-      this,
-      "levelSelect",
-      new Vec2(center.x + 200, center.y - 50),
-      "Level 5",
-      MENU_EVENT.LOAD_LVL_5
-    );
-    initButtonHandler(
-      this,
-      "levelSelect",
-      new Vec2(center.x + 200, center.y + 50),
-      "Level 6",
-      MENU_EVENT.LOAD_LVL_6
-    );
-    initButtonHandler(
-      this,
-      "levelSelect",
-      new Vec2(center.x, center.y + 250),
-      "Back",
-      MENU_EVENT.MENU
-    );
+    let levelData = getCookie('levelData')
+    // if (levelData) {
+      initButtonHandler(this,"levelSelect",new Vec2(center.x - 200, center.y - 150),"Level 1",MENU_EVENT.LOAD_LVL_1);
+      let bt2 = initButtonHandler(this,"levelSelect",new Vec2(center.x - 200, center.y - 50),"Level 2",MENU_EVENT.LOAD_LVL_2);
+      let bt3 = initButtonHandler(this,"levelSelect",new Vec2(center.x - 200, center.y + 50),"Level 3",MENU_EVENT.LOAD_LVL_3);
+      let bt4 = initButtonHandler(this,"levelSelect",new Vec2(center.x + 200, center.y - 150),"Level 4",MENU_EVENT.LOAD_LVL_4);
+      let bt5 = initButtonHandler(this,"levelSelect",new Vec2(center.x + 200, center.y - 50),"Level 5",MENU_EVENT.LOAD_LVL_5);
+      let bt6 = initButtonHandler(this,"levelSelect",new Vec2(center.x + 200, center.y + 50),"Level 6",MENU_EVENT.LOAD_LVL_6);
+    // }`
+
+    // Create back button
+    initButtonHandler(this,"levelSelect",new Vec2(center.x, center.y + 250),"Back",MENU_EVENT.MENU);    
   }
 
   initControlScene(center: Vec2): void {
