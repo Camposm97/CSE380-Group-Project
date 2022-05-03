@@ -408,14 +408,19 @@ export default class EntityManager {
         this.bombs[i].explode();
       }
     }
-    if (this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary)) {
+    if (
+      this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary) &&
+      !this.nearestBomb.isDestroyed
+    ) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
     } else if (
-      this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary)
+      this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary) &&
+      !this.nearestBomb.isDestroyed
     ) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.ORANGE);
     } else if (
-      this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary)
+      this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary) &&
+      !this.nearestBomb.isDestroyed
     ) {
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.YELLOW);
     } else (<PlayerController>this.player._ai).nearBomb = false;
