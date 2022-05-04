@@ -8,7 +8,8 @@ import Scene from "../../Wolfie2D/Scene/Scene";
  */
 export class Ending extends Scene {
     loadScene(): void {
-        
+        this.load.spritesheet('mcbendorjee', 'res/spritesheets/mcbendorjee.json')
+        this.load.spritesheet('rm_blue', 'res/spritesheets/robots/robot_mouse_blue.json')
     }
     startScene(): void {
         

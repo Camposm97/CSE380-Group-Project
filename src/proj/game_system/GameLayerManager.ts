@@ -16,7 +16,7 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Level1_1 } from "../scene/Level1";
-import { Level2_1 } from "../scene/Level2";
+import { Ending } from "../scene/Ending";
 
 enum LayerType {
     PRIMARY = 'primary',
@@ -285,6 +285,11 @@ export class GameLayerManager {
                     this.tfCheat.text = ''
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
                     break;
+                case CheatCode.ENDING:
+                    this.scene.changeLevel(Ending)
+                    this.tfCheat.text = ''
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'cheat'})
+                    break
             }
         } else {
             this.tfCheat.text = ''

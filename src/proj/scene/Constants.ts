@@ -1,7 +1,7 @@
 export const LEVEL_SAVE_DATA = 'level_save_data'
 export const LEADERBOARD_DATA = 'leaderboard_data'
 
-export enum CheatCode {
+export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
   INVINCIBLE = "invincible",
   SKIP_LEVEL = "skip",
   SHOW_ALL_BOMBS = "showAllBombs",
@@ -12,6 +12,7 @@ export enum CheatCode {
   LVL_4 = "4",
   LVL_5 = "5",
   LVL_6 = "6",
+  ENDING = "ending"
 }
 
 export const Cheats = {
