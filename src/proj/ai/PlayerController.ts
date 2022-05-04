@@ -78,6 +78,9 @@ export default class PlayerController implements BattlerAI {
   canPush: boolean;
   isPushing: boolean;
   isMoving: boolean;
+  movement: Vec2;
+
+  freeze: boolean; //to keep player still when game is over
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
@@ -127,6 +130,8 @@ export default class PlayerController implements BattlerAI {
     this.canPush = false;
     this.isPushing = false;
     this.isMoving = false;
+    this.movement = new Vec2(0, 0);
+    this.freeze = false;
   }
 
   activate(options: Record<string, any>): void {}
@@ -203,7 +208,10 @@ export default class PlayerController implements BattlerAI {
       }
 
       // WASD Movement
-      if (!this.owner.animation.isPlaying(PlayerAnimations.DAMAGE)) {
+      if (
+        !this.owner.animation.isPlaying(PlayerAnimations.DAMAGE) &&
+        !this.freeze
+      ) {
         this.handleMovement(deltaT);
       }
 
@@ -427,10 +435,15 @@ export default class PlayerController implements BattlerAI {
       if (this.isPushing) {
         moveSpeed = moveSpeed / 2;
       }
-      let movement = Vec2.UP.scaled(forwardAxis * moveSpeed);
-      movement = movement.add(new Vec2(horizontalAxis * moveSpeed, 0));
-      movement = movement.scaled(deltaT);
-      this.owner.move(movement);
+      this.movement = Vec2.UP.scaled(forwardAxis * moveSpeed);
+      this.movement = this.movement.add(
+        new Vec2(horizontalAxis * moveSpeed, 0)
+      );
+      this.movement = this.movement.scaled(deltaT);
+      let nextMove = this.movement.clone();
+      // console.log(nextMove.toString());
+      this.owner.move(nextMove);
+
       // let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
 
       // this.path = this.owner
@@ -475,6 +488,7 @@ export default class PlayerController implements BattlerAI {
     } else {
       this.doAnimation(PlayerAction.IDLE);
       this.isMoving = false;
+      this.movement = new Vec2(0, 0);
     }
   }
 
@@ -528,5 +542,10 @@ export default class PlayerController implements BattlerAI {
   destroy() {
     this.owner.visible = false;
     this.owner.setCollisionShape(new AABB(new Vec2(10, 10), new Vec2(1, 1)));
+  }
+
+  setFreeze(freeze: boolean): void {
+    console.log("freeze player");
+    this.freeze = freeze;
   }
 }

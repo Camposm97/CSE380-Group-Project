@@ -124,7 +124,8 @@ export default class BlueStatueAI implements RobotAI {
 
   push(v: Vec2): void {
     if (this.isFrozen) {
-      this.owner.move(v);
+      let move = v.clone();
+      this.owner.move(move);
     }
   }
 

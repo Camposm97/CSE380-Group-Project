@@ -314,6 +314,7 @@ export default abstract class GameLevel extends Scene {
         this.glm.showRoomComplete();
       }
       this.gameOver = true;
+      (<PlayerController>this.em.getPlayer()._ai).setFreeze(true); //keep player still once they reach the goal
     }
 
     this.em.handlePlayerCoatColor();
