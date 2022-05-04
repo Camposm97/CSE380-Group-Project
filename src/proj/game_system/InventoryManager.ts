@@ -33,10 +33,10 @@ export default class InventoryManager {
     this.currentSlot = 0;
 
     // Add layers
-    this.slotLayer = slotLayer;
-    scene.addUILayer(this.slotLayer).setDepth(100);
-    this.itemLayer = itemLayer;
-    scene.addUILayer(this.itemLayer).setDepth(101);
+    // this.slotLayer = slotLayer;
+    // scene.addUILayer(this.slotLayer).setDepth(100);
+    // this.itemLayer = itemLayer;
+    // scene.addUILayer(this.itemLayer).setDepth(101);
 
     // // Create the inventory slots
     // for (let i = 0; i < size; i++) {
