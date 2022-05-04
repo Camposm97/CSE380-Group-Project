@@ -328,12 +328,8 @@ export class GameLayerManager {
       !this.scene.getTilemap("Floor").visible;
     this.scene.getTilemap("Walls").visible =
       !this.scene.getTilemap("Walls").visible;
-    this.scene
-      .getLayer("slots1")
-      .setHidden(!this.scene.getLayer("slots1").isHidden());
-    this.scene
-      .getLayer("items1")
-      .setHidden(!this.scene.getLayer("items1").isHidden());
+    // this.scene.getLayer("slots1").setHidden(!this.scene.getLayer("slots1").isHidden());
+    // this.scene.getLayer("items1").setHidden(!this.scene.getLayer("items1").isHidden());
     if (this.pauseLayer.isHidden()) {
       this.scene.getViewport().setZoomLevel(3);
     } else {
@@ -359,8 +355,8 @@ export class GameLayerManager {
     this.controlsLayer.setHidden(true);
     this.scene.getTilemap("Floor").visible = false;
     this.scene.getTilemap("Walls").visible = false;
-    this.scene.getLayer("slots1").setHidden(true);
-    this.scene.getLayer("items1").setHidden(true);
+    // this.scene.getLayer("slots1").setHidden(true);
+    // this.scene.getLayer("items1").setHidden(true);
     this.scene.getViewport().setZoomLevel(1);
   }
 
