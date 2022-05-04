@@ -8,8 +8,9 @@ import MainMenu from "./MainMenu";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameLevel from "./GameLevel";
 import { initButton, initLabel } from "../ui/UIBuilder";
-import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
-import GameOptions from "../../Wolfie2D/Loop/GameOptions";
+import { Level2_1 } from "./Level2";
+import { getCookie, setCookie } from "../game_system/Cookies";
+import { SAVE_DATA } from "./Constants";
 
 export default class GameOver extends Scene {
   private currentScore: number;
@@ -62,7 +63,7 @@ export default class GameOver extends Scene {
     );
 
     if (this.win) {
-      if (this.isTutorial) {
+      if (this.isTutorial) { // We're in a tutorial! :o
         lblStatus.text = "Tutorial Complete!";
         lblScore.text = "";
         if (this.nextLvl) {
@@ -76,13 +77,35 @@ export default class GameOver extends Scene {
             key: "levelMusic",
           });
         }
-      } else {
+      } else { // We're in the real game :)
         lblStatus.text = "You win!";
         if (this.lastLevel) {
-          console.log("lastlevel");
-          this.emitter.fireEvent(GameEventType.STOP_SOUND, {
-            key: "levelMusic",
-          });
+          let str = getCookie(SAVE_DATA)
+          let o = {
+            lock2: true, lock3: true, lock4: true, lock5: true, lock6: true
+          }
+          if (str) {
+            o = JSON.parse(str)
+          }
+          switch (this.nextLvl.name) {
+            case 'Level2_1':
+              o.lock2 = false
+              break
+            case 'Level3_1':
+              o.lock3 = false
+              break
+            case 'Level4_1':
+              o.lock4 = false
+              break
+            case 'Level5_1':
+              o.lock5= false
+              break
+            case 'Level6_1':
+              o.lock6 = false
+              break
+          }
+          setCookie(SAVE_DATA, JSON.stringify(o))
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
         }
         if (this.nextLvl) {
           btOk.text = "Next Room";

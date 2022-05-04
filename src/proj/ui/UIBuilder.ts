@@ -7,6 +7,15 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 
+export function initLock(scene: Scene, layer: string, bt: Button): void {
+    let e = new Emitter()
+    let lockSprite = scene.add.sprite('lock', layer)
+    lockSprite.scale = new Vec2(1.5,1.75)
+    lockSprite.position = bt.position.clone()
+    bt.onClickEventId = undefined
+    bt.onClick = () => e.fireEvent(GameEventType.PLAY_SOUND, {key: 'locked', loop: false})
+}
+
 export function initLevelSelectButton(scene: Scene, layer: string, v: Vec2, text: string, eventId: string): Button {
     let emitter = new Emitter()
     let x = initButtonHandler(scene, layer, v, '', eventId)

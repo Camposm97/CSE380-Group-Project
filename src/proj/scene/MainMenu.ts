@@ -2,8 +2,9 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
+import { SAVE_DATA, MenuEvents } from "./Constants";
 import { getCookie } from "../game_system/Cookies";
-import { initButtonHandler, initLabel, initLevelSelectButton } from "../ui/UIBuilder";
+import { initButtonHandler, initLabel, initLevelSelectButton, initLock } from "../ui/UIBuilder";
 import { RobotAnimations } from "./Constants";
 import { Level1_1 } from "./Level1";
 import { Level2_1 } from "./Level2";
@@ -12,22 +13,6 @@ import { Level4_1 } from "./Level4";
 import { Level5_1 } from "./Level5";
 import { Level6_1 } from "./Level6";
 import { Tutorial1_1 } from "./Tutorial";
-
-enum MENU_EVENT {
-  MENU = "menu",
-  NEW_GAME = "new_game",
-  LEVEL_SELECT = "level_select",
-  CONTROLS = "controls",
-  HELP = "about",
-  LEADERBOARD = "leaderboard",
-  LOAD_LVL_1 = "load_lvl_1",
-  LOAD_LVL_2 = "load_lvl_2",
-  LOAD_LVL_3 = "load_lvl_3",
-  LOAD_LVL_4 = "load_lvl_4",
-  LOAD_LVL_5 = "load_lvl_5",
-  LOAD_LVL_6 = "load_lvl_6",
-  HOW_TO_PLAY = "HOW_TO_PLAY",
-}
 
 export default class MainMenu extends Scene {
   private mainMenu: Layer;
@@ -40,11 +25,12 @@ export default class MainMenu extends Scene {
     this.load.spritesheet('r_blue', 'res/spritesheets/robots/robot_blue.json')
     this.load.image('lock', 'res/sprites/red_lock.png')
     this.load.image('Level 1', 'res/tilemaps/level1/Level1_1.png')
-    this.load.image('Level 2', 'res/tilemaps/level1/Level1_1.png')
-    this.load.image('Level 3', 'res/tilemaps/level3/level3_1.png')
-    this.load.image('Level 4', 'res/tilemaps/level4/level4_1.png')
-    this.load.image('Level 5', 'res/tilemaps/level5/level5_1.png')
-    this.load.image('Level 6', 'res/tilemaps/level6/level6_1.png')
+    this.load.image('Level 2', 'res/tilemaps/level2/Level2_1.png')
+    this.load.image('Level 3', 'res/tilemaps/level3/Level3_1.png')
+    this.load.image('Level 4', 'res/tilemaps/level4/Level4_1.png')
+    this.load.image('Level 5', 'res/tilemaps/level5/Level5_1.png')
+    this.load.image('Level 6', 'res/tilemaps/level6/Level6_1.png')
+    this.load.audio('locked', 'res/sound/bad_event.wav')
   }
 
   startScene(): void {
@@ -57,31 +43,31 @@ export default class MainMenu extends Scene {
     this.initLeaderboardScene(center);
 
     // Subscribe to the button events
-    this.receiver.subscribe(MENU_EVENT.MENU);
-    this.receiver.subscribe(MENU_EVENT.NEW_GAME);
-    this.receiver.subscribe(MENU_EVENT.HOW_TO_PLAY);
-    this.receiver.subscribe(MENU_EVENT.LEVEL_SELECT);
-    this.receiver.subscribe(MENU_EVENT.LOAD_LVL_1);
-    this.receiver.subscribe(MENU_EVENT.LOAD_LVL_2);
-    this.receiver.subscribe(MENU_EVENT.LOAD_LVL_3);
-    this.receiver.subscribe(MENU_EVENT.LOAD_LVL_4);
-    this.receiver.subscribe(MENU_EVENT.LOAD_LVL_5);
-    this.receiver.subscribe(MENU_EVENT.LOAD_LVL_6);
-    this.receiver.subscribe(MENU_EVENT.CONTROLS);
-    this.receiver.subscribe(MENU_EVENT.HELP);
-    this.receiver.subscribe(MENU_EVENT.LEADERBOARD);
+    this.receiver.subscribe(MenuEvents.MENU);
+    this.receiver.subscribe(MenuEvents.NEW_GAME);
+    this.receiver.subscribe(MenuEvents.HOW_TO_PLAY);
+    this.receiver.subscribe(MenuEvents.LEVEL_SELECT);
+    this.receiver.subscribe(MenuEvents.LOAD_LVL_1);
+    this.receiver.subscribe(MenuEvents.LOAD_LVL_2);
+    this.receiver.subscribe(MenuEvents.LOAD_LVL_3);
+    this.receiver.subscribe(MenuEvents.LOAD_LVL_4);
+    this.receiver.subscribe(MenuEvents.LOAD_LVL_5);
+    this.receiver.subscribe(MenuEvents.LOAD_LVL_6);
+    this.receiver.subscribe(MenuEvents.CONTROLS);
+    this.receiver.subscribe(MenuEvents.HELP);
+    this.receiver.subscribe(MenuEvents.LEADERBOARD);
   }
 
   initMainMenuScene(v: Vec2): void {
     this.mainMenu = this.addUILayer("mainMenu");
     let c = this.viewport.getCenter().clone()
     const layer = "mainMenu";
-    initButtonHandler(this, layer, new Vec2(v.x, v.y - 225), "How to Play", MENU_EVENT.HOW_TO_PLAY);
-    initButtonHandler(this, layer, new Vec2(v.x, v.y - 150), "New Game", MENU_EVENT.NEW_GAME);
-    initButtonHandler(this, layer, new Vec2(v.x, v.y - 75), "Level Select", MENU_EVENT.LEVEL_SELECT);
-    initButtonHandler(this, layer, new Vec2(v.x, v.y), "Controls", MENU_EVENT.CONTROLS);
-    initButtonHandler(this, layer, new Vec2(v.x, v.y + 75), "Help", MENU_EVENT.HELP);
-    initButtonHandler(this, layer, new Vec2(v.x, v.y + 150), "Leaderboard", MENU_EVENT.LEADERBOARD);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y - 225), "How to Play", MenuEvents.HOW_TO_PLAY);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y - 150), "New Game", MenuEvents.NEW_GAME);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y - 75), "Level Select", MenuEvents.LEVEL_SELECT);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y), "Controls", MenuEvents.CONTROLS);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y + 75), "Help", MenuEvents.HELP);
+    initButtonHandler(this, layer, new Vec2(v.x, v.y + 150), "Leaderboard", MenuEvents.LEADERBOARD);
 
     let r1 = this.add.animatedSprite('r_blue', layer)
     r1.animation.play(RobotAnimations.IDLE, true)
@@ -93,62 +79,52 @@ export default class MainMenu extends Scene {
 
   initLevelSelectScene(center: Vec2): void {
     // Level Select Boards Scene
-    this.levelSelect = this.addUILayer("levelSelect");
+    const LAYER = 'levelSelect'
+    this.levelSelect = this.addUILayer(LAYER);
     this.levelSelect.setHidden(true);
 
     // Level Select Header
     initLabel(this,"levelSelect",new Vec2(center.x, center.y - 300),"Level Select");
 
     //  Level Select - Buttons
-    let bt1 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x - 200, center.y - 150),"Level 1",MENU_EVENT.LOAD_LVL_1);
-    let bt2 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x, center.y - 150),"Level 2",MENU_EVENT.LOAD_LVL_2);
-    let bt3 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x + 200, center.y - 150),"Level 3",MENU_EVENT.LOAD_LVL_3);
-    let bt4 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x - 200, center.y + 100),"Level 4",MENU_EVENT.LOAD_LVL_4);
-    let bt5 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x, center.y + 100),"Level 5",MENU_EVENT.LOAD_LVL_5);
-    let bt6 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x + 200, center.y + 100),"Level 6",MENU_EVENT.LOAD_LVL_6);
+    initLevelSelectButton(this,LAYER,new Vec2(center.x - 200, center.y - 150),"Level 1",MenuEvents.LOAD_LVL_1);
+    let bt2 = initLevelSelectButton(this,LAYER,new Vec2(center.x, center.y - 150),"Level 2",MenuEvents.LOAD_LVL_2);
+    let bt3 = initLevelSelectButton(this,LAYER,new Vec2(center.x + 200, center.y - 150),"Level 3",MenuEvents.LOAD_LVL_3);
+    let bt4 = initLevelSelectButton(this,LAYER,new Vec2(center.x - 200, center.y + 100),"Level 4",MenuEvents.LOAD_LVL_4);
+    let bt5 = initLevelSelectButton(this,LAYER,new Vec2(center.x, center.y + 100),"Level 5",MenuEvents.LOAD_LVL_5);
+    let bt6 = initLevelSelectButton(this,LAYER,new Vec2(center.x + 200, center.y + 100),"Level 6",MenuEvents.LOAD_LVL_6);
 
-    let str = getCookie('levelData')
+    let str = getCookie(SAVE_DATA)
     // Check if str is undefined.
     if (str) { // Determine which levels to unlock and lock
-      let o = JSON.parse(str)
-      if (o.lock1) {
-        console.log('lock 1')
+      let saveData = JSON.parse(str)
+      if (saveData.lock2) {
+        initLock(this, LAYER, bt2)
       }
-      if (o.lock2) {
-        console.log('lock 2')
+      if (saveData.lock3) {
+        initLock(this, LAYER, bt3)
       }
-      if (o.lock3) {
-        console.log('lock 3')
+      if (saveData.lock4) {
+        initLock(this, LAYER, bt4)
       }
-      if (o.lock4) {
-        console.log('lock 4')
+      if (saveData.lock5) {
+        initLock(this, LAYER, bt5)
       }
-      if (o.lock5) {
-        console.log('lock 5')
-      }
-      if (o.lock6) {
-        console.log('lock 6')
+      if (saveData.lock6) {
+        initLock(this, LAYER, bt6)
       }
     } else { // lock all levels
-      console.log('lock all levels')
-      let l1 = this.add.sprite('lock', 'levelSelect')
-      l1.position = bt1.position.clone()
-      let l2 = this.add.sprite('lock', 'levelSelect')
-      l2.position = bt2.position.clone()
-      let l3 = this.add.sprite('lock', 'levelSelect')
-      l3.position = bt3.position.clone()
-      let l4 = this.add.sprite('lock', 'levelSelect')
-      l4.position = bt4.position.clone()
-      let l5 = this.add.sprite('lock', 'levelSelect')
-      l5.position = bt5.position.clone()
-      let l6 = this.add.sprite('lock', 'levelSelect')
-      l6.position = bt6.position.clone()
+      initLock(this, LAYER, bt2)
+      initLock(this, LAYER, bt3)
+      initLock(this, LAYER, bt4)
+      initLock(this, LAYER, bt5)
+      initLock(this, LAYER, bt6)
     }
 
       
 
     // Create back button
-    initButtonHandler(this,"levelSelect",new Vec2(center.x, center.y + 250),"Back",MENU_EVENT.MENU);    
+    initButtonHandler(this,"levelSelect",new Vec2(center.x, center.y + 250),"Back",MenuEvents.MENU);    
   }
 
   initControlScene(center: Vec2): void {
@@ -208,7 +184,7 @@ export default class MainMenu extends Scene {
       "controls",
       new Vec2(center.x, center.y + 250),
       "Back",
-      MENU_EVENT.MENU
+      MenuEvents.MENU
     );
     // Scene has started, so start playing music
     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
@@ -305,7 +281,7 @@ export default class MainMenu extends Scene {
       "help",
       new Vec2(center.x, center.y + 250),
       "Back",
-      MENU_EVENT.MENU
+      MenuEvents.MENU
     );
   }
 
@@ -340,7 +316,7 @@ export default class MainMenu extends Scene {
       "leaderboard",
       new Vec2(center.x, center.y + 250),
       "Back",
-      MENU_EVENT.MENU
+      MenuEvents.MENU
     );
   }
 
@@ -348,58 +324,61 @@ export default class MainMenu extends Scene {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
       switch (event.type) {
-        case MENU_EVENT.MENU:
+        case MenuEvents.MENU:
           this.mainMenu.setHidden(false);
           this.help.setHidden(true);
           this.controls.setHidden(true);
           this.leaderboard.setHidden(true);
           this.levelSelect.setHidden(true);
           break;
-        case MENU_EVENT.HOW_TO_PLAY:
+        case MenuEvents.HOW_TO_PLAY:
           this.sceneManager.changeToScene(Tutorial1_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.NEW_GAME:
+        case MenuEvents.NEW_GAME:
           this.sceneManager.changeToScene(Level1_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.LEVEL_SELECT:
+        case MenuEvents.LEVEL_SELECT:
           this.mainMenu.setHidden(true);
           this.levelSelect.setHidden(false);
           break;
-        case MENU_EVENT.LOAD_LVL_1:
+        case MenuEvents.LEVEL_LOCKED:
+          console.log('hello world!!!!')
+          break;
+        case MenuEvents.LOAD_LVL_1:
           this.sceneManager.changeToScene(Level1_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.LOAD_LVL_2:
+        case MenuEvents.LOAD_LVL_2:
           this.sceneManager.changeToScene(Level2_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.LOAD_LVL_3:
+        case MenuEvents.LOAD_LVL_3:
           this.sceneManager.changeToScene(Level3_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.LOAD_LVL_4:
+        case MenuEvents.LOAD_LVL_4:
           this.sceneManager.changeToScene(Level4_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.LOAD_LVL_5:
+        case MenuEvents.LOAD_LVL_5:
           this.sceneManager.changeToScene(Level5_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.LOAD_LVL_6:
+        case MenuEvents.LOAD_LVL_6:
           this.sceneManager.changeToScene(Level6_1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
-        case MENU_EVENT.CONTROLS:
+        case MenuEvents.CONTROLS:
           this.mainMenu.setHidden(true);
           this.controls.setHidden(false);
           break;
-        case MENU_EVENT.HELP:
+        case MenuEvents.HELP:
           this.help.setHidden(false);
           this.mainMenu.setHidden(true);
           break;
-        case MENU_EVENT.LEADERBOARD:
+        case MenuEvents.LEADERBOARD:
           this.leaderboard.setHidden(false);
           this.mainMenu.setHidden(true);
           break;
