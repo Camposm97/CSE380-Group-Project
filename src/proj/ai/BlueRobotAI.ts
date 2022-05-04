@@ -36,6 +36,8 @@ export default class BlueRobotAI implements RobotAI {
   private moveFrameCount: number;
   paused: boolean;
 
+  pushable: boolean = false;
+
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
     this.listening = true;
@@ -300,5 +302,9 @@ export default class BlueRobotAI implements RobotAI {
           : this.owner.moveOnPath(this.speed * deltaT, this.path);
       }
     }
+  }
+
+  push(v: Vec2): void {
+    //not implemented
   }
 }

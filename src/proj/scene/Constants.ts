@@ -33,6 +33,7 @@ export enum Control {
   DROP = "drop",
   SLOT1 = "slot1",
   SLOT2 = "slot2",
+  PUSH_PULL = "push-pull",
 }
 
 export enum Events {

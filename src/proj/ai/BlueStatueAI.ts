@@ -52,6 +52,8 @@ export default class BlueStatueAI implements RobotAI {
 
   paused: boolean;
 
+  pushable: boolean = true;
+
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;
     this.listening = false;

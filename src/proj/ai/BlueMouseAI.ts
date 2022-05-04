@@ -31,6 +31,7 @@ export default class BlueMouseAI implements RobotAI {
   listening: boolean;
   offState: boolean;
   paused: boolean;
+  pushable: boolean = true;
 
   initializeAI(owner: AnimatedSprite, options?: Record<string, any>): void {
     this.owner = owner;

@@ -24,6 +24,7 @@ import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import Hit from "../../Wolfie2D/DataTypes/Physics/Hit";
 
 export default class PlayerController implements BattlerAI {
   // Tile Map
@@ -73,6 +74,11 @@ export default class PlayerController implements BattlerAI {
   private previousButton: string;
   private moveFrameCount: number;
 
+  //For pushing and pulling
+  canPush: boolean;
+  isPushing: boolean;
+  isMoving: boolean;
+
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
@@ -117,6 +123,10 @@ export default class PlayerController implements BattlerAI {
     this.previousAxis = "none";
     this.previousButton = "none";
     this.frameCount = 0;
+
+    this.canPush = false;
+    this.isPushing = false;
+    this.isMoving = false;
   }
 
   activate(options: Record<string, any>): void {}
@@ -151,38 +161,45 @@ export default class PlayerController implements BattlerAI {
         this.inventory.changeSlot(1);
       }
 
-      if (Input.isJustPressed("pickup")) {
-        // Check if there is an item to pick up
-        for (let item of this.items) {
-          if (this.owner.collisionShape.overlaps(item.sprite.boundary)) {
-            // We overlap it, try to pick it up
-            // MC - Use healthpack as you pick it up.
-            if (item instanceof Healthpack && item.sprite.visible) {
-              item.use(this.owner);
-              item.sprite.visible = false;
-            } else {
-              this.inventory.addItem(item);
-            }
-            break;
-          }
-        }
-      }
+      // if (Input.isJustPressed("pickup")) {
+      //   // Check if there is an item to pick up
+      //   for (let item of this.items) {
+      //     if (this.owner.collisionShape.overlaps(item.sprite.boundary)) {
+      //       // We overlap it, try to pick it up
+      //       // MC - Use healthpack as you pick it up.
+      //       if (item instanceof Healthpack && item.sprite.visible) {
+      //         item.use(this.owner);
+      //         item.sprite.visible = false;
+      //       } else {
+      //         this.inventory.addItem(item);
+      //       }
+      //       break;
+      //     }
+      //   }
+      // }
 
-      if (Input.isJustPressed("drop")) {
-        // Check if we can drop our current item
-        let item = this.inventory.removeItem();
+      // if (Input.isJustPressed("drop")) {
+      //   // Check if we can drop our current item
+      //   let item = this.inventory.removeItem();
 
-        if (item) {
-          // Move the item from the ui to the gameworld
-          item.moveSprite(this.owner.position, "primary");
+      //   if (item) {
+      //     // Move the item from the ui to the gameworld
+      //     item.moveSprite(this.owner.position, "primary");
 
-          // Add the item to the list of items
-          this.items.push(item);
-        }
-      }
+      //     // Add the item to the list of items
+      //     this.items.push(item);
+      //   }
+      // }
 
       if (Input.isJustPressed("panic") && this.health > 0) {
         this.emitter.fireEvent(Events.RESET_ROOM, {});
+      }
+
+      if (Input.isPressed("push-pull")) {
+        this.canPush = true;
+      } else {
+        this.canPush = false;
+        this.isPushing = false;
       }
 
       // WASD Movement
@@ -203,33 +220,33 @@ export default class PlayerController implements BattlerAI {
         });
       }
 
-      if (this.path != null) {
-        //Move on path if selected
-        if (this.path.isDone()) {
-          this.path = null;
-        } else {
-          this.owner.moveOnPath(this.speed * deltaT, this.path);
-          // this.owner.rotation = Vec2.UP.angleToCCW(this.path.getMoveDirection(this.owner));
-        }
-      } else {
-        //Target an enemy and attack
-        if (this.target != null) {
-          let item = this.inventory.getItem();
-          this.lookDirection = this.owner.position.dirTo(this.target);
+      // if (this.path != null) {
+      //   //Move on path if selected
+      //   if (this.path.isDone()) {
+      //     this.path = null;
+      //   } else {
+      //     this.owner.moveOnPath(this.speed * deltaT, this.path);
+      //     // this.owner.rotation = Vec2.UP.angleToCCW(this.path.getMoveDirection(this.owner));
+      //   }
+      // } else {
+      //   //Target an enemy and attack
+      //   if (this.target != null) {
+      //     let item = this.inventory.getItem();
+      //     this.lookDirection = this.owner.position.dirTo(this.target);
 
-          // If there is an item in the current slot, use it
-          if (item) {
-            item.use(this.owner, "player", this.lookDirection);
-            // this.owner.rotation = Vec2.UP.angleToCCW(this.lookDirection);
+      //     // If there is an item in the current slot, use it
+      //     if (item) {
+      //       item.use(this.owner, "player", this.lookDirection);
+      //       // this.owner.rotation = Vec2.UP.angleToCCW(this.lookDirection);
 
-            if (item instanceof Healthpack) {
-              // Destroy the used healthpack
-              this.inventory.removeItem();
-              item.sprite.visible = false;
-            }
-          }
-        }
-      }
+      //       if (item instanceof Healthpack) {
+      //         // Destroy the used healthpack
+      //         this.inventory.removeItem();
+      //         item.sprite.visible = false;
+      //       }
+      //     }
+      //   }
+      // }
     }
   }
 
@@ -303,6 +320,7 @@ export default class PlayerController implements BattlerAI {
   }
 
   handleMovement(deltaT: number): void {
+    this.isMoving = true;
     let forwardAxis = 0;
     let horizontalAxis = 0;
 
@@ -405,13 +423,20 @@ export default class PlayerController implements BattlerAI {
       (forwardAxis != 0 && horizontalAxis == 0) ||
       (forwardAxis == 0 && horizontalAxis != 0)
     ) {
-      let movement = Vec2.UP.scaled(forwardAxis * this.speed);
-      movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
-      let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
-      this.path = this.owner
-        .getScene()
-        .getNavigationManager()
-        .getPath(Names.NAVMESH, this.owner.position, newPos, true);
+      let moveSpeed = this.speed;
+      if (this.isPushing) {
+        moveSpeed = moveSpeed / 2;
+      }
+      let movement = Vec2.UP.scaled(forwardAxis * moveSpeed);
+      movement = movement.add(new Vec2(horizontalAxis * moveSpeed, 0));
+      movement = movement.scaled(deltaT);
+      this.owner.move(movement);
+      // let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
+
+      // this.path = this.owner
+      //   .getScene()
+      //   .getNavigationManager()
+      //   .getPath(Names.NAVMESH, this.owner.position, newPos, true);
 
       // let tileCoord = this.tilemap.getColRowAt(this.owner.position);
       // tileCoord = new Vec2(tileCoord.x, tileCoord.y);
@@ -424,28 +449,32 @@ export default class PlayerController implements BattlerAI {
       // If there is any movement, override idle animation
       if (Input.isPressed("forward")) {
         this.doAnimation(PlayerAction.WALK_UP);
+
+        // this.lookDirection.y = 1;
+        // this.lookDirection.x = 0;
         // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_UP);
       }
       if (Input.isPressed("left")) {
         this.doAnimation(PlayerAction.WALK_LEFT);
         // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_LEFT);
-        this.lookDirection.y = 0;
-        this.lookDirection.x = -1;
+        // this.lookDirection.y = 0;
+        // this.lookDirection.x = -1;
       }
       if (Input.isPressed("backward")) {
         this.doAnimation(PlayerAction.WALK_DOWN);
         // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_DOWN);
-        this.lookDirection.y = -1;
-        this.lookDirection.x = 0;
+        // this.lookDirection.y = -1;
+        // this.lookDirection.x = 0;
       }
       if (Input.isPressed("right")) {
         this.doAnimation(PlayerAction.WALK_RIGHT);
         // if (this.enemiesLeft) this.emitter.fireEvent(PlayerAction.WALK_RIGHT);
-        this.lookDirection.y = 0;
-        this.lookDirection.x = 1;
+        // this.lookDirection.y = 0;
+        // this.lookDirection.x = 1;
       }
     } else {
       this.doAnimation(PlayerAction.IDLE);
+      this.isMoving = false;
     }
   }
 
