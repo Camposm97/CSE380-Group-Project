@@ -80,6 +80,8 @@ export default class PlayerController implements BattlerAI {
   isMoving: boolean;
   movement: Vec2;
 
+  freeze: boolean; //to keep player still when game is over
+
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
     this.owner.scale = new Vec2(0.5, 0.5);
@@ -129,6 +131,7 @@ export default class PlayerController implements BattlerAI {
     this.isPushing = false;
     this.isMoving = false;
     this.movement = new Vec2(0, 0);
+    this.freeze = false;
   }
 
   activate(options: Record<string, any>): void {}
@@ -205,7 +208,10 @@ export default class PlayerController implements BattlerAI {
       }
 
       // WASD Movement
-      if (!this.owner.animation.isPlaying(PlayerAnimations.DAMAGE)) {
+      if (
+        !this.owner.animation.isPlaying(PlayerAnimations.DAMAGE) &&
+        !this.freeze
+      ) {
         this.handleMovement(deltaT);
       }
 
@@ -484,7 +490,6 @@ export default class PlayerController implements BattlerAI {
       this.isMoving = false;
       this.movement = new Vec2(0, 0);
     }
-    console.log(this.movement.toString());
   }
 
   handleAttack(): void {
@@ -537,5 +542,10 @@ export default class PlayerController implements BattlerAI {
   destroy() {
     this.owner.visible = false;
     this.owner.setCollisionShape(new AABB(new Vec2(10, 10), new Vec2(1, 1)));
+  }
+
+  setFreeze(freeze: boolean): void {
+    console.log("freeze player");
+    this.freeze = freeze;
   }
 }

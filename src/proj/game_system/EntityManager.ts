@@ -485,9 +485,6 @@ export default class EntityManager {
           // );
           // v.scale(deltaT);
           if ((<PlayerController>this.player._ai).isMoving) {
-            console.log(
-              (<PlayerController>this.player._ai).movement.toString()
-            );
             this.pushPullBlocks[i].push(
               (<PlayerController>this.player._ai).movement
             );
