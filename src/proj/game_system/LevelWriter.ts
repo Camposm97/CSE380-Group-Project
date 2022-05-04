@@ -4,7 +4,7 @@ import { LEVEL_SAVE_DATA } from "../scene/Constants";
  * Util for managing locked level data
  */
 export class LevelWriter {
-    private o
+    private o: any
 
     constructor() {
         let s = localStorage.getItem(LEVEL_SAVE_DATA)
