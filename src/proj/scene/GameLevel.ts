@@ -69,8 +69,9 @@ export default abstract class GameLevel extends Scene {
     this.load.image("healthpack", "res/sprites/healthpack.png");
     this.load.image("inventorySlot", "res/sprites/inventory.png");
     this.load.image("knife", "res/sprites/knife.png");
-    this.load.image("laserGun", "res/sprites/laserGun.png");
-    this.load.image("pistol", "res/sprites/pistol.png");
+    this.load.image("health", "res/sprites/heart.png");
+    // this.load.image("laserGun", "res/sprites/laserGun.png");
+    // this.load.image("pistol", "res/sprites/pistol.png");
     this.load.image("block", "res/sprites/block.png");
     this.load.audio("boom", "res/sound/explode.wav");
     this.load.audio("rs_freeze", "res/sound/rs_freeze.wav");
@@ -170,6 +171,7 @@ export default abstract class GameLevel extends Scene {
     this.em.initBlocks();
     // Initialize projectiles
     this.em.initProjectiles();
+
     this.glm.initHudLayer();
     this.glm.initPauseLayer();
     this.glm.initControlsLayer();
@@ -330,7 +332,8 @@ export default abstract class GameLevel extends Scene {
 
   updateHUD(): void {
     let health = (<BattlerAI>this.getPlayer()._ai).health;
-    this.lblHealth.text = `HP: ${health}`;
+    // this.lblHealth.text = `HP: ${health}`;
+    this.glm.updateHealthHud(health);
     this.lblTime.text = `${this.scoreTimer.toString()}`;
     this.lblEnemiesLeft.text = `Robots Left: ${this.em.getRobotsLeft()}`;
   }
