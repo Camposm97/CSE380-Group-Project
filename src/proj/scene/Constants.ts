@@ -1,4 +1,5 @@
-export const SAVE_DATA = 'save_data'
+export const LEVEL_SAVE_DATA = 'level_save_data'
+export const LEADERBOARD_DATA = 'leaderboard_data'
 
 export enum CheatCode {
   INVINCIBLE = "invincible",

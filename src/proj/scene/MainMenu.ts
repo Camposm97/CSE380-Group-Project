@@ -2,8 +2,7 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
-import { SAVE_DATA, MenuEvents } from "./Constants";
-import { getCookie } from "../game_system/Cookies";
+import { LEVEL_SAVE_DATA, MenuEvents } from "./Constants";
 import { initButtonHandler, initLabel, initLevelSelectButton, initLock } from "../ui/UIBuilder";
 import { RobotAnimations } from "./Constants";
 import { Level1_1 } from "./Level1";
@@ -13,6 +12,8 @@ import { Level4_1 } from "./Level4";
 import { Level5_1 } from "./Level5";
 import { Level6_1 } from "./Level6";
 import { Tutorial1_1 } from "./Tutorial";
+import { Leaderboard } from "../game_system/Leaderboard";
+import { LevelWriter } from "../game_system/LevelWriter";
 
 export default class MainMenu extends Scene {
   private mainMenu: Layer;
@@ -94,34 +95,39 @@ export default class MainMenu extends Scene {
     let bt5 = initLevelSelectButton(this,LAYER,new Vec2(center.x, center.y + 100),"Level 5",MenuEvents.LOAD_LVL_5);
     let bt6 = initLevelSelectButton(this,LAYER,new Vec2(center.x + 200, center.y + 100),"Level 6",MenuEvents.LOAD_LVL_6);
 
-    let str = getCookie(SAVE_DATA)
-    // Check if str is undefined.
-    if (str) { // Determine which levels to unlock and lock
-      let saveData = JSON.parse(str)
-      if (saveData.lock2) {
-        initLock(this, LAYER, bt2)
-      }
-      if (saveData.lock3) {
-        initLock(this, LAYER, bt3)
-      }
-      if (saveData.lock4) {
-        initLock(this, LAYER, bt4)
-      }
-      if (saveData.lock5) {
-        initLock(this, LAYER, bt5)
-      }
-      if (saveData.lock6) {
-        initLock(this, LAYER, bt6)
-      }
-    } else { // lock all levels
-      initLock(this, LAYER, bt2)
-      initLock(this, LAYER, bt3)
-      initLock(this, LAYER, bt4)
-      initLock(this, LAYER, bt5)
-      initLock(this, LAYER, bt6)
-    }
+    let lw = new LevelWriter()
+    if (lw.isLevel2Locked()) initLock(this, LAYER, bt2)
+    if (lw.isLevel3Locked()) initLock(this, LAYER, bt3)
+    if (lw.isLevel4Locked()) initLock(this, LAYER, bt4)
+    if (lw.isLevel5Locked()) initLock(this, LAYER, bt5)
+    if (lw.isLevel6Locked()) initLock(this, LAYER, bt6)
 
-      
+    // let str = localStorage.getItem(LEVEL_SAVE_DATA)
+    // Check if str is undefined.
+    // if (str) { // Determine which levels to unlock and lock
+    //   let saveData = JSON.parse(str)
+    //   if (saveData.lock2) {
+    //     initLock(this, LAYER, bt2)
+    //   }
+    //   if (saveData.lock3) {
+    //     initLock(this, LAYER, bt3)
+    //   }
+    //   if (saveData.lock4) {
+    //     initLock(this, LAYER, bt4)
+    //   }
+    //   if (saveData.lock5) {
+    //     initLock(this, LAYER, bt5)
+    //   }
+    //   if (saveData.lock6) {
+    //     initLock(this, LAYER, bt6)
+    //   }
+    // } else { // lock all levels
+    //   initLock(this, LAYER, bt2)
+    //   initLock(this, LAYER, bt3)
+    //   initLock(this, LAYER, bt4)
+    //   initLock(this, LAYER, bt5)
+    //   initLock(this, LAYER, bt6)
+    // }
 
     // Create back button
     initButtonHandler(this,"levelSelect",new Vec2(center.x, center.y + 250),"Back",MenuEvents.MENU);    
@@ -287,37 +293,20 @@ export default class MainMenu extends Scene {
 
   initLeaderboardScene(center: Vec2): void {
     // Leader Boards Scene
-    this.leaderboard = this.addUILayer("leaderboard");
+    const LAYER = 'leaderboard'
+    this.leaderboard = this.addUILayer(LAYER);
     this.leaderboard.setHidden(true);
 
     // Leader Boards Header
-    initLabel(
-      this,
-      "leaderboard",
-      new Vec2(center.x, center.y - 300),
-      "Leaderboard"
-    );
-    initLabel(
-      this,
-      "leaderboard",
-      new Vec2(center.x - 300, center.y - 200),
-      "Name"
-    );
-    initLabel(
-      this,
-      "leaderboard",
-      new Vec2(center.x + 300, center.y - 200),
-      "High Score"
-    );
+    initLabel(this,LAYER,new Vec2(center.x, center.y - 300),"Leaderboard");
+    initLabel(this,LAYER,new Vec2(center.x - 300, center.y - 200),"Name");
+    initLabel(this,LAYER,new Vec2(center.x + 300, center.y - 200),"High Score");
+
+    let lb = new Leaderboard()
+    lb.display(this, LAYER, center)
 
     // Leader Boards - Back Button
-    initButtonHandler(
-      this,
-      "leaderboard",
-      new Vec2(center.x, center.y + 250),
-      "Back",
-      MenuEvents.MENU
-    );
+    initButtonHandler(this,LAYER,new Vec2(center.x, center.y + 250),"Back", MenuEvents.MENU);
   }
 
   updateScene() {

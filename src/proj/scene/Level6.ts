@@ -1,3 +1,4 @@
+import { Ending } from "./Ending";
 import GameLevel from "./GameLevel";
 
 export class Level6_1 extends GameLevel {
@@ -91,7 +92,7 @@ export class Level6_4 extends GameLevel {
     this.setName("6-4");
     this.setLastLevel(true);
     super.startScene();
-    super.setNextLevel(null);
+    super.setNextLevel(Ending);
     this.setCurrentRoom(Level6_4);
   }
 

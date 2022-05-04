@@ -4,7 +4,6 @@ import WeaponTemplateRegistry from "./proj/registry/WeaponRegistry";
 import WeaponTypeRegistry from "./proj/registry/WeaponTypeRegistry";
 import SplashScreen from "./proj/scene/SplashScreen";
 import { Control } from "./proj/scene/Constants";
-import { getCookie, setCookie } from "./proj/game_system/Cookies";
 
 // The main function is your entrypoint into Wolfie2D. Specify your first scene and any options here.
 (function main() {
