@@ -5,6 +5,9 @@ import { initLabel } from "../ui/UIBuilder"
 
 const TOP_TEN = 10
 
+/**
+ * Util for managing Leaderboard system
+ */
 export class Leaderboard {
     private arr: any[]
 

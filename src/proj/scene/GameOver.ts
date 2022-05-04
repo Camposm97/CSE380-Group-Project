@@ -11,6 +11,7 @@ import Receiver from "../../Wolfie2D/Events/Receiver";
 import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
 import { Leaderboard } from "../game_system/Leaderboard";
 import { LevelWriter } from "../game_system/LevelWriter";
+import { PlayerAnimations } from "./Constants";
 
 export default class GameOver extends Scene {
   private currentScore: number;
@@ -32,39 +33,26 @@ export default class GameOver extends Scene {
 
   loadScene(): void {
     this.load.audio("lose", "res/sound/lose.wav");
+    this.load.spritesheet('mcbendorjee', 'res/spritesheets/mcbendorjee.json')
   }
 
   startScene() {
     this.r = new Receiver()
     const MAIN_LAYER = "MAIN_LAYER";
-    const ctr = this.viewport.getCenter().clone();
+    const c = this.viewport.getCenter().clone();
     this.addUILayer(MAIN_LAYER);
-    const lblStatus = <Label>this.add.uiElement(
-      UIElementType.LABEL,
-      MAIN_LAYER,
-      {
-        position: new Vec2(ctr.x, ctr.y),
-        text: "Game Over",
-      }
-    );
-    lblStatus.textColor = Color.WHITE;
+    const lblStatus = initLabel(this, MAIN_LAYER, c.clone().add(new Vec2(0,-300)), 'Game Over')
+    lblStatus.fontSize = 48
+    const btOk = initButton(this, MAIN_LAYER, new Vec2(c.x, c.y+300), 'Main Menu');
+    const lblScore = initLabel(this, MAIN_LAYER, new Vec2(c.x, c.y-200), `High Score: ${this.timeLeft + this.currentScore}`);
 
-    let btOk = initButton(
-      this,
-      MAIN_LAYER,
-      new Vec2(ctr.x, ctr.y + 300),
-      "Main Menu"
-    );
-
-    let lblScore = initLabel(
-      this,
-      MAIN_LAYER,
-      new Vec2(ctr.x, ctr.y + 50),
-      `High Score: ${this.timeLeft + this.currentScore}`
-    );
+    let prof = this.add.animatedSprite('mcbendorjee', MAIN_LAYER)
+    prof.position = c.clone()
+    prof.scale = new Vec2(4,4)
 
     if (this.win) {
-      if (this.isTutorial) { // We're in a tutorial! :o
+      prof.animation.play(PlayerAnimations.HAPPY)
+      if (this.isTutorial) { // We're in a tutorial and we won! :o  
         lblStatus.text = "Tutorial Complete!";
         lblScore.text = "";
         if (this.nextLvl) {
@@ -78,7 +66,7 @@ export default class GameOver extends Scene {
             key: "levelMusic",
           });
         }
-      } else { // We're in the real game :)
+      } else { // We're in the real game and we won :)
         lblStatus.text = "You win!";
         if (this.lastLevel) {
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
@@ -86,32 +74,6 @@ export default class GameOver extends Scene {
         if (this.nextLvl) { // If there is a next level, update level save data 
           let lw = new LevelWriter()
           lw.unlockLevel(this.nextLvl.name)
-          // let str = localStorage.getItem(LEVEL_SAVE_DATA)
-          // let o = {
-          //   lock2: true, lock3: true, lock4: true, lock5: true, lock6: true
-          // }
-          // if (str) {
-          //   o = JSON.parse(str)
-          // }
-          // switch (this.nextLvl.name) {
-          //   case 'Level2_1':
-          //     o.lock2 = false
-          //     break
-          //   case 'Level3_1':
-          //     o.lock3 = false
-          //     break
-          //   case 'Level4_1':
-          //     o.lock4 = false
-          //     break
-          //   case 'Level5_1':
-          //     o.lock5= false
-          //     break
-          //   case 'Level6_1':
-          //     o.lock6 = false
-          //     break
-          // }
-
-          // localStorage.setItem(LEVEL_SAVE_DATA, JSON.stringify(o))
 
           if (this.lastLevel) { // Check if this is the last room of the level
             btOk.text = 'Next Level'
@@ -134,21 +96,23 @@ export default class GameOver extends Scene {
         }
       }
     } else { // Player has lost
+      prof.animation.play(PlayerAnimations.CRY)
       this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
-      let tf: TextInput = undefined
+      let tfName: TextInput = undefined
       if (this.isTutorial) {
         lblStatus.text = "Tutorial Failed";
         lblScore.text = "";
       } else {
-        tf = <TextInput> this.add.uiElement(UIElementType.TEXT_INPUT, MAIN_LAYER, {position: new Vec2(ctr.x, ctr.y+100)})
-        tf.size = new Vec2(230, 40)
-        tf.fontSize = 24
-        tf.setHAlign('center')
-        tf.onClick = () => tf.text = ''
+        tfName = <TextInput> this.add.uiElement(UIElementType.TEXT_INPUT, MAIN_LAYER, {position: new Vec2(c.x, c.y-150)})
+        tfName.text = 'Your Name Here'
+        tfName.size = new Vec2(230, 40)
+        tfName.fontSize = 24
+        tfName.setHAlign('center')
+        tfName.onClick = () => tfName.text = ''
       }
       btOk.onClick = () => {
-        if (tf) {
-          let name = tf.text
+        if (tfName) {
+          let name = tfName.text
           if (name) {
             let leaderboard = new Leaderboard()
             leaderboard.add(name, this.currentScore)

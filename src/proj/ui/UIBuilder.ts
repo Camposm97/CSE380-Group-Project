@@ -6,18 +6,19 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
+import { LevelWriter } from "../game_system/LevelWriter";
 
 export function initLock(scene: Scene, layer: string, bt: Button): void {
     let e = new Emitter()
     let lockSprite = scene.add.sprite('lock', layer)
-    lockSprite.scale = new Vec2(1.5,1.75)
+    lockSprite.scale = new Vec2(2,2.5)
     lockSprite.position = bt.position.clone()
     bt.onClickEventId = undefined
     bt.onClick = () => e.fireEvent(GameEventType.PLAY_SOUND, {key: 'locked', loop: false})
 }
 
 export function initLevelSelectButton(scene: Scene, layer: string, v: Vec2, text: string, eventId: string): Button {
-    let emitter = new Emitter()
+    let e = new Emitter()
     let x = initButtonHandler(scene, layer, v, '', eventId)
     x.size = new Vec2(124,124)
 
@@ -27,7 +28,7 @@ export function initLevelSelectButton(scene: Scene, layer: string, v: Vec2, text
         x.fontSize = 32
         x.size = new Vec2(150,150)
         if (!flag && !x.getLayer().isHidden()) {
-            emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'select', loop: false})
+            e.fireEvent(GameEventType.PLAY_SOUND, {key: 'select', loop: false})
         }
         flag = true
     }
@@ -60,6 +61,24 @@ export function initLevelSelectButton(scene: Scene, layer: string, v: Vec2, text
     let vLvlOffset = new Vec2(0,-85)
     let lbl = initLabel(scene, layer, x.position.clone().add(vLvlOffset), text)
     lbl.fontSize = 20
+    let lw = new LevelWriter()
+    switch (text) {
+        case 'Level 2':
+            if (lw.isLevel2Locked()) lbl.textColor = Color.RED
+            break
+        case 'Level 3':
+            if (lw.isLevel3Locked()) lbl.textColor = Color.RED
+            break
+        case 'Level 4':
+            if (lw.isLevel4Locked()) lbl.textColor = Color.RED
+            break
+        case 'Level 5':
+            if (lw.isLevel5Locked()) lbl.textColor = Color.RED
+            break
+        case 'Level 6':
+            if (lw.isLevel6Locked()) lbl.textColor = Color.RED
+            break
+    }
     return x
 }
 

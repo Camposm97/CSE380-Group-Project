@@ -144,6 +144,8 @@ export enum PlayerAnimations {
   LOOK_LEFT_ORANGE = "LOOK_LEFT_ORANGE",
   LOOK_LEFT_RED = "LOOK_LEFT_RED",
   DAMAGE = "DAMAGE",
+  CRY = 'CRY',
+  HAPPY = 'HAPPY'
 }
 
 export enum RobotMouseAnimations {
