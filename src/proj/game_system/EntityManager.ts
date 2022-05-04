@@ -37,6 +37,8 @@ export default class EntityManager {
   private enemiesLeft: number;
   private emitter: Emitter;
   private MAX_BULLETS_SIZE = 100;
+  private pushPullEnemy: RobotAI = null;
+  private pushPullBlocks: Array<Block> = new Array();
 
   constructor(scene: GameLevel) {
     this.scene = scene;
@@ -308,51 +310,60 @@ export default class EntityManager {
 
   handleCollidables(deltaT: number): void {
     for (let enemy of this.enemies) {
-      if (enemy._ai instanceof BlueMouseAI) {
-        let bm = <BlueMouseAI>enemy._ai;
-        if (bm.owner.sweptRect.overlaps(this.player.sweptRect)) {
-          let v = new Vec2(
-            ((<PlayerController>this.player._ai).speed / 2) *
-              (<PlayerController>this.player._ai).lookDirection.x,
-            ((<PlayerController>this.player._ai).speed / 2) *
-              (<PlayerController>this.player._ai).lookDirection.y *
-              -1
-          );
-          v.scale(deltaT);
-          bm.push(v);
+      if ((<RobotAI>enemy._ai).pushable) {
+        let bm = <RobotAI>enemy._ai;
+        if (
+          bm.owner.sweptRect.overlaps(this.player.sweptRect) &&
+          (<PlayerController>this.player._ai).canPush
+        ) {
+          this.pushPullEnemy = bm;
+          // let v = new Vec2(
+          //   ((<PlayerController>this.player._ai).speed / 2) *
+          //     (<PlayerController>this.player._ai).lookDirection.x,
+          //   ((<PlayerController>this.player._ai).speed / 2) *
+          //     (<PlayerController>this.player._ai).lookDirection.y *
+          //     -1
+          // );
+          // v.scale(deltaT);
+          // (<PlayerController>this.player._ai).isPushing = true;
+          // bm.push(v);
         }
       }
     }
-    for (let enemy of this.enemies) {
-      if (enemy._ai instanceof BlueStatueAI) {
-        let bs = <BlueStatueAI>enemy._ai;
-        if (bs.owner.sweptRect.overlaps(this.player.sweptRect)) {
-          let v = new Vec2(
-            ((<PlayerController>this.player._ai).speed / 2) *
-              (<PlayerController>this.player._ai).lookDirection.x,
-            ((<PlayerController>this.player._ai).speed / 2) *
-              (<PlayerController>this.player._ai).lookDirection.y *
-              -1
-          );
-          v.scale(deltaT);
-          bs.push(v);
-        }
-      }
-    }
+    // for (let enemy of this.enemies) {
+    //   if (enemy._ai instanceof BlueStatueAI) {
+    //     let bs = <BlueStatueAI>enemy._ai;
+    //     if (bs.owner.sweptRect.overlaps(this.player.sweptRect)) {
+    //       let v = new Vec2(
+    //         ((<PlayerController>this.player._ai).speed / 2) *
+    //           (<PlayerController>this.player._ai).lookDirection.x,
+    //         ((<PlayerController>this.player._ai).speed / 2) *
+    //           (<PlayerController>this.player._ai).lookDirection.y *
+    //           -1
+    //       );
+    //       v.scale(deltaT);
+    //       bs.push(v);
+    //     }
+    //   }
+    // }
   }
 
   handleBlockCollision(deltaT: number): void {
     for (let block of this.blocks) {
-      if (block.owner.sweptRect.overlaps(this.player.sweptRect)) {
-        let blockVec = new Vec2(
-          ((<PlayerController>this.player._ai).speed / 2) *
-            (<PlayerController>this.player._ai).lookDirection.x,
-          ((<PlayerController>this.player._ai).speed / 2) *
-            (<PlayerController>this.player._ai).lookDirection.y *
-            -1
-        );
-        blockVec.scale(deltaT);
-        block.push(blockVec);
+      if (
+        block.owner.sweptRect.overlaps(this.player.sweptRect) &&
+        (<PlayerController>this.player._ai).canPush
+      ) {
+        this.pushPullBlocks.push(block);
+        // let blockVec = new Vec2(
+        //   ((<PlayerController>this.player._ai).speed / 2) *
+        //     (<PlayerController>this.player._ai).lookDirection.x,
+        //   ((<PlayerController>this.player._ai).speed / 2) *
+        //     (<PlayerController>this.player._ai).lookDirection.y *
+        //     -1
+        // );
+        // blockVec.scale(deltaT);
+        // block.push(blockVec);
       }
     }
   }
@@ -435,6 +446,48 @@ export default class EntityManager {
             this.nearestBomb = bomb;
             (<PlayerController>this.player._ai).nearBomb = true;
           }
+        }
+      }
+    }
+  }
+
+  handlePushPull(deltaT: number): void {
+    if (
+      this.pushPullEnemy != null &&
+      (<PlayerController>this.player._ai).canPush
+    ) {
+      (<PlayerController>this.player._ai).isPushing = true;
+      let v = new Vec2(
+        ((<PlayerController>this.player._ai).speed / 2) *
+          (<PlayerController>this.player._ai).lookDirection.x,
+        ((<PlayerController>this.player._ai).speed / 2) *
+          (<PlayerController>this.player._ai).lookDirection.y *
+          -1
+      );
+      v.scale(deltaT);
+      if ((<PlayerController>this.player._ai).isMoving)
+        this.pushPullEnemy.push(v);
+    } else {
+      this.pushPullEnemy = null;
+    }
+
+    if (this.pushPullBlocks != null) {
+      for (let i = 0; i < this.pushPullBlocks.length; i++) {
+        if ((<PlayerController>this.player._ai).canPush) {
+          (<PlayerController>this.player._ai).isPushing = true;
+          let v = new Vec2(
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.x,
+            ((<PlayerController>this.player._ai).speed / 2) *
+              (<PlayerController>this.player._ai).lookDirection.y *
+              -1
+          );
+          v.scale(deltaT);
+          if ((<PlayerController>this.player._ai).isMoving)
+            this.pushPullBlocks[i].push(v);
+        } else {
+          this.pushPullBlocks = new Array();
+          break;
         }
       }
     }
