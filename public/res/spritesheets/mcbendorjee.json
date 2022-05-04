@@ -624,15 +624,19 @@
       "frames": [
         {
           "index": 72,
-          "duration": 25
+          "duration": 20
         },
         {
           "index": 73,
-          "duration": 25
+          "duration": 20
         },
         {
           "index": 74,
-          "duration": 25
+          "duration": 20
+        },
+        {
+          "index": 73,
+          "duration": 20
         }
       ]
     }
