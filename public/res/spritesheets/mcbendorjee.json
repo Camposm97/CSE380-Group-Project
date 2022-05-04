@@ -603,6 +603,38 @@
           "duration": 10
         }
       ]
+    },
+    {
+      "name": "CRY",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 70,
+          "duration": 30
+        },
+        {
+          "index": 71,
+          "duration": 30
+        }
+      ]
+    }, 
+    {
+      "name": "HAPPY",
+      "repeat": true,
+      "frames": [
+        {
+          "index": 72,
+          "duration": 25
+        },
+        {
+          "index": 73,
+          "duration": 25
+        },
+        {
+          "index": 74,
+          "duration": 25
+        }
+      ]
     }
   ]
 }
