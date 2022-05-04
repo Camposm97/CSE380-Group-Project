@@ -3,7 +3,7 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import { getCookie } from "../game_system/Cookies";
-import { initButtonHandler, initLabel } from "../ui/UIBuilder";
+import { initButtonHandler, initLabel, initLevelSelectButton } from "../ui/UIBuilder";
 import { RobotAnimations } from "./Constants";
 import { Level1_1 } from "./Level1";
 import { Level2_1 } from "./Level2";
@@ -38,6 +38,13 @@ export default class MainMenu extends Scene {
 
   loadScene(): void {
     this.load.spritesheet('r_blue', 'res/spritesheets/robots/robot_blue.json')
+    this.load.image('lock', 'res/sprites/red_lock.png')
+    this.load.image('Level 1', 'res/tilemaps/level1/Level1_1.png')
+    this.load.image('Level 2', 'res/tilemaps/level1/Level1_1.png')
+    this.load.image('Level 3', 'res/tilemaps/level3/level3_1.png')
+    this.load.image('Level 4', 'res/tilemaps/level4/level4_1.png')
+    this.load.image('Level 5', 'res/tilemaps/level5/level5_1.png')
+    this.load.image('Level 6', 'res/tilemaps/level6/level6_1.png')
   }
 
   startScene(): void {
@@ -93,15 +100,52 @@ export default class MainMenu extends Scene {
     initLabel(this,"levelSelect",new Vec2(center.x, center.y - 300),"Level Select");
 
     //  Level Select - Buttons
-    let levelData = getCookie('levelData')
-    // if (levelData) {
-      initButtonHandler(this,"levelSelect",new Vec2(center.x - 200, center.y - 150),"Level 1",MENU_EVENT.LOAD_LVL_1);
-      let bt2 = initButtonHandler(this,"levelSelect",new Vec2(center.x - 200, center.y - 50),"Level 2",MENU_EVENT.LOAD_LVL_2);
-      let bt3 = initButtonHandler(this,"levelSelect",new Vec2(center.x - 200, center.y + 50),"Level 3",MENU_EVENT.LOAD_LVL_3);
-      let bt4 = initButtonHandler(this,"levelSelect",new Vec2(center.x + 200, center.y - 150),"Level 4",MENU_EVENT.LOAD_LVL_4);
-      let bt5 = initButtonHandler(this,"levelSelect",new Vec2(center.x + 200, center.y - 50),"Level 5",MENU_EVENT.LOAD_LVL_5);
-      let bt6 = initButtonHandler(this,"levelSelect",new Vec2(center.x + 200, center.y + 50),"Level 6",MENU_EVENT.LOAD_LVL_6);
-    // }`
+    let bt1 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x - 200, center.y - 150),"Level 1",MENU_EVENT.LOAD_LVL_1);
+    let bt2 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x, center.y - 150),"Level 2",MENU_EVENT.LOAD_LVL_2);
+    let bt3 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x + 200, center.y - 150),"Level 3",MENU_EVENT.LOAD_LVL_3);
+    let bt4 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x - 200, center.y + 100),"Level 4",MENU_EVENT.LOAD_LVL_4);
+    let bt5 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x, center.y + 100),"Level 5",MENU_EVENT.LOAD_LVL_5);
+    let bt6 = initLevelSelectButton(this,"levelSelect",new Vec2(center.x + 200, center.y + 100),"Level 6",MENU_EVENT.LOAD_LVL_6);
+
+    let str = getCookie('levelData')
+    // Check if str is undefined.
+    if (str) { // Determine which levels to unlock and lock
+      let o = JSON.parse(str)
+      if (o.lock1) {
+        console.log('lock 1')
+      }
+      if (o.lock2) {
+        console.log('lock 2')
+      }
+      if (o.lock3) {
+        console.log('lock 3')
+      }
+      if (o.lock4) {
+        console.log('lock 4')
+      }
+      if (o.lock5) {
+        console.log('lock 5')
+      }
+      if (o.lock6) {
+        console.log('lock 6')
+      }
+    } else { // lock all levels
+      console.log('lock all levels')
+      let l1 = this.add.sprite('lock', 'levelSelect')
+      l1.position = bt1.position.clone()
+      let l2 = this.add.sprite('lock', 'levelSelect')
+      l2.position = bt2.position.clone()
+      let l3 = this.add.sprite('lock', 'levelSelect')
+      l3.position = bt3.position.clone()
+      let l4 = this.add.sprite('lock', 'levelSelect')
+      l4.position = bt4.position.clone()
+      let l5 = this.add.sprite('lock', 'levelSelect')
+      l5.position = bt5.position.clone()
+      let l6 = this.add.sprite('lock', 'levelSelect')
+      l6.position = bt6.position.clone()
+    }
+
+      
 
     // Create back button
     initButtonHandler(this,"levelSelect",new Vec2(center.x, center.y + 250),"Back",MENU_EVENT.MENU);    

@@ -73,8 +73,7 @@ export default class SplashScreen extends Scene {
     // When the play button is clicked, go to the next scene
     startBtn.onClick = () => {
       this.sceneManager.changeToScene(MainMenu, {}, this.sceneOptions);
-      // this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'select', loop: false})
-    };
+    }
     startBtn.onEnter = () => {
       startBtn.fontSize = 32;
       startBtn.size = new Vec2(255, 55);
