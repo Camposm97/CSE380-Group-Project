@@ -457,16 +457,17 @@ export default class EntityManager {
       (<PlayerController>this.player._ai).canPush
     ) {
       (<PlayerController>this.player._ai).isPushing = true;
-      let v = new Vec2(
-        ((<PlayerController>this.player._ai).speed / 2) *
-          (<PlayerController>this.player._ai).lookDirection.x,
-        ((<PlayerController>this.player._ai).speed / 2) *
-          (<PlayerController>this.player._ai).lookDirection.y *
-          -1
-      );
-      v.scale(deltaT);
-      if ((<PlayerController>this.player._ai).isMoving)
-        this.pushPullEnemy.push(v);
+      // let v = new Vec2(
+      //   ((<PlayerController>this.player._ai).speed / 2) *
+      //     (<PlayerController>this.player._ai).lookDirection.x,
+      //   ((<PlayerController>this.player._ai).speed / 2) *
+      //     (<PlayerController>this.player._ai).lookDirection.y *
+      //     -1
+      // );
+      // v.scale(deltaT);
+      if ((<PlayerController>this.player._ai).isMoving) {
+        this.pushPullEnemy.push((<PlayerController>this.player._ai).movement);
+      }
     } else {
       this.pushPullEnemy = null;
     }
@@ -475,16 +476,22 @@ export default class EntityManager {
       for (let i = 0; i < this.pushPullBlocks.length; i++) {
         if ((<PlayerController>this.player._ai).canPush) {
           (<PlayerController>this.player._ai).isPushing = true;
-          let v = new Vec2(
-            ((<PlayerController>this.player._ai).speed / 2) *
-              (<PlayerController>this.player._ai).lookDirection.x,
-            ((<PlayerController>this.player._ai).speed / 2) *
-              (<PlayerController>this.player._ai).lookDirection.y *
-              -1
-          );
-          v.scale(deltaT);
-          if ((<PlayerController>this.player._ai).isMoving)
-            this.pushPullBlocks[i].push(v);
+          // let v = new Vec2(
+          //   ((<PlayerController>this.player._ai).speed / 2) *
+          //     (<PlayerController>this.player._ai).lookDirection.x,
+          //   ((<PlayerController>this.player._ai).speed / 2) *
+          //     (<PlayerController>this.player._ai).lookDirection.y *
+          //     -1
+          // );
+          // v.scale(deltaT);
+          if ((<PlayerController>this.player._ai).isMoving) {
+            console.log(
+              (<PlayerController>this.player._ai).movement.toString()
+            );
+            this.pushPullBlocks[i].push(
+              (<PlayerController>this.player._ai).movement
+            );
+          }
         } else {
           this.pushPullBlocks = new Array();
           break;

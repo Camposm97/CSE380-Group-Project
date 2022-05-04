@@ -78,6 +78,7 @@ export default class PlayerController implements BattlerAI {
   canPush: boolean;
   isPushing: boolean;
   isMoving: boolean;
+  movement: Vec2;
 
   initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
     this.owner = owner;
@@ -127,6 +128,7 @@ export default class PlayerController implements BattlerAI {
     this.canPush = false;
     this.isPushing = false;
     this.isMoving = false;
+    this.movement = new Vec2(0, 0);
   }
 
   activate(options: Record<string, any>): void {}
@@ -427,10 +429,15 @@ export default class PlayerController implements BattlerAI {
       if (this.isPushing) {
         moveSpeed = moveSpeed / 2;
       }
-      let movement = Vec2.UP.scaled(forwardAxis * moveSpeed);
-      movement = movement.add(new Vec2(horizontalAxis * moveSpeed, 0));
-      movement = movement.scaled(deltaT);
-      this.owner.move(movement);
+      this.movement = Vec2.UP.scaled(forwardAxis * moveSpeed);
+      this.movement = this.movement.add(
+        new Vec2(horizontalAxis * moveSpeed, 0)
+      );
+      this.movement = this.movement.scaled(deltaT);
+      let nextMove = this.movement.clone();
+      // console.log(nextMove.toString());
+      this.owner.move(nextMove);
+
       // let newPos = this.owner.position.clone().add(movement.scaled(deltaT));
 
       // this.path = this.owner
@@ -475,7 +482,9 @@ export default class PlayerController implements BattlerAI {
     } else {
       this.doAnimation(PlayerAction.IDLE);
       this.isMoving = false;
+      this.movement = new Vec2(0, 0);
     }
+    console.log(this.movement.toString());
   }
 
   handleAttack(): void {

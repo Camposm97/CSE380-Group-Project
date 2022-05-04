@@ -43,6 +43,7 @@ export default class Block {
   }
 
   push(direction: Vec2) {
-    this.owner.move(direction);
+    let move = direction.clone();
+    this.owner.move(move);
   }
 }
