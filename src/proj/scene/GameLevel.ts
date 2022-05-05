@@ -104,6 +104,7 @@ export default abstract class GameLevel extends Scene {
     this.load.audio("suit_yellow", "res/sound/suit_yellow.mp3");
     this.load.audio("suit_orange", "res/sound/suit_orange.mp3");
     this.load.audio("suit_red", "res/sound/suit_red.mp3");
+    this.load.audio("level_complete", "res/sound/level_complete.mp3");
   }
 
   loadLevelFromFolder(levelName: string): void {
@@ -355,6 +356,11 @@ export default abstract class GameLevel extends Scene {
       if (!this.gameOver) {
         this.scoreTimer.pause();
         this.glm.showRoomComplete();
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+          key: "level_complete",
+          loop: false,
+          holdReference: false,
+        });
       }
       this.gameOver = true;
       (<PlayerController>this.em.getPlayer()._ai).setFreeze(true); //keep player still once they reach the goal
