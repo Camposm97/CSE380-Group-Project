@@ -19,6 +19,7 @@ import { Level6_1 } from "./Level6";
 import { Tutorial1_1 } from "./Tutorial";
 import { Leaderboard } from "../game_system/Leaderboard";
 import { LevelWriter } from "../game_system/LevelWriter";
+import { LevelIntro1, LevelIntro2, LevelIntro3, LevelIntro4, LevelIntro5,LevelIntro6 } from "./LevelIntro";
 
 export default class MainMenu extends Scene {
   private mainMenu: Layer;
@@ -424,7 +425,7 @@ export default class MainMenu extends Scene {
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.NEW_GAME:
-          this.sceneManager.changeToScene(Level1_1, {});
+          this.sceneManager.changeToScene(LevelIntro1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.LEVEL_SELECT:
