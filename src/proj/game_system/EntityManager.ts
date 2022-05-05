@@ -423,16 +423,37 @@ export default class EntityManager {
       this.player.collisionShape.overlaps(this.nearestBomb.innerBoundary) &&
       !this.nearestBomb.isDestroyed
     ) {
+      if ((<PlayerController>this.player._ai).coatColor != CoatColor.RED) {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+          key: "suit_red",
+          loop: false,
+          holdReference: true,
+        });
+      }
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.RED);
     } else if (
       this.player.collisionShape.overlaps(this.nearestBomb.middleBoundary) &&
       !this.nearestBomb.isDestroyed
     ) {
+      if ((<PlayerController>this.player._ai).coatColor != CoatColor.ORANGE) {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+          key: "suit_orange",
+          loop: false,
+          holdReference: true,
+        });
+      }
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.ORANGE);
     } else if (
       this.player.collisionShape.overlaps(this.nearestBomb.outerBoundary) &&
       !this.nearestBomb.isDestroyed
     ) {
+      if ((<PlayerController>this.player._ai).coatColor != CoatColor.YELLOW) {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+          key: "suit_yellow",
+          loop: false,
+          holdReference: true,
+        });
+      }
       (<PlayerController>this.player._ai).setCoatColor(CoatColor.YELLOW);
     } else (<PlayerController>this.player._ai).nearBomb = false;
   }

@@ -62,6 +62,27 @@ export default abstract class GameLevel extends Scene {
       "blueStatue",
       "res/spritesheets/robots/robot_statue_blue.json"
     );
+    // this.load.spritesheet(
+    //   "yellowRobot",
+    //   "res/spritesheets/robots/robot_yellow.json"
+    // );
+    this.load.spritesheet(
+      "yellowMouse",
+      "res/spritesheets/robots/robot_mouse_yellow.json"
+    );
+    // this.load.spritesheet(
+    //   "yellowStatue",
+    //   "res/spritesheets/robots/robot_statue_yellow.json"
+    // );
+    // this.load.spritesheet("redRobot", "res/spritesheets/robots/robot_red.json");
+    this.load.spritesheet(
+      "redMouse",
+      "res/spritesheets/robots/robot_mouse_red.json"
+    );
+    // this.load.spritesheet(
+    //   "redStatue",
+    //   "res/spritesheets/robots/robot_statue_red.json"
+    // );
     this.load.spritesheet("projectile", "res/spritesheets/projectile.json");
     this.load.spritesheet("bomb", "res/spritesheets/explode.json");
     this.load.spritesheet("greenFlag", "res/spritesheets/green_flag.json");
@@ -81,6 +102,10 @@ export default abstract class GameLevel extends Scene {
     this.load.audio("flag_place", "res/sound/flag_place.wav");
     this.load.audio("damage", "res/sound/damage.wav");
     this.load.audio("cheat", "res/sound/cheat.wav");
+    this.load.audio("suit_yellow", "res/sound/suit_yellow.mp3");
+    this.load.audio("suit_orange", "res/sound/suit_orange.mp3");
+    this.load.audio("suit_red", "res/sound/suit_red.mp3");
+    this.load.audio("level_complete", "res/sound/level_complete.mp3");
   }
 
   loadLevelFromFolder(levelName: string): void {
@@ -193,6 +218,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.SHOW_CONTROLS);
     this.receiver.subscribe(Events.EXIT_GAME);
     this.receiver.subscribe(Events.PLAYER_WON);
+    this.receiver.subscribe(Events.PLAYER_SKIP);
     this.receiver.subscribe(Events.ROOM_COMPLETE);
     this.receiver.subscribe(Events.PLAYER_DIED);
     this.receiver.subscribe(Events.SHOW_CHEATS);
@@ -288,6 +314,21 @@ export default abstract class GameLevel extends Scene {
             key: "levelMusic",
           });
         break;
+      case Events.PLAYER_SKIP:
+        this.viewport.setZoomLevel(1);
+        this.sceneManager.changeToScene(GameOver, {
+          win: true,
+          currentScore: this.currentScore,
+          timeLeft: 0,
+          nextLvl: this.nextRoom,
+          isTutorial: this.isTutorial,
+          lastLevel: this.lastLevel,
+        });
+        if (this.lastLevel)
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+            key: "levelMusic",
+          });
+        break;
       case Events.PLAYER_DIED:
         console.log("player died");
         this.glm.showFadeIn();
@@ -335,6 +376,11 @@ export default abstract class GameLevel extends Scene {
       if (!this.gameOver) {
         this.scoreTimer.pause();
         this.glm.showRoomComplete();
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+          key: "level_complete",
+          loop: false,
+          holdReference: false,
+        });
       }
       this.gameOver = true;
       (<PlayerController>this.em.getPlayer()._ai).setFreeze(true); //keep player still once they reach the goal

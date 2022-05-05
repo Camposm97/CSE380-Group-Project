@@ -74,6 +74,7 @@ export enum Events {
   SHOW_CHEATS = "SHOW_CHEATS",
   SHOW_ALL_BOMBS = "SHOW_ALL_BOMBS",
   END_I_FRAMES = "END_I_FRAMES",
+  PLAYER_SKIP = "PLAYER_SKIP",
 }
 
 export enum Statuses {
