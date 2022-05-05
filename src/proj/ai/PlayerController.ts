@@ -320,7 +320,9 @@ export default class PlayerController implements BattlerAI {
   }
 
   kill(): void {
+    if (Cheats.invincible) return;
     this.health = 0;
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: 'damage', loop: false})
     this.doAnimation(PlayerAction.DAMAGE);
     this.owner.setAIActive(false, {});
     this.owner.isCollidable = false;
