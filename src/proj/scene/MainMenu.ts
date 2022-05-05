@@ -22,6 +22,7 @@ import { LevelWriter } from "../game_system/LevelWriter";
 import { LevelIntro1, LevelIntro2, LevelIntro3, LevelIntro4, LevelIntro5,LevelIntro6 } from "./LevelIntro";
 
 export default class MainMenu extends Scene {
+  private background: Layer
   private mainMenu: Layer;
   private levelSelect: Layer;
   private controls: Layer;
@@ -43,6 +44,7 @@ export default class MainMenu extends Scene {
   startScene(): void {
     this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
     let center = this.viewport.getCenter().clone();
+    this.initBackground(center)
     this.initMainMenuScene(center);
     this.initLevelSelectScene(center);
     this.initControlScene(center);
@@ -65,49 +67,91 @@ export default class MainMenu extends Scene {
     this.receiver.subscribe(MenuEvents.LEADERBOARD);
   }
 
-  initMainMenuScene(v: Vec2): void {
+  initBackground(c: Vec2): void {
+    const layer = 'background'
+    this.background = this.addUILayer(layer)
+    let x = Math.round(Math.random() * 5)
+    console.log(`x=${x}`)
+    let img, scaleX, scaleY
+    switch (x) {
+      case 0:
+        img = this.add.sprite('Level 1', layer)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 1:
+        img = this.add.sprite('Level 2', layer)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 2:
+        // TODO (Tuyen)
+        break
+      case 3:
+        // TODO (Tuyen)
+        break
+      case 4:
+        img = this.add.sprite('Level 5', layer)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+      case 5:
+        img = this.add.sprite('Level 6', layer)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+    }
+  }
+
+  initMainMenuScene(c: Vec2): void {
     this.mainMenu = this.addUILayer("mainMenu");
-    let c = this.viewport.getCenter().clone();
     const layer = "mainMenu";
     initButtonHandler(
       this,
       layer,
-      new Vec2(v.x, v.y - 225),
+      new Vec2(c.x, c.y - 225),
       "How to Play",
       MenuEvents.HOW_TO_PLAY
     );
     initButtonHandler(
       this,
       layer,
-      new Vec2(v.x, v.y - 150),
+      new Vec2(c.x, c.y - 150),
       "New Game",
       MenuEvents.NEW_GAME
     );
     initButtonHandler(
       this,
       layer,
-      new Vec2(v.x, v.y - 75),
+      new Vec2(c.x, c.y - 75),
       "Level Select",
       MenuEvents.LEVEL_SELECT
     );
     initButtonHandler(
       this,
       layer,
-      new Vec2(v.x, v.y),
+      new Vec2(c.x, c.y),
       "Controls",
       MenuEvents.CONTROLS
     );
     initButtonHandler(
       this,
       layer,
-      new Vec2(v.x, v.y + 75),
+      new Vec2(c.x, c.y + 75),
       "Help",
       MenuEvents.HELP
     );
     initButtonHandler(
       this,
       layer,
-      new Vec2(v.x, v.y + 150),
+      new Vec2(c.x, c.y + 150),
       "Leaderboard",
       MenuEvents.LEADERBOARD
     );
@@ -120,7 +164,7 @@ export default class MainMenu extends Scene {
     r2.position = new Vec2(c.x + 300, c.y);
   }
 
-  initLevelSelectScene(center: Vec2): void {
+  initLevelSelectScene(c: Vec2): void {
     // Level Select Boards Scene
     const LAYER = "levelSelect";
     this.levelSelect = this.addUILayer(LAYER);
@@ -130,7 +174,7 @@ export default class MainMenu extends Scene {
     initLabel(
       this,
       "levelSelect",
-      new Vec2(center.x, center.y - 300),
+      new Vec2(c.x, c.y - 300),
       "Level Select"
     );
 
@@ -138,42 +182,42 @@ export default class MainMenu extends Scene {
     initLevelSelectButton(
       this,
       LAYER,
-      new Vec2(center.x - 200, center.y - 150),
+      new Vec2(c.x - 200, c.y - 150),
       "Level 1",
       MenuEvents.LOAD_LVL_1
     );
     let bt2 = initLevelSelectButton(
       this,
       LAYER,
-      new Vec2(center.x, center.y - 150),
+      new Vec2(c.x, c.y - 150),
       "Level 2",
       MenuEvents.LOAD_LVL_2
     );
     let bt3 = initLevelSelectButton(
       this,
       LAYER,
-      new Vec2(center.x + 200, center.y - 150),
+      new Vec2(c.x + 200, c.y - 150),
       "Level 3",
       MenuEvents.LOAD_LVL_3
     );
     let bt4 = initLevelSelectButton(
       this,
       LAYER,
-      new Vec2(center.x - 200, center.y + 100),
+      new Vec2(c.x - 200, c.y + 100),
       "Level 4",
       MenuEvents.LOAD_LVL_4
     );
     let bt5 = initLevelSelectButton(
       this,
       LAYER,
-      new Vec2(center.x, center.y + 100),
+      new Vec2(c.x, c.y + 100),
       "Level 5",
       MenuEvents.LOAD_LVL_5
     );
     let bt6 = initLevelSelectButton(
       this,
       LAYER,
-      new Vec2(center.x + 200, center.y + 100),
+      new Vec2(c.x + 200, c.y + 100),
       "Level 6",
       MenuEvents.LOAD_LVL_6
     );
@@ -189,68 +233,68 @@ export default class MainMenu extends Scene {
     initButtonHandler(
       this,
       "levelSelect",
-      new Vec2(center.x, center.y + 250),
+      new Vec2(c.x, c.y + 250),
       "Back",
       MenuEvents.MENU
     );
   }
 
-  initControlScene(center: Vec2): void {
+  initControlScene(c: Vec2): void {
     this.controls = this.addUILayer("controls");
     this.controls.setHidden(true);
-    initLabel(this, "controls", new Vec2(center.x, center.y - 300), "Controls");
+    initLabel(this, "controls", new Vec2(c.x, c.y - 300), "Controls");
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y - 200),
+      new Vec2(c.x, c.y - 200),
       "ESC - pause the game"
     );
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y - 150),
+      new Vec2(c.x, c.y - 150),
       "P - panic button, resets the room to its original state"
     );
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y - 100),
+      new Vec2(c.x, c.y - 100),
       "F - to place flag"
     );
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y - 50),
+      new Vec2(c.x, c.y - 50),
       "W/Up-Arrow to move up"
     );
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y),
+      new Vec2(c.x, c.y),
       "A/Left-Arrow to move left"
     );
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y + 50),
+      new Vec2(c.x, c.y + 50),
       "S/Down-Arrow to move down"
     );
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y + 100),
+      new Vec2(c.x, c.y + 100),
       "D/Right-Arrow to move right"
     );
     initLabel(
       this,
       "controls",
-      new Vec2(center.x, center.y + 150),
+      new Vec2(c.x, c.y + 150),
       "Space/Left-Click to attack"
     );
     initButtonHandler(
       this,
       "controls",
-      new Vec2(center.x, center.y + 250),
+      new Vec2(c.x, c.y + 250),
       "Back",
       MenuEvents.MENU
     );
@@ -262,11 +306,11 @@ export default class MainMenu extends Scene {
     });
   }
 
-  initHelpScene(center: Vec2) {
+  initHelpScene(c: Vec2) {
     // Controls Scene
     this.help = this.addUILayer("help");
     this.help.setHidden(true);
-    initLabel(this, "help", new Vec2(center.x, center.y - 350), "Help");
+    initLabel(this, "help", new Vec2(c.x, c.y - 350), "Help");
 
     const strAbout1 = "Developed by Andrew Ojeda, Michael Campos, and Tuyen Vo";
     const strAbout2 =
@@ -287,49 +331,49 @@ export default class MainMenu extends Scene {
     const lblAbout1 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y - 250),
+      new Vec2(c.x, c.y - 250),
       strAbout1
     );
     const lblAbout2 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y - 150),
+      new Vec2(c.x, c.y - 150),
       strAbout2
     );
     const lblAbout3 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y - 100),
+      new Vec2(c.x, c.y - 100),
       strAbout3
     );
     const lblAbout4 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y - 50),
+      new Vec2(c.x, c.y - 50),
       strAbout4
     );
     const lblAbout5 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y - 5),
+      new Vec2(c.x, c.y - 5),
       strAbout5
     );
     const lblAbout6 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y + 50),
+      new Vec2(c.x, c.y + 50),
       strAbout6
     );
     const lblAbout7 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y + 100),
+      new Vec2(c.x, c.y + 100),
       strAbout7
     );
     const lblAbout8 = initLabel(
       this,
       "help",
-      new Vec2(center.x, center.y + 150),
+      new Vec2(c.x, c.y + 150),
       strAbout8
     );
 
@@ -347,36 +391,36 @@ export default class MainMenu extends Scene {
     initButtonHandler(
       this,
       "help",
-      new Vec2(center.x, center.y + 250),
+      new Vec2(c.x, c.y + 250),
       "Back",
       MenuEvents.MENU
     );
   }
 
-  initLeaderboardScene(center: Vec2): void {
+  initLeaderboardScene(c: Vec2): void {
     // Leader Boards Scene
     const LAYER = "leaderboard";
     this.leaderboard = this.addUILayer(LAYER);
     this.leaderboard.setHidden(true);
 
     // Leader Boards Header
-    initLabel(this, LAYER, new Vec2(center.x, center.y - 300), "Leaderboard");
-    initLabel(this, LAYER, new Vec2(center.x - 300, center.y - 200), "Name");
+    initLabel(this, LAYER, new Vec2(c.x, c.y - 300), "Leaderboard");
+    initLabel(this, LAYER, new Vec2(c.x - 300, c.y - 200), "Name");
     initLabel(
       this,
       LAYER,
-      new Vec2(center.x + 300, center.y - 200),
+      new Vec2(c.x + 300, c.y - 200),
       "High Score"
     );
 
     let lb = new Leaderboard();
-    lb.display(this, LAYER, center);
+    lb.display(this, LAYER, c);
 
     // Leader Boards - Back Button
     initButtonHandler(
       this,
       LAYER,
-      new Vec2(center.x, center.y + 250),
+      new Vec2(c.x, c.y + 250),
       "Back",
       MenuEvents.MENU
     );
@@ -387,6 +431,7 @@ export default class MainMenu extends Scene {
       let event = this.receiver.getNextEvent();
       switch (event.type) {
         case MenuEvents.MENU:
+          this.background.setHidden(false)
           this.mainMenu.setHidden(false);
           this.help.setHidden(true);
           this.controls.setHidden(true);
@@ -402,6 +447,7 @@ export default class MainMenu extends Scene {
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.LEVEL_SELECT:
+          this.background.setHidden(true)
           this.mainMenu.setHidden(true);
           this.levelSelect.setHidden(false);
           break;
@@ -433,14 +479,17 @@ export default class MainMenu extends Scene {
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.CONTROLS:
+          this.background.setHidden(true)
           this.mainMenu.setHidden(true);
           this.controls.setHidden(false);
           break;
         case MenuEvents.HELP:
+          this.background.setHidden(true)
           this.help.setHidden(false);
           this.mainMenu.setHidden(true);
           break;
         case MenuEvents.LEADERBOARD:
+          this.background.setHidden(true)
           this.leaderboard.setHidden(false);
           this.mainMenu.setHidden(true);
           break;
