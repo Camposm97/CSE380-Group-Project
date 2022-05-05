@@ -101,6 +101,7 @@ export default class GameOver extends Scene {
 
           if (this.lastLevel) {
             // Check if this is the last room of the level
+            lblStatus.text = 'Level Complete!'
             btOk.text = "Next Level";
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
               key: "victory",
