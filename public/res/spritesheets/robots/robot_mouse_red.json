@@ -1,6 +1,6 @@
 {
     "name": "Red Robot Mouse",
-    "spriteSheetImage": "rm_red.png",
+    "spriteSheetImage": "robot_mouse_red.png",
     "spriteWidth": 128,
     "spriteHeight": 128,
     "topBuffer": 0,

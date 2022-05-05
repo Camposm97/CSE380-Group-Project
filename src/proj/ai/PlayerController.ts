@@ -545,7 +545,6 @@ export default class PlayerController implements BattlerAI {
   }
 
   setFreeze(freeze: boolean): void {
-    console.log("freeze player");
     this.freeze = freeze;
   }
 }

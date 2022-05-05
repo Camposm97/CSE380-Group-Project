@@ -52,7 +52,6 @@ export default class BlueRobotAI implements RobotAI {
 
     if (options) {
       if (options.behavior === "secondary") {
-        console.log("mainbehavior set to false");
         this.mainBehavior = false;
       }
       if (options.time) {

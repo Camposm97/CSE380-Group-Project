@@ -380,7 +380,7 @@ export class GameLayerManager {
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
         case CheatCode.SKIP_LEVEL:
-          this.emitter.fireEvent(Events.PLAYER_WON);
+          this.emitter.fireEvent(Events.PLAYER_SKIP);
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
@@ -430,7 +430,7 @@ export class GameLayerManager {
       this.healthDisplay[i] = this.scene.add.sprite("health", LayerType.HUD);
       this.healthDisplay[i].position = new Vec2(12, 10);
       this.healthDisplay[i].position.add(new Vec2(i * 16, 0));
-      this.healthDisplay[i].scale = new Vec2(.5,.5)
+      this.healthDisplay[i].scale = new Vec2(0.5, 0.5);
       this.healthDisplay[i].visible = true;
     }
   }

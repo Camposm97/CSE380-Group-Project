@@ -99,8 +99,6 @@ export default class AudioManager {
   ): AudioBufferSourceNode {
     // Get audio buffer
     let buffer = ResourceManager.getInstance().getAudio(key);
-    console.log(key);
-    console.log(buffer);
 
     // Create a sound source
     var source = this.audioCtx.createBufferSource();
