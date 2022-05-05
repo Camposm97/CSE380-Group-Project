@@ -81,9 +81,10 @@ export default class GameOver extends Scene {
               currentScore: this.currentScore + this.timeLeft,
             });
         } else {
-          this.emitter.fireEvent(GameEventType.STOP_SOUND, {
-            key: "levelMusic",
-          });
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "levelMusic"});
+        }
+        if (this.lastLevel) {
+          btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
         }
       } else {
         // We're in the real game and we won :)
