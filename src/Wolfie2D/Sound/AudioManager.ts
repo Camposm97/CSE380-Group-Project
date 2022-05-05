@@ -99,6 +99,8 @@ export default class AudioManager {
   ): AudioBufferSourceNode {
     // Get audio buffer
     let buffer = ResourceManager.getInstance().getAudio(key);
+    console.log(key);
+    console.log(buffer);
 
     // Create a sound source
     var source = this.audioCtx.createBufferSource();
@@ -158,7 +160,6 @@ export default class AudioManager {
    */
   protected stopSound(key: string): void {
     let sound = this.currentSounds.get(key);
-    console.log(sound);
     if (sound) {
       sound.stop();
       this.currentSounds.delete(key);
@@ -228,7 +229,6 @@ export default class AudioManager {
 
       if (event.type === GameEventType.STOP_SOUND) {
         let soundKey = event.data.get("key");
-        console.log(soundKey);
         this.stopSound(soundKey);
       }
 
