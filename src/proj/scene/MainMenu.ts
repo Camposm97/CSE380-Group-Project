@@ -2,7 +2,7 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
-import { LEVEL_SAVE_DATA, MenuEvents } from "./Constants";
+import {  MenuEvents } from "./Constants";
 import {
   initButtonHandler,
   initLabel,
@@ -184,33 +184,6 @@ export default class MainMenu extends Scene {
     if (lw.isLevel5Locked()) initLock(this, LAYER, bt5);
     if (lw.isLevel6Locked()) initLock(this, LAYER, bt6);
 
-    // let str = localStorage.getItem(LEVEL_SAVE_DATA)
-    // Check if str is undefined.
-    // if (str) { // Determine which levels to unlock and lock
-    //   let saveData = JSON.parse(str)
-    //   if (saveData.lock2) {
-    //     initLock(this, LAYER, bt2)
-    //   }
-    //   if (saveData.lock3) {
-    //     initLock(this, LAYER, bt3)
-    //   }
-    //   if (saveData.lock4) {
-    //     initLock(this, LAYER, bt4)
-    //   }
-    //   if (saveData.lock5) {
-    //     initLock(this, LAYER, bt5)
-    //   }
-    //   if (saveData.lock6) {
-    //     initLock(this, LAYER, bt6)
-    //   }
-    // } else { // lock all levels
-    //   initLock(this, LAYER, bt2)
-    //   initLock(this, LAYER, bt3)
-    //   initLock(this, LAYER, bt4)
-    //   initLock(this, LAYER, bt5)
-    //   initLock(this, LAYER, bt6)
-    // }
-
     // Create back button
     initButtonHandler(
       this,
@@ -308,7 +281,7 @@ export default class MainMenu extends Scene {
     const strAbout7 =
       "Now he will have to brave the Al robots he was creating to escape Wolfie 2D or be forever stuck.";
     const strAbout8 =
-      "Cheat Codes: invincible, skip, showAllBombs, unlock-all-levels, 1, 2, 3, 4, 5, 6";
+      "Cheat Codes: invincible, skip, showAllBombs, unlockAllLvls, 1, 2, 3, 4, 5, 6, ending";
 
     const lblAbout1 = initLabel(
       this,

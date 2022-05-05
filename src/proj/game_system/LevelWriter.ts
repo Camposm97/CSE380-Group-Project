@@ -21,6 +21,15 @@ export class LevelWriter {
         }
     }
 
+    unlockAllLevels() {
+        this.o.lock2 = false
+        this.o.lock3 = false
+        this.o.lock4 = false
+        this.o.lock5= false
+        this.o.lock6 = false
+        this.save()
+    }
+
     unlockLevel(name: string) {
         switch (name) {
             case 'Level2_1':
