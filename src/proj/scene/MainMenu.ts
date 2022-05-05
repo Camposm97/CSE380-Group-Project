@@ -348,7 +348,7 @@ export default class MainMenu extends Scene {
     const strAbout7 =
       "Now he will have to brave the Al robots he was creating to escape Wolfie 2D or be forever stuck.";
     const strAbout8 =
-      "Cheat Codes: invincible, skip, showAllBombs, unlockAllLvls, 1, 2, 3, 4, 5, 6, ending";
+      "Cheat Codes: invincible, skip, showAllBombs, unlockAllLvls, ending";
 
     const lblAbout1 = initLabel(
       this,
@@ -478,9 +478,6 @@ export default class MainMenu extends Scene {
           this.background.setHidden(true)
           this.mainMenu.setHidden(true);
           this.levelSelect.setHidden(false);
-          break;
-        case MenuEvents.LEVEL_LOCKED:
-          console.log("hello world!!!!");
           break;
         case MenuEvents.LOAD_LVL_1:
           this.sceneManager.changeToScene(Level1_1, {});

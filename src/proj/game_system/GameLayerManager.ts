@@ -15,7 +15,6 @@ import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import Ending from "../scene/Ending";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import { LevelWriter } from "./LevelWriter";
 
@@ -386,37 +385,8 @@ export class GameLayerManager {
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
-        case CheatCode.LVL_1:
-          this.emitter.fireEvent(CheatCode.LVL_1)
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_2:
-          this.emitter.fireEvent(CheatCode.LVL_2)
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_3:
-          this.emitter.fireEvent(CheatCode.LVL_3)
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_4:
-          this.emitter.fireEvent(CheatCode.LVL_4)
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_5:
-          this.emitter.fireEvent(CheatCode.LVL_5)
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_6:
-          this.emitter.fireEvent(CheatCode.LVL_6)
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
         case CheatCode.ENDING:
+          this.emitter.fireEvent(CheatCode.ENDING)
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;

@@ -18,8 +18,7 @@ import { GameLayerManager } from "../game_system/GameLayerManager";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import { Level1_1 } from "./Level1";
-import { Level2_1 } from "./Level2";
+import Ending from "./Ending";
 
 export default abstract class GameLevel extends Scene {
   private isTutorial: boolean;
@@ -225,7 +224,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.SHOW_CHEATS);
     this.receiver.subscribe(Events.SHOW_ALL_BOMBS);
     this.receiver.subscribe(GameEventType.KEY_UP);
-    this.receiver.subscribe([CheatCode.LVL_1, CheatCode.LVL_2, CheatCode.LVL_3, CheatCode.LVL_4, CheatCode.LVL_5, CheatCode.LVL_6])
+    this.receiver.subscribe(CheatCode.ENDING)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -247,23 +246,8 @@ export default abstract class GameLevel extends Scene {
 
   handleEvent(event: GameEvent): void {
     switch (event.type) {
-      case CheatCode.LVL_1:
-        this.sceneManager.changeToScene(Level1_1, {})
-        break
-      case CheatCode.LVL_2:
-        this.sceneManager.changeToScene(Level1_1, {})
-        break
-      case CheatCode.LVL_3:
-        this.sceneManager.changeToScene(Level1_1, {})
-        break
-      case CheatCode.LVL_4:
-        this.sceneManager.changeToScene(Level1_1, {})
-        break
-      case CheatCode.LVL_5:
-        this.sceneManager.changeToScene(Level1_1, {})
-        break
-      case CheatCode.LVL_6:
-        this.sceneManager.changeToScene(Level1_1, {})
+      case CheatCode.ENDING:
+        this.sceneManager.changeToScene(Ending, {})
         break
       case GameEventType.KEY_UP:
         this.glm.identifyCheatCode();
