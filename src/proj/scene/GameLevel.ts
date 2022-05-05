@@ -19,6 +19,7 @@ import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Level1_1 } from "./Level1";
+import { Level2_1 } from "./Level2";
 
 export default abstract class GameLevel extends Scene {
   private isTutorial: boolean;

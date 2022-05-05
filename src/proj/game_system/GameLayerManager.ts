@@ -15,7 +15,7 @@ import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import { Ending } from "../scene/Ending";
+import Ending from "../scene/Ending";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import { LevelWriter } from "./LevelWriter";
 

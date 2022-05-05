@@ -38,6 +38,7 @@ export default class MainMenu extends Scene {
     this.load.image("Level 4", "res/tilemaps/level4/Level4_1.png");
     this.load.image("Level 5", "res/tilemaps/level5/Level5_1.png");
     this.load.image("Level 6", "res/tilemaps/level6/Level6_1.png");
+    this.load.image('dark_background', 'res/sprites/dark_background.png')
     this.load.audio("locked", "res/sound/bad_event.wav");
   }
 
@@ -68,21 +69,21 @@ export default class MainMenu extends Scene {
   }
 
   initBackground(c: Vec2): void {
-    const layer = 'background'
-    this.background = this.addUILayer(layer)
+    const LAYER = 'background'
+    this.background = this.addUILayer(LAYER)
     let x = Math.round(Math.random() * 5)
     console.log(`x=${x}`)
     let img, scaleX, scaleY
     switch (x) {
       case 0:
-        img = this.add.sprite('Level 1', layer)
+        img = this.add.sprite('Level 1', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) + 0.05
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05
         img.scale = new Vec2(scaleX, scaleY)
         break
       case 1:
-        img = this.add.sprite('Level 2', layer)
+        img = this.add.sprite('Level 2', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) + 0.05
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05
@@ -95,13 +96,14 @@ export default class MainMenu extends Scene {
         // TODO (Tuyen)
         break
       case 4:
-        img = this.add.sprite('Level 5', layer)
+        img = this.add.sprite('Level 5', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) - 0.15
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05
         img.scale = new Vec2(scaleX, scaleY)
+        break
       case 5:
-        img = this.add.sprite('Level 6', layer)
+        img = this.add.sprite('Level 6', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) - 0.15
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05
@@ -169,6 +171,12 @@ export default class MainMenu extends Scene {
     const LAYER = "levelSelect";
     this.levelSelect = this.addUILayer(LAYER);
     this.levelSelect.setHidden(true);
+
+    let bg = this.add.sprite('dark_background', LAYER)
+    bg.position = c
+    let scaleX = (bg.size.x / this.viewport.getView().x) - 0.15
+    let scaleY = (bg.size.y / this.viewport.getView().y) - 0.05
+    bg.scale = new Vec2(scaleX, scaleY)
 
     // Level Select Header
     initLabel(
@@ -242,6 +250,13 @@ export default class MainMenu extends Scene {
   initControlScene(c: Vec2): void {
     this.controls = this.addUILayer("controls");
     this.controls.setHidden(true);
+
+    let bg = this.add.sprite('dark_background', 'controls')
+    bg.position = c
+    let scaleX = (bg.size.x / this.viewport.getView().x) - 0.15
+    let scaleY = (bg.size.y / this.viewport.getView().y) - 0.05
+    bg.scale = new Vec2(scaleX, scaleY)
+
     initLabel(this, "controls", new Vec2(c.x, c.y - 300), "Controls");
     initLabel(
       this,
@@ -310,7 +325,14 @@ export default class MainMenu extends Scene {
     // Controls Scene
     this.help = this.addUILayer("help");
     this.help.setHidden(true);
-    initLabel(this, "help", new Vec2(c.x, c.y - 350), "Help");
+
+    let bg = this.add.sprite('dark_background', 'help')
+    bg.position = c
+    let scaleX = (bg.size.x / this.viewport.getView().x) - 0.15
+    let scaleY = (bg.size.y / this.viewport.getView().y) - 0.05
+    bg.scale = new Vec2(scaleX, scaleY)
+
+    initLabel(this, "help", new Vec2(c.x, c.y - 300), "Help");
 
     const strAbout1 = "Developed by Andrew Ojeda, Michael Campos, and Tuyen Vo";
     const strAbout2 =
@@ -402,6 +424,12 @@ export default class MainMenu extends Scene {
     const LAYER = "leaderboard";
     this.leaderboard = this.addUILayer(LAYER);
     this.leaderboard.setHidden(true);
+
+    let bg = this.add.sprite('dark_background', LAYER)
+    bg.position = c
+    let scaleX = (bg.size.x / this.viewport.getView().x) - 0.15
+    let scaleY = (bg.size.y / this.viewport.getView().y) - 0.05
+    bg.scale = new Vec2(scaleX, scaleY)
 
     // Leader Boards Header
     initLabel(this, LAYER, new Vec2(c.x, c.y - 300), "Leaderboard");

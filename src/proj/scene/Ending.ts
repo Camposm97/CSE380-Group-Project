@@ -14,7 +14,7 @@ enum Layer {
  * He is relieved to be free and swears to never forget to set a null pointer reference.
  * He then realizes he's late to lecture and scurries to his class.
  */
-export class Ending extends Scene {
+export default class Ending extends Scene {
     private prof: AnimatedSprite
     private pc: Sprite
     private c: Vec2
