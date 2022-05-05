@@ -1,5 +1,5 @@
-export const LEVEL_SAVE_DATA = 'level_save_data'
-export const LEADERBOARD_DATA = 'leaderboard_data'
+export const LEVEL_SAVE_DATA = "level_save_data";
+export const LEADERBOARD_DATA = "leaderboard_data";
 
 export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
   INVINCIBLE = "invincible",
@@ -12,7 +12,7 @@ export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
   LVL_4 = "4",
   LVL_5 = "5",
   LVL_6 = "6",
-  ENDING = "ending"
+  ENDING = "ending",
 }
 
 export const Cheats = {
@@ -47,7 +47,7 @@ export enum MenuEvents {
   CONTROLS = "controls",
   HELP = "about",
   LEADERBOARD = "leaderboard",
-  LEVEL_LOCKED = 'level_locked',
+  LEVEL_LOCKED = "level_locked",
   LOAD_LVL_1 = "load_lvl_1",
   LOAD_LVL_2 = "load_lvl_2",
   LOAD_LVL_3 = "load_lvl_3",
@@ -145,8 +145,8 @@ export enum PlayerAnimations {
   LOOK_LEFT_ORANGE = "LOOK_LEFT_ORANGE",
   LOOK_LEFT_RED = "LOOK_LEFT_RED",
   DAMAGE = "DAMAGE",
-  CRY = 'CRY',
-  HAPPY = 'HAPPY'
+  CRY = "CRY",
+  HAPPY = "HAPPY",
 }
 
 export enum RobotMouseAnimations {
@@ -167,6 +167,7 @@ export enum RobotAnimations {
   WALK_LEFT = "WALK_LEFT",
   DAMAGE = "DAMAGE",
   FROZEN = "FROZEN",
+  DANCE = "DANCE",
 }
 
 export enum RobotStatueAnimations {

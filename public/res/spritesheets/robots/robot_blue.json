@@ -124,6 +124,55 @@
           "duration": 10
         }
       ]
+    },
+    {
+      "name": "DANCE",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 30
+        },
+        {
+          "index": 3,
+          "duration": 30
+        },
+        {
+          "index": 0,
+          "duration": 30
+        },
+        {
+          "index": 3,
+          "duration": 30
+        },
+        {
+          "index": 12,
+          "duration": 30
+        },
+        {
+          "index": 9,
+          "duration": 30
+        },
+        {
+          "index": 12,
+          "duration": 30
+        },
+        {
+          "index": 9,
+          "duration": 30
+        },
+        {
+          "index": 0,
+          "duration": 15
+        },
+        {
+          "index": 3,
+          "duration": 15
+        },
+        {
+          "index": 12,
+          "duration": 15
+        }
+      ]
     }
   ]
 }
