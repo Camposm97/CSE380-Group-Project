@@ -269,6 +269,7 @@ export default abstract class GameLevel extends Scene {
           });
         break;
       case Events.PLAYER_DIED:
+        console.log("player died");
         this.glm.showFadeIn();
         new Timer(
           1000,
