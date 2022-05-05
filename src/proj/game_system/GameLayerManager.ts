@@ -16,7 +16,7 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
-import { LevelWriter } from "./LevelWriter";
+import { LU  } from "./LevelUnlocker";
 
 enum LayerType {
   PRIMARY = "primary",
@@ -374,11 +374,9 @@ export class GameLayerManager {
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
         case CheatCode.UNLOCK_ALL_LVLS:
-          Cheats.unlockAllLevels = !Cheats.unlockAllLevels;
+          LU.unlockAllLevels()
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          let lw = new LevelWriter()
-          lw.unlockAllLevels()
           break;
         case CheatCode.SKIP_LEVEL:
           this.emitter.fireEvent(Events.PLAYER_SKIP);

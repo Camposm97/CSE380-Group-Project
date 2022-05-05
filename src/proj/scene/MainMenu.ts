@@ -18,7 +18,7 @@ import { Level5_1 } from "./Level5";
 import { Level6_1 } from "./Level6";
 import { Tutorial1_1 } from "./Tutorial";
 import { Leaderboard } from "../game_system/Leaderboard";
-import { LevelWriter } from "../game_system/LevelWriter";
+import { LevelUnlocker, LU } from "../game_system/LevelUnlocker";
 import { LevelIntro1, LevelIntro2, LevelIntro3, LevelIntro4, LevelIntro5,LevelIntro6 } from "./LevelIntro";
 
 export default class MainMenu extends Scene {
@@ -230,12 +230,11 @@ export default class MainMenu extends Scene {
       MenuEvents.LOAD_LVL_6
     );
 
-    let lw = new LevelWriter();
-    if (lw.isLevel2Locked()) initLock(this, LAYER, bt2);
-    if (lw.isLevel3Locked()) initLock(this, LAYER, bt3);
-    if (lw.isLevel4Locked()) initLock(this, LAYER, bt4);
-    if (lw.isLevel5Locked()) initLock(this, LAYER, bt5);
-    if (lw.isLevel6Locked()) initLock(this, LAYER, bt6);
+    if (LU.isLevel2Locked()) initLock(this, LAYER, bt2);
+    if (LU.isLevel3Locked()) initLock(this, LAYER, bt3);
+    if (LU.isLevel4Locked()) initLock(this, LAYER, bt4);
+    if (LU.isLevel5Locked()) initLock(this, LAYER, bt5);
+    if (LU.isLevel6Locked()) initLock(this, LAYER, bt6);
 
     // Create back button
     initButtonHandler(

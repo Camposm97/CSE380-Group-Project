@@ -3,7 +3,7 @@ import { LEVEL_SAVE_DATA } from "../scene/Constants";
 /**
  * Util for managing locked level data
  */
-export class LevelWriter {
+export class LevelUnlocker {
     private o: any
 
     constructor() {
@@ -75,3 +75,5 @@ export class LevelWriter {
         localStorage.setItem(LEVEL_SAVE_DATA, JSON.stringify(this.o))
     }
 }
+
+export const LU = new LevelUnlocker()

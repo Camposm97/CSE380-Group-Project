@@ -11,7 +11,6 @@ export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
 
 export const Cheats = {
   invincible: false,
-  unlockAllLevels: false,
 };
 
 export enum Names {
