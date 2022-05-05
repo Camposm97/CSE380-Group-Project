@@ -10,15 +10,9 @@ import {
   initLock,
 } from "../ui/UIBuilder";
 import { RobotAnimations } from "./Constants";
-import { Level1_1 } from "./Level1";
-import { Level2_1 } from "./Level2";
-import { Level3_1 } from "./Level3";
-import { Level4_1 } from "./Level4";
-import { Level5_1 } from "./Level5";
-import { Level6_1 } from "./Level6";
 import { Tutorial1_1 } from "./Tutorial";
 import { Leaderboard } from "../game_system/Leaderboard";
-import { LevelUnlocker, LU } from "../game_system/LevelUnlocker";
+import { LU } from "../game_system/LevelUnlocker";
 import { LevelIntro1, LevelIntro2, LevelIntro3, LevelIntro4, LevelIntro5,LevelIntro6 } from "./LevelIntro";
 
 export default class MainMenu extends Scene {
@@ -479,27 +473,27 @@ export default class MainMenu extends Scene {
           this.levelSelect.setHidden(false);
           break;
         case MenuEvents.LOAD_LVL_1:
-          this.sceneManager.changeToScene(Level1_1, {});
+          this.sceneManager.changeToScene(LevelIntro1, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.LOAD_LVL_2:
-          this.sceneManager.changeToScene(Level2_1, {});
+          this.sceneManager.changeToScene(LevelIntro2, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.LOAD_LVL_3:
-          this.sceneManager.changeToScene(Level3_1, {});
+          this.sceneManager.changeToScene(LevelIntro3, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.LOAD_LVL_4:
-          this.sceneManager.changeToScene(Level4_1, {});
+          this.sceneManager.changeToScene(LevelIntro4, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.LOAD_LVL_5:
-          this.sceneManager.changeToScene(Level5_1, {});
+          this.sceneManager.changeToScene(LevelIntro5, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.LOAD_LVL_6:
-          this.sceneManager.changeToScene(Level6_1, {});
+          this.sceneManager.changeToScene(LevelIntro6, {});
           this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "menu" });
           break;
         case MenuEvents.CONTROLS:
