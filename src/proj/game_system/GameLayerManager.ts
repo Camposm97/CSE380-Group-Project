@@ -433,7 +433,8 @@ export class GameLayerManager {
     for (let i = 0; i < this.healthDisplay.length; i++) {
       this.healthDisplay[i] = this.scene.add.sprite("health", LayerType.HUD);
       this.healthDisplay[i].position = new Vec2(12, 10);
-      this.healthDisplay[i].position.add(new Vec2(i * 25, 0));
+      this.healthDisplay[i].position.add(new Vec2(i * 16, 0));
+      this.healthDisplay[i].scale = new Vec2(.5,.5)
       this.healthDisplay[i].visible = true;
     }
   }
