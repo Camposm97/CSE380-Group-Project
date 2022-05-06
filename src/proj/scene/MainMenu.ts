@@ -25,6 +25,8 @@ export default class MainMenu extends Scene {
 
   loadScene(): void {
     this.load.spritesheet("r_blue", "res/spritesheets/robots/robot_blue.json");
+    this.load.spritesheet("r_yellow", "res/spritesheets/robots/robot_yellow.json");
+    this.load.spritesheet("r_red", "res/spritesheets/robots/robot_red.json");
     this.load.image("lock", "res/sprites/red_lock.png");
     this.load.image("Level 1", "res/tilemaps/level1/Level1_1.png");
     this.load.image("Level 2", "res/tilemaps/level2/Level2_1.png");
@@ -155,13 +157,35 @@ export default class MainMenu extends Scene {
       "Leaderboard",
       MenuEvents.LEADERBOARD
     );
-
-    let r1 = this.add.animatedSprite("r_blue", layer);
-    r1.animation.play(RobotAnimations.DANCE, true);
-    r1.position = new Vec2(c.x - 300, c.y);
-    let r2 = this.add.animatedSprite("r_blue", layer);
-    r2.animation.play(RobotAnimations.DANCE, true);
-    r2.position = new Vec2(c.x + 300, c.y);
+    
+    let r1, r2;
+    let r = Math.round(Math.random() * 2)
+    switch (r) {
+      case 0:
+        r1 = this.add.animatedSprite("r_blue", layer);
+        r1.animation.play(RobotAnimations.DANCE, true);
+        r1.position = new Vec2(c.x - 300, c.y);
+        r2 = this.add.animatedSprite("r_blue", layer);
+        r2.animation.play(RobotAnimations.DANCE, true);
+        r2.position = new Vec2(c.x + 300, c.y);
+        break
+      case 1:
+        r1 = this.add.animatedSprite("r_yellow", layer);
+        r1.animation.play(RobotAnimations.DANCE, true);
+        r1.position = new Vec2(c.x - 300, c.y);
+        r2 = this.add.animatedSprite("r_yellow", layer);
+        r2.animation.play(RobotAnimations.DANCE, true);
+        r2.position = new Vec2(c.x + 300, c.y);
+        break
+      case 2:
+        r1 = this.add.animatedSprite("r_red", layer);
+        r1.animation.play(RobotAnimations.DANCE, true);
+        r1.position = new Vec2(c.x - 300, c.y);
+        r2 = this.add.animatedSprite("r_red", layer);
+        r2.animation.play(RobotAnimations.DANCE, true);
+        r2.position = new Vec2(c.x + 300, c.y);
+        break
+    }
   }
 
   initLevelSelectScene(c: Vec2): void {
