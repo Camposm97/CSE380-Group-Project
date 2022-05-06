@@ -15,7 +15,7 @@ export class Level1_1 extends GameLevel {
 
     this.loadRandomBombsJSON(bombJSONArray);
 
-    this.load.tilemap("level", "res/tilemaps/level1/Level1_1.json"); // Load tile map
+    this.load.tilemap("level", "res/tilemaps/level1/Level1_1_alt.json"); // Load tile map
     this.load.object("start_end", "res/data/level1/start_end1_1.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/level1/enemy1_1.json"); // Load enemy info
     this.load.object("blockData", "res/data/level1/blocks1_1.json"); // Load block info
