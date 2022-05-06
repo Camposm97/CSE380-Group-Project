@@ -10,6 +10,8 @@ export default class SplashScreen extends Scene {
   loadScene(): void {
     this.load.image("logo", "res/sprites/Logo.png");
     this.load.spritesheet("rm_blue", "res/spritesheets/robots/robot_mouse_blue.json");
+    this.load.spritesheet("rm_yellow", "res/spritesheets/robots/robot_mouse_yellow.json");
+    this.load.spritesheet("rm_red", "res/spritesheets/robots/robot_mouse_red.json")
     this.load.spritesheet("prof", "res/spritesheets/mcbendorjee.json");
     this.load.audio("select", "res/sound/select.wav");
     this.load.tilemap("background", "res/tilemaps/tutorial/SplashScreenBackground.json");
@@ -39,8 +41,8 @@ export default class SplashScreen extends Scene {
     sprite.scale = new Vec2(0.75, 0.75);
 
     let rm1 = this.add.animatedSprite("rm_blue", "primary");
-    let rm2 = this.add.animatedSprite("rm_blue", "primary");
-    let rm3 = this.add.animatedSprite("rm_blue", "primary");
+    let rm2 = this.add.animatedSprite("rm_yellow", "primary");
+    let rm3 = this.add.animatedSprite("rm_red", "primary");
 
     rm1.position = new Vec2(c.x + 300, c.y);
     rm2.position = new Vec2(c.x + 350, c.y + 50);
