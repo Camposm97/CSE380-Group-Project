@@ -10,7 +10,7 @@ import { initButton, initLabel } from "../ui/UIBuilder";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
 import { Leaderboard } from "../game_system/Leaderboard";
-import { LevelWriter } from "../game_system/LevelWriter";
+import { LevelUnlocker, LU } from "../game_system/LevelUnlocker";
 import { PlayerAnimations } from "./Constants";
 import ResourceManager from "../../Wolfie2D/ResourceManager/ResourceManager";
 
@@ -96,8 +96,7 @@ export default class GameOver extends Scene {
         }
         if (this.nextLvl) {
           // If there is a next level, update level save data
-          let lw = new LevelWriter();
-          lw.unlockLevel(this.nextLvl.name);
+          LU.unlockLevel(this.nextLvl.name)
 
           if (this.lastLevel) {
             // Check if this is the last room of the level

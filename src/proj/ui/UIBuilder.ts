@@ -6,7 +6,7 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
-import { LevelWriter } from "../game_system/LevelWriter";
+import { LU } from "../game_system/LevelUnlocker";
 
 export function initLock(scene: Scene, layer: string, bt: Button): void {
     let e = new Emitter()
@@ -61,22 +61,22 @@ export function initLevelSelectButton(scene: Scene, layer: string, v: Vec2, text
     let vLvlOffset = new Vec2(0,-85)
     let lbl = initLabel(scene, layer, x.position.clone().add(vLvlOffset), text)
     lbl.fontSize = 20
-    let lw = new LevelWriter()
+
     switch (text) {
         case 'Level 2':
-            if (lw.isLevel2Locked()) lbl.textColor = Color.RED
+            if (LU.isLevel2Locked()) lbl.textColor = Color.RED
             break
         case 'Level 3':
-            if (lw.isLevel3Locked()) lbl.textColor = Color.RED
+            if (LU.isLevel3Locked()) lbl.textColor = Color.RED
             break
         case 'Level 4':
-            if (lw.isLevel4Locked()) lbl.textColor = Color.RED
+            if (LU.isLevel4Locked()) lbl.textColor = Color.RED
             break
         case 'Level 5':
-            if (lw.isLevel5Locked()) lbl.textColor = Color.RED
+            if (LU.isLevel5Locked()) lbl.textColor = Color.RED
             break
         case 'Level 6':
-            if (lw.isLevel6Locked()) lbl.textColor = Color.RED
+            if (LU.isLevel6Locked()) lbl.textColor = Color.RED
             break
     }
     return x

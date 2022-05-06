@@ -6,7 +6,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import PositionGraph from "../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
-import { Control, Events, Names, RobotAction } from "./Constants";
+import { CheatCode, Control, Events, Names, RobotAction } from "./Constants";
 import BattlerAI from "../ai/BattlerAI";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Input from "../../Wolfie2D/Input/Input";
@@ -18,6 +18,7 @@ import { GameLayerManager } from "../game_system/GameLayerManager";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EntityManager from "../game_system/EntityManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import Ending from "./Ending";
 
 export default abstract class GameLevel extends Scene {
   private isTutorial: boolean;
@@ -223,6 +224,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.SHOW_CHEATS);
     this.receiver.subscribe(Events.SHOW_ALL_BOMBS);
     this.receiver.subscribe(GameEventType.KEY_UP);
+    this.receiver.subscribe(CheatCode.END)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -244,6 +246,9 @@ export default abstract class GameLevel extends Scene {
 
   handleEvent(event: GameEvent): void {
     switch (event.type) {
+      case CheatCode.END:
+        this.sceneManager.changeToScene(Ending, {})
+        break
       case GameEventType.KEY_UP:
         this.glm.identifyCheatCode();
         break;
@@ -471,9 +476,5 @@ export default abstract class GameLevel extends Scene {
 
   setLblEnemiesLeft(lbl: Label) {
     this.lblEnemiesLeft = lbl;
-  }
-
-  changeLevel(level: new (...args: any) => Scene) {
-    this.sceneManager.changeToScene(level, {});
   }
 }

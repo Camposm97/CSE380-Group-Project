@@ -15,9 +15,8 @@ import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import { Level1_1 } from "../scene/Level1";
-import { Ending } from "../scene/Ending";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import { LU  } from "./LevelUnlocker";
 
 enum LayerType {
   PRIMARY = "primary",
@@ -375,7 +374,7 @@ export class GameLayerManager {
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
         case CheatCode.UNLOCK_ALL_LVLS:
-          Cheats.unlockAllLevels = !Cheats.unlockAllLevels;
+          LU.unlockAllLevels()
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
@@ -384,38 +383,8 @@ export class GameLayerManager {
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
-        case CheatCode.LVL_1:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_2:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_3:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_4:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_5:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_6:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.ENDING:
-          this.scene.changeLevel(Ending);
+        case CheatCode.END:
+          this.emitter.fireEvent(CheatCode.END)
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;

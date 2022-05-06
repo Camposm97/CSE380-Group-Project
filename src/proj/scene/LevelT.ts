@@ -1,5 +1,4 @@
 import GameLevel from "./GameLevel";
-import { Level1_1 } from "./Level1";
 import { Tutorial1_2, Tutorial1_3, Tutorial1_4 } from "./Tutorial";
 
 export class LevelT_1 extends GameLevel {
