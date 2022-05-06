@@ -85,9 +85,13 @@ export default class MainMenu extends Scene {
         break
       case 2:
         // TODO (Tuyen)
+        img = this.add.sprite('Level 3', LAYER)
+        img.position = c
         break
       case 3:
         // TODO (Tuyen)
+        img = this.add.sprite('Level 4', LAYER)
+        img.position = c
         break
       case 4:
         img = this.add.sprite('Level 5', LAYER)
