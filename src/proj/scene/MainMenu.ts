@@ -251,61 +251,17 @@ export default class MainMenu extends Scene {
     bg.scale = new Vec2(scaleX, scaleY)
 
     initLabel(this, "controls", new Vec2(c.x, c.y - 300), "Controls");
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y - 200),
-      "ESC - pause the game"
-    );
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y - 150),
-      "P - panic button, resets the room to its original state"
-    );
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y - 100),
-      "F - to place flag"
-    );
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y - 50),
-      "W/Up-Arrow to move up"
-    );
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y),
-      "A/Left-Arrow to move left"
-    );
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y + 50),
-      "S/Down-Arrow to move down"
-    );
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y + 100),
-      "D/Right-Arrow to move right"
-    );
-    initLabel(
-      this,
-      "controls",
-      new Vec2(c.x, c.y + 150),
-      "Space/Left-Click to attack"
-    );
-    initButtonHandler(
-      this,
-      "controls",
-      new Vec2(c.x, c.y + 250),
-      "Back",
-      MenuEvents.MENU
-    );
+    initLabel(this,"controls",new Vec2(c.x, c.y - 200),"ESC - pause the game").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y - 160),"P - panic button, resets the room to its original state").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y - 120),"F - to place flag").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y - 80),"W/Up-Arrow to move up").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y - 40),"A/Left-Arrow to move left").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y),"S/Down-Arrow to move down").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y + 40),"D/Right-Arrow to move right").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y + 80),"Space/Left-Click to attack").fontSize = 28;
+    initLabel(this,"controls",new Vec2(c.x, c.y + 120),"M - push/pull boxes").fontSize = 28;
+    initButtonHandler(this,"controls",new Vec2(c.x, c.y + 250),"Back",MenuEvents.MENU);
+
     // Scene has started, so start playing music
     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
       key: "menu",
