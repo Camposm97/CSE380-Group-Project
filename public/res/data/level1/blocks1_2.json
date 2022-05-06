@@ -1,5 +1,5 @@
 {
-  "numBlocks": 13,
+  "numBlocks": 17,
   "blocks": [
     {
       "position": [5, 7]
@@ -39,6 +39,18 @@
     },
     {
       "position": [21, 17]
+    },
+    {
+      "position": [13, 4]
+    },
+    {
+      "position": [12, 5]
+    },
+    {
+      "position": [14, 5]
+    },
+    {
+      "position": [13, 6]
     }
   ]
 }
