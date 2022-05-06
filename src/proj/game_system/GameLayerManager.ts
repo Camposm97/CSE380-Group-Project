@@ -383,8 +383,8 @@ export class GameLayerManager {
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
-        case CheatCode.ENDING:
-          this.emitter.fireEvent(CheatCode.ENDING)
+        case CheatCode.END:
+          this.emitter.fireEvent(CheatCode.END)
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;

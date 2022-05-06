@@ -6,7 +6,7 @@ export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
   SKIP_LEVEL = "skip",
   SHOW_ALL_BOMBS = "showAllBombs",
   UNLOCK_ALL_LVLS = "unlockAllLvls",
-  ENDING = "ending",
+  END = "end",
 }
 
 export const Cheats = {

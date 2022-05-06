@@ -224,7 +224,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.SHOW_CHEATS);
     this.receiver.subscribe(Events.SHOW_ALL_BOMBS);
     this.receiver.subscribe(GameEventType.KEY_UP);
-    this.receiver.subscribe(CheatCode.ENDING)
+    this.receiver.subscribe(CheatCode.END)
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -246,7 +246,7 @@ export default abstract class GameLevel extends Scene {
 
   handleEvent(event: GameEvent): void {
     switch (event.type) {
-      case CheatCode.ENDING:
+      case CheatCode.END:
         this.sceneManager.changeToScene(Ending, {})
         break
       case GameEventType.KEY_UP:
