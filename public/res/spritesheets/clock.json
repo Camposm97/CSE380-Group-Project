@@ -1,0 +1,23 @@
+{
+    "name": "Clock",
+    "spriteSheetImage": "clock.png",
+    "spriteWidth": 32,
+    "spriteHeight": 32,
+    "columns": 1,
+    "rows": 2,
+    "animations": [
+      {
+        "name": "ON_TIME",
+        "frames": [
+          { "index": 0, "duration": 30 }
+        ]
+      },
+      {
+        "name": "LATE",
+        "frames": [
+          { "index": 1, "duration": 30}
+        ]
+      }
+    ]
+  }
+  
