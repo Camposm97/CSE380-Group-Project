@@ -1,7 +1,5 @@
-import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameLevel from "./GameLevel";
 import { Level2_1 } from "./Level2";
-import { Level5_1 } from "./Level5";
 
 export class Level1_1 extends GameLevel {
   loadScene(): void {

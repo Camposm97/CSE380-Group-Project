@@ -46,7 +46,7 @@ const t1_13 =
 const t1_14 = "The goal is to get McBendorjee to the Green Flag ";
 // {insert Green Flag Sprite here}.'
 const t1_15 =
-  "If there are any blocks blocking McBendorjee, you can push them out of the way. ";
+  "If there are any boxes blocking McBendorjee, you can push/pull them out by holding \"m\" . ";
 // {Insert Block sprite here}'
 const t1_16 =
   "Just be careful to not to block your own path. Blocks do not activate the bombs. ";

@@ -15,9 +15,8 @@ import TextInput from "../../Wolfie2D/Nodes/UIElements/TextInput";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import { Level1_1 } from "../scene/Level1";
-import { Ending } from "../scene/Ending";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import { LU  } from "./LevelUnlocker";
 
 enum LayerType {
   PRIMARY = "primary",
@@ -184,66 +183,28 @@ export class GameLayerManager {
     this.controlsLayer = this.scene.addUILayer(LayerType.CONTROLS);
     this.controlsLayer.setHidden(true);
 
-    const center = this.scene.getViewport().getCenter().clone();
+    const c = this.scene.getViewport().getCenter().clone();
 
     initLabel(
       this.scene,
       LayerType.CONTROLS,
-      new Vec2(center.x, center.y - 300),
+      new Vec2(c.x, c.y - 300),
       "Controls"
     );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y - 200),
-      "ESC - pause the game"
-    );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y - 150),
-      "P - panic button, resets the room to its original state"
-    );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y - 100),
-      "F - to place flag"
-    );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y - 50),
-      "W/Up-Arrow to move up"
-    );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y),
-      "A/Left-Arrow to move left"
-    );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y + 50),
-      "S/Down-Arrow to move down"
-    );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y + 100),
-      "D/Right-Arrow to move right"
-    );
-    initLabel(
-      this.scene,
-      LayerType.CONTROLS,
-      new Vec2(center.x, center.y + 150),
-      "Space/Left-Click to attack"
-    );
+    initLabel(this.scene, "controls", new Vec2(c.x, c.y - 300), "Controls");
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 200),"ESC - pause the game").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 160),"P - panic button, resets the room to its original state").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 120),"F - to place flag").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 80),"W/Up-Arrow to move up").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 40),"A/Left-Arrow to move left").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y),"S/Down-Arrow to move down").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y + 40),"D/Right-Arrow to move right").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y + 80),"Space/Left-Click to attack").fontSize = 28;
+    initLabel(this.scene,"controls",new Vec2(c.x, c.y + 120),"M - push/pull boxes").fontSize = 28;
     initButtonHandler(
       this.scene,
       LayerType.CONTROLS,
-      new Vec2(center.x, center.y + 250),
+      new Vec2(c.x, c.y + 250),
       "Back",
       Events.SHOW_CONTROLS
     );
@@ -380,7 +341,7 @@ export class GameLayerManager {
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
         case CheatCode.UNLOCK_ALL_LVLS:
-          Cheats.unlockAllLevels = !Cheats.unlockAllLevels;
+          LU.unlockAllLevels()
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
@@ -389,38 +350,8 @@ export class GameLayerManager {
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
-        case CheatCode.LVL_1:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_2:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_3:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_4:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_5:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.LVL_6:
-          this.scene.changeLevel(Level1_1);
-          this.tfCheat.text = "";
-          this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
-          break;
-        case CheatCode.ENDING:
-          this.scene.changeLevel(Ending);
+        case CheatCode.END:
+          this.emitter.fireEvent(CheatCode.END)
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;

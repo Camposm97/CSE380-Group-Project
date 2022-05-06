@@ -6,18 +6,11 @@ export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
   SKIP_LEVEL = "skip",
   SHOW_ALL_BOMBS = "showAllBombs",
   UNLOCK_ALL_LVLS = "unlockAllLvls",
-  LVL_1 = "1",
-  LVL_2 = "2",
-  LVL_3 = "3",
-  LVL_4 = "4",
-  LVL_5 = "5",
-  LVL_6 = "6",
-  ENDING = "ending",
+  END = "end",
 }
 
 export const Cheats = {
   invincible: false,
-  unlockAllLevels: false,
 };
 
 export enum Names {
@@ -47,7 +40,6 @@ export enum MenuEvents {
   CONTROLS = "controls",
   HELP = "about",
   LEADERBOARD = "leaderboard",
-  LEVEL_LOCKED = "level_locked",
   LOAD_LVL_1 = "load_lvl_1",
   LOAD_LVL_2 = "load_lvl_2",
   LOAD_LVL_3 = "load_lvl_3",

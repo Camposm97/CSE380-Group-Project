@@ -1,4 +1,4 @@
-import { Ending } from "./Ending";
+import Ending from "./Ending";
 import GameLevel from "./GameLevel";
 
 export class Level6_1 extends GameLevel {
