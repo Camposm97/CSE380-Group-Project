@@ -4,12 +4,18 @@
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [6, 3]
+      "position": [6, 3],
+      "options": {
+        "behavior": "secondary"
+      }
     },
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [6, 15]
+      "position": [6, 15],
+      "options": {
+        "behavior": "secondary"
+      }
     },
     {
       "ai": "BlueMouseAI",
