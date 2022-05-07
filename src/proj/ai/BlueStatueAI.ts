@@ -81,6 +81,9 @@ export default class BlueStatueAI implements RobotAI {
         this.direction = new Vec2(options.direction[0], options.direction[1]);
         this.directionIndex = options.directionIndex;
       }
+      if (options.projectileTime) {
+        this.currentProjFreq = options.projectileTime;
+      }
     }
     this.frozenTimer = new Timer(this.frozenTimeInMillis);
 

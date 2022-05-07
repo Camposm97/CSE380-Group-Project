@@ -38,9 +38,16 @@ export class Level2_2 extends GameLevel {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
 
-    this.load.tilemap("level", "res/tilemaps/level2/Level2_2.json"); // Load tile map
+    let enemyJSONArray = [
+      "res/data/level2/enemy2_2.json",
+      "res/data/level2/enemy2_2var2.json",
+    ];
+
+    this.loadRandomEnemysJSON(enemyJSONArray);
+
+    this.load.tilemap("level", "res/tilemaps/level2/Level2_2_alt.json"); // Load tile map
     this.load.object("start_end", "res/data/level2/start_end2_2.json"); //Load player and green flag coordinates
-    this.load.object("enemyData", "res/data/level2/enemy2_2.json"); // Load enemy info
+    // this.load.object("enemyData", "res/data/level2/enemy2_2.json"); // Load enemy info
     this.load.object("bombData", "res/data/level2/bombs2_2.json"); // Load bomb info
     this.load.object("blockData", "res/data/level2/blocks2_2.json"); // Load block info
     this.load.audio("levelMusic", "res/music/CSE_380_Level_2.mp3"); // Load Music info

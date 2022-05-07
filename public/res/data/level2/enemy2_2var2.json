@@ -19,20 +19,26 @@
     {
       "ai": "BlueStatueAI",
       "type": "blueStatue",
-      "position": [12, 8]
-    },
-    {
-      "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [20, 10],
+      "position": [12, 8],
       "options": {
-        "behavior": "secondary"
+        "projectileTime": 2500
       }
     },
     {
-      "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [23, 5]
+      "ai": "BlueStatueAI",
+      "type": "blueStatue",
+      "position": [22, 15],
+      "options": {
+        "projectileTime": 2500
+      }
+    },
+    {
+      "ai": "BlueStatueAI",
+      "type": "blueStatue",
+      "position": [22, 5],
+      "options": {
+        "projectileTime": 2500
+      }
     }
   ]
 }
