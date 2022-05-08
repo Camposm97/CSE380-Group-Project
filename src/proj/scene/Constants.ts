@@ -5,7 +5,7 @@ export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
   INVINCIBLE = "invincible",
   SKIP_LEVEL = "skip",
   SHOW_ALL_BOMBS = "showAllBombs",
-  UNLOCK_ALL_LVLS = "unlockAllLvls",
+  UNLOCK_ALL_LVLS = "unlockAll",
   END = "end",
 }
 
