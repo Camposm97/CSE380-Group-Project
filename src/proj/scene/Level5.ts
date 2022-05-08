@@ -80,7 +80,7 @@ export class Level5_4 extends GameLevel {
     this.load.tilemap("level", "res/tilemaps/level5/Level5_4.json"); // Load tile map
     this.load.object("start_end", "res/data/level5/start_end_5_4.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/level5/enemy_5_4.json"); // Load enemy info
-    this.load.object("bombData", "res/data/level5/bombs_5_4.json"); // Load bomb info
+    this.loadRandomBombsJSON(["res/data/level5/bombs_5_4_1.json", "res/data/level5/bombs_5_4_2.json"])
     this.load.object("blockData", "res/data/level5/blocks_5_4.json"); // Load block info
     this.load.audio("levelMusic", "res/music/CSE_380_Level_5.mp3");
   }
