@@ -85,7 +85,8 @@ export default class MainMenu extends Scene {
   initBackground(c: Vec2): void {
     const LAYER = 'background'
     this.background = this.addUILayer(LAYER)
-    let x = Math.round(Math.random() * 5)
+    const NUM_OF_ROOMS = 23
+    let x = Math.round(Math.random() * NUM_OF_ROOMS)
     console.log(`x=${x}`)
     let img, scaleX, scaleY
     switch (x) {
