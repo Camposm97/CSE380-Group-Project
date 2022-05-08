@@ -28,12 +28,30 @@ export default class MainMenu extends Scene {
     this.load.spritesheet("r_yellow", "res/spritesheets/robots/robot_yellow.json");
     this.load.spritesheet("r_red", "res/spritesheets/robots/robot_red.json");
     this.load.image("lock", "res/sprites/red_lock.png");
-    this.load.image("Level 1", "res/tilemaps/level1/Level1_1.png");
-    this.load.image("Level 2", "res/tilemaps/level2/Level2_1.png");
-    this.load.image("Level 3", "res/tilemaps/level3/Level3_1.png");
-    this.load.image("Level 4", "res/tilemaps/level4/Level4_1.png");
-    this.load.image("Level 5", "res/tilemaps/level5/Level5_1.png");
-    this.load.image("Level 6", "res/tilemaps/level6/Level6_1.png");
+    this.load.image("Level 1_1", "res/tilemaps/level1/Level1_1_alt.png");
+    this.load.image("Level 1_2", "res/tilemaps/level1/Level1_2_alt.png");
+    this.load.image("Level 1_3", "res/tilemaps/level1/Level1_3_alt.png");
+    this.load.image("Level 1_4", "res/tilemaps/level1/Level1_4_alt.png");
+    this.load.image("Level 2_1", "res/tilemaps/level2/Level2_1_alt.png");
+    this.load.image("Level 2_2", "res/tilemaps/level2/Level2_2_alt.png");
+    this.load.image("Level 2_3", "res/tilemaps/level2/Level2_3_alt.png");
+    this.load.image("Level 2_4", "res/tilemaps/level2/Level2_4_alt.png");
+    this.load.image("Level 3_1", "res/tilemaps/level3/Level3_1.png");
+    this.load.image("Level 3_2", "res/tilemaps/level3/Level3_2.png");
+    this.load.image("Level 3_3", "res/tilemaps/level3/Level3_3.png");
+    this.load.image("Level 3_4", "res/tilemaps/level3/Level3_4.png");
+    this.load.image("Level 4_1", "res/tilemaps/level4/Level4_1.png");
+    this.load.image("Level 4_2", "res/tilemaps/level4/Level4_2.png");
+    this.load.image("Level 4_3", "res/tilemaps/level4/Level4_3.png");
+    this.load.image("Level 4_4", "res/tilemaps/level4/Level4_4.png");
+    this.load.image("Level 5-1", "res/tilemaps/level5/Level5_1.png");
+    this.load.image("Level 5_2", "res/tilemaps/level5/Level5_2.png");
+    this.load.image("Level 5_3", "res/tilemaps/level5/Level5_3.png");
+    this.load.image("Level 5_4", "res/tilemaps/level5/Level5_4.png");
+    this.load.image("Level 6_1", "res/tilemaps/level6/Level6_1.png");
+    this.load.image("Level 6_2", "res/tilemaps/level6/Level6_2.png");
+    this.load.image("Level 6_3", "res/tilemaps/level6/Level6_3.png");
+    this.load.image("Level 6_4", "res/tilemaps/level6/Level6_4.png");
     this.load.image('dark_background', 'res/sprites/dark_background.png')
     this.load.audio("locked", "res/sound/bad_event.wav");
   }
@@ -71,39 +89,175 @@ export default class MainMenu extends Scene {
     console.log(`x=${x}`)
     let img, scaleX, scaleY
     switch (x) {
+      // Level 1
       case 0:
-        img = this.add.sprite('Level 1', LAYER)
+        img = this.add.sprite('Level 1_1', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) + 0.05
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05
         img.scale = new Vec2(scaleX, scaleY)
         break
       case 1:
-        img = this.add.sprite('Level 2', LAYER)
+        img = this.add.sprite('Level 1_2', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) + 0.05
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05
         img.scale = new Vec2(scaleX, scaleY)
         break
       case 2:
-        // TODO (Tuyen)
-        img = this.add.sprite('Level 3', LAYER)
+        img = this.add.sprite('Level 1_3', LAYER)
         img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
         break
       case 3:
-        // TODO (Tuyen)
-        img = this.add.sprite('Level 4', LAYER)
+        img = this.add.sprite('Level 1_4', LAYER)
         img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
         break
+      // Level 2
       case 4:
-        img = this.add.sprite('Level 5', LAYER)
+        img = this.add.sprite('Level 2_1', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 5:
+        img = this.add.sprite('Level 2_2', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 6:
+        img = this.add.sprite('Level 2_3', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 7:
+        img = this.add.sprite('Level 2_4', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) + 0.05
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      // Lvel 3
+      case 8:
+        img = this.add.sprite('Level 3_1', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 9:
+          img = this.add.sprite('Level 3_2', LAYER)
+          img.position = c
+          scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+          scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+          img.scale = new Vec2(scaleX, scaleY)
+          break
+        case 10:
+        img = this.add.sprite('Level 3_3', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 11:
+        img = this.add.sprite('Level 3_4', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      // Level 4
+      case 12:
+        img = this.add.sprite('Level 4_1', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 13:
+          img = this.add.sprite('Level 4_2', LAYER)
+          img.position = c
+          scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+          scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+          img.scale = new Vec2(scaleX, scaleY)
+          break
+      case 14:
+        img = this.add.sprite('Level 4_3', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      case 15:
+        img = this.add.sprite('Level 4_4', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 1.35
+        img.scale = new Vec2(scaleX, scaleY)
+        break 
+      // Level 5
+      case 16:
+        img = this.add.sprite('Level 5_1', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) - 0.15
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05
         img.scale = new Vec2(scaleX, scaleY)
         break
-      case 5:
-        img = this.add.sprite('Level 6', LAYER)
+        case 17:
+        img = this.add.sprite('Level 5_2', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+        case 18:
+        img = this.add.sprite('Level 5_3', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+        case 19:
+        img = this.add.sprite('Level 5_4', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+      // Level 6
+      case 20:
+        img = this.add.sprite('Level 6_1', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+       case 21:
+        img = this.add.sprite('Level 6_2', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+       case 22:
+        img = this.add.sprite('Level 6_3', LAYER)
+        img.position = c
+        scaleX = (img.size.x / this.viewport.getView().x) - 0.15
+        scaleY = (img.size.y / this.viewport.getView().y) - 0.05
+        img.scale = new Vec2(scaleX, scaleY)
+        break
+       case 23:
+        img = this.add.sprite('Level 6_4', LAYER)
         img.position = c
         scaleX = (img.size.x / this.viewport.getView().x) - 0.15
         scaleY = (img.size.y / this.viewport.getView().y) - 0.05

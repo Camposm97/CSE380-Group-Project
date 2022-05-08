@@ -81,10 +81,23 @@ export default class GameOver extends Scene {
               currentScore: this.currentScore + this.timeLeft,
             });
         } else {
-          this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "levelMusic"});
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+            key: "levelMusic",
+          });
         }
         if (this.lastLevel) {
-          btOk.onClick = () => this.sceneManager.changeToScene(MainMenu, {})
+          this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+            key: "victory",
+            loop: false,
+            holdReference: true,
+          });
+
+          btOk.onClick = () => {
+            this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+              key: "victory",
+            });
+            this.sceneManager.changeToScene(MainMenu, {});
+          };
         }
       } else {
         // We're in the real game and we won :)
@@ -96,16 +109,16 @@ export default class GameOver extends Scene {
         }
         if (this.nextLvl) {
           // If there is a next level, update level save data
-          LU.unlockLevel(this.nextLvl.name)
+          LU.unlockLevel(this.nextLvl.name);
 
           if (this.lastLevel) {
             // Check if this is the last room of the level
-            lblStatus.text = 'Level Complete!'
+            lblStatus.text = "Level Complete!";
             btOk.text = "Next Level";
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
               key: "victory",
               loop: false,
-              holdReference: false,
+              holdReference: true,
             });
             switch (
               this.nextLvl.name // Check if the next level is 'Ending'
@@ -117,10 +130,14 @@ export default class GameOver extends Scene {
           } else {
             btOk.text = "Next Room";
           }
-          btOk.onClick = () =>
+          btOk.onClick = () => {
+            this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+              key: "victory",
+            });
             this.sceneManager.changeToScene(this.nextLvl, {
               currentScore: this.currentScore + this.timeLeft,
             });
+          };
         } else {
           this.emitter.fireEvent(GameEventType.STOP_SOUND, {
             key: "levelMusic",
@@ -135,7 +152,7 @@ export default class GameOver extends Scene {
       this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
         key: "gameOver",
         loop: false,
-        holdReference: false,
+        holdReference: true,
       });
 
       let tfName: TextInput = undefined;
@@ -157,6 +174,9 @@ export default class GameOver extends Scene {
         tfName.onClick = () => (tfName.text = "");
       }
       btOk.onClick = () => {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+          key: "gameOver",
+        });
         if (tfName) {
           let name = tfName.text;
           if (name) {

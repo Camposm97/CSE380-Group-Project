@@ -1,5 +1,6 @@
 import GameLevel from "./GameLevel";
 import { Level5_1 } from "./Level5";
+import { LevelIntro5 } from "./LevelIntro";
 
 export class Level4_1 extends GameLevel {
   loadScene(): void {
@@ -90,7 +91,7 @@ export class Level4_4 extends GameLevel {
     this.setPlayMusic(false);
     this.setLastLevel(true);
     super.startScene();
-    super.setNextLevel(Level5_1);
+    super.setNextLevel(LevelIntro5);
     this.setCurrentRoom(Level4_4);
   }
 

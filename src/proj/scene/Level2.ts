@@ -1,5 +1,6 @@
 import GameLevel from "./GameLevel";
 import { Level3_1 } from "./Level3";
+import { LevelIntro3 } from "./LevelIntro";
 
 export class Level2_1 extends GameLevel {
   loadScene(): void {
@@ -71,9 +72,16 @@ export class Level2_3 extends GameLevel {
     this.loadMainResources();
     // Load resources (tilemap, audio, spritesheets)
 
-    this.load.tilemap("level", "res/tilemaps/level2/Level2_3.json"); // Load tile map
+    let enemyJSONArray = [
+      "res/data/level2/enemy2_3.json",
+      "res/data/level2/enemy2_3var2.json",
+    ];
+
+    this.loadRandomEnemysJSON(enemyJSONArray);
+
+    this.load.tilemap("level", "res/tilemaps/level2/Level2_3_alt.json"); // Load tile map
     this.load.object("start_end", "res/data/level2/start_end2_3.json"); //Load player and green flag coordinates
-    this.load.object("enemyData", "res/data/level2/enemy2_3.json"); // Load enemy info
+    // this.load.object("enemyData", "res/data/level2/enemy2_3.json"); // Load enemy info
     this.load.object("bombData", "res/data/level2/bombs2_3.json"); // Load bomb info
     this.load.object("blockData", "res/data/level2/blocks2_3.json"); // Load block info
     this.load.audio("levelMusic", "res/music/CSE_380_Level_2.mp3"); // Load Music info
@@ -97,9 +105,16 @@ export class Level2_4 extends GameLevel {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
 
-    this.load.tilemap("level", "res/tilemaps/level2/Level2_4.json"); // Load tile map
+    let enemyJSONArray = [
+      "res/data/level2/enemy2_4.json",
+      "res/data/level2/enemy2_4var2.json",
+    ];
+
+    this.loadRandomEnemysJSON(enemyJSONArray);
+
+    this.load.tilemap("level", "res/tilemaps/level2/Level2_4_alt.json"); // Load tile map
     this.load.object("start_end", "res/data/level2/start_end2_4.json"); //Load player and green flag coordinates
-    this.load.object("enemyData", "res/data/level2/enemy2_4.json"); // Load enemy info
+    // this.load.object("enemyData", "res/data/level2/enemy2_4.json"); // Load enemy info
     this.load.object("bombData", "res/data/level2/bombs2_4.json"); // Load bomb info
     this.load.object("blockData", "res/data/level2/blocks2_4.json"); // Load block info
     this.load.audio("levelMusic", "res/music/CSE_380_Level_2.mp3"); // Load Music info
@@ -110,7 +125,7 @@ export class Level2_4 extends GameLevel {
     this.setPlayMusic(false);
     this.setName("2-4");
     super.startScene();
-    super.setNextLevel(Level3_1);
+    super.setNextLevel(LevelIntro3);
     this.setCurrentRoom(Level2_4);
   }
 
