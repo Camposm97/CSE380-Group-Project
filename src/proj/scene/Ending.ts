@@ -1,10 +1,12 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
+import { initLabel } from "../ui/UIBuilder";
 import { PlayerAnimations } from "./Constants";
 
 enum Layer {
@@ -42,6 +44,7 @@ export default class Ending extends Scene {
     }
 
     startScene(): void {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'levelMusic'})
         this.receiver.subscribe([Events.Zoom_Out, Events.Next_Anim])
         this.c = this.viewport.getCenter().clone()
         this.addUILayer(Layer.Main)
@@ -53,6 +56,7 @@ export default class Ending extends Scene {
         this.clock = this.add.animatedSprite('clock', Layer.Main)
         this.clock.position = this.c.clone().sub(new Vec2(0,300))
         this.clock.scale = new Vec2(4,4)
+        this.clock.animation.play('ON_TIME', true)
 
         this.desk = this.add.sprite('desk', Layer.Main)
         this.desk.position = this.c.clone().add(new Vec2(0,400))
@@ -131,6 +135,18 @@ export default class Ending extends Scene {
                 }
             ]
         })
+        this.prof.tweens.add('move_right', {
+            startDelay: 250,
+            duration: 1000,
+            effects: [
+                {
+                    property: TweenableProperties.posX,
+                    start: this.prof.position.x,
+                    end: this.viewport.getHalfSize().x * 2.5,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        })
         this.prof.tweens.play('flash', true)
         let f1 = () => {
             this.prof.tweens.play('spin', false)
@@ -160,6 +176,36 @@ export default class Ending extends Scene {
                     break
                 case Events.Next_Anim:
                     this.prof.animation.play(PlayerAnimations.IDLE_WHITE, true)
+                    let lbl1 = initLabel(this, Layer.Main, this.c.clone().add(new Vec2(0,300)), 'Thank goodness! I\'m finally out of the game.')
+                    let flag = 0
+                    let repeat = true
+                    let time = 3500
+                    let f1 = () => {
+                        switch (flag) {
+                            case 0:
+                                lbl1.text = 'I swear to always set my pointers to null!'
+                                this.prof.animation.play(PlayerAnimations.CRY, true)
+                                flag = 1
+                                break
+                            case 1:
+                                lbl1.text = 'And comment every single code I write.'
+                                flag = 2
+                                break
+                            case 2:
+                                lbl1.text = 'Oh no! I\'m late to lecture!'
+                                this.prof.animation.play(PlayerAnimations.DAMAGE, true)
+                                this.clock.animation.play('LATE', true)
+                                flag = 3
+                                break
+                            case 3:
+                                lbl1.text = 'Thank you for playing!'
+                                this.prof.animation.play(PlayerAnimations.WALK_RIGHT_WHITE, true)
+                                this.prof.tweens.play('move_right', false)
+                                flag = 4
+                                break
+                        }
+                    }
+                    new Timer(time, f1, repeat).start()
                     break
             }
         }
