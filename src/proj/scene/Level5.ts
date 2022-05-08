@@ -8,7 +8,7 @@ export class Level5_1 extends GameLevel {
     this.load.tilemap("level", "res/tilemaps/level5/Level5_1.json"); // Load tile map
     this.load.object("start_end", "res/data/level5/start_end_5_1.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/level5/enemy_5_1.json"); // Load enemy info
-    this.load.object("bombData", "res/data/level5/bombs_5_1.json"); // Load bomb info
+    this.loadRandomBombsJSON(['res/data/level5/bombs_5_1_1.json', 'res/data/level5/bombs_5_1_2.json'])
     this.load.object("blockData", "res/data/level5/blocks_5_1.json"); // Load block info
     this.load.audio("levelMusic", "res/music/CSE_380_Level_5.mp3");
   }
@@ -31,7 +31,7 @@ export class Level5_2 extends GameLevel {
     this.load.tilemap("level", "res/tilemaps/level5/Level5_2.json"); // Load tile map
     this.load.object("start_end", "res/data/level5/start_end_5_2.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/level5/enemy_5_2.json"); // Load enemy info
-    this.load.object("bombData", "res/data/level5/bombs_5_2.json"); // Load bomb info
+    this.loadRandomBombsJSON(['res/data/level5/bombs_5_2_1.json', 'res/data/level5/bombs_5_2_2.json'])
     this.load.object("blockData", "res/data/level5/blocks_5_2.json"); // Load block info
     this.load.audio("levelMusic", "res/music/CSE_380_Level_5.mp3");
   }
@@ -55,7 +55,7 @@ export class Level5_3 extends GameLevel {
     this.load.tilemap("level", "res/tilemaps/level5/Level5_3.json"); // Load tile map
     this.load.object("start_end", "res/data/level5/start_end_5_3.json"); //Load player and green flag coordinates
     this.load.object("enemyData", "res/data/level5/enemy_5_3.json"); // Load enemy info
-    this.load.object("bombData", "res/data/level5/bombs_5_3.json"); // Load bomb info
+    this.loadRandomBombsJSON(['res/data/level5/bombs_5_3_1.json', 'res/data/level5/bombs_5_3_2.json'])
     this.load.object("blockData", "res/data/level5/blocks_5_3.json"); // Load block info
     this.load.audio("levelMusic", "res/music/CSE_380_Level_5.mp3");
   }
