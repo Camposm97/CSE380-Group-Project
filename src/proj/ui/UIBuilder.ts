@@ -43,20 +43,22 @@ export function initLevelSelectButton(scene: Scene, layer: string, v: Vec2, text
 
     let img = scene.add.sprite(text, layer)
     img.position = x.position.clone()
+
     switch (text) {
-        case 'Level 1':
-        case 'Level 2':
+        case 'Level 1_1':
+        case 'Level 2_1':
             img.scale = new Vec2(0.1675,0.2325)
             break
-        case 'Level 3':
-        case 'Level 4':
+        case 'Level 3_1':
+        case 'Level 4_1':
             img.scale = new Vec2(0.15,0.15)
             break
-        case 'Level 5':
-        case 'Level 6':
+        case 'Level 5_1':
+        case 'Level 6_1':
             img.scale = new Vec2(0.155,0.2325)
             break
-    }
+    }    
+
 
     let vLvlOffset = new Vec2(0,-85)
     let lbl = initLabel(scene, layer, x.position.clone().add(vLvlOffset), text)

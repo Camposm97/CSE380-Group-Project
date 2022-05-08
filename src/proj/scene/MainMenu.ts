@@ -44,7 +44,7 @@ export default class MainMenu extends Scene {
     this.load.image("Level 4_2", "res/tilemaps/level4/Level4_2.png");
     this.load.image("Level 4_3", "res/tilemaps/level4/Level4_3.png");
     this.load.image("Level 4_4", "res/tilemaps/level4/Level4_4.png");
-    this.load.image("Level 5-1", "res/tilemaps/level5/Level5_1.png");
+    this.load.image("Level 5_1", "res/tilemaps/level5/Level5_1.png");
     this.load.image("Level 5_2", "res/tilemaps/level5/Level5_2.png");
     this.load.image("Level 5_3", "res/tilemaps/level5/Level5_3.png");
     this.load.image("Level 5_4", "res/tilemaps/level5/Level5_4.png");
@@ -367,42 +367,42 @@ export default class MainMenu extends Scene {
       this,
       LAYER,
       new Vec2(c.x - 200, c.y - 150),
-      "Level 1",
+      "Level 1_1",
       MenuEvents.LOAD_LVL_1
     );
     let bt2 = initLevelSelectButton(
       this,
       LAYER,
       new Vec2(c.x, c.y - 150),
-      "Level 2",
+      "Level 2_1",
       MenuEvents.LOAD_LVL_2
     );
     let bt3 = initLevelSelectButton(
       this,
       LAYER,
       new Vec2(c.x + 200, c.y - 150),
-      "Level 3",
+      "Level 3_1",
       MenuEvents.LOAD_LVL_3
     );
     let bt4 = initLevelSelectButton(
       this,
       LAYER,
       new Vec2(c.x - 200, c.y + 100),
-      "Level 4",
+      "Level 4_1",
       MenuEvents.LOAD_LVL_4
     );
     let bt5 = initLevelSelectButton(
       this,
       LAYER,
       new Vec2(c.x, c.y + 100),
-      "Level 5",
+      "Level 5_1",
       MenuEvents.LOAD_LVL_5
     );
     let bt6 = initLevelSelectButton(
       this,
       LAYER,
       new Vec2(c.x + 200, c.y + 100),
-      "Level 6",
+      "Level 6_1",
       MenuEvents.LOAD_LVL_6
     );
 
