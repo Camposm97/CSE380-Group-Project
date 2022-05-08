@@ -2,7 +2,7 @@
   "numBombs": 9,
   "bombs": [
     {
-      "position": [9, 22]
+      "position": [5, 26]
     },
     {
       "position": [13, 17]
@@ -20,13 +20,13 @@
       "position": [15,24]
     },
     {
-      "position": [13,6]
+      "position": [11,11]
     },
     {
       "position": [15,8]
     },
     {
-      "position": [27,11]
+      "position": [4,23]
     },
     {
       "position": [25,11]

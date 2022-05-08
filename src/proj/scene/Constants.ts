@@ -4,7 +4,7 @@ export const LEADERBOARD_DATA = "leaderboard_data";
 export enum CheatCode { // TODO; FIX SKIP TO LEVEL N cheat
   INVINCIBLE = "invincible",
   SKIP_LEVEL = "skip",
-  SHOW_ALL_BOMBS = "showAllBombs",
+  SHOW_ALL_BOMBS = "showBombs",
   UNLOCK_ALL_LVLS = "unlockAll",
   END = "end",
 }
