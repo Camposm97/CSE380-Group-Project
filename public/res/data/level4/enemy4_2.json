@@ -22,7 +22,6 @@
       "type": "yellowMouse",
       "position": [21, 12],
       "options": {
-        "behavior": "secondary",
         "damage": 2
       }
     },

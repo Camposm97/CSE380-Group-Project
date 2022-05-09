@@ -29,7 +29,6 @@
       "type": "redMouse",
       "position": [15, 17],
       "options": {
-        "behavior": "secondary",
         "damage": 3
       }
     },
