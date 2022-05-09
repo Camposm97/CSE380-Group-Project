@@ -2,40 +2,31 @@
   "numBombs": 9,
   "bombs": [
     {
-      "position": [5, 26]
+      "position": [4, 3]
     },
     {
-      "position": [13, 17]
+      "position": [13, 5]
     },
     {
-      "position": [13, 19]
+      "position": [25, 7]
     },
     {
-      "position": [6, 9]
+      "position": [4, 12]
     },
     {
-      "position": [13,26]
+      "position": [18,11]
     },
     {
-      "position": [15,24]
+      "position": [13,16]
     },
     {
-      "position": [11,11]
+      "position": [25,19]
     },
     {
-      "position": [15,8]
+      "position": [4,22]
     },
     {
-      "position": [4,23]
-    },
-    {
-      "position": [25,11]
-    },
-    {
-      "position": [23,11]
-    },
-    {
-      "position": [21,11]
+      "position": [23,25]
     }
   ]
 }

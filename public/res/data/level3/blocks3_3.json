@@ -1,3 +1,20 @@
 {
-  "numBlocks": 0
+  "numBlocks": 4,
+  "blocks": [
+    {
+      "position": [24, 26]
+    },
+    {
+      "position": [25, 25]
+    },
+    {
+      "position": [28, 24]
+    },
+    {
+      "position": [27, 25]
+    },
+    {
+      "position": [24, 26]
+    }
+  ]
 }
