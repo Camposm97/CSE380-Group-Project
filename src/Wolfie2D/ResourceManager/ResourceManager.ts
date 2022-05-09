@@ -547,16 +547,21 @@ export default class ResourceManager {
      * @param onFinishLoading The function to call when there are no more images to load
      */
     private loadImagesFromQueue(onFinishLoading: Function): void {
+        console.log('running loadimagesfromqueue');
         this.loadonly_imagesToLoad = this.loadonly_imageLoadingQueue.getSize();
         this.loadonly_imagesLoaded = 0;
+        console.log(this.loadonly_imagesToLoad)
 
         // If no items to load, we're finished
         if(this.loadonly_imagesToLoad === 0){
+            console.log('image queue has 0 items');
             onFinishLoading();
             return;
         }
 
         while(this.loadonly_imageLoadingQueue.hasItems()){
+            console.log('image queue has items');
+            console.log(this.loadonly_imagesToLoad);
             let image = this.loadonly_imageLoadingQueue.dequeue();
             this.loadImage(image.key, image.path, image.isDependency, onFinishLoading);
         }
