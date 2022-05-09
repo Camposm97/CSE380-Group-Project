@@ -5,7 +5,9 @@
       "ai": "BlueRobotAI",
       "type": "yellowRobot",
       "position": [4, 9],
-      "damage": 2
+      "options": {
+        "damage": 2
+      }
     },
     {
       "ai": "BlueRobotAI",
@@ -26,16 +28,18 @@
       "ai": "BlueMouseAI",
       "type": "redMouse",
       "position": [15, 17],
-      "behavior": "secondary",
-      "damage": 3
+      "options": {
+        "behavior": "secondary",
+        "damage": 3
+      }
     },
-    
+
     {
       "ai": "BlueStatueAI",
       "type": "blueStatue",
       "position": [19, 14]
     },
-  
+
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",

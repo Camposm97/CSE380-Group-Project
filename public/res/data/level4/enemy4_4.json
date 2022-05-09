@@ -21,21 +21,22 @@
       "type": "blueMouse",
       "position": [25, 9],
       "behavior": "secondary"
-
     },
     {
       "ai": "BlueMouseAI",
       "type": "redMouse",
       "position": [16, 20],
-      "damage": 3
-
+      "options": {
+        "damage": 3
+      }
     },
     {
       "ai": "BlueMouseAI",
       "type": "yellowMouse",
       "position": [10, 26],
-      "damage": 2
-
+      "options": {
+        "damage": 2
+      }
     },
     {
       "ai": "BlueStatueAI",
