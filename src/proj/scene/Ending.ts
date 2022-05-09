@@ -6,16 +6,20 @@ import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import { initLabel } from "../ui/UIBuilder";
+import { initButtonHandler, initLabel } from "../ui/UIBuilder";
 import { PlayerAnimations } from "./Constants";
+import MainMenu from "./MainMenu";
 
 enum Layer {
   Main = "main",
+  Text = 'text'
 }
 
 enum Events {
   Zoom_Out = "zoom_out",
   Next_Anim = "next_animation",
+  Main_Menu = 'main_menu',
+  Show_Button = 'show_button'
 }
 
 /**
@@ -35,10 +39,6 @@ export default class Ending extends Scene {
 
   loadScene(): void {
     this.load.spritesheet("mcbendorjee", "res/spritesheets/mcbendorjee.json");
-    this.load.spritesheet(
-      "rm_blue",
-      "res/spritesheets/robots/robot_mouse_blue.json"
-    );
     this.load.spritesheet("clock", "res/spritesheets/clock.json");
     this.load.image("desk", "res/sprites/desk.png");
     this.load.image("pc", "res/sprites/computer.png");
@@ -53,9 +53,10 @@ export default class Ending extends Scene {
       key: "endingMusic",
       loop: true,
     });
-    this.receiver.subscribe([Events.Zoom_Out, Events.Next_Anim]);
+    this.receiver.subscribe([Events.Zoom_Out, Events.Next_Anim, Events.Show_Button, Events.Main_Menu]);
     this.c = this.viewport.getCenter().clone();
     this.addUILayer(Layer.Main);
+    this.addUILayer(Layer.Text)
 
     this.office = this.add.sprite("office", Layer.Main);
     this.office.position = this.c.clone();
@@ -190,7 +191,7 @@ export default class Ending extends Scene {
           this.prof.animation.play(PlayerAnimations.IDLE_WHITE, true);
           let lbl1 = initLabel(
             this,
-            Layer.Main,
+            Layer.Text,
             this.c.clone().add(new Vec2(0, 300)),
             "Thank goodness! I'm finally out of the game."
           );
@@ -217,7 +218,7 @@ export default class Ending extends Scene {
                 flag = 1;
                 break;
               case 1:
-                lbl1.text = "And comment every single code I write.";
+                lbl1.text = "And comment every single line of code I write.";
                 flag = 2;
                 break;
               case 2:
@@ -245,8 +246,8 @@ export default class Ending extends Scene {
                 break;
               case 5:
                 lbl3.text = "Michael Campos";
-                lbl2.text = "//TODO";
-                lbl1.text = "//TODO";
+                lbl2.text = "Player & Robot Animations";
+                lbl1.text = "Cheat Codes and Level 5 & 6";
                 flag = 6;
                 break;
               case 6:
@@ -259,12 +260,34 @@ export default class Ending extends Scene {
                 lbl3.text = "";
                 lbl2.text = "";
                 lbl1.text = "Thank You For Playing!";
+                lbl1.fontSize = 40
+                lbl1.tweens.add('center', {
+                  startDelay: 1000,
+                  duration: 2000,
+                  effects: [
+                    {
+                      property: TweenableProperties.posY,
+                      start: lbl1.position.y,
+                      end: this.c.clone().y,
+                      ease: EaseFunctionType.IN_OUT_QUAD
+                    }
+                  ],
+                  onEnd: Events.Show_Button
+                })
+                lbl1.tweens.play('center', false)
                 flag = 8; //ADD BUTTON TO EXIT CREDITS
                 break;
             }
           };
           new Timer(time, f1, repeat).start();
-          break;
+          break
+          case Events.Show_Button:
+            this.getLayer(Layer.Main).setHidden(true)
+            initButtonHandler(this, Layer.Text, this.c.clone().add(new Vec2(0, 300)), 'Main Menu', Events.Main_Menu)
+            break
+          case Events.Main_Menu:
+            this.sceneManager.changeToScene(MainMenu, {})
+            break
       }
     }
   }
