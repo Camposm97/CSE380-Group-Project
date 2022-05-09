@@ -62,27 +62,27 @@ export default abstract class GameLevel extends Scene {
       "blueStatue",
       "res/spritesheets/robots/robot_statue_blue.json"
     );
-    // this.load.spritesheet(
-    //   "yellowRobot",
-    //   "res/spritesheets/robots/robot_yellow.json"
-    // );
+    this.load.spritesheet(
+      "yellowRobot",
+      "res/spritesheets/robots/robot_yellow.json"
+    );
     this.load.spritesheet(
       "yellowMouse",
       "res/spritesheets/robots/robot_mouse_yellow.json"
     );
-    // this.load.spritesheet(
-    //   "yellowStatue",
-    //   "res/spritesheets/robots/robot_statue_yellow.json"
-    // );
-    // this.load.spritesheet("redRobot", "res/spritesheets/robots/robot_red.json");
+    this.load.spritesheet(
+      "yellowStatue",
+      "res/spritesheets/robots/robot_statue_yellow.json"
+    );
+    this.load.spritesheet("redRobot", "res/spritesheets/robots/robot_red.json");
     this.load.spritesheet(
       "redMouse",
       "res/spritesheets/robots/robot_mouse_red.json"
     );
-    // this.load.spritesheet(
-    //   "redStatue",
-    //   "res/spritesheets/robots/robot_statue_red.json"
-    // );
+    this.load.spritesheet(
+      "redStatue",
+      "res/spritesheets/robots/robot_statue_red.json"
+    );
     this.load.spritesheet("projectile", "res/spritesheets/projectile.json");
     this.load.spritesheet("bomb", "res/spritesheets/explode.json");
     this.load.spritesheet("greenFlag", "res/spritesheets/green_flag.json");
@@ -224,7 +224,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.SHOW_CHEATS);
     this.receiver.subscribe(Events.SHOW_ALL_BOMBS);
     this.receiver.subscribe(GameEventType.KEY_UP);
-    this.receiver.subscribe(CheatCode.END)
+    this.receiver.subscribe(CheatCode.END);
 
     this.initScoreTimer();
     this.glm.showFadeOut();
@@ -247,8 +247,8 @@ export default abstract class GameLevel extends Scene {
   handleEvent(event: GameEvent): void {
     switch (event.type) {
       case CheatCode.END:
-        this.sceneManager.changeToScene(Ending, {})
-        break
+        this.sceneManager.changeToScene(Ending, {});
+        break;
       case GameEventType.KEY_UP:
         this.glm.identifyCheatCode();
         break;

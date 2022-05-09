@@ -3,7 +3,7 @@
   "enemies": [
     {
       "ai": "BlueRobotAI",
-      "type": "blueRobot",
+      "type": "redRobot",
       "position": [6, 3]
     },
     {

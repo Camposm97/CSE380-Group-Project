@@ -35,9 +35,9 @@ export class LevelIntro1 extends Scene {
     const LORE_5: string =
       "piazza posts would go unanswered, and only the strong would survive";
     const LORE_6: string =
-      "to tell the tail on reddit.  He took a deep breath and started to compile the program.";
+      "to tell the tale on reddit.  He took a deep breath and started to compile the program.";
     const LORE_7: string =
-      'The process would take 30 minutes, "just like the good old days" he though to himself.';
+      'The process would take 30 minutes, "just like the good old days" he thought to himself.';
     const LORE_8: string =
       "Suddenly, McBendorjee felt a sharp pain and everything went black.";
     const LORE_9: string =
