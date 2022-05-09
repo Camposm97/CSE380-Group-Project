@@ -259,7 +259,7 @@ export default class Ending extends Scene {
                 lbl3.text = "";
                 lbl2.text = "";
                 lbl1.text = "Thank You For Playing!";
-                flag = 8; //ADD BUTTON TO EXIT CREDITS
+                flag = 8; //TODO ADD BUTTON TO EXIT CREDITS
                 break;
             }
           };
