@@ -11,21 +11,7 @@
       "type": "blueMouse",
       "position": [1, 11]
     },
-    {
-      "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [19, 7]
-    },
-    {
-      "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [6, 13]
-    },
-    {
-      "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [6, 13]
-    },
+
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
@@ -33,6 +19,21 @@
       "options": {
         "behavior": "secondary"
       }
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [5, 17]
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [24, 19]
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [14, 19]
     },
     {
       "ai": "BlueStatueAI",
