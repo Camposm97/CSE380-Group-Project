@@ -12,14 +12,14 @@ import MainMenu from "./MainMenu";
 
 enum Layer {
   Main = "main",
-  Text = 'text'
+  Text = "text",
 }
 
 enum Events {
   Zoom_Out = "zoom_out",
   Next_Anim = "next_animation",
-  Main_Menu = 'main_menu',
-  Show_Button = 'show_button'
+  Main_Menu = "main_menu",
+  Show_Button = "show_button",
 }
 
 /**
@@ -52,11 +52,17 @@ export default class Ending extends Scene {
     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
       key: "endingMusic",
       loop: true,
+      holdReference: true,
     });
-    this.receiver.subscribe([Events.Zoom_Out, Events.Next_Anim, Events.Show_Button, Events.Main_Menu]);
+    this.receiver.subscribe([
+      Events.Zoom_Out,
+      Events.Next_Anim,
+      Events.Show_Button,
+      Events.Main_Menu,
+    ]);
     this.c = this.viewport.getCenter().clone();
     this.addUILayer(Layer.Main);
-    this.addUILayer(Layer.Text)
+    this.addUILayer(Layer.Text);
 
     this.office = this.add.sprite("office", Layer.Main);
     this.office.position = this.c.clone();
@@ -239,29 +245,31 @@ export default class Ending extends Scene {
               case 4:
                 lbl3.text = "Andrew Ojeda";
                 lbl2.text =
-                  "Original Concept, Lead Developer, Player and Enemy Mechanics";
+                  "Original Concept, Lead Developer, Player and Robot Mechanics";
                 lbl1.text =
-                  "Bomb and Block Mechanics, Story, Music, Levels 1 and 2";
+                  "Bomb and Block Mechanics, Story, Music, Levels 1 & 2";
                 flag = 5;
                 break;
               case 5:
                 lbl3.text = "Michael Campos";
-                lbl2.text = "Player & Robot Animations";
-                lbl1.text = "Cheat Codes and Level 5 & 6";
+                lbl2.text =
+                  "Player & Robot Animations, Player and Robot Mechanics, UI, Tilesets";
+                lbl1.text =
+                  "Credit Animation, Level Loading, Cheat Codes, Tutorial, Levels 5 & 6";
                 flag = 6;
                 break;
               case 6:
                 lbl3.text = "Tuyen Vo";
-                lbl2.text = "//TODO";
-                lbl1.text = "//TODO";
+                lbl2.text = "UI, Tilesets, Logo, Sprites, Level Loading";
+                lbl1.text = "Robot Animations, Levels 3 & 4";
                 flag = 7;
                 break;
               case 7:
                 lbl3.text = "";
                 lbl2.text = "";
                 lbl1.text = "Thank You For Playing!";
-                lbl1.fontSize = 40
-                lbl1.tweens.add('center', {
+                lbl1.fontSize = 40;
+                lbl1.tweens.add("center", {
                   startDelay: 1000,
                   duration: 2000,
                   effects: [
@@ -269,25 +277,34 @@ export default class Ending extends Scene {
                       property: TweenableProperties.posY,
                       start: lbl1.position.y,
                       end: this.c.clone().y,
-                      ease: EaseFunctionType.IN_OUT_QUAD
-                    }
+                      ease: EaseFunctionType.IN_OUT_QUAD,
+                    },
                   ],
-                  onEnd: Events.Show_Button
-                })
-                lbl1.tweens.play('center', false)
-                flag = 8; //ADD BUTTON TO EXIT CREDITS
+                  onEnd: Events.Show_Button,
+                });
+                lbl1.tweens.play("center", false);
+                flag = 8;
                 break;
             }
           };
           new Timer(time, f1, repeat).start();
-          break
-          case Events.Show_Button:
-            this.getLayer(Layer.Main).setHidden(true)
-            initButtonHandler(this, Layer.Text, this.c.clone().add(new Vec2(0, 300)), 'Main Menu', Events.Main_Menu)
-            break
-          case Events.Main_Menu:
-            this.sceneManager.changeToScene(MainMenu, {})
-            break
+          break;
+        case Events.Show_Button:
+          this.getLayer(Layer.Main).setHidden(true);
+          initButtonHandler(
+            this,
+            Layer.Text,
+            this.c.clone().add(new Vec2(0, 300)),
+            "Main Menu",
+            Events.Main_Menu
+          );
+          break;
+        case Events.Main_Menu:
+          this.emitter.fireEvent(GameEventType.STOP_SOUND, {
+            key: "endingMusic",
+          });
+          this.sceneManager.changeToScene(MainMenu, {});
+          break;
       }
     }
   }
