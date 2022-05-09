@@ -3,73 +3,122 @@
     "enemies": [
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [7,21]
+            "type": "redRobot",
+            "position": [7,21],
+            "options": {
+                "damage": 3,
+                "behavior": "secondary"
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [7,23]
+            "type": "yellowRobot",
+            "position": [7,23],
+            "options": {
+                "damage": 2,
+                "behavior": "secondary"
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [7,25.5]
+            "type": "redRobot",
+            "position": [7,25.5],
+            "options": {
+                "damage": 3,
+                "behavior": "secondary"
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [7,28]
+            "type": "yellowRobot",
+            "position": [7,28],
+            "options": {
+                "damage": 2,
+                "behavior": "secondary"
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [7,23]
+            "type": "redRobot",
+            "position": [7,23],
+            "options": {
+                "damage": 3,
+                "behavior": "secondary"
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [26,21]
+            "type": "redRobot",
+            "position": [26,21],
+            "options": {
+                "damage": 3
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [26,23]
+            "type": "yellowRobot",
+            "position": [26,23],
+            "options": {
+                "damage": 2
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [26,25.5]
+            "type": "redRobot",
+            "position": [26,25.5],
+            "options": {
+                "damage": 3
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [26,28]
+            "type": "yellowRobot",
+            "position": [26,28],
+            "options": {
+                "damage": 2
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [23,4]
+            "type": "redRobot",
+            "position": [23,4],
+            "options": {
+                "damage": 3
+            }
         },
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [29,4]
+            "type": "yellowRobot",
+            "position": [29,4],
+            "options": {
+                "damage": 2
+            }
         },
         {
             "ai": "BlueStatueAI",
-            "type": "blueStatue",
-            "position": [6.5,7]
+            "type": "yellowStatue",
+            "position": [6.5,7],
+            "options": {
+                "damage": 2,
+                "projectileTime": 650
+            }
         },
         {
             "ai": "BlueStatueAI",
-            "type": "blueStatue",
-            "position": [26,11]
+            "type": "redStatue",
+            "position": [26,11],
+            "options": {
+                "damage": 3,
+                "projectileTime": 500
+            }
         },
         {
             "ai": "BlueMouseAI",
-            "type": "blueMouse",
-            "position": [10,11]
+            "type": "yellowMouse",
+            "position": [10,11],
+            "options": {
+                "damage": 2
+            }
         }
     ]
 }

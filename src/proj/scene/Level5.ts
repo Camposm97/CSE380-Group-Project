@@ -7,7 +7,7 @@ export class Level5_1 extends GameLevel {
   loadScene(): void {
     this.loadMainResources();
     this.load.tilemap("level", "res/tilemaps/level5/Level5_1.json"); // Load tile map
-    this.load.object("start_end", "res/data/level5/start_end_5_1.json"); //Load player and green flag coordinates
+    this.loadRandomStartEndJSON(['res/data/level5/start_end_5_1_1.json', 'res/data/level5/start_end_5_1_2.json'])
     this.load.object("enemyData", "res/data/level5/enemy_5_1.json"); // Load enemy info
     this.loadRandomBombsJSON(['res/data/level5/bombs_5_1_1.json', 'res/data/level5/bombs_5_1_2.json'])
     this.load.object("blockData", "res/data/level5/blocks_5_1.json"); // Load block info

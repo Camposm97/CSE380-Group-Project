@@ -8,8 +8,11 @@
     },
     {
       "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [22, 8]
+      "type": "redMouse",
+      "position": [22, 8],
+      "options": {
+        "damage": 3
+      }
     },
     {
       "ai": "BlueMouseAI",
@@ -18,13 +21,20 @@
     },
     {
       "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [13, 16.5]
+      "type": "redMouse",
+      "position": [13, 16.5],
+      "options": {
+        "damage": 3
+      }
     },
     {
       "ai": "BlueStatueAI",
-      "type": "blueStatue",
-      "position": [7,24]
+      "type": "yellowStatue",
+      "position": [7,24],
+      "options": {
+        "damage": 2,
+        "projectileTime": 650
+      }
     },
     {
       "ai": "BlueStatueAI",

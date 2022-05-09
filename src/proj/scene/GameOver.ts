@@ -120,11 +120,11 @@ export default class GameOver extends Scene {
               loop: false,
               holdReference: true,
             });
-            switch (
-              this.nextLvl.name // Check if the next level is 'Ending'
-            ) {
+            switch (this.nextLvl.name) { // Check if the next level is 'Ending'
               case "Ending":
                 btOk.text = "Ending";
+                let leaderboard = new Leaderboard()
+                leaderboard.add('Winner', this.currentScore)
                 break;
             }
           } else {

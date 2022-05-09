@@ -8,8 +8,11 @@
     },
     {
       "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [17,6]
+      "type": "yellowMouse",
+      "position": [17,6],
+      "options": {
+        "damage": 2
+      }
     },
     {
       "ai": "BlueMouseAI",
@@ -23,8 +26,11 @@
     },
     {
       "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [17,13]
+      "type": "yellowMouse",
+      "position": [17,13],
+      "options": {
+        "damage": 2
+      }
     },
     {
       "ai": "BlueMouseAI",

@@ -3,28 +3,45 @@
     "enemies": [
       {
         "ai": "BlueMouseAI",
-        "type": "blueMouse",
-        "position": [19, 12.5]
+        "type": "yellowMouse",
+        "position": [19, 12.5],
+        "options": {
+          "damage": 2
+        }
       },
       {
         "ai": "BlueMouseAI",
-        "type": "blueMouse",
-        "position": [7, 12.5]
+        "type": "yellowMouse",
+        "position": [7, 12.5],
+        "options": {
+          "damage": 2
+        }
       },
       {
         "ai": "BlueMouseAI",
-        "type": "blueMouse",
-        "position": [6, 6]
+        "type": "redMouse",
+        "position": [6, 6],
+        "options": {
+          "damage": 3
+        }
       },
       {
         "ai": "BlueStatueAI",
-        "type": "blueStatue",
-        "position": [10, 6]
+        "type": "yellowStatue",
+        "position": [10, 6],
+        "options": {
+          "damage": 2,
+          "projectileTime": 600
+        }
       },
       {
         "ai": "BlueStatueAI",
-        "type": "blueStatue",
-        "position": [18, 6]
+        "type": "yellowStatue",
+        "position": [18, 6],
+        "options": {
+          "damage": 2,
+          "projectileTime": 600
+        }
       },
       {
         "ai": "BlueStatueAI",
