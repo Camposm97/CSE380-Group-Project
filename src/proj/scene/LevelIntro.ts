@@ -121,16 +121,22 @@ export class LevelIntro2 extends Scene {
     this.addUILayer(LEVEL_INTRO);
     const c = this.viewport.getCenter().clone();
 
-    const LORE_1: string = "Andrew write lore";
-    const LORE_2: string = "Andrew write some lore";
-    const LORE_3: string = "Andrew write more lore";
-    const LORE_4: string = "Andrew write decent lore";
-    const LORE_5: string = "Andrew write epic lore";
-    const LORE_6: string = "Andrew write dramatic lore";
-    const LORE_7: string = "Andrew write scary lore";
-    const LORE_8: string = "Andrew write dnd lore";
-    const LORE_9: string = "Andrew write mystic lore";
-    const LORE_10: string = "Andrew write happy lore";
+    const LORE_1: string =
+      "McBendorjee gave a sigh of relief, his game was more difficult than he thought it would be.";
+    const LORE_2: string =
+      "Thankfully he only made two levels and knew he should be done with this nightmare soon.";
+    const LORE_3: string =
+      "The next level he made was based off of his experiences in college. Since he went to ";
+    const LORE_4: string =
+      "Stonybrook, his only experiences were studying in the library and sleeping 4 hours";
+    const LORE_5: string =
+      "a night in his dorm.  McBendorjee made sure his classes would uphold this Stonybrook";
+    const LORE_6: string =
+      "tradition.  McBendorjee needed to beat this level fast so he could make sure his";
+    const LORE_7: string = "students had the same college experience he had.";
+    const LORE_8: string = "";
+    const LORE_9: string = "";
+    const LORE_10: string = "";
 
     initLabel(
       this,
@@ -209,16 +215,21 @@ export class LevelIntro3 extends Scene {
     this.addUILayer(LEVEL_INTRO);
     const c = this.viewport.getCenter().clone();
 
-    const LORE_1: string = "Andrew write lore";
-    const LORE_2: string = "Andrew write some lore";
-    const LORE_3: string = "Andrew write more lore";
-    const LORE_4: string = "Andrew write decent lore";
-    const LORE_5: string = "Andrew write epic lore";
-    const LORE_6: string = "Andrew write dramatic lore";
-    const LORE_7: string = "Andrew write scary lore";
-    const LORE_8: string = "Andrew write dnd lore";
-    const LORE_9: string = "Andrew write mystic lore";
-    const LORE_10: string = "Andrew write happy lore";
+    const LORE_1: string =
+      "McBendorjee had beaten his two levels, surely he must be freed from Wolife2D by now.";
+    const LORE_2: string =
+      'But to his horror, he realized there was a third level. "How could this be possible?"';
+    const LORE_3: string =
+      "It looked like he was in some kind of a lab, but who could have possibly created it?";
+    const LORE_4: string =
+      "Was it a student who broke into his lab? Was Wolfie2D becoming sentient?";
+    const LORE_5: string =
+      "Or was McBendorjee's own conciousness creating the levels as he played?";
+    const LORE_6: string = "";
+    const LORE_7: string = "";
+    const LORE_8: string = "";
+    const LORE_9: string = "";
+    const LORE_10: string = "";
 
     initLabel(
       this,

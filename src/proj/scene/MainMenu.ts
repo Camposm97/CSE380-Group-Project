@@ -491,7 +491,7 @@ export default class MainMenu extends Scene {
       this,
       "controls",
       new Vec2(c.x, c.y + 120),
-      "M - push/pull boxes"
+      "M - push/pull"
     ).fontSize = 28;
     initButtonHandler(
       this,

@@ -1,5 +1,5 @@
 {
-  "numBombs": 23,
+  "numBombs": 22,
   "bombs": [
     {
       "position": [9, 3]
@@ -48,9 +48,6 @@
     },
     {
       "position": [16, 15]
-    },
-    {
-      "position": [20, 4]
     },
     {
       "position": [21, 8]

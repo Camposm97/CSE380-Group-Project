@@ -16,7 +16,7 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
-import { LU  } from "./LevelUnlocker";
+import { LU } from "./LevelUnlocker";
 
 enum LayerType {
   PRIMARY = "primary",
@@ -192,15 +192,60 @@ export class GameLayerManager {
       "Controls"
     );
     initLabel(this.scene, "controls", new Vec2(c.x, c.y - 300), "Controls");
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 200),"ESC - pause the game").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 160),"P - panic button, resets the room to its original state").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 120),"F - to place flag").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 80),"W/Up-Arrow to move up").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y - 40),"A/Left-Arrow to move left").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y),"S/Down-Arrow to move down").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y + 40),"D/Right-Arrow to move right").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y + 80),"Space/Left-Click to attack").fontSize = 28;
-    initLabel(this.scene,"controls",new Vec2(c.x, c.y + 120),"M - push/pull boxes").fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y - 200),
+      "ESC - pause the game"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y - 160),
+      "P - panic button, resets the room to its original state"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y - 120),
+      "F - to place flag"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y - 80),
+      "W/Up-Arrow to move up"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y - 40),
+      "A/Left-Arrow to move left"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y),
+      "S/Down-Arrow to move down"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y + 40),
+      "D/Right-Arrow to move right"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y + 80),
+      "Space/Left-Click to attack"
+    ).fontSize = 28;
+    initLabel(
+      this.scene,
+      "controls",
+      new Vec2(c.x, c.y + 120),
+      "M - push/pull"
+    ).fontSize = 28;
     initButtonHandler(
       this.scene,
       LayerType.CONTROLS,
@@ -341,7 +386,7 @@ export class GameLayerManager {
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
         case CheatCode.UNLOCK_ALL_LVLS:
-          LU.unlockAllLevels()
+          LU.unlockAllLevels();
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
@@ -351,7 +396,7 @@ export class GameLayerManager {
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
         case CheatCode.END:
-          this.emitter.fireEvent(CheatCode.END)
+          this.emitter.fireEvent(CheatCode.END);
           this.tfCheat.text = "";
           this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "cheat" });
           break;
