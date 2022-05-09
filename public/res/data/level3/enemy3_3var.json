@@ -4,12 +4,12 @@
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [1, 7]
+      "position": [4, 9]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [1, 11]
+      "position": [3, 12]
     },
 
     {
