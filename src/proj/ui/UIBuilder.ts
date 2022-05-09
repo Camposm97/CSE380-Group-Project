@@ -61,7 +61,7 @@ export function initLevelSelectButton(scene: Scene, layer: string, v: Vec2, text
 
 
     let vLvlOffset = new Vec2(0,-85)
-    let lbl = initLabel(scene, layer, x.position.clone().add(vLvlOffset), text)
+    let lbl = initLabel(scene, layer, x.position.clone().add(vLvlOffset), text.slice(0, 7))
     lbl.fontSize = 20
 
     switch (text) {

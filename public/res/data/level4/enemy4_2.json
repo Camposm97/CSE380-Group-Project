@@ -1,35 +1,50 @@
 {
-  "numEnemies": 6,
+  "numEnemies": 7,
   "enemies": [
     {
-      "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [19, 18]
+      "ai": "BlueStatueAI",
+      "type": "redStatue",
+      "position": [10,6],
+      "damage": 3
+
     },
+    {
+      "ai": "BlueStatueAI",
+      "type": "yellowStatue",
+      "position": [21,3],
+      "damage": 2
+
+    },
+    {
+      "ai": "BlueMouseAI",
+      "type": "yellowMouse",
+      "position": [21, 12],
+      "behavior": "secondary",
+      "damage": 2
+
+    },
+   
     {
       "ai": "BlueRobotAI",
       "type": "blueRobot",
-      "position": [25, 23]
+      "position": [9, 19]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [14, 3]
+      "position": [15, 8]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [14, 13]
+      "position": [12, 23],
+      "behavior": "secondary"
+
     },
     {
       "ai": "BlueStatueAI",
       "type": "blueStatue",
-      "position": [10,5]
-    },
-    {
-      "ai": "BlueStatueAI",
-      "type": "blueStatue",
-      "position": [9,18]
+      "position": [7,25]
     }
   ]
 }

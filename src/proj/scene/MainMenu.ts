@@ -68,6 +68,7 @@ export default class MainMenu extends Scene {
 
   startScene(): void {
     this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
+    this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: 'endingMusic' })
     let center = this.viewport.getCenter().clone();
     this.initBackground(center);
     this.initMainMenuScene(center);

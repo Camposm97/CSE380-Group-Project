@@ -4,7 +4,7 @@
     {
       "ai": "BlueRobotAI",
       "type": "yellowRobot",
-      "position": [3, 7],
+      "position": [3, 20],
       "options": {
         "damage": 2
       }
@@ -12,34 +12,29 @@
     {
       "ai": "BlueRobotAI",
       "type": "yellowRobot",
-      "position": [16, 6],
+      "position": [3, 25],
       "options": {
         "damage": 2
       }
     },
     {
       "ai": "BlueStatueAI",
-      "type": "yellowStatue",
-      "position": [25, 7],
-      "options": {
-        "damage": 2,
-        "projectileTime": "750"
-      }
+      "type": "blueStatue",
+      "position": [10, 22]
     },
     {
-      "ai": "BlueMouseAI",
-      "type": "yellowMouse",
-      "position": [2, 12],
+      "ai": "BlueRobotAI",
+      "type": "yellowRobot",
+      "position": [23, 16],
       "options": {
         "damage": 2
       }
     },
     {
-      "ai": "BlueMouseAI",
-      "type": "yellowMouse",
-      "position": [25, 11],
+      "ai": "BlueRobotAI",
+      "type": "yellowRobot",
+      "position": [21, 25],
       "options": {
-        "behavior": "secondary",
         "damage": 2
       }
     }

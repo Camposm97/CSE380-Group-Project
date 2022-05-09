@@ -4,35 +4,36 @@
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [3, 8]
+      "position": [4, 9]
     },
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
       "position": [3, 12]
     },
-    {
-      "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [9, 7]
-    },
-    {
-      "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [19, 7]
-    },
-    {
-      "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [4, 19]
-    },
+
     {
       "ai": "BlueMouseAI",
       "type": "blueMouse",
-      "position": [14, 13],
+      "position": [13, 13],
       "options": {
         "behavior": "secondary"
       }
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [5, 17]
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [24, 19]
+    },
+    {
+      "ai": "BlueRobotAI",
+      "type": "blueRobot",
+      "position": [14, 19]
     },
     {
       "ai": "BlueStatueAI",
