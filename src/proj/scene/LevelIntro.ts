@@ -308,16 +308,22 @@ export class LevelIntro4 extends Scene {
     this.addUILayer(LEVEL_INTRO);
     const c = this.viewport.getCenter().clone();
 
-    const LORE_1: string = "Andrew write lore";
-    const LORE_2: string = "Andrew write some lore";
-    const LORE_3: string = "Andrew write more lore";
-    const LORE_4: string = "Andrew write decent lore";
-    const LORE_5: string = "Andrew write epic lore";
-    const LORE_6: string = "Andrew write dramatic lore";
-    const LORE_7: string = "Andrew write scary lore";
-    const LORE_8: string = "Andrew write dnd lore";
-    const LORE_9: string = "Andrew write mystic lore";
-    const LORE_10: string = "Andrew write happy lore";
+    const LORE_1: string =
+      '"How many levels are left?" It seems there was no end in sight."';
+    const LORE_2: string =
+      "Was McBendorjee doomed to be stuck in Wolfie2D forever?";
+    const LORE_3: string =
+      "He looked around and noticed the next level was much more peaceful.";
+    const LORE_4: string =
+      "It reminded him of the time he ate some brownies his college roommates had made him.";
+    const LORE_5: string =
+      "The brownies made time go slow, food taste amazing, and video games felt like they";
+    const LORE_6: string =
+      "did when he was a kid.  McBendorjee had never felt such peace since then until now.";
+    const LORE_7: string = "";
+    const LORE_8: string = "";
+    const LORE_9: string = "";
+    const LORE_10: string = "";
 
     initLabel(
       this,
@@ -397,16 +403,23 @@ export class LevelIntro5 extends Scene {
     this.addUILayer(LEVEL_INTRO);
     const c = this.viewport.getCenter().clone();
 
-    const LORE_1: string = "Andrew write lore";
-    const LORE_2: string = "Andrew write some lore";
-    const LORE_3: string = "Andrew write more lore";
-    const LORE_4: string = "Andrew write decent lore";
-    const LORE_5: string = "Andrew write epic lore";
-    const LORE_6: string = "Andrew write dramatic lore";
-    const LORE_7: string = "Andrew write scary lore";
-    const LORE_8: string = "Andrew write dnd lore";
-    const LORE_9: string = "Andrew write mystic lore";
-    const LORE_10: string = "Andrew write happy lore";
+    const LORE_1: string =
+      "The peace that McBendorjee had started to feel began to slip away again.";
+    const LORE_2: string =
+      "It was slowly replaced by fear and anxiety.  It was the same fear and";
+    const LORE_3: string =
+      "anxiety he felt when he had 3 assignments due all at once and there";
+    const LORE_4: string =
+      "was no time to complete them.  McBendorjee suddenly felt an overwhelming";
+    const LORE_5: string =
+      "sense of guilt.  He realized that he had become the monster he feared as";
+    const LORE_6: string =
+      "a student.  He had grown cold and apathetic to plight of his students.";
+    const LORE_7: string =
+      "Was this all punishment for the unnecessary amount of work he assigned?";
+    const LORE_8: string = "Did he even deserve to be free from Wolife2D";
+    const LORE_9: string = "";
+    const LORE_10: string = "";
 
     initLabel(
       this,
@@ -486,16 +499,22 @@ export class LevelIntro6 extends Scene {
     this.addUILayer(LEVEL_INTRO);
     const c = this.viewport.getCenter().clone();
 
-    const LORE_1: string = "Andrew write lore";
-    const LORE_2: string = "Andrew write some lore";
-    const LORE_3: string = "Andrew write more lore";
-    const LORE_4: string = "Andrew write decent lore";
-    const LORE_5: string = "Andrew write epic lore";
-    const LORE_6: string = "Andrew write dramatic lore";
-    const LORE_7: string = "Andrew write scary lore";
-    const LORE_8: string = "Andrew write dnd lore";
-    const LORE_9: string = "Andrew write mystic lore";
-    const LORE_10: string = "Andrew write happy lore";
+    const LORE_1: string =
+      "McBendorjee now knew he no option but to keep pressing forward.";
+    const LORE_2: string =
+      "He had been through hell playing through his own creation, but with";
+    const LORE_3: string =
+      "it came a newfound determination to change.  He no longer would put";
+    const LORE_4: string =
+      "students through what he went through.  He vowed if he survived this";
+    const LORE_5: string =
+      "he would make sure his classes were fair, and students could enjoy";
+    const LORE_6: string =
+      "an education and a social life.  He would end the vicious cycle of";
+    const LORE_7: string = "suffering, he just had one more level.";
+    const LORE_8: string = "Or at least that's what he hoped.";
+    const LORE_9: string = "";
+    const LORE_10: string = "";
 
     initLabel(
       this,
