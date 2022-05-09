@@ -3,18 +3,25 @@
     "enemies": [
         {
             "ai": "BlueRobotAI",
-            "type": "blueRobot",
-            "position": [14,14]
+            "type": "redRobot",
+            "position": [14,14],
+            "options": {
+                "damage": 3
+            }
         },
         {
             "ai": "BlueMouseAI",
-            "type": "blueMouse",
-            "position": [6,7.5]
+            "type": "redMouse",
+            "position": [6,7.5],
+            "options": {
+                "damage": 3
+            }
         },
         {
             "ai": "BlueMouseAI",
-            "type": "blueMouse",
-            "position": [20,3.5]
+            "type": "yellowMouse",
+            "position": [20,3.5],
+            "damage": 2
         },
         {
             "ai": "BlueMouseAI",

@@ -13,8 +13,11 @@
     },
     {
       "ai": "BlueRobotAI",
-      "type": "blueRobot",
-      "position": [25, 14]
+      "type": "yellowRobot",
+      "position": [25, 15],
+      "options": {
+        "damage": 2
+      }
     },
     {
       "ai": "BlueMouseAI",
@@ -23,8 +26,11 @@
     },
     {
       "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [26, 6.5]
+      "type": "yellowMouse",
+      "position": [26, 6.5],
+      "options": {
+        "damage": 2
+      }
     },
     {
       "ai": "BlueMouseAI",
@@ -33,8 +39,11 @@
     },
     {
       "ai": "BlueMouseAI",
-      "type": "blueMouse",
-      "position": [26, 9.5]
+      "type": "yellowMouse",
+      "position": [26, 9.5],
+      "options": {
+        "damage": 2
+      }
     },
     {
       "ai": "BlueMouseAI",

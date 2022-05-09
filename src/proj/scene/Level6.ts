@@ -30,7 +30,7 @@ export class Level6_2 extends GameLevel {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
     this.load.tilemap("level", "res/tilemaps/level6/Level6_2.json"); // Load tile map
-    this.load.object("start_end", "res/data/level6/start_end_6_2.json"); //Load player and green flag coordinates
+    this.loadRandomStartEndJSON(['res/data/level6/start_end_6_2_1.json', 'res/data/level6/start_end_6_2_2.json'])
     this.load.object("enemyData", "res/data/level6/enemy_6_2.json"); // Load enemy info
     this.load.object("bombData", "res/data/level6/bombs_6_2.json"); // Load bomb info
     this.load.object("blockData", "res/data/level6/blocks_6_2.json"); // Load block info
@@ -80,7 +80,7 @@ export class Level6_4 extends GameLevel {
     // Load resources (tilemap, audio, spritesheets)
     this.loadMainResources();
     this.load.tilemap("level", "res/tilemaps/level6/Level6_4.json"); // Load tile map
-    this.load.object("start_end", "res/data/level6/start_end_6_4.json"); //Load player and green flag coordinates
+    this.loadRandomStartEndJSON(['res/data/level6/start_end_6_4_1.json', 'res/data/level6/start_end_6_4_2.json'])
     this.load.object("enemyData", "res/data/level6/enemy_6_4.json"); // Load enemy info
     this.load.object("bombData", "res/data/level6/bombs_6_4.json"); // Load bomb info
     this.load.object("blockData", "res/data/level6/blocks_6_4.json"); // Load block info

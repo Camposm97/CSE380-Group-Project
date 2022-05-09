@@ -3,53 +3,93 @@
     "enemies": [
         {
             "ai": "BlueStatueAI",
-            "type": "blueStatue",
-            "position": [5, 12]
+            "type": "redStatue",
+            "position": [5, 12],
+            "options": {
+                "damage": 3,
+                "projectileTime": 500,
+                "time": 10000
+            }
+        },
+        {
+            "ai": "BlueStatueAI",
+            "type": "redStatue",
+            "position": [5, 16],
+            "options": {
+                "damage": 3,
+                "projectileTime": 500,
+                "time": 10000
+            }
         },
         {
             "ai": "BlueStatueAI",
             "type": "blueStatue",
-            "position": [5, 16]
+            "position": [5, 20],
+            "options": {
+                "time": 6000
+            }
+        },
+        {
+            "ai": "BlueStatueAI",
+            "type": "yellowStatue",
+            "position": [5, 24],
+            "options": {
+                "damage": 2,
+                "projectileTime": 650,
+                "time": 7500
+            }
+        },
+        {
+            "ai": "BlueStatueAI",
+            "type": "yellowStatue",
+            "position": [5, 28],
+            "options": {
+                "damage": 2,
+                "projectileTime": 650,
+                "time": 7500
+            }
         },
         {
             "ai": "BlueStatueAI",
             "type": "blueStatue",
-            "position": [5, 20]
+            "position": [28, 12],
+            "options": {
+                "time": 6000
+            }
         },
         {
             "ai": "BlueStatueAI",
             "type": "blueStatue",
-            "position": [5, 24]
+            "position": [28, 16],
+            "options": {
+                "time": 6000
+            }
+        },
+        {
+            "ai": "BlueStatueAI",
+            "type": "redStatue",
+            "position": [28, 20],
+            "options": {
+                "damage": 3,
+                "projectileTime": 500,
+                "time": 10000
+            }
         },
         {
             "ai": "BlueStatueAI",
             "type": "blueStatue",
-            "position": [5, 28]
+            "position": [28, 24],
+            "options": {
+                "time": 6000
+            }
         },
         {
             "ai": "BlueStatueAI",
             "type": "blueStatue",
-            "position": [28, 12]
-        },
-        {
-            "ai": "BlueStatueAI",
-            "type": "blueStatue",
-            "position": [28, 16]
-        },
-        {
-            "ai": "BlueStatueAI",
-            "type": "blueStatue",
-            "position": [28, 20]
-        },
-        {
-            "ai": "BlueStatueAI",
-            "type": "blueStatue",
-            "position": [28, 24]
-        },
-        {
-            "ai": "BlueStatueAI",
-            "type": "blueStatue",
-            "position": [28, 28]
+            "position": [28, 28],
+            "options": {
+                "time": 6000
+            }
         }
     ]
 }
