@@ -156,6 +156,7 @@ export default class BlueStatueAI implements RobotAI {
     this.emitter.fireEvent(RobotAction.FIRE_PROJECTILE, {
       position: position,
       velocity: this.projectileVel,
+      damage: this.damage,
     });
   }
   destroy(): void {

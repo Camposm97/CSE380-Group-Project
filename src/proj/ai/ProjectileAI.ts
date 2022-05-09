@@ -49,6 +49,10 @@ export default class ProjectileAI implements AI {
     this.current_velocity = this.start_velocity;
   }
 
+  setDamage(damage: number): void {
+    this.damage = damage;
+  }
+
   handleEvent(event: GameEvent): void {
     // If the bullet used was the same as this bullet, then reset the speed
     if (event.data.get("id") == this.owner.id) {

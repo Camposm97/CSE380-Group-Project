@@ -242,7 +242,7 @@ export default class EntityManager {
     }
   }
 
-  spawnProjectile(position: Vec2, velocity: Vec2): void {
+  spawnProjectile(position: Vec2, velocity: Vec2, damage: number): void {
     // Find the first viable bullet
     let projectile: AnimatedSprite = null;
 
@@ -260,6 +260,7 @@ export default class EntityManager {
       projectile.position = position;
       // projectile.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
       (<ProjectileAI>projectile._ai).activate(velocity);
+      (<ProjectileAI>projectile._ai).setDamage(damage);
       projectile.animation.play("IDLE");
     }
   }
@@ -384,10 +385,10 @@ export default class EntityManager {
   handleProjectileCollision(): void {
     for (let i = 0; i < this.projectiles.length; i++) {
       if (
-        this.projectiles[i].position.x > 450 ||
+        this.projectiles[i].position.x > 600 ||
         this.projectiles[i].position.x < 0 ||
         this.projectiles[i].position.y < 0 ||
-        this.projectiles[i].position.y > 450
+        this.projectiles[i].position.y > 600 //temp fix to allow projectiles to spawn in later levels
       ) {
         this.projectiles[i].visible = false;
       }

@@ -336,7 +336,8 @@ export default abstract class GameLevel extends Scene {
       case RobotAction.FIRE_PROJECTILE:
         this.em.spawnProjectile(
           event.data.get("position"),
-          event.data.get("velocity")
+          event.data.get("velocity"),
+          event.data.get("damage")
         );
         break;
       case Events.PROJECTILE_UNLOAD:

@@ -30,7 +30,7 @@
     {
       "ai": "BlueStatueAI",
       "type": "yellowStatue",
-      "position": [7,24],
+      "position": [7, 24],
       "options": {
         "damage": 2,
         "projectileTime": 650
@@ -39,7 +39,10 @@
     {
       "ai": "BlueStatueAI",
       "type": "blueStatue",
-      "position": [19,30]
+      "position": [19, 30],
+      "options": {
+        "projectileTime": 1000
+      }
     }
   ]
 }
