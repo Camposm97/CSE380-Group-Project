@@ -167,7 +167,7 @@ export default class GameOver extends Scene {
             position: new Vec2(c.x, c.y - 150),
           }
         );
-        tfName.text = "Your Name Here";
+        tfName.text = "A Noob";
         tfName.size = new Vec2(230, 40);
         tfName.fontSize = 24;
         tfName.setHAlign("center");
