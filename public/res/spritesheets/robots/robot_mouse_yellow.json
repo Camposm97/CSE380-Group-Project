@@ -9,6 +9,7 @@
   "leftBuffer": 0,
   "rows": 9,
   "columns": 8,
+  "durationType": "time",
   "animations": [
     {
       "name": "IDLE",
@@ -145,7 +146,8 @@
       ]
     },
     {
-      "name": "WALK_UP",
+      "name": "WALK_DOWN",
+      "repeat": true,
       "frames": [
         {
           "index": 0,
@@ -198,7 +200,8 @@
       ]
     },
     {
-      "name": "WALK_DOWN",
+      "name": "WALK_UP",
+      "repeat": true,
       "frames": [
         {
           "index": 12,
@@ -252,6 +255,7 @@
     },
     {
       "name": "WALK_LEFT",
+      "repeat": true,
       "frames": [
         {
           "index": 24,
@@ -297,6 +301,7 @@
     },
     {
       "name": "WALK_RIGHT",
+      "repeat": true,
       "frames": [
         {
           "index": 34,
@@ -342,6 +347,7 @@
     },
     {
       "name": "DEATH",
+      "repeat": false,
       "frames": [
         {
           "index": 44,
@@ -426,6 +432,16 @@
         {
           "index": 64,
           "duration": 2
+        }
+      ]
+    },
+    {
+      "name": "OFF",
+      "repeat": false,
+      "frames": [
+        {
+          "index": 64,
+          "duration": 10
         }
       ]
     }
