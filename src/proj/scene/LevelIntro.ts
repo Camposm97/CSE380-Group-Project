@@ -116,6 +116,12 @@ export class LevelIntro1 extends Scene {
 }
 
 export class LevelIntro2 extends Scene {
+  private currentScore: number
+
+  initScene(options: Record<string, any>): void {
+    this.currentScore = options.currentScore ? options.currentScore : 0
+  }
+
   startScene(): void {
     this.receiver.subscribe([GO_TO.LEVEL2_1]);
     this.addUILayer(LEVEL_INTRO);
@@ -202,7 +208,7 @@ export class LevelIntro2 extends Scene {
       let e = this.receiver.getNextEvent();
       switch (e.type) {
         case GO_TO.LEVEL2_1:
-          this.sceneManager.changeToScene(Level2_1, {});
+          this.sceneManager.changeToScene(Level2_1, {currentScore: this.currentScore});
           break;
       }
     }
@@ -210,6 +216,12 @@ export class LevelIntro2 extends Scene {
 }
 
 export class LevelIntro3 extends Scene {
+  private currentScore: number
+
+  initScene(options: Record<string, any>): void {
+    this.currentScore = options.currentScore ? options.currentScore : 0
+  }
+
   startScene(): void {
     this.receiver.subscribe([GO_TO.LEVEL3_1]);
     this.addUILayer(LEVEL_INTRO);
@@ -295,7 +307,7 @@ export class LevelIntro3 extends Scene {
       let e = this.receiver.getNextEvent();
       switch (e.type) {
         case GO_TO.LEVEL3_1:
-          this.sceneManager.changeToScene(Level3_1, {});
+          this.sceneManager.changeToScene(Level3_1, {currentScore: this.currentScore});
           break;
       }
     }
@@ -303,6 +315,12 @@ export class LevelIntro3 extends Scene {
 }
 
 export class LevelIntro4 extends Scene {
+  private currentScore: number
+
+  initScene(options: Record<string, any>): void {
+    this.currentScore = options.currentScore ? options.currentScore : 0
+  }
+
   startScene(): void {
     this.receiver.subscribe([GO_TO.LEVEL4_1]);
     this.addUILayer(LEVEL_INTRO);
@@ -390,7 +408,7 @@ export class LevelIntro4 extends Scene {
       let e = this.receiver.getNextEvent();
       switch (e.type) {
         case GO_TO.LEVEL4_1:
-          this.sceneManager.changeToScene(Level4_1, {});
+          this.sceneManager.changeToScene(Level4_1, {currentScore: this.currentScore});
           break;
       }
     }
@@ -398,6 +416,12 @@ export class LevelIntro4 extends Scene {
 }
 
 export class LevelIntro5 extends Scene {
+  private currentScore: number
+
+  initScene(options: Record<string, any>): void {
+    this.currentScore = options.currentScore ? options.currentScore : 0
+  }
+
   startScene(): void {
     this.receiver.subscribe([GO_TO.LEVEL5_1]);
     this.addUILayer(LEVEL_INTRO);
@@ -486,7 +510,7 @@ export class LevelIntro5 extends Scene {
       let e = this.receiver.getNextEvent();
       switch (e.type) {
         case GO_TO.LEVEL5_1:
-          this.sceneManager.changeToScene(Level5_1, {});
+          this.sceneManager.changeToScene(Level5_1, {currentScore: this.currentScore});
           break;
       }
     }
@@ -494,6 +518,12 @@ export class LevelIntro5 extends Scene {
 }
 
 export class LevelIntro6 extends Scene {
+  private currentScore: number
+
+  initScene(options: Record<string, any>): void {
+    this.currentScore = options.currentScore ? options.currentScore : 0
+  }
+
   startScene(): void {
     this.receiver.subscribe([GO_TO.LEVEL6_1]);
     this.addUILayer(LEVEL_INTRO);
@@ -581,7 +611,7 @@ export class LevelIntro6 extends Scene {
       let e = this.receiver.getNextEvent();
       switch (e.type) {
         case GO_TO.LEVEL6_1:
-          this.sceneManager.changeToScene(Level6_1, {});
+          this.sceneManager.changeToScene(Level6_1, {currentScore: this.currentScore});
           break;
       }
     }
