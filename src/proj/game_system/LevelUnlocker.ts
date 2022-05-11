@@ -1,4 +1,5 @@
 import { LEVEL_SAVE_DATA } from "../scene/Constants";
+import { LevelIntro2 } from "../scene/LevelIntro";
 
 /**
  * Util for managing locked level data
@@ -31,20 +32,21 @@ export class LevelUnlocker {
     }
 
     unlockLevel(name: string) {
+        console.log(`Attempting to unlock: ${name}`)
         switch (name) {
-            case 'Level2_1':
+            case 'LevelIntro2':
                 this.o.lock2 = false
                 break
-            case 'Level3_1':
+            case 'LevelIntro3':
                 this.o.lock3 = false
                 break
-            case 'Level4_1':
+            case 'LevelIntro4':
                 this.o.lock4 = false
                 break
-            case 'Level5_1':
+            case 'LevelIntro5':
                 this.o.lock5= false
                 break
-            case 'Level6_1':
+            case 'LevelIntro6':
                 this.o.lock6 = false
                 break
         }
