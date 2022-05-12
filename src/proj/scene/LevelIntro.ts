@@ -97,7 +97,7 @@ export class LevelIntro1 extends Scene {
       "Start",
       GO_TO.LEVEL1_1
     );
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "levelMusic",
       loop: true,
       holdReference: true,
@@ -197,7 +197,7 @@ export class LevelIntro2 extends Scene {
       "Start",
       GO_TO.LEVEL2_1
     );
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "levelMusic",
       loop: true,
       holdReference: true,
@@ -296,7 +296,7 @@ export class LevelIntro3 extends Scene {
       "Start",
       GO_TO.LEVEL3_1
     );
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "levelMusic",
       loop: true,
       holdReference: true,
@@ -396,7 +396,7 @@ export class LevelIntro4 extends Scene {
       "Start",
       GO_TO.LEVEL4_1
     );
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "levelMusic",
       loop: true,
       holdReference: true,
@@ -498,7 +498,7 @@ export class LevelIntro5 extends Scene {
       "Start",
       GO_TO.LEVEL5_1
     );
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "levelMusic",
       loop: true,
       holdReference: true,
@@ -599,7 +599,7 @@ export class LevelIntro6 extends Scene {
       "Start",
       GO_TO.LEVEL6_1
     );
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "levelMusic",
       loop: true,
       holdReference: true,

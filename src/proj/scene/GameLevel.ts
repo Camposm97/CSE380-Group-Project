@@ -162,7 +162,7 @@ export default abstract class GameLevel extends Scene {
   startScene() {
     if (this.playMusic) {
       // Scene has started, so start playing music
-      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+      this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
         key: "levelMusic",
         loop: true,
         holdReference: true,
@@ -201,6 +201,7 @@ export default abstract class GameLevel extends Scene {
     this.glm.initHudLayer();
     this.glm.initPauseLayer();
     this.glm.initControlsLayer();
+    this.glm.initSettingsLayer();
     this.glm.initCheatCodeLayer();
     this.glm.initRoomCompleteLayer();
 
@@ -216,6 +217,7 @@ export default abstract class GameLevel extends Scene {
     this.receiver.subscribe(Events.PAUSE_GAME);
     this.receiver.subscribe(Events.RESET_ROOM);
     this.receiver.subscribe(Events.SHOW_CONTROLS);
+    this.receiver.subscribe(Events.SHOW_SETTINGS)
     this.receiver.subscribe(Events.EXIT_GAME);
     this.receiver.subscribe(Events.PLAYER_WON);
     this.receiver.subscribe(Events.PLAYER_SKIP);
@@ -274,6 +276,9 @@ export default abstract class GameLevel extends Scene {
         break;
       case Events.SHOW_CONTROLS:
         this.glm.showControls();
+        break;
+      case Events.SHOW_SETTINGS:
+        this.glm.showSettings();
         break;
       case Events.SHOW_CHEATS:
         this.glm.showCheatCodes();

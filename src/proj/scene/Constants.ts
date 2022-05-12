@@ -38,6 +38,7 @@ export enum MenuEvents {
   NEW_GAME = "new_game",
   LEVEL_SELECT = "level_select",
   CONTROLS = "controls",
+  SETTINGS = 'settings',
   HELP = "about",
   LEADERBOARD = "leaderboard",
   LOAD_LVL_1 = "load_lvl_1",
@@ -48,6 +49,7 @@ export enum MenuEvents {
   LOAD_LVL_6 = "load_lvl_6",
   HOW_TO_PLAY = "how_to_play",
 }
+
 
 export enum Events {
   SHOT_FIRED = "SHOT_FIRED",
@@ -67,6 +69,7 @@ export enum Events {
   SHOW_ALL_BOMBS = "SHOW_ALL_BOMBS",
   END_I_FRAMES = "END_I_FRAMES",
   PLAYER_SKIP = "PLAYER_SKIP",
+  SHOW_SETTINGS = "SHOW_SETTINGS"
 }
 
 export enum Statuses {

@@ -17,12 +17,15 @@ import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import { LU } from "./LevelUnlocker";
+import Slider from "../../Wolfie2D/Nodes/UIElements/Slider";
+import SoundSystem from "./SoundSystem";
 
 enum LayerType {
   PRIMARY = "primary",
   HUD = "hud",
   PAUSE = "pause",
   CONTROLS = "controls",
+  SETTINGS = 'settings',
   ROOM_COMPLETE = "ROOM_COMPLETE",
   CHEAT = "CHEAT",
 }
@@ -36,6 +39,7 @@ export class GameLayerManager {
   private hudLayer: Layer;
   private pauseLayer: Layer;
   private controlsLayer: Layer;
+  private settingsLayer: Layer;
   private roomCompleteLayer: Layer;
   private cheatCodeLayer: Layer;
   private btCheat: Button;
@@ -135,6 +139,7 @@ export class GameLayerManager {
   initPauseLayer(): void {
     let c = this.scene.getViewport().getCenter().clone();
     this.pauseLayer = this.scene.addUILayer(LayerType.PAUSE);
+    this.pauseLayer.setHidden(true);
     initLabel(
       this.scene,
       LayerType.PAUSE,
@@ -162,21 +167,27 @@ export class GameLayerManager {
       "Controls",
       Events.SHOW_CONTROLS
     );
-    this.btCheat = initButtonHandler(
+    initButtonHandler(
       this.scene,
       LayerType.PAUSE,
       new Vec2(c.x, c.y + 75),
+      'Settings',
+      Events.SHOW_SETTINGS
+    )
+    this.btCheat = initButtonHandler(
+      this.scene,
+      LayerType.PAUSE,
+      new Vec2(c.x, c.y + 150),
       "Cheat Codes",
       Events.SHOW_CHEATS
     );
     initButtonHandler(
       this.scene,
       LayerType.PAUSE,
-      new Vec2(c.x, c.y + 150),
+      new Vec2(c.x, c.y + 225),
       "Exit",
       Events.EXIT_GAME
     );
-    this.pauseLayer.setHidden(true);
   }
 
   initControlsLayer(): void {
@@ -255,6 +266,45 @@ export class GameLayerManager {
     );
   }
 
+  initSettingsLayer(): void {
+    let c = this.scene.getViewport().getCenter().clone();
+    this.settingsLayer = this.scene.addUILayer(LayerType.SETTINGS)
+    this.settingsLayer.setHidden(true)
+
+    initLabel(this.scene, LayerType.SETTINGS, new Vec2(c.x, c.y - 300), "Settings");
+
+    let ss = SoundSystem.get()
+    let sfxSlider: Slider = <Slider> this.scene.add.uiElement(UIElementType.SLIDER, LayerType.SETTINGS, 
+      {
+        value: ss.getSFXVolume(),
+        position: new Vec2(c.x,c.y-150)
+      })
+    sfxSlider.onValueChange = () => ss.setSFXVolume(sfxSlider.getValue())
+    sfxSlider.size = new Vec2(750, 50)
+    sfxSlider.nibSize = new Vec2(20,20)
+    sfxSlider.sliderColor = Color.WHITE
+    initLabel(this.scene, LayerType.SETTINGS, new Vec2(c.x - (sfxSlider.size.x / 2) - 75, sfxSlider.position.y), 'SFX')
+
+    let musicSlider: Slider = <Slider> this.scene.add.uiElement(UIElementType.SLIDER, LayerType.SETTINGS, 
+      {
+        value: ss.getMusicVolume(),
+        position: new Vec2(c.x,c.y-50)
+      })
+    musicSlider.onValueChange = () => ss.setMusicVolume(musicSlider.getValue())
+    musicSlider.size = new Vec2(750, 50)
+    musicSlider.nibSize = new Vec2(20,20)
+    musicSlider.sliderColor = Color.WHITE
+    initLabel(this.scene, LayerType.SETTINGS, new Vec2(c.x - (musicSlider.size.x / 2) - 75, musicSlider.position.y), 'Music')
+
+    initButtonHandler(
+      this.scene,
+      LayerType.SETTINGS,
+      new Vec2(c.x, c.y + 250),
+      "Back",
+      Events.SHOW_SETTINGS
+    );
+  }
+
   initCheatCodeLayer(): void {
     const c = this.scene.getViewport().getCenter().clone();
     this.cheatCodeLayer = this.scene.addUILayer(LayerType.CHEAT);
@@ -327,6 +377,11 @@ export class GameLayerManager {
       this.pauseLayer.setHidden(false);
       return this.primaryLayer.isHidden();
     }
+    if (!this.settingsLayer.isHidden()) {
+      this.settingsLayer.setHidden(true)
+      this.pauseLayer.setHidden(false)
+      return this.primaryLayer.isHidden()
+    }
     this.primaryLayer.setHidden(!this.primaryLayer.isHidden());
     this.hudLayer.setHidden(!this.hudLayer.isHidden());
     this.pauseLayer.setHidden(!this.pauseLayer.isHidden());
@@ -350,6 +405,11 @@ export class GameLayerManager {
   showControls() {
     this.controlsLayer.setHidden(!this.controlsLayer.isHidden());
     this.pauseLayer.setHidden(!this.pauseLayer.isHidden());
+  }
+
+  showSettings() {
+    this.settingsLayer.setHidden(!this.settingsLayer.isHidden())
+    this.pauseLayer.setHidden(!this.pauseLayer.isHidden())
   }
 
   showCheatCodes() {

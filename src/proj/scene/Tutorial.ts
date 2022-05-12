@@ -220,7 +220,7 @@ export class Tutorial1_1 extends Scene {
       GO_TO.LEVELT_1
     );
 
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "levelMusic",
       loop: true,
       holdReference: true,

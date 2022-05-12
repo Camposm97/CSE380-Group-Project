@@ -21,12 +21,18 @@ import {
   LevelIntro5,
   LevelIntro6,
 } from "./LevelIntro";
+import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
+import Slider from "../../Wolfie2D/Nodes/UIElements/Slider";
+import Color from "../../Wolfie2D/Utils/Color";
+import AudioManager, { AudioChannelType } from "../../Wolfie2D/Sound/AudioManager";
+import SoundSystem from "../game_system/SoundSystem";
 
 export default class MainMenu extends Scene {
   private background: Layer;
   private mainMenu: Layer;
   private levelSelect: Layer;
   private controls: Layer;
+  private settings: Layer
   private help: Layer;
   private leaderboard: Layer;
 
@@ -71,6 +77,7 @@ export default class MainMenu extends Scene {
     this.initMainMenuScene(center);
     this.initLevelSelectScene(center);
     this.initControlScene(center);
+    this.initSettings(center)
     this.initHelpScene(center);
     this.initLeaderboardScene(center);
 
@@ -86,6 +93,7 @@ export default class MainMenu extends Scene {
     this.receiver.subscribe(MenuEvents.LOAD_LVL_5);
     this.receiver.subscribe(MenuEvents.LOAD_LVL_6);
     this.receiver.subscribe(MenuEvents.CONTROLS);
+    this.receiver.subscribe(MenuEvents.SETTINGS)
     this.receiver.subscribe(MenuEvents.HELP);
     this.receiver.subscribe(MenuEvents.LEADERBOARD);
   }
@@ -351,17 +359,18 @@ export default class MainMenu extends Scene {
       "Controls",
       MenuEvents.CONTROLS
     );
+    initButtonHandler(this, layer, new Vec2(c.x, c.y+75), 'Settings', MenuEvents.SETTINGS)
     initButtonHandler(
       this,
       layer,
-      new Vec2(c.x, c.y + 75),
+      new Vec2(c.x, c.y+150),
       "Help",
       MenuEvents.HELP
     );
     initButtonHandler(
       this,
       layer,
-      new Vec2(c.x, c.y + 150),
+      new Vec2(c.x, c.y+225),
       "Leaderboard",
       MenuEvents.LEADERBOARD
     );
@@ -545,11 +554,56 @@ export default class MainMenu extends Scene {
     );
 
     // Scene has started, so start playing music
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "menu",
       loop: true,
       holdReference: true,
     });
+  }
+
+  initSettings(c: Vec2): void {
+    const LAYER = 'settings'
+    this.settings = this.addUILayer(LAYER)
+    this.settings.setHidden(true)
+
+    let bg = this.add.sprite("dark_background", LAYER);
+    bg.position = c;
+    let scaleX = bg.size.x / this.viewport.getView().x - 0.15;
+    let scaleY = bg.size.y / this.viewport.getView().y - 0.05;
+    bg.scale = new Vec2(scaleX, scaleY);
+
+    initLabel(this, LAYER, new Vec2(c.x, c.y - 300), "Settings");
+
+    let ss = SoundSystem.get()
+    let sfxSlider: Slider = <Slider> this.add.uiElement(UIElementType.SLIDER, LAYER, 
+      {
+        value: ss.getSFXVolume(),
+        position: new Vec2(c.x,c.y-150)
+      })
+    sfxSlider.onValueChange = () => ss.setSFXVolume(sfxSlider.getValue())
+    sfxSlider.size = new Vec2(750, 50)
+    sfxSlider.nibSize = new Vec2(20,20)
+    sfxSlider.sliderColor = Color.WHITE
+    initLabel(this, LAYER, new Vec2(c.x - (sfxSlider.size.x / 2) - 75, sfxSlider.position.y), 'SFX')
+
+    let musicSlider: Slider = <Slider> this.add.uiElement(UIElementType.SLIDER, LAYER, 
+      {
+        value: ss.getMusicVolume(),
+        position: new Vec2(c.x,c.y-50)
+      })
+    musicSlider.onValueChange = () => ss.setMusicVolume(musicSlider.getValue())
+    musicSlider.size = new Vec2(750, 50)
+    musicSlider.nibSize = new Vec2(20,20)
+    musicSlider.sliderColor = Color.WHITE
+    initLabel(this, LAYER, new Vec2(c.x - (musicSlider.size.x / 2) - 75, musicSlider.position.y), 'Music')
+
+    initButtonHandler(
+      this,
+      LAYER,
+      new Vec2(c.x, c.y + 250),
+      "Back",
+      MenuEvents.MENU
+    );
   }
 
   initHelpScene(c: Vec2) {
@@ -691,6 +745,7 @@ export default class MainMenu extends Scene {
           this.controls.setHidden(true);
           this.leaderboard.setHidden(true);
           this.levelSelect.setHidden(true);
+          this.settings.setHidden(true)
           break;
         case MenuEvents.HOW_TO_PLAY:
           this.sceneManager.changeToScene(Tutorial1_1, {});
@@ -704,6 +759,7 @@ export default class MainMenu extends Scene {
           this.background.setHidden(true);
           this.mainMenu.setHidden(true);
           this.levelSelect.setHidden(false);
+          this.settings.setHidden(true)
           break;
         case MenuEvents.LOAD_LVL_1:
           this.sceneManager.changeToScene(LevelIntro1, {});
@@ -733,16 +789,26 @@ export default class MainMenu extends Scene {
           this.background.setHidden(true);
           this.mainMenu.setHidden(true);
           this.controls.setHidden(false);
+          this.settings.setHidden(true)
+          break;
+        case MenuEvents.SETTINGS:
+          this.settings.setHidden(false)
+          this.background.setHidden(true)
+          this.leaderboard.setHidden(true)
+          this.mainMenu.setHidden(true)
+          this.controls.setHidden(true)
           break;
         case MenuEvents.HELP:
           this.background.setHidden(true);
           this.help.setHidden(false);
           this.mainMenu.setHidden(true);
+          this.settings.setHidden(true)
           break;
         case MenuEvents.LEADERBOARD:
           this.background.setHidden(true);
           this.leaderboard.setHidden(false);
           this.mainMenu.setHidden(true);
+          this.settings.setHidden(true)
           break;
       }
     }

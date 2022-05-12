@@ -49,7 +49,7 @@ export default class Ending extends Scene {
 
   startScene(): void {
     this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "levelMusic" });
-    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {
+    this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {
       key: "endingMusic",
       loop: true,
       holdReference: true,
