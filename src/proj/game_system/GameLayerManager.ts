@@ -377,10 +377,12 @@ export class GameLayerManager {
       this.pauseLayer.setHidden(false);
       return this.primaryLayer.isHidden();
     }
+    // If the settings layer is showing and the user presses 'ESC', then hide the controls and show the pause menu
     if (!this.settingsLayer.isHidden()) {
-      this.settingsLayer.setHidden(true)
-      this.pauseLayer.setHidden(false)
-      return this.primaryLayer.isHidden()
+      console.log('exit settings layer')
+      this.settingsLayer.setHidden(true);
+      this.pauseLayer.setHidden(false);
+      return this.primaryLayer.isHidden();
     }
     this.primaryLayer.setHidden(!this.primaryLayer.isHidden());
     this.hudLayer.setHidden(!this.hudLayer.isHidden());

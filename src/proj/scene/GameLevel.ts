@@ -258,12 +258,13 @@ export default abstract class GameLevel extends Scene {
         this.em.showAllBombs();
         break;
       case Events.PAUSE_GAME:
-        this.em.getPlayer().setAIActive(!this.em.getPlayer().aiActive, {});
         // this.em.toggleAI()
         if (this.glm.togglePauseScreen()) {
           this.scoreTimer.pause();
+          this.em.getPlayer().setAIActive(false, {}) 
         } else {
           this.scoreTimer.start(this.scoreTimer.getTimeLeftInMillis());
+          this.em.getPlayer().setAIActive(true, {})
         }
         break;
       case Events.RESET_ROOM:
