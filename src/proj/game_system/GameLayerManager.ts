@@ -313,7 +313,7 @@ export class GameLayerManager {
       UIElementType.TEXT_INPUT,
       LayerType.PAUSE,
       {
-        position: new Vec2(c.x, c.y + 75),
+        position: new Vec2(c.x, c.y + 150),
       }
     );
     this.tfCheat.visible = false;
