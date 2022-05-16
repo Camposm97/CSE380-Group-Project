@@ -60,7 +60,7 @@ export default class ProjectileAI implements AI {
     }
     switch (event.type) {
       case Events.PAUSE_GAME:
-        this.paused = !this.paused;
+        // this.paused = !this.paused;
         break;
       default:
         break;
@@ -81,6 +81,10 @@ export default class ProjectileAI implements AI {
         );
       }
     }
+  }
+
+  toggleAI(pause: boolean): void {
+    this.paused = pause
   }
 
   destroy(): void {}

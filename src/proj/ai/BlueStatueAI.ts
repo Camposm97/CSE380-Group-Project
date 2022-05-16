@@ -168,17 +168,28 @@ export default class BlueStatueAI implements RobotAI {
   handleEvent(event: GameEvent): void {
     switch (event.type) {
       case Events.PAUSE_GAME:
-        this.paused = !this.paused;
-        if (this.paused) {
-          this.frozenTimer.pause();
-          this.projectileTimer.pause();
-        } else {
-          this.frozenTimer.resume();
-          this.projectileTimer.resume();
-        }
+        // this.paused = !this.paused;
+        // if (this.paused) {
+        //   this.frozenTimer.pause();
+        //   this.projectileTimer.pause();
+        // } else {
+        //   this.frozenTimer.resume();
+        //   this.projectileTimer.resume();
+        // }
         break;
       default:
         break;
+    }
+  }
+
+  toggleAI(pause: boolean): void {
+    this.paused = pause;
+    if (this.paused) {
+      this.frozenTimer.pause();
+      this.projectileTimer.pause();
+    } else {
+      this.frozenTimer.resume();
+      this.projectileTimer.resume();
     }
   }
 

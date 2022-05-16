@@ -526,6 +526,23 @@ export default class EntityManager {
     );
   }
 
+  toggleAIOfAllEntities(pause: boolean): void {
+    this.player.setAIActive(!pause, {})
+    for (let enemy of this.enemies) {
+      let ai = enemy._ai
+      if (ai instanceof BlueRobotAI) {
+        (<BlueRobotAI> ai).toggleAI(pause)
+      } else if (ai instanceof BlueMouseAI) {
+        (<BlueMouseAI> ai).toggleAI(pause)
+      } else if (ai instanceof BlueStatueAI) {
+        (<BlueStatueAI> ai).toggleAI(pause)
+      }
+    }
+    for (let p of this.projectiles) {
+      (<ProjectileAI> p._ai).toggleAI(pause)
+    }
+  }
+
   getPlayer(): AnimatedSprite {
     return this.player;
   }

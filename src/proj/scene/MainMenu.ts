@@ -625,7 +625,7 @@ export default class MainMenu extends Scene {
     const strAbout3 =
       "from scratch using nothing but C and MIPs for his CSE 420 class,";
     const strAbout4 =
-      "when he accidentally forgot to give a character array a null pointer reference.";
+      "when he accidentally forgot to give a character array a null terminator.";
     const strAbout5 =
       "This led to a catastrophic chain of events that culminated in Professor McBendorjee";
     const strAbout6 =

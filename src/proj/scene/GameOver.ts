@@ -36,7 +36,7 @@ export default class GameOver extends Scene {
     this.load.audio("lose", "res/sound/lose.wav");
     this.load.spritesheet("mcbendorjee", "res/spritesheets/mcbendorjee.json");
     this.load.audio("gameOver", "res/music/CSE_380_Game_Over.mp3"); // Load Music info
-    this.load.audio("victory", "res/music/CSE_380_victory.mp3"); // Load Music info
+    this.load.audio("victory", "res/music/CSE_380_Victory.mp3"); // Load Music info
   }
 
   startScene() {

@@ -6,7 +6,6 @@ import Timer from "../../Wolfie2D/Timing/Timer";
 import { Control, Events, Names, RobotAnimations } from "../scene/Constants";
 import RobotAI from "./RobotAI";
 import Receiver from "../../Wolfie2D/Events/Receiver";
-import { PlayerAction } from "../scene/Constants";
 import Input from "../../Wolfie2D/Input/Input";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
@@ -102,12 +101,12 @@ export default class BlueRobotAI implements RobotAI {
   handleEvent(event: GameEvent): void {
     switch (event.type) {
       case Events.PAUSE_GAME:
-        this.paused = !this.paused;
-        if (this.paused) {
-          this.frozenTimer.pause();
-        } else {
-          this.frozenTimer.resume();
-        }
+        // this.paused = !this.paused;
+        // if (this.paused) {
+        //   this.frozenTimer.pause();
+        // } else {
+        //   this.frozenTimer.resume();
+        // }
         break;
       default:
         break;
@@ -305,5 +304,14 @@ export default class BlueRobotAI implements RobotAI {
 
   push(v: Vec2): void {
     //not implemented
+  }
+
+  toggleAI(pause: boolean): void {
+    this.paused = pause;
+    if (this.paused) {
+      this.frozenTimer.pause();
+    } else {
+      this.frozenTimer.resume();
+    }
   }
 }

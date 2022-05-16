@@ -219,7 +219,7 @@ export default class Ending extends Scene {
           let f1 = () => {
             switch (flag) {
               case 0:
-                lbl1.text = "I swear I'll never forget a null pointer!";
+                lbl1.text = "I swear I'll never forget a null terminator!";
                 this.prof.animation.play(PlayerAnimations.CRY, true);
                 flag = 1;
                 break;

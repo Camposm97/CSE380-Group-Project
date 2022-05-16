@@ -158,15 +158,24 @@ export default class BlueMouseAI implements RobotAI {
   handleEvent(event: GameEvent): void {
     switch (event.type) {
       case Events.PAUSE_GAME:
-        this.paused = !this.paused;
-        if (this.paused) {
-          this.frozenTimer.pause();
-        } else {
-          this.frozenTimer.resume();
-        }
+        // this.paused = !this.paused;
+        // if (this.paused) {
+        //   this.frozenTimer.pause();
+        // } else {
+        //   this.frozenTimer.resume();
+        // }
         break;
       default:
         break;
+    }
+  }
+
+  toggleAI(pause: boolean): void {
+    this.paused = pause;
+    if (this.paused) {
+      this.frozenTimer.pause();
+    } else {
+      this.frozenTimer.resume();
     }
   }
 
